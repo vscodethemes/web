@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "invoke:fetchThemes": "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
+    "build": "tsc",
     "test": "jest",
     "lint": "tslint --project ."
   },

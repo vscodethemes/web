@@ -1,14 +1,7 @@
 import * as fetch from 'jest-fetch-mock'
 import { Extension, Services } from '../../types/static'
-import getThemeRepositories, { GITHUB_PROPERTY_NAME, MAX_PAGES_TO_FETCH } from './fetchThemes'
-
-afterEach(() => fetch.resetMocks())
-
-const createServices = () => ({
-  fetch,
-  logger: { log: jest.fn(), error: jest.fn() },
-  jobs: { create: jest.fn(), receive: jest.fn() },
-})
+import createServices from '../services/mock'
+import fetchThemes, { GITHUB_PROPERTY_NAME, MAX_PAGES_TO_FETCH } from './fetchThemes'
 
 const createValidThemes = (): Extension[] => {
   return [
@@ -67,37 +60,134 @@ const createInvalidThemes = (): any[] => {
   ]
 }
 
-test('shoud get repositories for themes', async () => {
+afterEach(() => fetch.resetMocks())
+
+test('should not process empty job', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [] }))
+  jest.spyOn(services.jobs.fetchThemes, 'receive').mockImplementation(() => Promise.resolve(null))
+
+  const fetchSpy = jest.spyOn(services, 'fetch')
+  await fetchThemes(services)
+  expect(fetchSpy).toHaveBeenCalledTimes(0)
+})
+
+test('should not process job if max pages reached', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: MAX_PAGES_TO_FETCH + 1 }))
+
+  const fetchSpy = jest.spyOn(services, 'fetch')
+  await fetchThemes(services)
+  expect(fetchSpy).toHaveBeenCalledTimes(0)
+})
+
+test('should fetch page', async () => {
   const services = createServices()
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
-  const result = await getThemeRepositories(services)
-  expect(result).toEqual(['repoUrl1', 'repoUrl2'])
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const fetchSpy = jest.spyOn(services, 'fetch')
+  await fetchThemes(services)
+  expect(fetchSpy).toHaveBeenCalledTimes(1)
 })
 
-test('shoud not return invalid themes', async () => {
+test('should queue job for next page', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const queueSpy = jest.spyOn(services.jobs.fetchThemes, 'queue')
+  await fetchThemes(services)
+  expect(queueSpy).toHaveBeenCalledWith({ page: 2 })
+})
+
+test('should not queue job for next page when current page is empty', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const queueSpy = jest.spyOn(services.jobs.fetchThemes, 'queue')
+  await fetchThemes(services)
+  expect(queueSpy).toHaveBeenCalledTimes(0)
+})
+
+test('should queue job for repositories', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const queueSpy = jest.spyOn(services.jobs.fetchRepository, 'queue')
+  await fetchThemes(services)
+  expect(queueSpy).toHaveBeenCalledTimes(themes.length)
+  expect(queueSpy.mock.calls[0][0]).toEqual({ repository: 'repoUrl1' })
+  expect(queueSpy.mock.calls[1][0]).toEqual({ repository: 'repoUrl2' })
+})
+
+test('should not queue job for invalid repositories', async () => {
   const services = createServices()
   const themes = createInvalidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
-  const result = await getThemeRepositories(services)
-  expect(result).toEqual([])
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const queueSpy = jest.spyOn(services.jobs.fetchRepository, 'queue')
+  await fetchThemes(services)
+  expect(queueSpy).toHaveBeenCalledTimes(0)
 })
 
-test('shoud fetch pages until no results found', async () => {
+test('should notify fetch themes job', async () => {
   const services = createServices()
-  const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [themes[0]] }] }))
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [themes[1]] }] }))
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
-  await getThemeRepositories(services)
+  const themes = createInvalidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const notifySpy = jest.spyOn(services.jobs.fetchThemes, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
-test('shoud not fetch more than maximum page limit', async () => {
+test('should notify fetch repository job on last page', async () => {
   const services = createServices()
-  const themes = createValidThemes()
-  fetch.mockResponse(JSON.stringify({ results: [{ extensions: [themes[0]] }] }))
-  await getThemeRepositories(services)
-  expect(services.fetch.mock.calls.length).toBe(MAX_PAGES_TO_FETCH)
+  const themes = createInvalidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const notifySpy = jest.spyOn(services.jobs.fetchRepository, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+})
+
+test('should not notify fetch repository job when not on last page', async () => {
+  const services = createServices()
+  const themes = createInvalidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ page: 1 }))
+
+  const notifySpy = jest.spyOn(services.jobs.fetchRepository, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
 })

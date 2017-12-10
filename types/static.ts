@@ -14,7 +14,21 @@ export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
 
-type Fetch = (url: string | Request, init?: RequestInit) => Promise<Response>
+export interface Job<P> {
+  queue: (params: P) => Promise<any>
+  receive: () => Promise<null | P>
+  notify: () => Promise<any>
+}
+
+export type Fetch = (url: string | Request, init?: RequestInit) => Promise<Response>
+
+export interface FetchThemesPayload {
+  page: number
+}
+
+export interface FetchRepositoryPayload {
+  repository: string
+}
 
 export interface Services {
   fetch: Fetch
@@ -23,8 +37,7 @@ export interface Services {
     error: (error: Error) => void
   }
   jobs: {
-    create: (params: any) => Promise<any>
-    receive: (params: any) => Promise<any>
+    fetchThemes: Job<FetchThemesPayload>
+    fetchRepository: Job<FetchRepositoryPayload>
   }
-  event?: any
 }
