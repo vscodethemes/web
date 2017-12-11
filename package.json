@@ -8,6 +8,7 @@
     "invoke:fetchThemes": "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
     "build": "tsc",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "tslint --project ."
   },
   "dependencies": {
@@ -42,6 +43,8 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
+    "mapCoverage": true,
+    "collectCoverageFrom": ["backend/**", "frontend/**"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
   }
