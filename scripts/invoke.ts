@@ -5,7 +5,9 @@ const args = minimist(process.argv.slice(2))
 
 async function invoke(jobPath: string, eventPath: string) {
   const { default: job } = await import(jobPath)
-  const { default: event } = eventPath ? await import(eventPath) : { default: {} }
+  const { default: event } = eventPath
+    ? await import(eventPath)
+    : { default: {} }
 
   try {
     await job(createServices())

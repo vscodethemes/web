@@ -1,6 +1,11 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
-import { FetchRepositoryPayload, FetchThemesPayload, Job, Services } from '../../types/static'
+import {
+  FetchRepositoryPayload,
+  FetchThemesPayload,
+  Job,
+  Services,
+} from '../../types/static'
 
 function createJob<P>(name: string): Job<P> {
   return {

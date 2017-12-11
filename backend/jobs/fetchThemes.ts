@@ -2,7 +2,8 @@ import { ExtensionRuntime } from '../../types/runtime'
 import { Extension, ExtensionQueryResults, Services } from '../../types/static'
 
 export const MAX_PAGES_TO_FETCH = 100
-export const GITHUB_PROPERTY_NAME = 'Microsoft.VisualStudio.Services.Links.GitHub'
+export const GITHUB_PROPERTY_NAME =
+  'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
   const job = await services.jobs.fetchThemes.receive()
@@ -37,7 +38,9 @@ export default async function run(services: Services): Promise<any> {
   }
   // Queue a job for each repository url.
   await Promise.all(
-    repositories.map(repository => services.jobs.fetchRepository.queue({ repository })),
+    repositories.map(repository =>
+      services.jobs.fetchRepository.queue({ repository }),
+    ),
   )
 
   services.logger.log(`
@@ -50,7 +53,10 @@ export default async function run(services: Services): Promise<any> {
 /**
  * Fetch themes from the VSCode Marketplace for the provided page.
  */
-async function fetchMarketplaceThemes(services: Services, page: number): Promise<Extension[]> {
+async function fetchMarketplaceThemes(
+  services: Services,
+  page: number,
+): Promise<Extension[]> {
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
   const query = {
     filters: [
@@ -90,12 +96,15 @@ async function fetchMarketplaceThemes(services: Services, page: number): Promise
 /**
  * Extracts repository urls from a list of themes.
  */
-function extractRepositories(services: Services, themes: Extension[]): string[] {
+function extractRepositories(
+  services: Services,
+  themes: Extension[],
+): string[] {
   const repos: string[] = []
 
   themes.forEach(theme => {
     try {
-      // Throws error if theme is not a valid extension type.
+      // Throw error if theme is the expected extension structure.
       ExtensionRuntime.check(theme)
       // Sort by the lastUpdatedAt (ISO string) to get the latest version.
       const latestVersion = theme.versions.sort((a, b) =>
@@ -112,9 +121,9 @@ function extractRepositories(services: Services, themes: Extension[]): string[] 
         throw new Error(`Missing property ${GITHUB_PROPERTY_NAME}`)
       }
     } catch (err) {
-      services.logger.log(`${err.message}:`)
+      services.logger.log('Invalid theme:')
       services.logger.log(theme)
-      services.logger.log('')
+      services.logger.error(err)
     }
   })
 

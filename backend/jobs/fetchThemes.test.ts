@@ -1,7 +1,10 @@
 import * as fetch from 'jest-fetch-mock'
 import { Extension, Services } from '../../types/static'
 import createServices from '../services/mock'
-import fetchThemes, { GITHUB_PROPERTY_NAME, MAX_PAGES_TO_FETCH } from './fetchThemes'
+import fetchThemes, {
+  GITHUB_PROPERTY_NAME,
+  MAX_PAGES_TO_FETCH,
+} from './fetchThemes'
 
 const createValidThemes = (): Extension[] => {
   return [
@@ -66,7 +69,9 @@ test('should not process empty job', async () => {
   const services = createServices()
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [] }))
-  jest.spyOn(services.jobs.fetchThemes, 'receive').mockImplementation(() => Promise.resolve(null))
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(null))
 
   const fetchSpy = jest.spyOn(services, 'fetch')
   await fetchThemes(services)
