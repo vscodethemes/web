@@ -17,9 +17,14 @@ export default async function run(services: Services): Promise<any> {
     return
   }
 
+  logger.log('Proccessing fetchThemes job...')
+  logger.log(`Message ID: ${job.messageId}`)
+  logger.log(`Receipt Handle: ${job.receiptHandle}`)
+  logger.log(`Payload: ${JSON.stringify(job.payload)}`)
+
   try {
     if (!FetchThemesPayloadRuntime.guard(job.payload)) {
-      throw new PermanentJobError(`Invalid payload: '${JSON.stringify(job)}`)
+      throw new PermanentJobError('Invalid job payload.')
     }
 
     const { page } = job.payload
