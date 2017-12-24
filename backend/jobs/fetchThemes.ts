@@ -61,7 +61,7 @@ export default async function run(services: Services): Promise<any> {
       logger.log(err.message)
       await fetchThemes.fail(job)
     } else {
-      logger.log('Unknown Error')
+      logger.log('Unexpected Error.')
       await fetchThemes.fail(job)
       // Rethrow error for global error handlers.
       throw err

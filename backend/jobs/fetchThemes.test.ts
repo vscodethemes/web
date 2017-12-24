@@ -215,3 +215,23 @@ test('should not notify fetch repository job when not on last page', async () =>
   await fetchThemes(services)
   expect(notifySpy).toHaveBeenCalledTimes(0)
 })
+
+test('should throw on unexpected error', async () => {
+  const services = createServices()
+  // Simulate unexpected error by forcing fetch to reject.
+  fetch.mockRejectOnce(new Error())
+  jest
+    .spyOn(services.jobs.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
+
+  const failSpy = jest.spyOn(services.jobs.fetchThemes, 'fail')
+  let error
+  try {
+    await fetchThemes(services)
+  } catch {
+    error = true
+  }
+
+  expect(error).toEqual(true)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
