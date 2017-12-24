@@ -4,20 +4,32 @@ import {
   FetchRepositoryPayload,
   FetchThemesPayload,
   Job,
+  JobMessage,
   Services,
 } from '../../types/static'
 
 function createJob<P>(name: string): Job<P> {
   return {
-    queue: async params => {
+    create: async (params: P) => {
       // TODO: Send message to SQS queue
     },
     receive: async () => {
       // TODO: Receive message from SQS queue
-      return Promise.resolve(JSON.parse('{}'))
+      const result: JobMessage<P> = JSON.parse('{}')
+      return Promise.resolve(result)
     },
     notify: async () => {
       // TODO: Send notification to SNS topic
+    },
+    succeed: async (message: JobMessage<P>) => {
+      // TODO: Delete message from SQS queue
+    },
+    fail: async (message: JobMessage<P>) => {
+      // TODO: Send message to dead-letter SQS queue
+    },
+    retry: async (message: JobMessage<P>) => {
+      // No-op: Don't delete the message, processing will timeout and
+      // cause SQS to retry according to it's redrive policy.
     },
   }
 }

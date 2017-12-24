@@ -9,9 +9,12 @@ import {
 
 function createJob<P>(): Job<P> {
   return {
-    queue: () => Promise.resolve(),
+    create: () => Promise.resolve(),
     receive: () => Promise.resolve(JSON.parse('{}')),
     notify: () => Promise.resolve(),
+    succeed: () => Promise.resolve(),
+    fail: () => Promise.resolve(),
+    retry: () => Promise.resolve(),
   }
 }
 

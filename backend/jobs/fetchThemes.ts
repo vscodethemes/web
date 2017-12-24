@@ -1,53 +1,77 @@
-import { ExtensionRuntime } from '../../types/runtime'
+import {
+  ExtensionRuntime,
+  FetchThemesPayloadRuntime,
+} from '../../types/runtime'
 import { Extension, ExtensionQueryResults, Services } from '../../types/static'
+import { PermanentJobError, TransientJobError } from '../errors'
 
 export const MAX_PAGES_TO_FETCH = 100
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const job = await services.jobs.fetchThemes.receive()
+  const { jobs: { fetchThemes, fetchRepository }, logger } = services
+
+  const job = await fetchThemes.receive()
   if (!job) {
-    services.logger.log('No more jobs to process.')
+    logger.log('No more jobs to process.')
     return
   }
 
-  const page = job.page
-  if (page > MAX_PAGES_TO_FETCH) {
-    services.logger.log('Maximum number of pages reached.')
-    return
-  }
+  try {
+    if (!FetchThemesPayloadRuntime.guard(job.payload)) {
+      throw new PermanentJobError(`Invalid payload: '${JSON.stringify(job)}`)
+    }
 
-  const themes = await fetchMarketplaceThemes(services, page)
-  if (themes.length === 0) {
-    services.logger.log('No more pages to process.')
-    // Only when we have finished processing all pages do we start
-    // processing the repositories.
-    services.jobs.fetchRepository.notify()
-    return
-  }
-  // Queue a job to process the next page.
-  await services.jobs.fetchThemes.queue({ page: page + 1 })
-  // Start processing the next page as soon as we queue the job.
-  await services.jobs.fetchThemes.notify()
+    const { page } = job.payload
+    if (page > MAX_PAGES_TO_FETCH) {
+      logger.log('Maximum number of pages reached.')
+      return
+    }
 
-  const repositories = extractRepositories(services, themes)
-  if (repositories.length === 0) {
-    services.logger.log('No repositories to process for page.')
-    return
-  }
-  // Queue a job for each repository url.
-  await Promise.all(
-    repositories.map(repository =>
-      services.jobs.fetchRepository.queue({ repository }),
-    ),
-  )
+    const themes = await fetchMarketplaceThemes(services, page)
+    if (themes.length === 0) {
+      logger.log('No more pages to process.')
+      // Only when we have finished processing all pages do we start
+      // processing the repositories.
+      await fetchRepository.notify()
+      return
+    }
+    // Queue a job to process the next page.
+    await fetchThemes.create({ page: page + 1 })
+    // Start processing the next page as soon as we queue the job.
+    await fetchThemes.notify()
 
-  services.logger.log(`
-    Page: ${page}
-    Themes found: ${themes.length}
-    Repositories queued: ${repositories.length}
-  `)
+    const repositories = extractRepositories(services, themes)
+    if (repositories.length === 0) {
+      logger.log('No repositories to process for page.')
+      return
+    }
+    // Queue a job for each repository url.
+    await Promise.all(
+      repositories.map(repository => fetchRepository.create({ repository })),
+    )
+
+    await fetchThemes.succeed(job)
+
+    logger.log(`
+      Page: ${page}
+      Themes found: ${themes.length}
+      Repositories queued: ${repositories.length}
+    `)
+  } catch (err) {
+    if (TransientJobError.is(err)) {
+      logger.log(err.message)
+      await fetchThemes.retry(job)
+    } else if (PermanentJobError.is(err)) {
+      logger.log(err.message)
+      await fetchThemes.fail(job)
+    } else {
+      logger.log('Unknown Error')
+      logger.error(err)
+      await fetchThemes.fail(job)
+    }
+  }
 }
 
 /**
@@ -57,6 +81,7 @@ async function fetchMarketplaceThemes(
   services: Services,
   page: number,
 ): Promise<Extension[]> {
+  const { fetch } = services
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
   const query = {
     filters: [
@@ -80,7 +105,7 @@ async function fetchMarketplaceThemes(
     flags: 914, // Settings flags to 914 will return the github link.
   }
 
-  const response = await services.fetch(url, {
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
       Accept: 'application/json;api-version=3.0-preview.1',
@@ -88,6 +113,10 @@ async function fetchMarketplaceThemes(
     },
     body: JSON.stringify(query),
   })
+
+  if (!response.ok) {
+    throw new TransientJobError(`Invalid response: ${response.statusText}`)
+  }
 
   const payload: ExtensionQueryResults = await response.json()
   return payload.results[0].extensions
@@ -100,12 +129,11 @@ function extractRepositories(
   services: Services,
   themes: Extension[],
 ): string[] {
+  const { logger } = services
   const repos: string[] = []
 
   themes.forEach(theme => {
-    try {
-      // Throw error if theme is the expected extension structure.
-      ExtensionRuntime.check(theme)
+    if (ExtensionRuntime.guard(theme)) {
       // Sort by the lastUpdatedAt (ISO string) to get the latest version.
       const latestVersion = theme.versions.sort((a, b) =>
         b.lastUpdated.localeCompare(a.lastUpdated),
@@ -118,13 +146,16 @@ function extractRepositories(
       if (repoUrlProp) {
         repos.push(repoUrlProp.value)
       } else {
-        throw new Error(`Missing property '${GITHUB_PROPERTY_NAME}'`)
+        // Skip themes without github url.
+        logger.log(
+          `Missing property '${GITHUB_PROPERTY_NAME}': ${JSON.stringify(
+            theme,
+          )}`,
+        )
       }
-    } catch (err) {
-      // Skip over the invalid theme (by not throwing) and log it.
-      services.logger.log('Invalid theme:')
-      services.logger.log(theme)
-      services.logger.error(err)
+    } else {
+      // Skip themes with unexpected structure.
+      logger.log(`Invalid theme: ${JSON.stringify(theme)}`)
     }
   })
 

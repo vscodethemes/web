@@ -1,4 +1,4 @@
-import { Array, Record, String, Tuple } from 'runtypes'
+import { Array, Number, Record, String, Tuple } from 'runtypes'
 
 export const PublisherRuntime = Record({
   publisherName: String,
@@ -22,4 +22,8 @@ export const ExtensionRuntime = Record({
 
 export const ExtensionQueryResultsRuntime = Record({
   results: Tuple(Record({ extensions: Array(ExtensionRuntime) })),
+})
+
+export const FetchThemesPayloadRuntime = Record({
+  page: Number,
 })
