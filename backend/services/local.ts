@@ -5,7 +5,7 @@ import { Job, JobMessage, Services } from '../../types/static'
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
     create: async params => {
-      console.log('Job queued:', name, params)
+      console.log('Job created:', name, params)
       return {}
     },
     receive: async (): Promise<JobMessage<P>> => {

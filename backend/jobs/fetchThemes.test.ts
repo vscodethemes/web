@@ -1,10 +1,7 @@
 import * as fetch from 'jest-fetch-mock'
 import { Extension, Services } from '../../types/static'
 import createServices from '../services/mock'
-import fetchThemes, {
-  GITHUB_PROPERTY_NAME,
-  MAX_PAGES_TO_FETCH,
-} from './fetchThemes'
+import fetchThemes, { GITHUB_PROPERTY_NAME } from './fetchThemes'
 
 const createValidThemes = (): Extension[] => {
   return [
@@ -85,21 +82,6 @@ test('should fail job if it has an invalid payload', async () => {
   const failSpy = jest.spyOn(services.jobs.fetchThemes, 'fail')
   await fetchThemes(services)
   expect(failSpy).toHaveBeenCalledTimes(1)
-})
-
-test('should not process job if max pages reached', async () => {
-  const services = createServices()
-  const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [] }))
-  jest
-    .spyOn(services.jobs.fetchThemes, 'receive')
-    .mockImplementation(() =>
-      Promise.resolve({ payload: { page: MAX_PAGES_TO_FETCH + 1 } }),
-    )
-
-  const fetchSpy = jest.spyOn(services, 'fetch')
-  await fetchThemes(services)
-  expect(fetchSpy).toHaveBeenCalledTimes(0)
 })
 
 test('should fetch page', async () => {

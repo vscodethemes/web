@@ -5,7 +5,6 @@ import {
 import { Extension, ExtensionQueryResults, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
-export const MAX_PAGES_TO_FETCH = 100
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
@@ -24,11 +23,6 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { page } = job.payload
-    if (page > MAX_PAGES_TO_FETCH) {
-      logger.log('Maximum number of pages reached.')
-      return
-    }
-
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
@@ -68,8 +62,9 @@ export default async function run(services: Services): Promise<any> {
       await fetchThemes.fail(job)
     } else {
       logger.log('Unknown Error')
-      logger.error(err)
       await fetchThemes.fail(job)
+      // Rethrow error for global error handlers.
+      throw err
     }
   }
 }
@@ -148,9 +143,9 @@ function extractRepositories(
       } else {
         // Skip themes without github url.
         logger.log(
-          `Missing property '${GITHUB_PROPERTY_NAME}': ${JSON.stringify(
+          `Missing property '${GITHUB_PROPERTY_NAME}': \n${JSON.stringify(
             theme,
-          )}`,
+          )}\n`,
         )
       }
     } else {
