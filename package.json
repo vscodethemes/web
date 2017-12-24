@@ -16,6 +16,7 @@
     "runtypes": "^0.13.1"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^0.0.24",
     "@types/jest": "^21.1.8",
     "@types/minimist": "^1.2.0",
     "@types/node": "^8.0.54",
@@ -44,8 +45,17 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "mapCoverage": true,
-    "collectCoverageFrom": ["backend/**", "frontend/**"],
+    "collectCoverageFrom": [
+      "backend/**",
+      "frontend/**"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

@@ -20,7 +20,10 @@ export interface Job<P> {
   notify: () => Promise<any>
 }
 
-export type Fetch = (url: string | Request, init?: RequestInit) => Promise<Response>
+export type Fetch = (
+  url: string | Request,
+  init?: RequestInit,
+) => Promise<Response>
 
 export interface FetchThemesPayload {
   page: number
@@ -40,4 +43,10 @@ export interface Services {
     fetchThemes: Job<FetchThemesPayload>
     fetchRepository: Job<FetchRepositoryPayload>
   }
+}
+
+export type JobHandler = (services: Services) => Promise<any>
+
+export interface JobHandlers {
+  [key: string]: JobHandler
 }

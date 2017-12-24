@@ -1,5 +1,10 @@
 {
-  "extends": ["tslint:latest", "tslint-react", "tslint-eslint-rules", "tslint-config-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-react",
+    "tslint-eslint-rules",
+    "tslint-config-prettier"
+  ],
   "rules": {
     "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": false,

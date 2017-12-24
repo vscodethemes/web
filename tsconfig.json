@@ -5,10 +5,16 @@
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": false,
+    "sourceMap": true,
     "removeComments": false,
-    "noImplicitAny": false
+    "noImplicitAny": true
   },
-  "types": ["node"],
-  "exclude": ["node_modules"]
+  "types": [
+    "node",
+    "aws-lambda"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts"
+  ]
 }

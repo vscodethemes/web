@@ -1,7 +1,6 @@
 // tslint:disable no-empty
 import * as fetch from 'jest-fetch-mock'
 import {
-  Fetch,
   FetchRepositoryPayload,
   FetchThemesPayload,
   Job,

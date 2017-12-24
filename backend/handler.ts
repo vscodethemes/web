@@ -1,22 +1,26 @@
+import { JobHandlers } from '../types/static'
 import fetchThemes from './jobs/fetchThemes'
 // import fetchRepository from './jobs/fetchRepository'
 import createServices from './services/aws'
 
 const jobName = process.env.JOB
 
-export default async function handler(event, context) {
+const jobs: JobHandlers = {
+  fetchThemes,
+  // fetchRepository,
+}
+
+export default async function handler(event: any, context: AWSLambda.Context) {
   const services = createServices()
 
   try {
-    let result
-    if (jobName === 'fetchThemes') {
-      result = await fetchThemes(services)
-    } else if (jobName === 'fetchRepository') {
-      // result = await fetchRepository(services)
-    } else {
+    const job = jobs[jobName]
+    if (!job) {
       throw new Error(`Invalid job '${jobName}'.`)
     }
-    context.done(result)
+
+    const result = await job(services)
+    context.succeed(result)
   } catch (err) {
     context.fail(err)
   }

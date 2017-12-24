@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@types/aws-lambda@^0.0.24":
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-0.0.24.tgz#79e4ef418f299d7430aca414178864806968415e"
+
 "@types/events@*":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.1.0.tgz#93b1be91f63c184450385272c47b6496fd028e02"

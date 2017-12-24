@@ -22,6 +22,7 @@ export default function createServices(): Services {
   return {
     fetch,
     jobs: {
+      // TODO: Allow receive mocks to be passed in via CLI.
       fetchThemes: createJob('fetchThemes', { page: 1 }),
       fetchRepository: createJob('fetchRepository', { repository: 'test' }),
     },

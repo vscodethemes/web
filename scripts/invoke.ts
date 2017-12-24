@@ -3,12 +3,8 @@ import createServices from '../backend/services/local'
 
 const args = minimist(process.argv.slice(2))
 
-async function invoke(jobPath: string, eventPath: string) {
+async function invoke(jobPath: string) {
   const { default: job } = await import(jobPath)
-  const { default: event } = eventPath
-    ? await import(eventPath)
-    : { default: {} }
-
   try {
     await job(createServices())
   } catch (err) {
@@ -17,4 +13,4 @@ async function invoke(jobPath: string, eventPath: string) {
   }
 }
 
-invoke(args.job, args.event).catch(console.error)
+invoke(args.job).catch(console.error)

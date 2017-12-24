@@ -111,16 +111,17 @@ function extractRepositories(
         b.lastUpdated.localeCompare(a.lastUpdated),
       )[0]
       // Find the property the contains theme's repository url.
-      const repoUrlProperty = latestVersion.properties.find(
-        property => property.key === GITHUB_PROPERTY_NAME,
+      const repoUrlProp = latestVersion.properties.find(
+        prop => prop.key === GITHUB_PROPERTY_NAME,
       )
 
-      if (repoUrlProperty) {
-        repos.push(repoUrlProperty.value)
+      if (repoUrlProp) {
+        repos.push(repoUrlProp.value)
       } else {
-        throw new Error(`Missing property ${GITHUB_PROPERTY_NAME}`)
+        throw new Error(`Missing property '${GITHUB_PROPERTY_NAME}'`)
       }
     } catch (err) {
+      // Skip over the invalid theme (by not throwing) and log it.
       services.logger.log('Invalid theme:')
       services.logger.log(theme)
       services.logger.error(err)
