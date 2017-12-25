@@ -10,8 +10,10 @@
     "build": "rimraf build && tsc",
     "package":
       "yarn build && bestzip build/lambda.zip build/backend build/types",
-    "plan":
+    "terraform-plan":
       "yarn package && cd infrastructure/env-production && terraform get && terraform plan",
+    "terraform-show":
+      "yarn package && cd infrastructure/env-production && terraform get && terraform show",
     "deploy":
       "yarn package && cd infrastructure/env-production && terraform get && terraform apply -auto-approve",
     "test": "jest",
