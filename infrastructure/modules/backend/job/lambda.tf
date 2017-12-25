@@ -5,7 +5,7 @@ resource "aws_lambda_function" "lambda" {
   memory_size      = 128
   timeout          = 10
   role             = "${aws_iam_role.lambda.arn}"
-  handler          = "backend/handler.default"
+  handler          = "build/backend/handler.default"
   runtime          = "nodejs6.10"
 
   environment {
