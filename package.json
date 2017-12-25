@@ -8,8 +8,10 @@
     "invoke:fetchThemes":
       "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
     "build": "rimraf build && tsc",
+    "install-build-deps":
+      "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
     "package":
-      "yarn build && bestzip build/lambda.zip build/backend build/types",
+      "yarn build && yarn install-build-deps && bestzip build/lambda.zip build/backend build/types build/node_modules",
     "terraform-plan":
       "yarn package && cd infrastructure/env-production && terraform get && terraform plan",
     "terraform-show":
