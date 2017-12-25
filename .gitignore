@@ -1,3 +1,6 @@
 node_modules/
 build/
 coverage/
+.terraform/
+*.tfstate
+*.tfstate.backup
