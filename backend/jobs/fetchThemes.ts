@@ -33,6 +33,7 @@ export default async function run(services: Services): Promise<any> {
       // Only when we have finished processing all pages do we start
       // processing the repositories.
       // await fetchRepository.notify()
+      await fetchThemes.succeed(job)
       return
     }
     // Queue a job to process the next page.
@@ -117,11 +118,18 @@ async function fetchMarketplaceThemes(
   })
 
   if (!response.ok) {
-    throw new TransientJobError(`Invalid response: ${response.statusText}`)
+    throw new TransientJobError(`Bad response: ${response.statusText}`)
   }
 
-  const payload: ExtensionQueryResults = await response.json()
-  return payload.results[0].extensions
+  const data: ExtensionQueryResults = await response.json()
+  try {
+    return data.results[0].extensions
+  } catch (err) {
+    // TODO: Add test fpr this.
+    throw new TransientJobError(
+      `Invalid response data: ${JSON.stringify(data)}`,
+    )
+  }
 }
 
 /**
