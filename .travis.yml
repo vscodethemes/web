@@ -3,8 +3,8 @@ node_js:
 - 6.10.3
 env:
   global:
-    # TF_VAR_aws_access_key and TF_VAR_aws_secret_key
-    secure: jqIsO3C0hHrdNBWM18tm5ruIy3GUUYEVBXhJzgukTdhmmGMm8Y3CkbwMGIZkzGwc23jYFAatz7HgdKTNfQblo/R+qJr89D5cV8Z6WQS9SSE4uweLRu7LV6f7AJa/rKBzyp0hdluL2AvMU5EurMDwdwRwBrfI1VGm6OsfqxlPVUTniJKPVFmydxfxWBfGK9v4w4FGHXKMYqVOTxCKxK5NTuweTeW7wPaxW6kNbpKQRKcu85KcdwaxQxj8/UWKcwAlw1sVtTzlNP+wQ94S3n0QBkQUuKFjXEyiaUyuxFc8UU5IDJnldn9Cc9qTHPOm0fKINu3eJhFxKlx/ciSKAwFOxGrBNj0krmx4RGULW4hcsut/hu6JGFPaw4KK6ENc1ZWJ+PS0R6UgZACvHEiZGJDAAA503VEOdUlv3Vt/ywr730nTpiv62/1tTUsThLVE6V5UZBQqXI8h0LHf1HON7GWLUX53phGTSaPGR3G5CMcqFp/j1eF3QOpumJ7y8u2A6UtjhbgB9SISYukv5h7AchQMvb/BTqxAlSOJvEJFFjl3trLTViq6LeebhfRNrPBWCG9lpox+/mS+5+7l4hLOAyv0iVT4d67CthLISF8InQA7q0aIU1LOas559nzATRuqF8eIYNKlkROiqel8xX02kXdvmIqz33anKzwzhp0fP7zoRoM=
+    # TF_VAR_region, TF_VAR_access_key, TF_VAR_secret_key
+    secure: DrVXCpGk+BRipCXGdNM6pUizl3P6maO3v1+pi1p399N5dOFQqsgXGICNi4ztxxZyxX7pSiFTb61FoPGLE+OgGqHpCcRIZcbn1p6YLnShosRMtoV2byaajlgKbAKYrIi7TtfDro1EcrYw4EfJWfUeFX607wDepyygDiEtpciUMfC9584m067ipTv+d5iihIa5ig4LW6I55NmygzoAEBpLt8WhxqiPVTt8LdqippHFKPK7Kx24S7Z1nxMzZauZypDEQxA+2ttKgqz34cI4iOi97Y6Tburp77TOGAWLj7MQeGr20soL2WVJZ/rELisJrTOg3U7YlrhQNVy2QmPqcMAuJWhc7YF+LAfWGH4avTob1fRuJPSBF4HtiAYwKlZ+61ndDB56rsYWSg/fnDvI+JsrXtsk34b1wD2ihnXGxV/eQciefOgNiOTj4QtIll+XgpYUhTZnDuYnglKC62Tu3WnoQEisxhIBlHqzUbMWHipJwx3HOnHSGLfydHNk5JaRK8hokn9gfghChLWN8P/IzqHaA4KyulTg3Eri4Dl7AGDRyWUdkgEszbsjWWPUFAoIjHuGNPFa/DoYQTIFI/SasGmcN/F4YBYCp9bnv/E3lh2jcKLd9Z96Jyim4gy8ZiIuv1zTg7hBE1KCCHd6VrPD82RuvJvfIw7jzL8nwYRhq/cJ5LU=
 before_install:
 - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
@@ -25,12 +25,14 @@ script:
 - yarn build
 - yarn lint
 - yarn test
+- yarn install-production-dependencies
 - yarn package
-- yarn plan
+- yarn terraform-init
+- yarn terraform-plan
 deploy:
 - provider: script
   skip_cleanup: true
-  script: yarn deploy
+  script: yarn terraform-apply
   on:
     repo: jschr/VSCodeThemes
     branch: production
