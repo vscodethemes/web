@@ -25,6 +25,7 @@ script:
 - yarn build
 - yarn lint
 - yarn test
+- yarn package
 - yarn plan
 deploy:
 - provider: script
