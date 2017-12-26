@@ -9,7 +9,7 @@ export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { jobs: { fetchThemes }, logger } = services
+  const { fetchThemes, logger } = services
 
   const job = await fetchThemes.receive()
   if (!job) {

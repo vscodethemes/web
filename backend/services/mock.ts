@@ -21,10 +21,8 @@ function createJob<P>(): Job<P> {
 export default function createServices(): Services {
   return {
     fetch,
-    jobs: {
-      fetchThemes: createJob<FetchThemesPayload>(),
-      // fetchRepository: createJob<FetchRepositoryPayload>(),
-    },
+    fetchThemes: createJob<FetchThemesPayload>(),
+    // fetchRepository: createJob<FetchRepositoryPayload>(),
     logger: {
       log: () => {},
       error: () => {},

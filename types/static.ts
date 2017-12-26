@@ -49,10 +49,8 @@ export interface Services {
     log: (obj: any) => void
     error: (error: Error) => void
   }
-  jobs: {
-    fetchThemes: Job<FetchThemesPayload>
-    // fetchRepository: Job<FetchRepositoryPayload>
-  }
+  fetchThemes: Job<FetchThemesPayload>
+  // fetchRepository: Job<FetchRepositoryPayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>
