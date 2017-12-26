@@ -22,6 +22,7 @@ cache:
 install:
 - yarn install --frozen-lockfile
 script:
+- yarn build
 - yarn lint
 - yarn test
 - yarn plan
