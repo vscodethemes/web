@@ -4,8 +4,8 @@ import { Job, JobMessage, Services } from '../../types/static'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
-    create: async params => {
-      console.log('Job created:', name, params)
+    create: async payload => {
+      console.log('Job created:', name, payload)
       return {}
     },
     receive: async (): Promise<JobMessage<P>> => {
@@ -36,15 +36,13 @@ export default function createServices(): Services {
     jobs: {
       // TODO: Allow receive mocks to be passed in via CLI.
       fetchThemes: createJob('fetchThemes', {
-        messageId: '',
         receiptHandle: '',
         payload: { page: 1 },
       }),
-      fetchRepository: createJob('fetchRepository', {
-        messageId: '',
-        receiptHandle: '',
-        payload: { repository: 'test' },
-      }),
+      // fetchRepository: createJob('fetchRepository', {
+      //   receiptHandle: '',
+      //   payload: { repository: 'test' },
+      // }),
     },
     logger: {
       log: obj => {

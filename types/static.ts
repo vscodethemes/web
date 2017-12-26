@@ -17,8 +17,6 @@ export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
 
 export interface JobMessage<P> {
-  // A unique identifier for the message.
-  messageId: string
   // An identifier associated with the act of receiving the message.
   // A new receipt handle is returned every time you receive a message.
   // When deleting a message, you provide the last received receipt handle to delete the message.
@@ -32,7 +30,7 @@ export interface Job<P> {
   receive: () => Promise<null | JobMessage<P>>
   notify: () => Promise<any>
   succeed: (message: JobMessage<P>) => Promise<any>
-  fail: (message: JobMessage<P>) => Promise<any>
+  fail: (message: JobMessage<P>, error: Error) => Promise<any>
   retry: (message: JobMessage<P>) => Promise<any>
 }
 
@@ -53,7 +51,7 @@ export interface Services {
   }
   jobs: {
     fetchThemes: Job<FetchThemesPayload>
-    fetchRepository: Job<FetchRepositoryPayload>
+    // fetchRepository: Job<FetchRepositoryPayload>
   }
 }
 

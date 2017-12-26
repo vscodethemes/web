@@ -3,4 +3,4 @@ build/
 coverage/
 .terraform/
 *.tfstate
-*.tfstate.backup
+*.tfstate.*

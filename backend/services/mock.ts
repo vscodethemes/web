@@ -23,7 +23,7 @@ export default function createServices(): Services {
     fetch,
     jobs: {
       fetchThemes: createJob<FetchThemesPayload>(),
-      fetchRepository: createJob<FetchRepositoryPayload>(),
+      // fetchRepository: createJob<FetchRepositoryPayload>(),
     },
     logger: {
       log: () => {},

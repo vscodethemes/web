@@ -9,7 +9,7 @@ export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { jobs: { fetchThemes, fetchRepository }, logger } = services
+  const { jobs: { fetchThemes }, logger } = services
 
   const job = await fetchThemes.receive()
   if (!job) {
@@ -18,7 +18,6 @@ export default async function run(services: Services): Promise<any> {
   }
 
   logger.log('Proccessing fetchThemes job...')
-  logger.log(`Message ID: ${job.messageId}`)
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
@@ -33,7 +32,7 @@ export default async function run(services: Services): Promise<any> {
       logger.log('No more pages to process.')
       // Only when we have finished processing all pages do we start
       // processing the repositories.
-      await fetchRepository.notify()
+      // await fetchRepository.notify()
       return
     }
     // Queue a job to process the next page.
@@ -46,10 +45,13 @@ export default async function run(services: Services): Promise<any> {
       logger.log('No repositories to process for page.')
       return
     }
+
+    logger.log(repositories)
+
     // Queue a job for each repository url.
-    await Promise.all(
-      repositories.map(repository => fetchRepository.create({ repository })),
-    )
+    // await Promise.all(
+    //   repositories.map(repository => fetchRepository.create({ repository })),
+    // )
 
     await fetchThemes.succeed(job)
 
@@ -64,10 +66,10 @@ export default async function run(services: Services): Promise<any> {
       await fetchThemes.retry(job)
     } else if (PermanentJobError.is(err)) {
       logger.log(err.message)
-      await fetchThemes.fail(job)
+      await fetchThemes.fail(job, err)
     } else {
       logger.log('Unexpected Error.')
-      await fetchThemes.fail(job)
+      await fetchThemes.fail(job, err)
       // Rethrow error for global error handlers.
       throw err
     }

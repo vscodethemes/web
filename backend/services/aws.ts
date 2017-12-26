@@ -1,4 +1,5 @@
 // tslint:disable no-console
+import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
   FetchRepositoryPayload,
@@ -8,24 +9,76 @@ import {
   Services,
 } from '../../types/static'
 
-function createJob<P>(name: string): Job<P> {
+const {
+  FETCH_THEMES_QUEUE_URL,
+  FETCH_THEMES_DEADLETTER_URL,
+  FETCH_THEMES_TOPIC_ARN,
+} = process.env
+
+const sqs = new AWS.SQS()
+const sns = new AWS.SNS()
+
+function createJob<P>(
+  queueUrl: string,
+  deadLetterQueueUrl: string,
+  topicArn: string,
+): Job<P> {
   return {
-    create: async (params: P) => {
-      // TODO: Send message to SQS queue
+    create: async (payload: P) => {
+      const params = {
+        QueueUrl: queueUrl,
+        MessageBody: JSON.stringify(payload),
+      }
+      await sqs.sendMessage(params).promise()
     },
     receive: async () => {
-      // TODO: Receive message from SQS queue
-      const result: JobMessage<P> = JSON.parse('{}')
-      return Promise.resolve(result)
+      const params = {
+        QueueUrl: queueUrl,
+        MaxNumberOfMessages: 1,
+        WaitTimeSeconds: 10, // seconds
+      }
+      const data = await sqs.receiveMessage(params).promise()
+      const message = data.Messages[0]
+      const payload = JSON.parse(message.Body)
+      return { receiptHandle: message.ReceiptHandle, payload }
     },
     notify: async () => {
-      // TODO: Send notification to SNS topic
+      const params = {
+        TopicArn: topicArn,
+        Message: 'fetchThemes',
+      }
+      await sns.publish(params).promise()
     },
     succeed: async (message: JobMessage<P>) => {
-      // TODO: Delete message from SQS queue
+      const params = {
+        QueueUrl: queueUrl,
+        ReceiptHandle: message.receiptHandle,
+      }
+      await sqs.deleteMessage(params).promise()
     },
-    fail: async (message: JobMessage<P>) => {
-      // TODO: Send message to dead-letter SQS queue
+    fail: async (message: JobMessage<P>, error: Error) => {
+      // Forward message and error to the dead-letter queue.
+      const sendParams = {
+        QueueUrl: deadLetterQueueUrl,
+        MessageBody: JSON.stringify(message.payload),
+        MessageAttributes: {
+          error: {
+            DataType: 'String',
+            StringValue: error.message,
+          },
+          stack: {
+            DataType: 'String',
+            StringValue: error.stack,
+          },
+        },
+      }
+      await sqs.sendMessage(sendParams).promise()
+      // Delete message from original queue.
+      const deleteParams = {
+        QueueUrl: queueUrl,
+        ReceiptHandle: message.receiptHandle,
+      }
+      await sqs.deleteMessage(deleteParams).promise()
     },
     retry: async (message: JobMessage<P>) => {
       // No-op: Don't delete the message, processing will timeout and
@@ -38,8 +91,12 @@ export default function createServices(): Services {
   return {
     fetch,
     jobs: {
-      fetchThemes: createJob<FetchThemesPayload>('fetchThemes'),
-      fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
+      fetchThemes: createJob<FetchThemesPayload>(
+        FETCH_THEMES_QUEUE_URL,
+        FETCH_THEMES_DEADLETTER_URL,
+        FETCH_THEMES_TOPIC_ARN,
+      ),
+      // fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
     },
     // Ouputs to CloudWatch
     logger: {
