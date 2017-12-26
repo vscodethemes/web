@@ -1,0 +1,34 @@
+language: node_js
+node_js:
+- 6.10.3
+env:
+  global:
+    # TF_VAR_aws_access_key and TF_VAR_aws_secret_key
+    secure: jqIsO3C0hHrdNBWM18tm5ruIy3GUUYEVBXhJzgukTdhmmGMm8Y3CkbwMGIZkzGwc23jYFAatz7HgdKTNfQblo/R+qJr89D5cV8Z6WQS9SSE4uweLRu7LV6f7AJa/rKBzyp0hdluL2AvMU5EurMDwdwRwBrfI1VGm6OsfqxlPVUTniJKPVFmydxfxWBfGK9v4w4FGHXKMYqVOTxCKxK5NTuweTeW7wPaxW6kNbpKQRKcu85KcdwaxQxj8/UWKcwAlw1sVtTzlNP+wQ94S3n0QBkQUuKFjXEyiaUyuxFc8UU5IDJnldn9Cc9qTHPOm0fKINu3eJhFxKlx/ciSKAwFOxGrBNj0krmx4RGULW4hcsut/hu6JGFPaw4KK6ENc1ZWJ+PS0R6UgZACvHEiZGJDAAA503VEOdUlv3Vt/ywr730nTpiv62/1tTUsThLVE6V5UZBQqXI8h0LHf1HON7GWLUX53phGTSaPGR3G5CMcqFp/j1eF3QOpumJ7y8u2A6UtjhbgB9SISYukv5h7AchQMvb/BTqxAlSOJvEJFFjl3trLTViq6LeebhfRNrPBWCG9lpox+/mS+5+7l4hLOAyv0iVT4d67CthLISF8InQA7q0aIU1LOas559nzATRuqF8eIYNKlkROiqel8xX02kXdvmIqz33anKzwzhp0fP7zoRoM=
+before_install:
+- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+- sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
+- echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+- sudo apt-get update -qq
+- sudo apt-get install -y -qq yarn
+- curl -fSL "https://releases.hashicorp.com/terraform/0.6.15/terraform_0.6.15_linux_amd64.zip"
+  -o terraform.zip
+- sudo unzip terraform.zip -d /opt/terraform
+- sudo ln -s /opt/terraform/terraform /usr/bin/terraform
+- rm -f terraform.zip
+cache:
+  directories:
+  - "$HOME/.yarn-cache"
+install:
+- yarn install --frozen-lockfile
+script:
+- yarn lint
+- yarn test
+- yarn plan
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: yarn deploy
+  on:
+    repo: jschr/VSCodeThemes
+    branch: master

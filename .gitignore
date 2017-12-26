@@ -4,3 +4,4 @@ coverage/
 .terraform/
 *.tfstate
 *.tfstate.*
+terraform.plan

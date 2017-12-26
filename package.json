@@ -5,13 +5,19 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "invoke:fetchThemes": "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
+    "invoke:fetchThemes":
+      "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
     "build": "rimraf build && tsc",
-    "install-build-deps": "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
-    "package": "yarn build && yarn install-build-deps && bestzip build/lambda.zip build/backend build/types build/node_modules",
-    "terraform-plan": "yarn package && cd infrastructure/env-production && terraform get && terraform plan",
-    "terraform-show": "yarn package && cd infrastructure/env-production && terraform get && terraform show",
-    "deploy": "yarn package && cd infrastructure/env-production && terraform get && terraform apply -auto-approve",
+    "install-build-deps":
+      "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
+    "package":
+      "yarn build && yarn install-build-deps && bestzip build/lambda.zip build/backend build/types build/node_modules",
+    "plan":
+      "yarn package && cd infrastructure/env-production && terraform get && terraform plan -out terraform.plan",
+    "show":
+      "yarn package && cd infrastructure/env-production && terraform get && terraform show",
+    "deploy":
+      "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "tslint --project ."
@@ -53,17 +59,8 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "mapCoverage": true,
-    "collectCoverageFrom": [
-      "backend/**",
-      "frontend/**"
-    ],
+    "collectCoverageFrom": ["backend/**", "frontend/**"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
   }
 }
