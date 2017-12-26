@@ -8,6 +8,14 @@ resource "aws_lambda_function" "lambda" {
   handler          = "build/backend/handler.default"
   runtime          = "nodejs6.10"
 
+  # Limits our lambda function to only process one job at a time. 
+  # For a recursive job, notifying itself before the execution of the current
+  # function invocation completes will cause a 2nd concurrent job to created.
+  # This isn't a bad thing, but we don't really need concurrency and makes 
+  # the logs in CloudWatch harder to read because they are split up in a 
+  # log stream for each invocation.
+  reserved_concurrent_executions = 1
+
   environment {
     variables = "${var.environment_variables}"
   }
