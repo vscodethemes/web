@@ -1,8 +1,13 @@
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
+variable "region" {}
 
-variable "region" {
-  default = "us-east-1"
+terraform {
+  backend "s3" {
+    # Manually created bucket with versioning enabled.
+    bucket = "vscodethemes-tfstate"
+    key    = "production.tfstate"
+  }
 }
 
 provider "aws" {
