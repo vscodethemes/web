@@ -2,7 +2,7 @@
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
-  FetchRepositoryPayload,
+  // FetchRepositoryPayload,
   FetchThemesPayload,
   Job,
   JobMessage,
@@ -38,6 +38,11 @@ function createJob<P>(
         WaitTimeSeconds: 10, // seconds
       }
       const data = await sqs.receiveMessage(params).promise()
+      if (!data || !data.Messages) {
+        console.log('Invalid response data! THIS SHOULD NOT HAPPEN!!')
+        console.log(data)
+      }
+
       const message = data.Messages[0]
       const payload = JSON.parse(message.Body)
       return { receiptHandle: message.ReceiptHandle, payload }
@@ -90,14 +95,12 @@ function createJob<P>(
 export default function createServices(): Services {
   return {
     fetch,
-    jobs: {
-      fetchThemes: createJob<FetchThemesPayload>(
-        FETCH_THEMES_QUEUE_URL,
-        FETCH_THEMES_DEADLETTER_URL,
-        FETCH_THEMES_TOPIC_ARN,
-      ),
-      // fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
-    },
+    fetchThemes: createJob<FetchThemesPayload>(
+      FETCH_THEMES_QUEUE_URL,
+      FETCH_THEMES_DEADLETTER_URL,
+      FETCH_THEMES_TOPIC_ARN,
+    ),
+    // fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
     // Ouputs to CloudWatch
     logger: {
       log: obj => {
