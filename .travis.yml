@@ -31,4 +31,4 @@ deploy:
   script: yarn deploy
   on:
     repo: jschr/VSCodeThemes
-    branch: master
+    branch: production
