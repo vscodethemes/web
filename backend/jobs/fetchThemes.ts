@@ -9,7 +9,7 @@ export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { fetchThemes, logger } = services
+  const { fetchThemes, processRepo, logger } = services
 
   const job = await fetchThemes.receive()
   if (!job) {
@@ -32,7 +32,7 @@ export default async function run(services: Services): Promise<any> {
       logger.log('No more pages to process.')
       // Only when we have finished processing all pages do we start
       // processing the repositories.
-      // await fetchRepository.notify()
+      await processRepo.notify()
       await fetchThemes.succeed(job)
       return
     }
@@ -50,9 +50,9 @@ export default async function run(services: Services): Promise<any> {
     logger.log(repositories)
 
     // Queue a job for each repository url.
-    // await Promise.all(
-    //   repositories.map(repository => fetchRepository.create({ repository })),
-    // )
+    await Promise.all(
+      repositories.map(repository => processRepo.create({ repository })),
+    )
 
     await fetchThemes.succeed(job)
 

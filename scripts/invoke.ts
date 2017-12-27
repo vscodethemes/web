@@ -13,4 +13,4 @@ async function invoke(jobPath: string) {
   }
 }
 
-invoke(args.job).catch(console.error)
+invoke(args._[0]).catch(console.error)

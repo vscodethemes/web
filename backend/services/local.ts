@@ -1,6 +1,12 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
-import { Job, JobMessage, Services } from '../../types/static'
+import {
+  FetchThemesPayload,
+  Job,
+  JobMessage,
+  ProcessRepoPayload,
+  Services,
+} from '../../types/static'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
@@ -9,7 +15,7 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
       return {}
     },
     receive: async (): Promise<JobMessage<P>> => {
-      console.log('Job received:', 'fetchThemes')
+      console.log('Job received:', name)
       return receiveMock
     },
     notify: async () => {
@@ -34,14 +40,22 @@ export default function createServices(): Services {
   return {
     fetch,
     // TODO: Allow receive mocks to be passed in via CLI.
-    fetchThemes: createJob('fetchThemes', {
+    fetchThemes: createJob<FetchThemesPayload>('fetchThemes', {
       receiptHandle: '',
       payload: { page: 1 },
     }),
-    // fetchRepository: createJob('fetchRepository', {
-    //   receiptHandle: '',
-    //   payload: { repository: 'test' },
-    // }),
+    processRepo: createJob<ProcessRepoPayload>('processRepo', {
+      receiptHandle: '',
+      payload: {
+        repository: 'test',
+        installs: 0,
+        rating: 0,
+        ratingCount: 0,
+        trendingDaily: 0,
+        trendingWeekly: 0,
+        trendingMonthly: 0,
+      },
+    }),
     logger: {
       log: obj => {
         console.log(obj)
