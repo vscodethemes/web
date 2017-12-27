@@ -4,6 +4,7 @@ import {
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
   FetchThemesPayloadRuntime,
+  ProcessRepoPayloadRuntime,
   PropertyRuntime,
   PublisherRuntime,
   VersionRuntime,
@@ -12,6 +13,7 @@ import {
 export type ExtensionQueryResults = Static<typeof ExtensionQueryResultsRuntime>
 export type Extension = Static<typeof ExtensionRuntime>
 export type FetchThemesPayload = Static<typeof FetchThemesPayloadRuntime>
+export type ProcessRepoPayload = Static<typeof ProcessRepoPayloadRuntime>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
@@ -39,10 +41,6 @@ export type Fetch = (
   init?: RequestInit,
 ) => Promise<Response>
 
-export interface FetchRepositoryPayload {
-  repository: string
-}
-
 export interface Services {
   fetch: Fetch
   logger: {
@@ -50,7 +48,7 @@ export interface Services {
     error: (error: Error) => void
   }
   fetchThemes: Job<FetchThemesPayload>
-  // fetchRepository: Job<FetchRepositoryPayload>
+  processRepo: Job<ProcessRepoPayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>

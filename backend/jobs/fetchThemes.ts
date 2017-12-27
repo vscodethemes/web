@@ -2,14 +2,19 @@ import {
   ExtensionRuntime,
   FetchThemesPayloadRuntime,
 } from '../../types/runtime'
-import { Extension, ExtensionQueryResults, Services } from '../../types/static'
+import {
+  Extension,
+  ExtensionQueryResults,
+  ProcessRepoPayload,
+  Services,
+} from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { fetchThemes, logger } = services
+  const { fetchThemes, processRepo, logger } = services
 
   const job = await fetchThemes.receive()
   if (!job) {
@@ -32,7 +37,7 @@ export default async function run(services: Services): Promise<any> {
       logger.log('No more pages to process.')
       // Only when we have finished processing all pages do we start
       // processing the repositories.
-      // await fetchRepository.notify()
+      await processRepo.notify()
       await fetchThemes.succeed(job)
       return
     }
@@ -40,26 +45,23 @@ export default async function run(services: Services): Promise<any> {
     await fetchThemes.create({ page: page + 1 })
     // Start processing the next page as soon as we queue the job.
     await fetchThemes.notify()
-
-    const repositories = extractRepositories(services, themes)
-    if (repositories.length === 0) {
-      logger.log('No repositories to process for page.')
+    const extracted = extractThemes(services, themes)
+    if (extracted.length === 0) {
+      logger.log('No themes extracted for page.')
       return
     }
 
-    logger.log(repositories)
+    logger.log(extracted)
 
     // Queue a job for each repository url.
-    // await Promise.all(
-    //   repositories.map(repository => fetchRepository.create({ repository })),
-    // )
+    await Promise.all(extracted.map(processRepo.create))
 
     await fetchThemes.succeed(job)
 
     logger.log(`
       Page: ${page}
-      Themes found: ${themes.length}
-      Repositories queued: ${repositories.length}
+      Themes for page: ${themes.length}
+      Themes extracted: ${extracted.length}
     `)
   } catch (err) {
     if (TransientJobError.is(err)) {
@@ -135,12 +137,12 @@ async function fetchMarketplaceThemes(
 /**
  * Extracts repository urls from a list of themes.
  */
-function extractRepositories(
+function extractThemes(
   services: Services,
   themes: Extension[],
-): string[] {
+): ProcessRepoPayload[] {
   const { logger } = services
-  const repos: string[] = []
+  const extracted: ProcessRepoPayload[] = []
 
   themes.forEach(theme => {
     if (ExtensionRuntime.guard(theme)) {
@@ -154,7 +156,15 @@ function extractRepositories(
       )
 
       if (repoUrlProp) {
-        repos.push(repoUrlProp.value)
+        extracted.push({
+          repository: repoUrlProp.value,
+          installs: extractStatistic(theme, 'install'),
+          rating: extractStatistic(theme, 'averagerating'),
+          ratingCount: extractStatistic(theme, 'ratingcount'),
+          trendingDaily: extractStatistic(theme, 'trendingdaily'),
+          trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
+          trendingMonthly: extractStatistic(theme, 'trendingweekly'),
+        })
       } else {
         // Skip themes without github url.
         logger.log(
@@ -169,5 +179,13 @@ function extractRepositories(
     }
   })
 
-  return repos
+  return extracted
+}
+
+function extractStatistic(theme: Extension, name: string): number {
+  const stat = theme.statistics.find(s => s.statisticName === name)
+  if (!stat) {
+    return 0
+  }
+  return stat.value
 }

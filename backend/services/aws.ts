@@ -6,6 +6,7 @@ import {
   FetchThemesPayload,
   Job,
   JobMessage,
+  ProcessRepoPayload,
   Services,
 } from '../../types/static'
 
@@ -13,6 +14,9 @@ const {
   FETCH_THEMES_QUEUE_URL,
   FETCH_THEMES_DEADLETTER_URL,
   FETCH_THEMES_TOPIC_ARN,
+  PROCESS_REPO_QUEUE_URL,
+  PROCESS_REPO_DEADLETTER_URL,
+  PROCESS_REPO_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -100,7 +104,11 @@ export default function createServices(): Services {
       FETCH_THEMES_DEADLETTER_URL,
       FETCH_THEMES_TOPIC_ARN,
     ),
-    // fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
+    processRepo: createJob<ProcessRepoPayload>(
+      PROCESS_REPO_QUEUE_URL,
+      PROCESS_REPO_DEADLETTER_URL,
+      PROCESS_REPO_TOPIC_ARN,
+    ),
     // Ouputs to CloudWatch
     logger: {
       log: obj => {

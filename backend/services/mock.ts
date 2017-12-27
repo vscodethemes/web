@@ -1,9 +1,9 @@
 // tslint:disable no-empty
 import * as fetch from 'jest-fetch-mock'
 import {
-  // FetchRepositoryPayload,
   FetchThemesPayload,
   Job,
+  ProcessRepoPayload,
   Services,
 } from '../../types/static'
 
@@ -22,7 +22,7 @@ export default function createServices(): Services {
   return {
     fetch,
     fetchThemes: createJob<FetchThemesPayload>(),
-    // fetchRepository: createJob<FetchRepositoryPayload>(),
+    processRepo: createJob<ProcessRepoPayload>(),
     logger: {
       log: () => {},
       error: () => {},
