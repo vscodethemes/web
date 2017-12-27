@@ -1,4 +1,4 @@
-import { Extension, ExtensionQueryResults, Services } from '../../types/static'
+import { Services } from '../../types/static'
 
 export default async function run(services: Services): Promise<any> {
   const { processRepo, logger } = services

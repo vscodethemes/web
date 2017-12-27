@@ -4,6 +4,14 @@ import createServices from '../services/mock'
 import fetchThemes, { GITHUB_PROPERTY_NAME } from './fetchThemes'
 
 const createValidThemes = (): Extension[] => {
+  const statistics = [
+    { statisticName: 'install', value: 1 },
+    { statisticName: 'averagerating', value: 1 },
+    { statisticName: 'ratingcount', value: 1 },
+    { statisticName: 'trendingdaily', value: 1 },
+    { statisticName: 'trendingweekly', value: 1 },
+    { statisticName: 'trendingmonthly', value: 1 },
+  ]
   return [
     {
       extensionName: 'valid1',
@@ -16,6 +24,7 @@ const createValidThemes = (): Extension[] => {
           properties: [{ key: GITHUB_PROPERTY_NAME, value: 'repoUrl1' }],
         },
       ],
+      statistics,
     },
     {
       extensionName: 'valid2',
@@ -28,6 +37,7 @@ const createValidThemes = (): Extension[] => {
           properties: [{ key: GITHUB_PROPERTY_NAME, value: 'repoUrl2' }],
         },
       ],
+      statistics,
     },
   ]
 }
@@ -190,8 +200,24 @@ test('should create job for repositories', async () => {
   const createSpy = jest.spyOn(services.processRepo, 'create')
   await fetchThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
-  expect(createSpy.mock.calls[0][0]).toEqual({ repository: 'repoUrl1' })
-  expect(createSpy.mock.calls[1][0]).toEqual({ repository: 'repoUrl2' })
+  expect(createSpy.mock.calls[0][0]).toEqual({
+    repository: 'repoUrl1',
+    installs: 1,
+    rating: 1,
+    ratingCount: 1,
+    trendingDaily: 1,
+    trendingMonthly: 1,
+    trendingWeekly: 1,
+  })
+  expect(createSpy.mock.calls[1][0]).toEqual({
+    repository: 'repoUrl2',
+    installs: 1,
+    rating: 1,
+    ratingCount: 1,
+    trendingDaily: 1,
+    trendingMonthly: 1,
+    trendingWeekly: 1,
+  })
 })
 
 test('should not create job for invalid repositories', async () => {

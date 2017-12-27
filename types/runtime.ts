@@ -14,10 +14,16 @@ export const VersionRuntime = Record({
   properties: Array(PropertyRuntime),
 })
 
+export const StatisticRuntime = Record({
+  statisticName: String,
+  value: Number,
+})
+
 export const ExtensionRuntime = Record({
   extensionName: String,
   publisher: PublisherRuntime,
   versions: Array(VersionRuntime),
+  statistics: Array(StatisticRuntime),
 })
 
 export const ExtensionQueryResultsRuntime = Record({
