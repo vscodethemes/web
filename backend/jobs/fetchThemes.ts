@@ -13,6 +13,8 @@ import { PermanentJobError, TransientJobError } from '../errors'
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
+// TODO: rename jobs; start, scrapeThemes, extractThemes, extractColors, save
+
 export default async function run(services: Services): Promise<any> {
   const { fetchThemes, processRepo, logger } = services
 
@@ -35,9 +37,6 @@ export default async function run(services: Services): Promise<any> {
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
-      // Only when we have finished processing all pages do we start
-      // processing the repositories.
-      await processRepo.notify()
       await fetchThemes.succeed(job)
       return
     }
@@ -45,23 +44,30 @@ export default async function run(services: Services): Promise<any> {
     await fetchThemes.create({ page: page + 1 })
     // Start processing the next page as soon as we queue the job.
     await fetchThemes.notify()
-    const extracted = extractThemes(services, themes)
-    if (extracted.length === 0) {
+
+    const themesWithRepos = filterThemes(services, themes)
+    if (themesWithRepos.length === 0) {
       logger.log('No themes extracted for page.')
       return
     }
 
-    logger.log(extracted)
+    logger.log(themesWithRepos)
 
-    // Queue a job for each repository url.
-    await Promise.all(extracted.map(processRepo.create))
+    await Promise.all(
+      themesWithRepos.map(theme => {
+        // Queue a job to extract the themes of each repository
+        processRepo.create(theme)
+        // Start processing immediately
+        processRepo.notify()
+      }),
+    )
 
     await fetchThemes.succeed(job)
 
     logger.log(`
       Page: ${page}
       Themes for page: ${themes.length}
-      Themes extracted: ${extracted.length}
+      Themes with repos: ${themesWithRepos.length}
     `)
   } catch (err) {
     if (TransientJobError.is(err)) {
@@ -137,7 +143,7 @@ async function fetchMarketplaceThemes(
 /**
  * Extracts repository urls from a list of themes.
  */
-function extractThemes(
+function filterThemes(
   services: Services,
   themes: Extension[],
 ): ProcessRepoPayload[] {

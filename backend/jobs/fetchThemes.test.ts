@@ -220,6 +220,19 @@ test('should create job for repositories', async () => {
   })
 })
 
+test('should notify for each repository', async () => {
+  const services = createServices()
+  const themes = createValidThemes()
+  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  jest
+    .spyOn(services.fetchThemes, 'receive')
+    .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
+
+  const notifySpy = jest.spyOn(services.processRepo, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(themes.length)
+})
+
 test('should not create job for invalid repositories', async () => {
   const services = createServices()
   const themes = createInvalidThemes()
@@ -244,32 +257,6 @@ test('should notify fetch themes job', async () => {
   const notifySpy = jest.spyOn(services.fetchThemes, 'notify')
   await fetchThemes(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
-})
-
-test('should notify fetch repository job on last page', async () => {
-  const services = createServices()
-  const themes = createInvalidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
-  jest
-    .spyOn(services.fetchThemes, 'receive')
-    .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
-
-  const notifySpy = jest.spyOn(services.processRepo, 'notify')
-  await fetchThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
-})
-
-test('should not notify fetch repository job when not on last page', async () => {
-  const services = createServices()
-  const themes = createInvalidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
-  jest
-    .spyOn(services.fetchThemes, 'receive')
-    .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
-
-  const notifySpy = jest.spyOn(services.processRepo, 'notify')
-  await fetchThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
 test('should throw on unexpected error', async () => {
