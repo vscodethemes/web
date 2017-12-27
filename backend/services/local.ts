@@ -1,10 +1,10 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
 import {
-  FetchThemesPayload,
+  ExtractThemesPayload,
   Job,
   JobMessage,
-  ProcessRepoPayload,
+  ScrapeThemesPayload,
   Services,
 } from '../../types/static'
 
@@ -40,11 +40,11 @@ export default function createServices(): Services {
   return {
     fetch,
     // TODO: Allow receive mocks to be passed in via CLI.
-    fetchThemes: createJob<FetchThemesPayload>('fetchThemes', {
+    scrapeThemes: createJob<ScrapeThemesPayload>('scrapeThemes', {
       receiptHandle: '',
       payload: { page: 1 },
     }),
-    processRepo: createJob<ProcessRepoPayload>('processRepo', {
+    extractThemes: createJob<ExtractThemesPayload>('extractThemes', {
       receiptHandle: '',
       payload: {
         repository: 'test',

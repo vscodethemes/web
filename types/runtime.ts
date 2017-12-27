@@ -30,11 +30,11 @@ export const ExtensionQueryResultsRuntime = Record({
   results: Tuple(Record({ extensions: Array(ExtensionRuntime) })),
 })
 
-export const FetchThemesPayloadRuntime = Record({
+export const ScrapeThemesPayloadRuntime = Record({
   page: Number,
 })
 
-export const ProcessRepoPayloadRuntime = Record({
+export const ExtractThemesPayloadRuntime = Record({
   repository: String,
   installs: Number,
   rating: Number,

@@ -1,9 +1,9 @@
-# Fetch themes.
-resource "aws_sns_topic" "fetch_themes" {
-  name = "fetch_themes"
+# Scrape themes.
+resource "aws_sns_topic" "scrape_themes" {
+  name = "scrape_themes"
 }
 
-# Process repository.
-resource "aws_sns_topic" "process_repo" {
-  name = "process_repo"
+# Extract themes.
+resource "aws_sns_topic" "extract_themes" {
+  name = "extract_themes"
 }

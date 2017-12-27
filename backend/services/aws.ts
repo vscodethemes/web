@@ -2,21 +2,20 @@
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
-  // FetchRepositoryPayload,
-  FetchThemesPayload,
+  ExtractThemesPayload,
   Job,
   JobMessage,
-  ProcessRepoPayload,
+  ScrapeThemesPayload,
   Services,
 } from '../../types/static'
 
 const {
-  FETCH_THEMES_QUEUE_URL,
-  FETCH_THEMES_DEADLETTER_URL,
-  FETCH_THEMES_TOPIC_ARN,
-  PROCESS_REPO_QUEUE_URL,
-  PROCESS_REPO_DEADLETTER_URL,
-  PROCESS_REPO_TOPIC_ARN,
+  SCRAPE_THEMES_QUEUE_URL,
+  SCRAPE_THEMES_DEADLETTER_URL,
+  SCRAPE_THEMES_TOPIC_ARN,
+  EXTRACT_THEMES_QUEUE_URL,
+  EXTRACT_THEMES_DEADLETTER_URL,
+  EXTRACT_THEMES_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -99,15 +98,15 @@ function createJob<P>(
 export default function createServices(): Services {
   return {
     fetch,
-    fetchThemes: createJob<FetchThemesPayload>(
-      FETCH_THEMES_QUEUE_URL,
-      FETCH_THEMES_DEADLETTER_URL,
-      FETCH_THEMES_TOPIC_ARN,
+    scrapeThemes: createJob<ScrapeThemesPayload>(
+      SCRAPE_THEMES_QUEUE_URL,
+      SCRAPE_THEMES_DEADLETTER_URL,
+      SCRAPE_THEMES_TOPIC_ARN,
     ),
-    processRepo: createJob<ProcessRepoPayload>(
-      PROCESS_REPO_QUEUE_URL,
-      PROCESS_REPO_DEADLETTER_URL,
-      PROCESS_REPO_TOPIC_ARN,
+    extractThemes: createJob<ExtractThemesPayload>(
+      EXTRACT_THEMES_QUEUE_URL,
+      EXTRACT_THEMES_DEADLETTER_URL,
+      EXTRACT_THEMES_TOPIC_ARN,
     ),
     // Ouputs to CloudWatch
     logger: {

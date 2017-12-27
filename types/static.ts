@@ -3,17 +3,17 @@ import { Static } from 'runtypes'
 import {
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
-  FetchThemesPayloadRuntime,
-  ProcessRepoPayloadRuntime,
+  ExtractThemesPayloadRuntime,
   PropertyRuntime,
   PublisherRuntime,
+  ScrapeThemesPayloadRuntime,
   VersionRuntime,
 } from './runtime'
 
 export type ExtensionQueryResults = Static<typeof ExtensionQueryResultsRuntime>
 export type Extension = Static<typeof ExtensionRuntime>
-export type FetchThemesPayload = Static<typeof FetchThemesPayloadRuntime>
-export type ProcessRepoPayload = Static<typeof ProcessRepoPayloadRuntime>
+export type ScrapeThemesPayload = Static<typeof ScrapeThemesPayloadRuntime>
+export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
@@ -47,8 +47,8 @@ export interface Services {
     log: (obj: any) => void
     error: (error: Error) => void
   }
-  fetchThemes: Job<FetchThemesPayload>
-  processRepo: Job<ProcessRepoPayload>
+  scrapeThemes: Job<ScrapeThemesPayload>
+  extractThemes: Job<ExtractThemesPayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>

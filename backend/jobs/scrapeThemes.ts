@@ -1,11 +1,11 @@
 import {
   ExtensionRuntime,
-  FetchThemesPayloadRuntime,
+  ScrapeThemesPayloadRuntime,
 } from '../../types/runtime'
 import {
   Extension,
   ExtensionQueryResults,
-  ProcessRepoPayload,
+  ExtractThemesPayload,
   Services,
 } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
@@ -13,12 +13,10 @@ import { PermanentJobError, TransientJobError } from '../errors'
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
-// TODO: rename jobs; start, scrapeThemes, extractThemes, extractColors, save
-
 export default async function run(services: Services): Promise<any> {
-  const { fetchThemes, processRepo, logger } = services
+  const { scrapeThemes, extractThemes, logger } = services
 
-  const job = await fetchThemes.receive()
+  const job = await scrapeThemes.receive()
   if (!job) {
     logger.log('No more jobs to process.')
     return
@@ -29,7 +27,7 @@ export default async function run(services: Services): Promise<any> {
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
   try {
-    if (!FetchThemesPayloadRuntime.guard(job.payload)) {
+    if (!ScrapeThemesPayloadRuntime.guard(job.payload)) {
       throw new PermanentJobError('Invalid job payload.')
     }
 
@@ -37,13 +35,13 @@ export default async function run(services: Services): Promise<any> {
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
-      await fetchThemes.succeed(job)
+      await scrapeThemes.succeed(job)
       return
     }
     // Queue a job to process the next page.
-    await fetchThemes.create({ page: page + 1 })
+    await scrapeThemes.create({ page: page + 1 })
     // Start processing the next page as soon as we queue the job.
-    await fetchThemes.notify()
+    await scrapeThemes.notify()
 
     const themesWithRepos = filterThemes(services, themes)
     if (themesWithRepos.length === 0) {
@@ -56,13 +54,13 @@ export default async function run(services: Services): Promise<any> {
     await Promise.all(
       themesWithRepos.map(theme => {
         // Queue a job to extract the themes of each repository
-        processRepo.create(theme)
+        extractThemes.create(theme)
         // Start processing immediately
-        processRepo.notify()
+        extractThemes.notify()
       }),
     )
 
-    await fetchThemes.succeed(job)
+    await scrapeThemes.succeed(job)
 
     logger.log(`
       Page: ${page}
@@ -72,13 +70,13 @@ export default async function run(services: Services): Promise<any> {
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)
-      await fetchThemes.retry(job)
+      await scrapeThemes.retry(job)
     } else if (PermanentJobError.is(err)) {
       logger.log(err.message)
-      await fetchThemes.fail(job, err)
+      await scrapeThemes.fail(job, err)
     } else {
       logger.log('Unexpected Error.')
-      await fetchThemes.fail(job, err)
+      await scrapeThemes.fail(job, err)
       // Rethrow error for global error handlers.
       throw err
     }
@@ -146,9 +144,9 @@ async function fetchMarketplaceThemes(
 function filterThemes(
   services: Services,
   themes: Extension[],
-): ProcessRepoPayload[] {
+): ExtractThemesPayload[] {
   const { logger } = services
-  const extracted: ProcessRepoPayload[] = []
+  const extracted: ExtractThemesPayload[] = []
 
   themes.forEach(theme => {
     if (ExtensionRuntime.guard(theme)) {

@@ -1,35 +1,35 @@
-module "fetch_themes" {
+module "scrape_themes" {
   source           = "./lambda"
-  name             = "fetch_themes"
+  name             = "scrape_themes"
   environment      = "${var.environment}"
-  sns_trigger_arn  = "${aws_sns_topic.fetch_themes.arn}"
-  sqs_receive_arns = ["${aws_sqs_queue.fetch_themes.arn}"]
-  sqs_send_arns    = ["${aws_sqs_queue.fetch_themes.arn}", "${aws_sqs_queue.fetch_themes_deadletter.arn}"]
-  sqs_delete_arns  = ["${aws_sqs_queue.fetch_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.fetch_themes.arn}"]
+  sns_trigger_arn  = "${aws_sns_topic.scrape_themes.arn}"
+  sqs_receive_arns = ["${aws_sqs_queue.scrape_themes.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.scrape_themes.arn}", "${aws_sqs_queue.scrape_themes_deadletter.arn}"]
+  sqs_delete_arns  = ["${aws_sqs_queue.scrape_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}"]
 
   environment_variables {
-    JOB                         = "fetchThemes"
-    FETCH_THEMES_TOPIC_ARN      = "${aws_sns_topic.fetch_themes.arn}"
-    FETCH_THEMES_QUEUE_URL      = "${aws_sqs_queue.fetch_themes.id}"
-    FETCH_THEMES_DEADLETTER_URL = "${aws_sqs_queue.fetch_themes_deadletter.id}"
+    JOB                          = "scrapeThemes"
+    SCRAPE_THEMES_TOPIC_ARN      = "${aws_sns_topic.scrape_themes.arn}"
+    SCRAPE_THEMES_QUEUE_URL      = "${aws_sqs_queue.scrape_themes.id}"
+    SCRAPE_THEMES_DEADLETTER_URL = "${aws_sqs_queue.scrape_themes_deadletter.id}"
   }
 }
 
-module "process_repo" {
+module "extract_themes" {
   source           = "./lambda"
-  name             = "process_repo"
+  name             = "extract_themes"
   environment      = "${var.environment}"
-  sns_trigger_arn  = "${aws_sns_topic.process_repo.arn}"
-  sqs_receive_arns = ["${aws_sqs_queue.process_repo.arn}"]
-  sqs_send_arns    = ["${aws_sqs_queue.process_repo.arn}", "${aws_sqs_queue.process_repo_deadletter.arn}"]
-  sqs_delete_arns  = ["${aws_sqs_queue.process_repo.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.process_repo.arn}"]
+  sns_trigger_arn  = "${aws_sns_topic.extract_themes.arn}"
+  sqs_receive_arns = ["${aws_sqs_queue.extract_themes.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.extract_themes.arn}", "${aws_sqs_queue.extract_themes_deadletter.arn}"]
+  sqs_delete_arns  = ["${aws_sqs_queue.extract_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}"]
 
   environment_variables {
-    JOB                         = "processRepo"
-    PROCESS_REPO_TOPIC_ARN      = "${aws_sns_topic.process_repo.arn}"
-    PROCESS_REPO_QUEUE_URL      = "${aws_sqs_queue.process_repo.id}"
-    PROCESS_REPO_DEADLETTER_URL = "${aws_sqs_queue.process_repo_deadletter.id}"
+    JOB                           = "extractThemes"
+    EXTRACT_THEMES_TOPIC_ARN      = "${aws_sns_topic.extract_themes.arn}"
+    EXTRACT_THEMES_QUEUE_URL      = "${aws_sqs_queue.extract_themes.id}"
+    EXTRACT_THEMES_DEADLETTER_URL = "${aws_sqs_queue.extract_themes_deadletter.id}"
   }
 }

@@ -1,18 +1,18 @@
 import { Services } from '../../types/static'
 
 export default async function run(services: Services): Promise<any> {
-  const { processRepo, logger } = services
+  const { extractThemes, logger } = services
 
-  const job = await processRepo.receive()
+  const job = await extractThemes.receive()
   if (!job) {
     logger.log('No more jobs to process.')
     return
   }
 
-  logger.log('Proccessing processRepo job...')
+  logger.log('Proccessing extractThemes job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
-  await processRepo.succeed(job)
-  await processRepo.notify()
+  await extractThemes.succeed(job)
+  await extractThemes.notify()
 }
