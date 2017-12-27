@@ -5,8 +5,10 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "invoke:fetchThemes":
-      "ts-node scripts/invoke --job ../backend/jobs/fetchThemes.ts",
+    "invoke:scrapeThemes":
+      "ts-node scripts/invoke ../backend/jobs/scrapeThemes.ts",
+    "invoke:extractThemes":
+      "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
     "build": "rimraf build && tsc",
     "install-production-dependencies":
       "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",

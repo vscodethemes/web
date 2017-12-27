@@ -3,18 +3,24 @@ import { Static } from 'runtypes'
 import {
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
-  FetchThemesPayloadRuntime,
+  ExtractColorsPayloadRuntime,
+  ExtractThemesPayloadRuntime,
+  PackageJSONRuntime,
   PropertyRuntime,
   PublisherRuntime,
+  ScrapeThemesPayloadRuntime,
   VersionRuntime,
 } from './runtime'
 
 export type ExtensionQueryResults = Static<typeof ExtensionQueryResultsRuntime>
 export type Extension = Static<typeof ExtensionRuntime>
-export type FetchThemesPayload = Static<typeof FetchThemesPayloadRuntime>
+export type ScrapeThemesPayload = Static<typeof ScrapeThemesPayloadRuntime>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
+export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
+export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
+export type PackageJSON = Static<typeof PackageJSONRuntime>
 
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
@@ -39,22 +45,24 @@ export type Fetch = (
   init?: RequestInit,
 ) => Promise<Response>
 
-export interface FetchRepositoryPayload {
-  repository: string
-}
-
 export interface Services {
   fetch: Fetch
   logger: {
     log: (obj: any) => void
     error: (error: Error) => void
   }
-  fetchThemes: Job<FetchThemesPayload>
-  // fetchRepository: Job<FetchRepositoryPayload>
+  scrapeThemes: Job<ScrapeThemesPayload>
+  extractThemes: Job<ExtractThemesPayload>
+  extractColors: Job<ExtractColorsPayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>
 
 export interface JobHandlers {
   [key: string]: JobHandler
+}
+
+export interface RepositoryInfo {
+  repository: string
+  repositoryOwner: string
 }

@@ -1,17 +1,23 @@
 import {
   ExtensionRuntime,
-  FetchThemesPayloadRuntime,
+  ScrapeThemesPayloadRuntime,
 } from '../../types/runtime'
-import { Extension, ExtensionQueryResults, Services } from '../../types/static'
+import {
+  Extension,
+  ExtensionQueryResults,
+  ExtractThemesPayload,
+  RepositoryInfo,
+  Services,
+} from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { fetchThemes, logger } = services
+  const { scrapeThemes, extractThemes, logger } = services
 
-  const job = await fetchThemes.receive()
+  const job = await scrapeThemes.receive()
   if (!job) {
     logger.log('No more jobs to process.')
     return
@@ -22,7 +28,7 @@ export default async function run(services: Services): Promise<any> {
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
   try {
-    if (!FetchThemesPayloadRuntime.guard(job.payload)) {
+    if (!ScrapeThemesPayloadRuntime.guard(job.payload)) {
       throw new PermanentJobError('Invalid job payload.')
     }
 
@@ -30,47 +36,48 @@ export default async function run(services: Services): Promise<any> {
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
-      // Only when we have finished processing all pages do we start
-      // processing the repositories.
-      // await fetchRepository.notify()
-      await fetchThemes.succeed(job)
+      await scrapeThemes.succeed(job)
       return
     }
     // Queue a job to process the next page.
-    await fetchThemes.create({ page: page + 1 })
+    await scrapeThemes.create({ page: page + 1 })
     // Start processing the next page as soon as we queue the job.
-    await fetchThemes.notify()
+    await scrapeThemes.notify()
 
-    const repositories = extractRepositories(services, themes)
-    if (repositories.length === 0) {
-      logger.log('No repositories to process for page.')
+    const themesWithRepos = filterThemes(services, themes)
+    if (themesWithRepos.length === 0) {
+      logger.log('No themes extracted for page.')
       return
     }
 
-    logger.log(repositories)
+    logger.log(themesWithRepos)
 
-    // Queue a job for each repository url.
-    // await Promise.all(
-    //   repositories.map(repository => fetchRepository.create({ repository })),
-    // )
+    await Promise.all(
+      themesWithRepos.map(async theme => {
+        // Queue a job to extract the themes of each repository
+        await extractThemes.create(theme)
+        // Start processing immediately
+        await extractThemes.notify()
+      }),
+    )
 
-    await fetchThemes.succeed(job)
+    await scrapeThemes.succeed(job)
 
     logger.log(`
       Page: ${page}
-      Themes found: ${themes.length}
-      Repositories queued: ${repositories.length}
+      Themes for page: ${themes.length}
+      Themes with repos: ${themesWithRepos.length}
     `)
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)
-      await fetchThemes.retry(job)
+      await scrapeThemes.retry(job)
     } else if (PermanentJobError.is(err)) {
       logger.log(err.message)
-      await fetchThemes.fail(job, err)
+      await scrapeThemes.fail(job, err)
     } else {
       logger.log('Unexpected Error.')
-      await fetchThemes.fail(job, err)
+      await scrapeThemes.fail(job, err)
       // Rethrow error for global error handlers.
       throw err
     }
@@ -84,6 +91,7 @@ async function fetchMarketplaceThemes(
   services: Services,
   page: number,
 ): Promise<Extension[]> {
+  let themes = []
   const { fetch } = services
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
   const query = {
@@ -118,29 +126,36 @@ async function fetchMarketplaceThemes(
   })
 
   if (!response.ok) {
-    throw new TransientJobError(`Bad response: ${response.statusText}`)
-  }
-
-  const data: ExtensionQueryResults = await response.json()
-  try {
-    return data.results[0].extensions
-  } catch (err) {
-    // TODO: Add test fpr this.
     throw new TransientJobError(
-      `Invalid response data: ${JSON.stringify(data)}`,
+      `fetchMarketplaceThemes error: Bad response ${response.statusText}`,
     )
   }
+
+  try {
+    const data: ExtensionQueryResults = await response.json()
+    themes = data.results[0].extensions
+  } catch (err) {
+    throw new TransientJobError(
+      'fetchMarketplaceThemes error: Invalid response data',
+    )
+  }
+
+  if (!themes) {
+    throw new PermanentJobError('fetchMarketplaceThemes error: Invalid themes')
+  }
+
+  return themes
 }
 
 /**
  * Extracts repository urls from a list of themes.
  */
-function extractRepositories(
+function filterThemes(
   services: Services,
   themes: Extension[],
-): string[] {
+): ExtractThemesPayload[] {
   const { logger } = services
-  const repos: string[] = []
+  const extracted: ExtractThemesPayload[] = []
 
   themes.forEach(theme => {
     if (ExtensionRuntime.guard(theme)) {
@@ -154,7 +169,17 @@ function extractRepositories(
       )
 
       if (repoUrlProp) {
-        repos.push(repoUrlProp.value)
+        extracted.push({
+          ...extractRepositoryInfo(repoUrlProp.value),
+          stats: {
+            installs: extractStatistic(theme, 'install'),
+            rating: extractStatistic(theme, 'averagerating'),
+            ratingCount: extractStatistic(theme, 'ratingcount'),
+            trendingDaily: extractStatistic(theme, 'trendingdaily'),
+            trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
+            trendingMonthly: extractStatistic(theme, 'trendingweekly'),
+          },
+        })
       } else {
         // Skip themes without github url.
         logger.log(
@@ -169,5 +194,22 @@ function extractRepositories(
     }
   })
 
-  return repos
+  return extracted
+}
+
+function extractRepositoryInfo(url: string): RepositoryInfo {
+  const [repositoryOwner, repository] = url
+    .replace(/^(https:\/\/)?(www\.)?github\.com\//, '')
+    .replace(/\.git$/, '')
+    .split('/')
+
+  return { repository, repositoryOwner }
+}
+
+function extractStatistic(theme: Extension, name: string): number {
+  const stat = theme.statistics.find(s => s.statisticName === name)
+  if (!stat) {
+    return 0
+  }
+  return stat.value
 }

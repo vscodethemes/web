@@ -1,14 +1,33 @@
-resource "aws_sqs_queue" "fetch_themes" {
-  name           = "fetch_themes"
-  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.fetch_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
+# Scrape themes.
+resource "aws_sqs_queue" "scrape_themes" {
+  name           = "scrape_themes"
+  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.scrape_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
 
   tags {
     environment = "${var.environment}"
   }
 }
 
-resource "aws_sqs_queue" "fetch_themes_deadletter" {
-  name = "fetch_themes_deadletter"
+resource "aws_sqs_queue" "scrape_themes_deadletter" {
+  name = "scrape_themes_deadletter"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}
+
+# Process repository.
+resource "aws_sqs_queue" "extract_themes" {
+  name           = "extract_themes"
+  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.extract_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}
+
+resource "aws_sqs_queue" "extract_themes_deadletter" {
+  name = "extract_themes_deadletter"
 
   tags {
     environment = "${var.environment}"

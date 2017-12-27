@@ -2,17 +2,24 @@
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
-  // FetchRepositoryPayload,
-  FetchThemesPayload,
+  ExtractColorsPayload,
+  ExtractThemesPayload,
   Job,
   JobMessage,
+  ScrapeThemesPayload,
   Services,
 } from '../../types/static'
 
 const {
-  FETCH_THEMES_QUEUE_URL,
-  FETCH_THEMES_DEADLETTER_URL,
-  FETCH_THEMES_TOPIC_ARN,
+  SCRAPE_THEMES_QUEUE_URL,
+  SCRAPE_THEMES_DEADLETTER_URL,
+  SCRAPE_THEMES_TOPIC_ARN,
+  EXTRACT_THEMES_QUEUE_URL,
+  EXTRACT_THEMES_DEADLETTER_URL,
+  EXTRACT_THEMES_TOPIC_ARN,
+  EXTRACT_COLORS_QUEUE_URL,
+  EXTRACT_COLORS_DEADLETTER_URL,
+  EXTRACT_COLORS_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -95,12 +102,21 @@ function createJob<P>(
 export default function createServices(): Services {
   return {
     fetch,
-    fetchThemes: createJob<FetchThemesPayload>(
-      FETCH_THEMES_QUEUE_URL,
-      FETCH_THEMES_DEADLETTER_URL,
-      FETCH_THEMES_TOPIC_ARN,
+    scrapeThemes: createJob<ScrapeThemesPayload>(
+      SCRAPE_THEMES_QUEUE_URL,
+      SCRAPE_THEMES_DEADLETTER_URL,
+      SCRAPE_THEMES_TOPIC_ARN,
     ),
-    // fetchRepository: createJob<FetchRepositoryPayload>('fetchRepository'),
+    extractThemes: createJob<ExtractThemesPayload>(
+      EXTRACT_THEMES_QUEUE_URL,
+      EXTRACT_THEMES_DEADLETTER_URL,
+      EXTRACT_THEMES_TOPIC_ARN,
+    ),
+    extractColors: createJob<ExtractColorsPayload>(
+      EXTRACT_COLORS_QUEUE_URL,
+      EXTRACT_COLORS_DEADLETTER_URL,
+      EXTRACT_COLORS_TOPIC_ARN,
+    ),
     // Ouputs to CloudWatch
     logger: {
       log: obj => {
