@@ -69,8 +69,12 @@ test('should not process empty job', async () => {
     .mockImplementation(() => Promise.resolve(null))
 
   const fetchSpy = jest.spyOn(services, 'fetch')
+  const notifySpy = jest.spyOn(services.fetchThemes, 'notify')
+  const succeedSpy = jest.spyOn(services.fetchThemes, 'succeed')
   await fetchThemes(services)
   expect(fetchSpy).toHaveBeenCalledTimes(0)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
+  expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
 test('should fail job if it has an invalid payload', async () => {
@@ -183,11 +187,11 @@ test('should create job for repositories', async () => {
     .spyOn(services.fetchThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  // const createSpy = jest.spyOn(services.fetchRepository, 'create')
-  // await fetchThemes(services)
-  // expect(createSpy).toHaveBeenCalledTimes(themes.length)
-  // expect(createSpy.mock.calls[0][0]).toEqual({ repository: 'repoUrl1' })
-  // expect(createSpy.mock.calls[1][0]).toEqual({ repository: 'repoUrl2' })
+  const createSpy = jest.spyOn(services.processRepo, 'create')
+  await fetchThemes(services)
+  expect(createSpy).toHaveBeenCalledTimes(themes.length)
+  expect(createSpy.mock.calls[0][0]).toEqual({ repository: 'repoUrl1' })
+  expect(createSpy.mock.calls[1][0]).toEqual({ repository: 'repoUrl2' })
 })
 
 test('should not create job for invalid repositories', async () => {
@@ -198,9 +202,9 @@ test('should not create job for invalid repositories', async () => {
     .spyOn(services.fetchThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  // const createSpy = jest.spyOn(services.fetchRepository, 'create')
-  // await fetchThemes(services)
-  // expect(createSpy).toHaveBeenCalledTimes(0)
+  const createSpy = jest.spyOn(services.processRepo, 'create')
+  await fetchThemes(services)
+  expect(createSpy).toHaveBeenCalledTimes(0)
 })
 
 test('should notify fetch themes job', async () => {
@@ -224,9 +228,9 @@ test('should notify fetch repository job on last page', async () => {
     .spyOn(services.fetchThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  // const notifySpy = jest.spyOn(services.fetchRepository, 'notify')
-  // await fetchThemes(services)
-  // expect(notifySpy).toHaveBeenCalledTimes(1)
+  const notifySpy = jest.spyOn(services.processRepo, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
 test('should not notify fetch repository job when not on last page', async () => {
@@ -237,9 +241,9 @@ test('should not notify fetch repository job when not on last page', async () =>
     .spyOn(services.fetchThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  // const notifySpy = jest.spyOn(services.fetchRepository, 'notify')
-  // await fetchThemes(services)
-  // expect(notifySpy).toHaveBeenCalledTimes(0)
+  const notifySpy = jest.spyOn(services.processRepo, 'notify')
+  await fetchThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
 test('should throw on unexpected error', async () => {

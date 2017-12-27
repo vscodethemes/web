@@ -38,3 +38,15 @@ output "fetch_themes_sqs_queue_url" {
 output "fetch_themes_sqs_deadletter_queue_url" {
   value = "${module.backend.fetch_themes_sqs_deadletter_queue_url}"
 }
+
+output "process_repo_sns_topic_arn" {
+  value = "${module.backend.process_repo_sns_topic_arn}"
+}
+
+output "process_repo_sqs_queue_url" {
+  value = "${module.backend.process_repo_sqs_queue_url}"
+}
+
+output "process_repo_sqs_deadletter_queue_url" {
+  value = "${module.backend.process_repo_sqs_deadletter_queue_url}"
+}

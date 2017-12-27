@@ -27,3 +27,13 @@ export const ExtensionQueryResultsRuntime = Record({
 export const FetchThemesPayloadRuntime = Record({
   page: Number,
 })
+
+export const ProcessRepoPayloadRuntime = Record({
+  repository: String,
+  installs: Number,
+  rating: Number,
+  ratingCount: Number,
+  trendingDaily: Number,
+  trendingWeekly: Number,
+  trendingMonthly: Number,
+})
