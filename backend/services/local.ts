@@ -1,6 +1,7 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
 import {
+  ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
   JobMessage,
@@ -49,12 +50,30 @@ export default function createServices(): Services {
       payload: {
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
-        installs: 0,
-        rating: 0,
-        ratingCount: 0,
-        trendingDaily: 0,
-        trendingWeekly: 0,
-        trendingMonthly: 0,
+        stats: {
+          installs: 0,
+          rating: 0,
+          ratingCount: 0,
+          trendingDaily: 0,
+          trendingWeekly: 0,
+          trendingMonthly: 0,
+        },
+      },
+    }),
+    extractColors: createJob<ExtractColorsPayload>('extractColors', {
+      receiptHandle: '',
+      payload: {
+        repository: 'OneDark-Pro',
+        repositoryOwner: 'Binaryify',
+        repositoryPath: './themes/OneDark-Pro.json',
+        stats: {
+          installs: 0,
+          rating: 0,
+          ratingCount: 0,
+          trendingDaily: 0,
+          trendingWeekly: 0,
+          trendingMonthly: 0,
+        },
       },
     }),
     logger: {

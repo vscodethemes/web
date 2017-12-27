@@ -3,7 +3,9 @@ import { Static } from 'runtypes'
 import {
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
+  ExtractColorsPayloadRuntime,
   ExtractThemesPayloadRuntime,
+  PackageJSONRuntime,
   PropertyRuntime,
   PublisherRuntime,
   ScrapeThemesPayloadRuntime,
@@ -13,10 +15,12 @@ import {
 export type ExtensionQueryResults = Static<typeof ExtensionQueryResultsRuntime>
 export type Extension = Static<typeof ExtensionRuntime>
 export type ScrapeThemesPayload = Static<typeof ScrapeThemesPayloadRuntime>
-export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
+export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
+export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
+export type PackageJSON = Static<typeof PackageJSONRuntime>
 
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
@@ -49,6 +53,7 @@ export interface Services {
   }
   scrapeThemes: Job<ScrapeThemesPayload>
   extractThemes: Job<ExtractThemesPayload>
+  extractColors: Job<ExtractColorsPayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>

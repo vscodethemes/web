@@ -2,6 +2,7 @@
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
+  ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
   JobMessage,
@@ -16,6 +17,9 @@ const {
   EXTRACT_THEMES_QUEUE_URL,
   EXTRACT_THEMES_DEADLETTER_URL,
   EXTRACT_THEMES_TOPIC_ARN,
+  EXTRACT_COLORS_QUEUE_URL,
+  EXTRACT_COLORS_DEADLETTER_URL,
+  EXTRACT_COLORS_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -107,6 +111,11 @@ export default function createServices(): Services {
       EXTRACT_THEMES_QUEUE_URL,
       EXTRACT_THEMES_DEADLETTER_URL,
       EXTRACT_THEMES_TOPIC_ARN,
+    ),
+    extractColors: createJob<ExtractColorsPayload>(
+      EXTRACT_COLORS_QUEUE_URL,
+      EXTRACT_COLORS_DEADLETTER_URL,
+      EXTRACT_COLORS_TOPIC_ARN,
     ),
     // Ouputs to CloudWatch
     logger: {

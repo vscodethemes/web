@@ -53,11 +53,11 @@ export default async function run(services: Services): Promise<any> {
     logger.log(themesWithRepos)
 
     await Promise.all(
-      themesWithRepos.map(theme => {
+      themesWithRepos.map(async theme => {
         // Queue a job to extract the themes of each repository
-        extractThemes.create(theme)
+        await extractThemes.create(theme)
         // Start processing immediately
-        extractThemes.notify()
+        await extractThemes.notify()
       }),
     )
 
@@ -91,6 +91,7 @@ async function fetchMarketplaceThemes(
   services: Services,
   page: number,
 ): Promise<Extension[]> {
+  let themes = []
   const { fetch } = services
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
   const query = {
@@ -125,18 +126,25 @@ async function fetchMarketplaceThemes(
   })
 
   if (!response.ok) {
-    throw new TransientJobError(`Bad response: ${response.statusText}`)
-  }
-
-  const data: ExtensionQueryResults = await response.json()
-  try {
-    return data.results[0].extensions
-  } catch (err) {
-    // TODO: Add test fpr this.
     throw new TransientJobError(
-      `Invalid response data: ${JSON.stringify(data)}`,
+      `fetchMarketplaceThemes error: Bad response ${response.statusText}`,
     )
   }
+
+  try {
+    const data: ExtensionQueryResults = await response.json()
+    themes = data.results[0].extensions
+  } catch (err) {
+    throw new TransientJobError(
+      'fetchMarketplaceThemes error: Invalid response data',
+    )
+  }
+
+  if (!themes) {
+    throw new PermanentJobError('fetchMarketplaceThemes error: Invalid themes')
+  }
+
+  return themes
 }
 
 /**
@@ -163,12 +171,14 @@ function filterThemes(
       if (repoUrlProp) {
         extracted.push({
           ...extractRepositoryInfo(repoUrlProp.value),
-          installs: extractStatistic(theme, 'install'),
-          rating: extractStatistic(theme, 'averagerating'),
-          ratingCount: extractStatistic(theme, 'ratingcount'),
-          trendingDaily: extractStatistic(theme, 'trendingdaily'),
-          trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
-          trendingMonthly: extractStatistic(theme, 'trendingweekly'),
+          stats: {
+            installs: extractStatistic(theme, 'install'),
+            rating: extractStatistic(theme, 'averagerating'),
+            ratingCount: extractStatistic(theme, 'ratingcount'),
+            trendingDaily: extractStatistic(theme, 'trendingdaily'),
+            trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
+            trendingMonthly: extractStatistic(theme, 'trendingweekly'),
+          },
         })
       } else {
         // Skip themes without github url.

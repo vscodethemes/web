@@ -1,4 +1,4 @@
-import { Array, Number, Record, String, Tuple } from 'runtypes'
+import { Array, Number, Record, String, Tuple, Union } from 'runtypes'
 
 export const PublisherRuntime = Record({
   publisherName: String,
@@ -37,10 +37,32 @@ export const ScrapeThemesPayloadRuntime = Record({
 export const ExtractThemesPayloadRuntime = Record({
   repository: String,
   repositoryOwner: String,
-  installs: Number,
-  rating: Number,
-  ratingCount: Number,
-  trendingDaily: Number,
-  trendingWeekly: Number,
-  trendingMonthly: Number,
+  stats: Record({
+    installs: Number,
+    rating: Number,
+    ratingCount: Number,
+    trendingDaily: Number,
+    trendingWeekly: Number,
+    trendingMonthly: Number,
+  }),
 })
+
+export const PackageJSONRuntime = Record({
+  contributes: Record({
+    themes: Array(
+      Record({
+        label: String,
+        uiTheme: String,
+        path: String,
+      }),
+    ),
+  }),
+})
+
+export const ExtractColorsPayloadRuntime = Union(
+  ExtractThemesPayloadRuntime,
+  Record({
+    name: String,
+    repositoryPath: String,
+  }),
+)
