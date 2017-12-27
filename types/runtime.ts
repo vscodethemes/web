@@ -36,6 +36,7 @@ export const ScrapeThemesPayloadRuntime = Record({
 
 export const ExtractThemesPayloadRuntime = Record({
   repository: String,
+  repositoryOwner: String,
   installs: Number,
   rating: Number,
   ratingCount: Number,

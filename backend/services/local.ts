@@ -47,7 +47,8 @@ export default function createServices(): Services {
     extractThemes: createJob<ExtractThemesPayload>('extractThemes', {
       receiptHandle: '',
       payload: {
-        repository: 'test',
+        repository: 'OneDark-Pro',
+        repositoryOwner: 'Binaryify',
         installs: 0,
         rating: 0,
         ratingCount: 0,

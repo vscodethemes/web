@@ -21,7 +21,12 @@ const createValidThemes = (): Extension[] => {
       versions: [
         {
           lastUpdated: '2000-01-00T00:00:00.000',
-          properties: [{ key: GITHUB_PROPERTY_NAME, value: 'repoUrl1' }],
+          properties: [
+            {
+              key: GITHUB_PROPERTY_NAME,
+              value: 'https://github.com/owner/repo',
+            },
+          ],
         },
       ],
       statistics,
@@ -34,7 +39,12 @@ const createValidThemes = (): Extension[] => {
       versions: [
         {
           lastUpdated: '2000-01-00T00:00:00.000',
-          properties: [{ key: GITHUB_PROPERTY_NAME, value: 'repoUrl2' }],
+          properties: [
+            {
+              key: GITHUB_PROPERTY_NAME,
+              value: 'www.github.com/owner/repo.git',
+            },
+          ],
         },
       ],
       statistics,
@@ -201,7 +211,8 @@ test('should create job for repositories', async () => {
   await scrapeThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
   expect(createSpy.mock.calls[0][0]).toEqual({
-    repository: 'repoUrl1',
+    repository: 'repo',
+    repositoryOwner: 'owner',
     installs: 1,
     rating: 1,
     ratingCount: 1,
@@ -210,7 +221,8 @@ test('should create job for repositories', async () => {
     trendingWeekly: 1,
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
-    repository: 'repoUrl2',
+    repository: 'repo',
+    repositoryOwner: 'owner',
     installs: 1,
     rating: 1,
     ratingCount: 1,

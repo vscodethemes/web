@@ -6,6 +6,7 @@ import {
   Extension,
   ExtensionQueryResults,
   ExtractThemesPayload,
+  RepositoryInfo,
   Services,
 } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
@@ -161,7 +162,7 @@ function filterThemes(
 
       if (repoUrlProp) {
         extracted.push({
-          repository: repoUrlProp.value,
+          ...extractRepositoryInfo(repoUrlProp.value),
           installs: extractStatistic(theme, 'install'),
           rating: extractStatistic(theme, 'averagerating'),
           ratingCount: extractStatistic(theme, 'ratingcount'),
@@ -184,6 +185,15 @@ function filterThemes(
   })
 
   return extracted
+}
+
+function extractRepositoryInfo(url: string): RepositoryInfo {
+  const [repositoryOwner, repository] = url
+    .replace(/^(https:\/\/)?(www\.)?github\.com\//, '')
+    .replace(/\.git$/, '')
+    .split('/')
+
+  return { repository, repositoryOwner }
 }
 
 function extractStatistic(theme: Extension, name: string): number {

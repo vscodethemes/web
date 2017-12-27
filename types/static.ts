@@ -56,3 +56,8 @@ export type JobHandler = (services: Services) => Promise<any>
 export interface JobHandlers {
   [key: string]: JobHandler
 }
+
+export interface RepositoryInfo {
+  repository: string
+  repositoryOwner: string
+}
