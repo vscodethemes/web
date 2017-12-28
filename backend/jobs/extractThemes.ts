@@ -5,6 +5,8 @@ import {
 import { ExtractColorsPayload, PackageJSON, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
+const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
+
 export default async function run(services: Services): Promise<any> {
   const { extractThemes, extractColors, logger } = services
 
@@ -85,7 +87,11 @@ async function fetchDefaultBranch(
 ): Promise<string> {
   let branch = ''
   const { fetch } = services
-  const url = `https://api.github.com/repos/${repositoryOwner}/${repository}`
+  const baseUrl = 'https://api.github.com/repos'
+  const auth = `client_id=${GITHUB_CLIENT_ID}&client_secret=${
+    GITHUB_CLIENT_SECRET
+  }`
+  const url = `${baseUrl}/${repositoryOwner}/${repository}?${auth}`
 
   const response = await fetch(url, {
     method: 'GET',
