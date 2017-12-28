@@ -1,9 +1,5 @@
 import { ColorsRuntime, ExtractColorsPayloadRuntime } from '../../types/runtime'
-import {
-  Colors,
-  // SaveThemePayload,
-  Services,
-} from '../../types/static'
+import { Colors, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -34,7 +30,10 @@ export default async function run(services: Services): Promise<any> {
       payload.repositoryPath,
     )
 
-    logger.log(theme)
+    logger.log({ ...payload, ...theme })
+    // TODO: Create a job to save the theme.
+    // await saveTheme.create({ ...payload, ...theme })
+    // await saveTheme.notify()
 
     await extractColors.succeed(job)
   } catch (err) {
@@ -90,12 +89,15 @@ async function fetchTheme(
       colors: {
         'activityBar.background': colors['activityBar.background'],
         'activityBar.foreground': colors['activityBar.foreground'],
+        'statusBar.background': colors['statusBar.background'],
+        'statusBar.foreground': colors['statusBar.foreground'],
         // TODO: Add required colors for rendering the editor.
       },
     }
   } catch (err) {
     throw new TransientJobError('fetchTheme error: Invalid response data')
   }
+
   if (!theme.name) {
     throw new PermanentJobError('fetchTheme error: Invalid name')
   }

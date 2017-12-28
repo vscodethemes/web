@@ -69,7 +69,12 @@ export const ExtractColorsPayloadRuntime = Record({
   stats: StatsRuntime,
 })
 
-export const ColorsRuntime = Record({})
+export const ColorsRuntime = Record({
+  'activityBar.background': String,
+  'activityBar.foreground': String,
+  'statusBar.background': String,
+  'statusBar.foreground': String,
+})
 
 export const SaveThemePayloadRuntime = Record({
   repository: String,

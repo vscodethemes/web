@@ -1,6 +1,5 @@
 import * as fetch from 'jest-fetch-mock'
 import {
-  Extension,
   ExtractThemesPayload,
   JobMessage,
   PackageJSON,
@@ -28,6 +27,7 @@ function createJob(): JobMessage<ExtractThemesPayload> {
     },
   }
 }
+
 test('should not process empty job', async () => {
   const services = createServices()
   jest
