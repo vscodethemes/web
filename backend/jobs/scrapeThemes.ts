@@ -95,7 +95,7 @@ async function fetchMarketplaceThemes(
   page: number,
 ): Promise<Extension[]> {
   let themes = []
-  const { fetch } = services
+  const { fetch, logger } = services
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
   const query = {
     filters: [
@@ -138,6 +138,7 @@ async function fetchMarketplaceThemes(
     const data: ExtensionQueryResults = await response.json()
     themes = data.results[0].extensions
   } catch (err) {
+    logger.error(err)
     throw new TransientJobError(
       'fetchMarketplaceThemes error: Invalid response data',
     )

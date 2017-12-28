@@ -84,7 +84,7 @@ async function fetchTheme(
 
   try {
     const data = await response.json()
-    logger.log(`fetchThemes: ${data}`)
+    logger.log(`fetchTheme: ${JSON.stringify(data)}`)
 
     theme = {
       name: data.name,
@@ -97,6 +97,7 @@ async function fetchTheme(
       },
     }
   } catch (err) {
+    logger.error(err)
     throw new TransientJobError('fetchTheme error: Invalid response data')
   }
 

@@ -135,7 +135,7 @@ async function fetchPackageJson(
   branch: string,
 ): Promise<PackageJSON> {
   let packageJson: PackageJSON
-  const { fetch } = services
+  const { fetch, logger } = services
   const url = `https://raw.githubusercontent.com/${repositoryOwner}/${
     repository
   }/${branch}/package.json`
@@ -156,6 +156,7 @@ async function fetchPackageJson(
   try {
     packageJson = await response.json()
   } catch (err) {
+    logger.error(err)
     throw new TransientJobError('fetchPackageJson error: Invalid response data')
   }
 
