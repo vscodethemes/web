@@ -31,6 +31,15 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   }
 }
 
+function createColors(): Colors {
+  return {
+    'activityBar.background': 'color',
+    'activityBar.foreground': 'color',
+    'statusBar.foreground': 'color',
+    'statusBar.background': 'color',
+  }
+}
+
 test('should not process empty job', async () => {
   const services = createServices()
   jest
@@ -106,24 +115,31 @@ test('should fail job if fetching the theme returns invalid colors', async () =>
 
 test('should succeed job for valid input', async () => {
   const services = createServices()
-  const colors: Colors = {
-    'activityBar.background': 'color',
-    'activityBar.foreground': 'color',
-    'statusBar.foreground': 'color',
-    'statusBar.background': 'color',
-  }
-  fetch.mockResponseOnce(JSON.stringify({ name: 'name', colors }))
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', colors: createColors() }),
+  )
   jest
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
   const succeedSpy = jest.spyOn(services.extractColors, 'succeed')
-  // const createSpy = jest.spyOn(services.saveTheme, 'create')
-  // const notifySpy = jest.spyOn(services.saveTheme, 'notify')
   await extractColors(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
-  // expect(notifySpy).toHaveBeenCalledTimes(2)
-  // expect(createSpy).toHaveBeenCalledTimes(2)
-  // expect(createSpy.mock.calls[0][0]).toEqual({})
-  // expect(createSpy.mock.calls[1][0]).toEqual({})
 })
+
+test('should notify self for valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', colors: createColors() }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const notifySpy = jest.spyOn(services.extractColors, 'notify')
+  await extractColors(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+})
+
+test('should create save theme jobs for valid input')
+test('should notify save theme jobs for valid input')
