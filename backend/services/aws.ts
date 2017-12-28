@@ -26,6 +26,7 @@ const sqs = new AWS.SQS()
 const sns = new AWS.SNS()
 
 function createJob<P>(
+  jobName: string,
   queueUrl: string,
   deadLetterQueueUrl: string,
   topicArn: string,
@@ -57,7 +58,7 @@ function createJob<P>(
     notify: async () => {
       const params = {
         TopicArn: topicArn,
-        Message: 'fetchThemes',
+        Message: jobName,
       }
       await sns.publish(params).promise()
     },
@@ -93,8 +94,14 @@ function createJob<P>(
       await sqs.deleteMessage(deleteParams).promise()
     },
     retry: async (message: JobMessage<P>) => {
-      // No-op: Don't delete the message, processing will timeout and
-      // cause SQS to retry according to it's redrive policy.
+      // Don't delete the message, processing will timeout and cause SQS to
+      // retry according to it's redrive policy.
+      // Notify to execute the lambda function again.
+      const params = {
+        TopicArn: topicArn,
+        Message: `${jobName}-retry`,
+      }
+      await sns.publish(params).promise()
     },
   }
 }
@@ -103,16 +110,19 @@ export default function createServices(): Services {
   return {
     fetch,
     scrapeThemes: createJob<ScrapeThemesPayload>(
+      'scrapeThemes',
       SCRAPE_THEMES_QUEUE_URL,
       SCRAPE_THEMES_DEADLETTER_URL,
       SCRAPE_THEMES_TOPIC_ARN,
     ),
     extractThemes: createJob<ExtractThemesPayload>(
+      'extractThemes',
       EXTRACT_THEMES_QUEUE_URL,
       EXTRACT_THEMES_DEADLETTER_URL,
       EXTRACT_THEMES_TOPIC_ARN,
     ),
     extractColors: createJob<ExtractColorsPayload>(
+      'extractColors',
       EXTRACT_COLORS_QUEUE_URL,
       EXTRACT_COLORS_DEADLETTER_URL,
       EXTRACT_COLORS_TOPIC_ARN,
