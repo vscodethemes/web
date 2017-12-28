@@ -109,7 +109,7 @@ async function fetchDefaultBranch(
     const data = await response.json()
     branch = data.default_branch
   } catch (err) {
-    throw new TransientJobError(
+    throw new PermanentJobError(
       'fetchDefaultBranch error: Invalid response data',
     )
   }
