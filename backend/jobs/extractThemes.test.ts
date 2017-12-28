@@ -28,6 +28,17 @@ function createJob(): JobMessage<ExtractThemesPayload> {
   }
 }
 
+function createPackageJson(): PackageJSON {
+  return {
+    contributes: {
+      themes: [
+        { label: 'name', uiTheme: 'vs-dark', path: './themes/theme1.json' },
+        { label: 'name', uiTheme: 'vs-dark', path: './themes/theme2.json' },
+      ],
+    },
+  }
+}
+
 test('should not process empty job', async () => {
   const services = createServices()
   jest
@@ -145,11 +156,20 @@ test('should succeed job for valid input', async () => {
     .mockImplementation(() => Promise.resolve(createJob()))
 
   const succeedSpy = jest.spyOn(services.extractThemes, 'succeed')
-  const createSpy = jest.spyOn(services.extractColors, 'create')
-  const notifySpy = jest.spyOn(services.extractColors, 'notify')
   await extractThemes(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
-  expect(notifySpy).toHaveBeenCalledTimes(2)
+})
+
+test('should create extract theme jobs for valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
+  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
+  jest
+    .spyOn(services.extractThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const createSpy = jest.spyOn(services.extractColors, 'create')
+  await extractThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(2)
   expect(createSpy.mock.calls[0][0]).toEqual({
     repository: 'repo',
@@ -179,4 +199,30 @@ test('should succeed job for valid input', async () => {
       trendingWeekly: 1,
     },
   })
+})
+
+test('should notify self on valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
+  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
+  jest
+    .spyOn(services.extractThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const notifySpy = jest.spyOn(services.extractThemes, 'notify')
+  await extractThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+})
+
+test('should notify extract colors on valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
+  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
+  jest
+    .spyOn(services.extractThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const notifySpy = jest.spyOn(services.extractColors, 'notify')
+  await extractThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })

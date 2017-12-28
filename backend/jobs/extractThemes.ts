@@ -51,16 +51,14 @@ export default async function run(services: Services): Promise<any> {
     )
 
     // For each theme source, create a job to extract the colors.
-    await Promise.all(
-      themes.map(async theme => {
-        await extractColors.create(theme)
-        // Start processing immediately
-        await extractColors.notify()
-      }),
-    )
+    await Promise.all(themes.map(extractColors.create))
 
     // Job succeeded.
     await extractThemes.succeed(job)
+    // Process the next repository in the queue.
+    await extractThemes.notify()
+    // Start the extract colors job.
+    await extractColors.notify()
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)

@@ -22,7 +22,7 @@ export default async function run(services: Services): Promise<any> {
 
     const { payload } = job
     // Fetch the theme's colors from it's repository.
-    const theme = await fetchTheme(
+    const { name, colors } = await fetchTheme(
       services,
       payload.repositoryOwner,
       payload.repository,
@@ -30,12 +30,16 @@ export default async function run(services: Services): Promise<any> {
       payload.repositoryPath,
     )
 
-    logger.log({ ...payload, ...theme })
+    const theme = { ...payload, name, colors }
+    logger.log(`Theme: ${JSON.stringify(theme)}`)
     // TODO: Create a job to save the theme.
-    // await saveTheme.create({ ...payload, ...theme })
-    // await saveTheme.notify()
+    // await saveTheme.create(theme)
 
+    // Job succeeded.
     await extractColors.succeed(job)
+    // Process the next theme in the queue.
+    await extractColors.notify()
+    // await saveTheme.notify()
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)
