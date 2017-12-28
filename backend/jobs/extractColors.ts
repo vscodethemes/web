@@ -1,5 +1,9 @@
 import { ColorsRuntime, ExtractColorsPayloadRuntime } from '../../types/runtime'
-import { Colors, PackageJSON, Services } from '../../types/static'
+import {
+  Colors,
+  // SaveThemePayload,
+  Services,
+} from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -10,6 +14,7 @@ export default async function run(services: Services): Promise<any> {
     logger.log('No more jobs to process.')
     return
   }
+
   logger.log('Proccessing extractColors job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
@@ -19,8 +24,8 @@ export default async function run(services: Services): Promise<any> {
       throw new PermanentJobError('Invalid job payload.')
     }
 
-    // Fetch the theme's colors from it's repository.
     const { payload } = job
+    // Fetch the theme's colors from it's repository.
     const theme = await fetchTheme(
       services,
       payload.repositoryOwner,
@@ -29,7 +34,7 @@ export default async function run(services: Services): Promise<any> {
       payload.repositoryPath,
     )
 
-    console.log(theme)
+    logger.log(theme)
 
     await extractColors.succeed(job)
   } catch (err) {
@@ -57,7 +62,7 @@ async function fetchTheme(
   repository: string,
   repositoryBranch: string,
   repositoryPath: string,
-): Promise<{}> {
+): Promise<{ name: string; colors: Colors }> {
   let theme
   const { fetch } = services
   const baseUrl = 'https://raw.githubusercontent.com'
@@ -79,18 +84,25 @@ async function fetchTheme(
   }
 
   try {
-    const data = await response.json()
+    const { name, colors } = await response.json()
     theme = {
-      name: data.name,
-      colors: {},
+      name,
+      colors: {
+        'activityBar.background': colors['activityBar.background'],
+        'activityBar.foreground': colors['activityBar.foreground'],
+        // TODO: Add required colors for rendering the editor.
+      },
     }
   } catch (err) {
     throw new TransientJobError('fetchTheme error: Invalid response data')
   }
+  if (!theme.name) {
+    throw new PermanentJobError('fetchTheme error: Invalid name')
+  }
 
-  // if (!SavePayloadRuntime.guard(theme)) {
-  //   throw new PermanentJobError('fetchTheme error: Invalid colors')
-  // }
+  if (!ColorsRuntime.guard(theme.colors)) {
+    throw new PermanentJobError('fetchTheme error: Invalid colors')
+  }
 
   return theme
 }

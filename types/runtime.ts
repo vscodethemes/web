@@ -1,4 +1,4 @@
-import { Array, Number, Record, String, Tuple, Union } from 'runtypes'
+import { Array, Number, Record, String, Tuple } from 'runtypes'
 
 export const PublisherRuntime = Record({
   publisherName: String,
@@ -70,3 +70,12 @@ export const ExtractColorsPayloadRuntime = Record({
 })
 
 export const ColorsRuntime = Record({})
+
+export const SaveThemePayloadRuntime = Record({
+  repository: String,
+  repositoryOwner: String,
+  repositoryBranch: String,
+  repositoryPath: String,
+  stats: StatsRuntime,
+  colors: ColorsRuntime,
+})
