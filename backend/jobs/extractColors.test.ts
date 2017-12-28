@@ -127,7 +127,7 @@ test('should succeed job for valid input', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should notify self for valid input', async () => {
+test('should not notify self for valid input', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
     JSON.stringify({ name: 'name', colors: createColors() }),
@@ -138,7 +138,7 @@ test('should notify self for valid input', async () => {
 
   const notifySpy = jest.spyOn(services.extractColors, 'notify')
   await extractColors(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
 test('should create save theme jobs for valid input')

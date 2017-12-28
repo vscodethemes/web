@@ -201,7 +201,7 @@ test('should create extract theme jobs for valid input', async () => {
   })
 })
 
-test('should notify self on valid input', async () => {
+test('should not notify self', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
   fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
@@ -211,10 +211,10 @@ test('should notify self on valid input', async () => {
 
   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
   await extractThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
-test('should notify extract colors on valid input', async () => {
+test('should notify extract colors for each theme', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
   fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
@@ -224,5 +224,5 @@ test('should notify extract colors on valid input', async () => {
 
   const notifySpy = jest.spyOn(services.extractColors, 'notify')
   await extractThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(notifySpy).toHaveBeenCalledTimes(2)
 })
