@@ -102,7 +102,7 @@ async function fetchTheme(
     }
   } catch (err) {
     logger.error(err)
-    throw new TransientJobError('fetchTheme error: Invalid response data')
+    throw new PermanentJobError('fetchTheme error: Invalid response data')
   }
 
   if (!theme.name) {

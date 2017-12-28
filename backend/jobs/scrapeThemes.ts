@@ -139,7 +139,7 @@ async function fetchMarketplaceThemes(
     themes = data.results[0].extensions
   } catch (err) {
     logger.error(err)
-    throw new TransientJobError(
+    throw new PermanentJobError(
       'fetchMarketplaceThemes error: Invalid response data',
     )
   }

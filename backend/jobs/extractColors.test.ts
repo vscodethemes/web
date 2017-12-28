@@ -77,16 +77,16 @@ test('should retry job if fetching the theme returns a bad response', async () =
   expect(retrySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should retry job if fetching the theme returns invalid response data', async () => {
+test('should fail job if fetching the theme returns invalid response data', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify(null))
   jest
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const retrySpy = jest.spyOn(services.extractColors, 'retry')
+  const failSpy = jest.spyOn(services.extractColors, 'fail')
   await extractColors(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
+  expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
 test('should fail job if fetching the theme returns invalid name', async () => {

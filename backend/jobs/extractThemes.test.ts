@@ -76,16 +76,16 @@ test('should retry job if fetching default branch returns bad response', async (
   expect(retrySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should retry job if fetching default branch returns invalid response data', async () => {
+test('should fail job if fetching default branch returns invalid response data', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify(null))
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const retrySpy = jest.spyOn(services.extractThemes, 'retry')
+  const failSpy = jest.spyOn(services.extractThemes, 'fail')
   await extractThemes(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
+  expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
 test('should fail job if fetching default branch returns invalid branch', async () => {

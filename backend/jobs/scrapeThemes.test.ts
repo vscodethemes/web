@@ -120,16 +120,16 @@ test('should retry job if fetch returns bad response', async () => {
   expect(retrySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should retry job if fetch returns invalid response data', async () => {
+test('should fail job if fetch returns invalid response data', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: null }))
   jest
     .spyOn(services.scrapeThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const retrySpy = jest.spyOn(services.scrapeThemes, 'retry')
+  const failSpy = jest.spyOn(services.scrapeThemes, 'fail')
   await scrapeThemes(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
+  expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
 test('should fail job if fetch returns invalid extensions', async () => {
