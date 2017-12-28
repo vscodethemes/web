@@ -2,7 +2,7 @@ import {
   ExtractThemesPayloadRuntime,
   PackageJSONRuntime,
 } from '../../types/runtime'
-import { PackageJSON, Services } from '../../types/static'
+import { ExtractColorsPayload, PackageJSON, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -23,38 +23,41 @@ export default async function run(services: Services): Promise<any> {
       throw new PermanentJobError('Invalid job payload.')
     }
 
+    const { payload } = job
     // Find the default branch of the repository.
-    const { repository, repositoryOwner } = job.payload
     const branch = await fetchDefaultBranch(
       services,
-      repositoryOwner,
-      repository,
+      payload.repositoryOwner,
+      payload.repository,
     )
 
     // Get the package.json for the default branch.
     const packageJson = await fetchPackageJson(
       services,
-      repositoryOwner,
-      repository,
+      payload.repositoryOwner,
+      payload.repository,
       branch,
     )
 
     // A package.json definition can contain multiple theme sources.
-    const themes = packageJson.contributes.themes.map(theme => ({
-      ...job.payload,
-      name: theme.label,
-      repositoryPath: theme.path,
-    }))
+    const themes: ExtractColorsPayload[] = packageJson.contributes.themes.map(
+      theme => ({
+        ...payload,
+        repositoryBranch: branch,
+        repositoryPath: theme.path,
+      }),
+    )
 
+    // For each theme source, create a job to extract the colors.
     await Promise.all(
       themes.map(async theme => {
-        // For each theme source, create a job to extract the colors.
         await extractColors.create(theme)
         // Start processing immediately
         await extractColors.notify()
       }),
     )
 
+    // Job succeeded.
     await extractThemes.succeed(job)
   } catch (err) {
     if (TransientJobError.is(err)) {
@@ -117,7 +120,7 @@ async function fetchDefaultBranch(
 }
 
 /**
- * Fetch the repository's default branch.
+ * Fetch the repository's package.json.
  */
 async function fetchPackageJson(
   services: Services,

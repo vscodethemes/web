@@ -1,6 +1,7 @@
 import { Request, RequestInit, Response } from 'node-fetch'
 import { Static } from 'runtypes'
 import {
+  ColorsRuntime,
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
   ExtractColorsPayloadRuntime,
@@ -21,6 +22,7 @@ export type Version = Static<typeof VersionRuntime>
 export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
 export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type PackageJSON = Static<typeof PackageJSONRuntime>
+export type Colors = Static<typeof ColorsRuntime>
 
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.

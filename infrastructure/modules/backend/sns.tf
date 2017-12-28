@@ -7,3 +7,8 @@ resource "aws_sns_topic" "scrape_themes" {
 resource "aws_sns_topic" "extract_themes" {
   name = "extract_themes"
 }
+
+# Extract colors.
+resource "aws_sns_topic" "extract_colors" {
+  name = "extract_colors"
+}

@@ -50,3 +50,15 @@ output "extract_themes_sqs_queue_url" {
 output "extract_themes_sqs_deadletter_queue_url" {
   value = "${module.backend.extract_themes_sqs_deadletter_queue_url}"
 }
+
+output "extract_colors_sns_topic_arn" {
+  value = "${module.backend.extract_colors_sns_topic_arn}"
+}
+
+output "extract_colors_sqs_queue_url" {
+  value = "${module.backend.extract_colors_sqs_queue_url}"
+}
+
+output "extract_colors_sqs_deadletter_queue_url" {
+  value = "${module.backend.extract_colors_sqs_deadletter_queue_url}"
+}

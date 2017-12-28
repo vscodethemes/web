@@ -46,8 +46,8 @@ function createJob<P>(
       }
       const data = await sqs.receiveMessage(params).promise()
       if (!data || !data.Messages) {
-        console.log('Invalid response data! THIS SHOULD NOT HAPPEN!!')
-        console.log(data)
+        // There are no messages in the queue.
+        return null
       }
 
       const message = data.Messages[0]

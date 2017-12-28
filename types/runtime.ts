@@ -34,17 +34,19 @@ export const ScrapeThemesPayloadRuntime = Record({
   page: Number,
 })
 
+export const StatsRuntime = Record({
+  installs: Number,
+  rating: Number,
+  ratingCount: Number,
+  trendingDaily: Number,
+  trendingWeekly: Number,
+  trendingMonthly: Number,
+})
+
 export const ExtractThemesPayloadRuntime = Record({
   repository: String,
   repositoryOwner: String,
-  stats: Record({
-    installs: Number,
-    rating: Number,
-    ratingCount: Number,
-    trendingDaily: Number,
-    trendingWeekly: Number,
-    trendingMonthly: Number,
-  }),
+  stats: StatsRuntime,
 })
 
 export const PackageJSONRuntime = Record({
@@ -59,10 +61,12 @@ export const PackageJSONRuntime = Record({
   }),
 })
 
-export const ExtractColorsPayloadRuntime = Union(
-  ExtractThemesPayloadRuntime,
-  Record({
-    name: String,
-    repositoryPath: String,
-  }),
-)
+export const ExtractColorsPayloadRuntime = Record({
+  repository: String,
+  repositoryOwner: String,
+  repositoryBranch: String,
+  repositoryPath: String,
+  stats: StatsRuntime,
+})
+
+export const ColorsRuntime = Record({})
