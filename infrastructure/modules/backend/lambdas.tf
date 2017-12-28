@@ -35,6 +35,8 @@ module "extract_themes" {
     EXTRACT_THEMES_DEADLETTER_URL = "${aws_sqs_queue.extract_themes_deadletter.id}"
     EXTRACT_COLORS_TOPIC_ARN      = "${aws_sns_topic.extract_colors.arn}"
     EXTRACT_COLORS_QUEUE_URL      = "${aws_sqs_queue.extract_colors.id}"
+    GITHUB_CLIENT_ID              = "${var.github_client_id}"
+    GITHUB_CLIENT_SECRET          = "${var.github_client_secret}"
   }
 }
 

@@ -1,6 +1,8 @@
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "region" {}
+variable "github_client_id" {}
+variable "github_client_secret" {}
 
 terraform {
   backend "s3" {
@@ -17,8 +19,10 @@ provider "aws" {
 }
 
 module "backend" {
-  source      = "../modules/backend"
-  environment = "production"
+  source               = "../modules/backend"
+  environment          = "production"
+  github_client_id     = "${var.github_client_id}"
+  github_client_secret = "${var.github_client_secret}"
 }
 
 # module "frontend" {
