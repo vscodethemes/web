@@ -33,6 +33,7 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { page } = job.payload
+    // Fetch page from VSCode Marketplace
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
@@ -44,6 +45,7 @@ export default async function run(services: Services): Promise<any> {
     // Start processing the next page as soon as we queue the job.
     await scrapeThemes.notify()
 
+    // Get all themes with repository URLs.
     const themesWithRepos = filterThemes(services, themes)
     if (themesWithRepos.length === 0) {
       logger.log('No themes extracted for page.')
@@ -52,15 +54,16 @@ export default async function run(services: Services): Promise<any> {
 
     logger.log(themesWithRepos)
 
+    // Queue a job to extract the themes of each repository
     await Promise.all(
       themesWithRepos.map(async theme => {
-        // Queue a job to extract the themes of each repository
         await extractThemes.create(theme)
         // Start processing immediately
         await extractThemes.notify()
       }),
     )
 
+    // Job succeeded.
     await scrapeThemes.succeed(job)
 
     logger.log(`

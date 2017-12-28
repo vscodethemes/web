@@ -66,6 +66,7 @@ export default function createServices(): Services {
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
         repositoryPath: './themes/OneDark-Pro.json',
+        repositoryBranch: 'master',
         stats: {
           installs: 0,
           rating: 0,

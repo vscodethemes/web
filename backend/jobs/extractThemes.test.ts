@@ -1,6 +1,5 @@
 import * as fetch from 'jest-fetch-mock'
 import {
-  Extension,
   ExtractThemesPayload,
   JobMessage,
   PackageJSON,
@@ -28,6 +27,7 @@ function createJob(): JobMessage<ExtractThemesPayload> {
     },
   }
 }
+
 test('should not process empty job', async () => {
   const services = createServices()
   jest
@@ -152,9 +152,9 @@ test('should succeed job for valid input', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(2)
   expect(createSpy).toHaveBeenCalledTimes(2)
   expect(createSpy.mock.calls[0][0]).toEqual({
-    name: 'name',
     repository: 'repo',
     repositoryOwner: 'owner',
+    repositoryBranch: 'master',
     repositoryPath: './themes/theme1.json',
     stats: {
       installs: 1,
@@ -166,9 +166,9 @@ test('should succeed job for valid input', async () => {
     },
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
-    name: 'name',
     repository: 'repo',
     repositoryOwner: 'owner',
+    repositoryBranch: 'master',
     repositoryPath: './themes/theme2.json',
     stats: {
       installs: 1,
