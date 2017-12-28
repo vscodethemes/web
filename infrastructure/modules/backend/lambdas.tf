@@ -54,6 +54,6 @@ module "extract_colors" {
     JOB                           = "extractColors"
     EXTRACT_COLORS_TOPIC_ARN      = "${aws_sns_topic.extract_colors.arn}"
     EXTRACT_COLORS_QUEUE_URL      = "${aws_sqs_queue.extract_colors.id}"
-    EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors.id}"
+    EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors_deadletter.id}"
   }
 }
