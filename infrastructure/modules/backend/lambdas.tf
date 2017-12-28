@@ -24,9 +24,9 @@ module "extract_themes" {
   environment      = "${var.environment}"
   sns_trigger_arn  = "${aws_sns_topic.extract_themes.arn}"
   sqs_receive_arns = ["${aws_sqs_queue.extract_themes.arn}"]
-  sqs_send_arns    = ["${aws_sqs_queue.extract_themes.arn}", "${aws_sqs_queue.extract_themes_deadletter.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.extract_themes.arn}", "${aws_sqs_queue.extract_themes_deadletter.arn}", "${aws_sqs_queue.extract_colors.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}", "${aws_sns_topic.extract_colors.arn}"]
 
   environment_variables {
     JOB                           = "extractThemes"
