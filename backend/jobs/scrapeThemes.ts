@@ -38,14 +38,12 @@ export default async function run(services: Services): Promise<any> {
     if (themes.length === 0) {
       logger.log('No more pages to process.')
       await scrapeThemes.succeed(job)
-      // Process the next job in the queue.
-      // Even though there are no more pages to process, there could still
-      // be more jobs (likely retries).
-      await scrapeThemes.notify()
       return
     }
     // Create a job to process the next page.
     await scrapeThemes.create({ page: page + 1 })
+    // Process the next job in the queue.
+    await scrapeThemes.notify()
 
     // Get all themes with repository URLs.
     const themesWithRepos = filterThemes(services, themes)
@@ -57,14 +55,16 @@ export default async function run(services: Services): Promise<any> {
     logger.log(themesWithRepos)
 
     // Create a job to extract the themes of each repository.
-    await Promise.all(themesWithRepos.map(extractThemes.create))
+    await Promise.all(
+      themesWithRepos.map(async theme => {
+        await extractThemes.create(theme)
+        // Start the extract themes job.
+        await extractThemes.notify()
+      }),
+    )
 
     // Job succeeded.
     await scrapeThemes.succeed(job)
-    // Process the next job in the queue.
-    await scrapeThemes.notify()
-    // Start the extract themes job.
-    await extractThemes.notify()
 
     logger.log(`
       Page: ${page}

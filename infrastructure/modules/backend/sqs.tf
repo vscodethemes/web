@@ -1,7 +1,8 @@
 # Scrape themes.
 resource "aws_sqs_queue" "scrape_themes" {
-  name           = "scrape_themes"
-  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.scrape_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
+  name                       = "scrape_themes"
+  visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.scrape_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
 
   tags {
     environment = "${var.environment}"
@@ -18,8 +19,9 @@ resource "aws_sqs_queue" "scrape_themes_deadletter" {
 
 # Extract themes.
 resource "aws_sqs_queue" "extract_themes" {
-  name           = "extract_themes"
-  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.extract_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
+  name                       = "extract_themes"
+  visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.extract_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
 
   tags {
     environment = "${var.environment}"
@@ -36,8 +38,9 @@ resource "aws_sqs_queue" "extract_themes_deadletter" {
 
 # Extract colors.
 resource "aws_sqs_queue" "extract_colors" {
-  name           = "extract_colors"
-  redrive_policy = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.extract_colors_deadletter.arn}\",\"maxReceiveCount\":4}"
+  name                       = "extract_colors"
+  visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.extract_colors_deadletter.arn}\",\"maxReceiveCount\":4}"
 
   tags {
     environment = "${var.environment}"

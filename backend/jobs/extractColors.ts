@@ -34,12 +34,10 @@ export default async function run(services: Services): Promise<any> {
     logger.log(`Theme: ${JSON.stringify(theme)}`)
     // TODO: Create a job to save the theme.
     // await saveTheme.create(theme)
+    // await saveTheme.notify()
 
     // Job succeeded.
     await extractColors.succeed(job)
-    // Process the next theme in the queue.
-    await extractColors.notify()
-    // await saveTheme.notify()
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)

@@ -2,11 +2,13 @@ resource "aws_lambda_function" "lambda" {
   filename         = "../../build/lambda.zip"
   source_code_hash = "${base64sha256(file("../../build/lambda.zip"))}"
   function_name    = "${var.name}"
-  memory_size      = 128
-  timeout          = 15
   role             = "${aws_iam_role.lambda.arn}"
+  memory_size      = 128
   handler          = "build/backend/handler.default"
   runtime          = "nodejs6.10"
+
+  # This should be a value greater than the SQS visibility timeout.
+  timeout = 15
 
   # Limits our lambda function to only process one job at a time. 
   # For a recursive job, notifying itself before the execution of the current

@@ -280,7 +280,7 @@ test('should notify self for valid input', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should notify self for empty page', async () => {
+test('should not notify self for empty page', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
@@ -289,10 +289,10 @@ test('should notify self for empty page', async () => {
 
   const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
   await scrapeThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
-test('should notify extract themes job for valid input', async () => {
+test('should notify extract themes job each repository', async () => {
   const services = createServices()
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
@@ -302,5 +302,5 @@ test('should notify extract themes job for valid input', async () => {
 
   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
   await scrapeThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(notifySpy).toHaveBeenCalledTimes(2)
 })
