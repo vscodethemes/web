@@ -23,7 +23,7 @@ export default async function run(services: Services): Promise<any> {
     return
   }
 
-  logger.log('Proccessing fetchThemes job...')
+  logger.log('Proccessing scrapeThemes job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 

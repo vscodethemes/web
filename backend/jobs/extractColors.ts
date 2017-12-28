@@ -63,7 +63,7 @@ async function fetchTheme(
   repositoryPath: string,
 ): Promise<{ name: string; colors: Colors }> {
   let theme
-  const { fetch } = services
+  const { fetch, logger } = services
   const baseUrl = 'https://raw.githubusercontent.com'
   const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
   const branchUrl = `${repoUrl}/${repositoryBranch}`
@@ -83,14 +83,16 @@ async function fetchTheme(
   }
 
   try {
-    const { name, colors } = await response.json()
+    const data = await response.json()
+    logger.log(`fetchThemes: ${data}`)
+
     theme = {
-      name,
+      name: data.name,
       colors: {
-        'activityBar.background': colors['activityBar.background'],
-        'activityBar.foreground': colors['activityBar.foreground'],
-        'statusBar.background': colors['statusBar.background'],
-        'statusBar.foreground': colors['statusBar.foreground'],
+        'activityBar.background': data.colors['activityBar.background'],
+        'activityBar.foreground': data.colors['activityBar.foreground'],
+        'statusBar.background': data.colors['statusBar.background'],
+        'statusBar.foreground': data.colors['statusBar.foreground'],
         // TODO: Add required colors for rendering the editor.
       },
     }
@@ -99,11 +101,15 @@ async function fetchTheme(
   }
 
   if (!theme.name) {
-    throw new PermanentJobError('fetchTheme error: Invalid name')
+    throw new PermanentJobError(
+      `fetchTheme error: Invalid name: ${JSON.stringify(theme)}`,
+    )
   }
 
   if (!ColorsRuntime.guard(theme.colors)) {
-    throw new PermanentJobError('fetchTheme error: Invalid colors')
+    throw new PermanentJobError(
+      `fetchTheme error: Invalid colors: ${JSON.stringify(theme)}`,
+    )
   }
 
   return theme
