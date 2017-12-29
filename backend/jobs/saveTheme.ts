@@ -3,10 +3,6 @@ import { SaveThemePayloadRuntime } from '../../types/runtime'
 import { SaveThemePayload, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
-const { ALGOLIA_APP_ID, ALGOLIA_API_KEY } = process.env
-// const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-// const index = search.initIndex('vscodethemes')
-
 export default async function run(services: Services): Promise<any> {
   const { saveTheme, logger } = services
 
@@ -53,7 +49,7 @@ async function addToSearch(
   services: Services,
   theme: SaveThemePayload,
 ): Promise<string> {
-  const { logger } = services
+  // const { index, logger } = services
   // const content = await index.addObject({
   //   objectID: `${theme.respositoryOwner}/${theme.respository}/${theme.respositoryPath}`,
   //   ...theme
