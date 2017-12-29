@@ -150,9 +150,9 @@ test('should create save theme jobs for valid input', async () => {
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const createSpy = jest.spyOn(services.extractColors, 'create')
+  const createSpy = jest.spyOn(services.saveTheme, 'create')
   await extractColors(services)
-  expect(createSpy).toHaveBeenCalledTimes(0)
+  expect(createSpy).toHaveBeenCalledTimes(1)
 })
 
 test('should notify save theme jobs for valid input', async () => {
@@ -164,7 +164,7 @@ test('should notify save theme jobs for valid input', async () => {
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const notifySpy = jest.spyOn(services.extractColors, 'notify')
+  const notifySpy = jest.spyOn(services.saveTheme, 'notify')
   await extractColors(services)
-  expect(notifySpy).toHaveBeenCalledTimes(0)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })

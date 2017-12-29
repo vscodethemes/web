@@ -51,7 +51,7 @@ async function addToSearch(
 ): Promise<string> {
   // const { index, logger } = services
   // const content = await index.addObject({
-  //   objectID: `${theme.respositoryOwner}/${theme.respository}/${theme.respositoryPath}`,
+  //   objectID: `${theme.respositoryOwner}/${theme.respository}/${repositoryPath.replace(/^\.\//, '')}`,
   //   ...theme
   // })
   // return content.objectID

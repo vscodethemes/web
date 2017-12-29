@@ -3,7 +3,7 @@ import { Colors, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
-  const { extractColors, logger } = services
+  const { extractColors, saveTheme, logger } = services
 
   const job = await extractColors.receive()
   if (!job) {
@@ -32,9 +32,10 @@ export default async function run(services: Services): Promise<any> {
 
     const theme = { ...payload, name, colors }
     logger.log(`Theme: ${JSON.stringify(theme)}`)
-    // TODO: Create a job to save the theme.
-    // await saveTheme.create(theme)
-    // await saveTheme.notify()
+
+    // Create a job to save the theme.
+    await saveTheme.create(theme)
+    await saveTheme.notify()
 
     // Job succeeded.
     await extractColors.succeed(job)
