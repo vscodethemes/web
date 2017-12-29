@@ -32,8 +32,6 @@ const {
 
 const sqs = new AWS.SQS()
 const sns = new AWS.SNS()
-const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-const index = search.initIndex('VSCodeThemes')
 
 function createJob<P>(
   jobName: string,
@@ -130,6 +128,8 @@ export default function createServices(): Services {
     },
     index: {
       addObject: async (object: IndexObject) => {
+        const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+        const index = search.initIndex('VSCodeThemes')
         const result = await index.addObject(object)
         return result
       },
