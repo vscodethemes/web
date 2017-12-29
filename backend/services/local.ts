@@ -41,6 +41,20 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
 export default function createServices(): Services {
   return {
     fetch,
+    logger: {
+      log: obj => {
+        console.log(obj)
+      },
+      error: error => {
+        console.error(error)
+      },
+    },
+    index: {
+      addObject: obj => {
+        console.log('Added object to index', obj)
+        return Promise.resolve()
+      },
+    },
     // TODO: Allow receive mocks to be passed in via CLI.
     scrapeThemes: createJob<ScrapeThemesPayload>('scrapeThemes', {
       receiptHandle: '',
@@ -101,13 +115,5 @@ export default function createServices(): Services {
         },
       },
     }),
-    logger: {
-      log: obj => {
-        console.log(obj)
-      },
-      error: error => {
-        console.error(error)
-      },
-    },
   }
 }

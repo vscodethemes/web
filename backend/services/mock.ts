@@ -23,13 +23,16 @@ function createJob<P>(): Job<P> {
 export default function createServices(): Services {
   return {
     fetch,
-    scrapeThemes: createJob<ScrapeThemesPayload>(),
-    extractThemes: createJob<ExtractThemesPayload>(),
-    extractColors: createJob<ExtractColorsPayload>(),
-    saveTheme: createJob<SaveThemePayload>(),
     logger: {
       log: () => {},
       error: () => {},
     },
+    index: {
+      addObject: () => Promise.resolve(),
+    },
+    scrapeThemes: createJob<ScrapeThemesPayload>(),
+    extractThemes: createJob<ExtractThemesPayload>(),
+    extractColors: createJob<ExtractColorsPayload>(),
+    saveTheme: createJob<SaveThemePayload>(),
   }
 }

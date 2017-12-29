@@ -3,7 +3,7 @@ import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
 import saveTheme from './jobs/saveTheme'
 import scrapeThemes from './jobs/scrapeThemes'
-import createServices from './services/aws'
+import createServices from './services'
 
 const jobName = process.env.JOB
 
