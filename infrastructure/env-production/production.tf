@@ -3,6 +3,8 @@ variable "aws_secret_key" {}
 variable "region" {}
 variable "github_client_id" {}
 variable "github_client_secret" {}
+variable "algolia_app_id" {}
+variable "algolia_api_key" {}
 
 terraform {
   backend "s3" {
@@ -23,6 +25,8 @@ module "backend" {
   environment          = "production"
   github_client_id     = "${var.github_client_id}"
   github_client_secret = "${var.github_client_secret}"
+  algolia_app_id       = "${var.algolia_app_id}"
+  algolia_api_key      = "${var.algolia_api_key}"
 }
 
 # module "frontend" {

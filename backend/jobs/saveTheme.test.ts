@@ -5,7 +5,7 @@ import {
   Services,
 } from '../../types/static'
 import createServices from '../services/mock'
-import saveTheme from './saveTheme'
+import saveTheme, { createObjectId } from './saveTheme'
 
 function createJob(): JobMessage<SaveThemePayload> {
   return {
@@ -47,9 +47,31 @@ test('should not process empty job', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
-test('should fail job if it has an invalid payload')
+test('should fail job if it has an invalid payload', async () => {
+  const services = createServices()
+  jest
+    .spyOn(services.saveTheme, 'receive')
+    .mockImplementation(() => Promise.resolve({}))
 
-test('should retry job if added to index fails')
+  const failSpy = jest.spyOn(services.saveTheme, 'fail')
+  await saveTheme(services)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should retry job if add to index fails', async () => {
+  const services = createServices()
+  jest
+    .spyOn(services.saveTheme, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  jest.spyOn(services.index, 'addObject').mockImplementation(() => {
+    throw new Error()
+  })
+
+  const retrySpy = jest.spyOn(services.saveTheme, 'retry')
+  await saveTheme(services)
+  expect(retrySpy).toHaveBeenCalledTimes(1)
+})
 
 test('should succeed job for valid input', async () => {
   const services = createServices()
@@ -60,6 +82,22 @@ test('should succeed job for valid input', async () => {
   const succeedSpy = jest.spyOn(services.saveTheme, 'succeed')
   await saveTheme(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should add to index for valid input', async () => {
+  const services = createServices()
+  const job = createJob()
+  jest
+    .spyOn(services.saveTheme, 'receive')
+    .mockImplementation(() => Promise.resolve(job))
+
+  const addObjectSpy = jest.spyOn(services.index, 'addObject')
+  await saveTheme(services)
+  expect(addObjectSpy).toHaveBeenCalledTimes(1)
+  expect(addObjectSpy.mock.calls[0][0]).toEqual({
+    ...job.payload,
+    objectID: createObjectId(job.payload),
+  })
 })
 
 test('should not notify self for valid input', async () => {

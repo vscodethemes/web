@@ -49,11 +49,19 @@ export type Fetch = (
   init?: RequestInit,
 ) => Promise<Response>
 
+export interface IndexObject {
+  objectID: string
+  [key: string]: any
+}
+
 export interface Services {
   fetch: Fetch
   logger: {
     log: (obj: any) => void
     error: (error: Error) => void
+  }
+  index: {
+    addObject: (object: IndexObject) => Promise<any>
   }
   scrapeThemes: Job<ScrapeThemesPayload>
   extractThemes: Job<ExtractThemesPayload>

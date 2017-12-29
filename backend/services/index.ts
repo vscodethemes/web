@@ -1,9 +1,11 @@
 // tslint:disable no-console
+import * as algoliasearch from 'algoliasearch'
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
+  IndexObject,
   Job,
   JobMessage,
   SaveThemePayload,
@@ -24,10 +26,14 @@ const {
   SAVE_THEME_QUEUE_URL,
   SAVE_THEME_DEADLETTER_URL,
   SAVE_THEME_TOPIC_ARN,
+  ALGOLIA_APP_ID,
+  ALGOLIA_API_KEY,
 } = process.env
 
 const sqs = new AWS.SQS()
 const sns = new AWS.SNS()
+const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
+const index = search.initIndex('VSCodeThemes')
 
 function createJob<P>(
   jobName: string,
@@ -113,6 +119,21 @@ function createJob<P>(
 export default function createServices(): Services {
   return {
     fetch,
+    // Ouputs to CloudWatch
+    logger: {
+      log: obj => {
+        console.log(obj)
+      },
+      error: error => {
+        console.error(error)
+      },
+    },
+    index: {
+      addObject: async (object: IndexObject) => {
+        const result = await index.addObject(object)
+        return result
+      },
+    },
     scrapeThemes: createJob<ScrapeThemesPayload>(
       'scrapeThemes',
       SCRAPE_THEMES_QUEUE_URL,
@@ -137,14 +158,5 @@ export default function createServices(): Services {
       SAVE_THEME_DEADLETTER_URL,
       SAVE_THEME_TOPIC_ARN,
     ),
-    // Ouputs to CloudWatch
-    logger: {
-      log: obj => {
-        console.log(obj)
-      },
-      error: error => {
-        console.error(error)
-      },
-    },
   }
 }
