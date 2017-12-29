@@ -71,7 +71,7 @@ module "save_theme" {
   sns_publish_arns = ["${aws_sns_topic.save_theme.arn}"]
 
   environment_variables {
-    JOB                       = "extractColors"
+    JOB                       = "saveTheme"
     SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
     SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
     SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"
