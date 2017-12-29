@@ -6,6 +6,7 @@ import {
   ExtractThemesPayload,
   Job,
   JobMessage,
+  SaveThemePayload,
   ScrapeThemesPayload,
   Services,
 } from '../../types/static'
@@ -20,6 +21,9 @@ const {
   EXTRACT_COLORS_QUEUE_URL,
   EXTRACT_COLORS_DEADLETTER_URL,
   EXTRACT_COLORS_TOPIC_ARN,
+  SAVE_THEME_QUEUE_URL,
+  SAVE_THEME_DEADLETTER_URL,
+  SAVE_THEME_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -126,6 +130,12 @@ export default function createServices(): Services {
       EXTRACT_COLORS_QUEUE_URL,
       EXTRACT_COLORS_DEADLETTER_URL,
       EXTRACT_COLORS_TOPIC_ARN,
+    ),
+    saveTheme: createJob<SaveThemePayload>(
+      'saveTheme',
+      SAVE_THEME_QUEUE_URL,
+      SAVE_THEME_DEADLETTER_URL,
+      SAVE_THEME_TOPIC_ARN,
     ),
     // Ouputs to CloudWatch
     logger: {

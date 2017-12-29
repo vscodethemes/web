@@ -141,5 +141,30 @@ test('should not notify self for valid input', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(0)
 })
 
-test('should create save theme jobs for valid input')
-test('should notify save theme jobs for valid input')
+test('should create save theme jobs for valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', colors: createColors() }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const createSpy = jest.spyOn(services.extractColors, 'create')
+  await extractColors(services)
+  expect(createSpy).toHaveBeenCalledTimes(0)
+})
+
+test('should notify save theme jobs for valid input', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', colors: createColors() }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const notifySpy = jest.spyOn(services.extractColors, 'notify')
+  await extractColors(services)
+  expect(notifySpy).toHaveBeenCalledTimes(0)
+})

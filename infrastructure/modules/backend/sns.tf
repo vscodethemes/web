@@ -12,3 +12,8 @@ resource "aws_sns_topic" "extract_themes" {
 resource "aws_sns_topic" "extract_colors" {
   name = "extract_colors"
 }
+
+# Save theme.
+resource "aws_sns_topic" "save_theme" {
+  name = "save_theme"
+}
