@@ -46,14 +46,34 @@ module "extract_colors" {
   environment      = "${var.environment}"
   sns_trigger_arn  = "${aws_sns_topic.extract_colors.arn}"
   sqs_receive_arns = ["${aws_sqs_queue.extract_colors.arn}"]
-  sqs_send_arns    = ["${aws_sqs_queue.extract_colors.arn}", "${aws_sqs_queue.extract_colors_deadletter.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.extract_colors.arn}", "${aws_sqs_queue.extract_colors_deadletter.arn}", "${aws_sqs_queue.save_theme.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_colors.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}", "${aws_sns_topic.save_theme.arn}"]
 
   environment_variables {
     JOB                           = "extractColors"
     EXTRACT_COLORS_TOPIC_ARN      = "${aws_sns_topic.extract_colors.arn}"
     EXTRACT_COLORS_QUEUE_URL      = "${aws_sqs_queue.extract_colors.id}"
     EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors_deadletter.id}"
+    SAVE_THEME_TOPIC_ARN          = "${aws_sns_topic.save_theme.arn}"
+    SAVE_THEME_QUEUE_URL          = "${aws_sqs_queue.save_theme.id}"
+  }
+}
+
+module "save_theme" {
+  source           = "./lambda"
+  name             = "save_theme"
+  environment      = "${var.environment}"
+  sns_trigger_arn  = "${aws_sns_topic.save_theme.arn}"
+  sqs_receive_arns = ["${aws_sqs_queue.save_theme.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.save_theme.arn}", "${aws_sqs_queue.save_theme_deadletter.arn}"]
+  sqs_delete_arns  = ["${aws_sqs_queue.save_theme.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.save_theme.arn}"]
+
+  environment_variables {
+    JOB                       = "extractColors"
+    SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
+    SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
+    SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"
   }
 }

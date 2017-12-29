@@ -54,3 +54,22 @@ resource "aws_sqs_queue" "extract_colors_deadletter" {
     environment = "${var.environment}"
   }
 }
+
+# Save theme.
+resource "aws_sqs_queue" "save_theme" {
+  name                       = "save_theme"
+  visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.save_theme_deadletter.arn}\",\"maxReceiveCount\":4}"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}
+
+resource "aws_sqs_queue" "save_theme_deadletter" {
+  name = "save_theme_deadletter"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}

@@ -1,6 +1,7 @@
 import { JobHandlers } from '../types/static'
 import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
+import saveTheme from './jobs/saveTheme'
 import scrapeThemes from './jobs/scrapeThemes'
 import createServices from './services/aws'
 
@@ -10,6 +11,7 @@ const jobs: JobHandlers = {
   scrapeThemes,
   extractThemes,
   extractColors,
+  saveTheme,
 }
 
 export default async function handler(event: any, context: AWSLambda.Context) {

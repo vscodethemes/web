@@ -4,6 +4,7 @@ import {
   ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
+  SaveThemePayload,
   ScrapeThemesPayload,
   Services,
 } from '../../types/static'
@@ -25,6 +26,7 @@ export default function createServices(): Services {
     scrapeThemes: createJob<ScrapeThemesPayload>(),
     extractThemes: createJob<ExtractThemesPayload>(),
     extractColors: createJob<ExtractColorsPayload>(),
+    saveTheme: createJob<SaveThemePayload>(),
     logger: {
       log: () => {},
       error: () => {},

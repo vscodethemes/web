@@ -58,6 +58,7 @@ export interface Services {
   scrapeThemes: Job<ScrapeThemesPayload>
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
+  saveTheme: Job<SaveThemePayload>
 }
 
 export type JobHandler = (services: Services) => Promise<any>
