@@ -5,5 +5,5 @@ resource "aws_cloudwatch_event_rule" "run_all" {
 
 resource "aws_cloudwatch_event_rule" "init" {
   name                = "init"
-  schedule_expression = "rate(3 hours)"
+  schedule_expression = "rate(4 hours)"
 }
