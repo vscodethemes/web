@@ -93,11 +93,10 @@ module "run_all" {
   ]
 
   environment_variables {
-    JOB                       = "runAll"
-    SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
-    SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
-    SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"
-    ALGOLIA_APP_ID            = "${var.algolia_app_id}"
-    ALGOLIA_API_KEY           = "${var.algolia_api_key}"
+    JOB                      = "runAll"
+    SCRAPE_THEMES_TOPIC_ARN  = "${aws_sns_topic.scrape_themes.arn}"
+    EXTRACT_THEMES_TOPIC_ARN = "${aws_sns_topic.extract_themes.arn}"
+    EXTRACT_COLORS_TOPIC_ARN = "${aws_sns_topic.extract_colors.arn}"
+    SAVE_THEME_TOPIC_ARN     = "${aws_sns_topic.save_theme.arn}"
   }
 }
