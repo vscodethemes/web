@@ -1,6 +1,6 @@
 import { Services } from '../../types/static'
 import createServices from '../services/mock'
-import runAllJobs from './runAllJobs'
+import runAll from './runAll'
 
 test('should notify all jobs', async () => {
   const services = createServices()
@@ -9,7 +9,7 @@ test('should notify all jobs', async () => {
   const notifyExtractColorsSpy = jest.spyOn(services.extractColors, 'notify')
   const notifySaveThemeSpy = jest.spyOn(services.saveTheme, 'notify')
 
-  await runAllJobs(services)
+  await runAll(services)
 
   expect(notifyScrapeThemesSpy).toHaveBeenCalledTimes(1)
   expect(notifyExtractThemesSpy).toHaveBeenCalledTimes(1)
