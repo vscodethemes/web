@@ -102,3 +102,17 @@ module "run_all" {
     SAVE_THEME_TOPIC_ARN     = "${aws_sns_topic.save_theme.arn}"
   }
 }
+
+module "init" {
+  source                  = "./lambda"
+  name                    = "init"
+  environment             = "${var.environment}"
+  cloudwatch_trigger_name = "${aws_cloudwatch_event_rule.init.name}"
+  cloudwatch_trigger_arn  = "${aws_cloudwatch_event_rule.init.arn}"
+  sqs_send_arns           = ["${aws_sqs_queue.scrape_themes.arn}"]
+
+  environment_variables {
+    JOB                     = "init"
+    SCRAPE_THEMES_QUEUE_URL = "${aws_sqs_queue.scrape_themes.id}"
+  }
+}
