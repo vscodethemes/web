@@ -244,26 +244,22 @@ test('should create job for repositories', async () => {
   expect(createSpy.mock.calls[0][0]).toEqual({
     repository: 'repo',
     repositoryOwner: 'owner',
-    stats: {
-      installs: 1,
-      rating: 1,
-      ratingCount: 1,
-      trendingDaily: 1,
-      trendingMonthly: 1,
-      trendingWeekly: 1,
-    },
+    installs: 1,
+    rating: 1,
+    ratingCount: 1,
+    trendingDaily: 1,
+    trendingMonthly: 1,
+    trendingWeekly: 1,
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
     repository: 'repo',
     repositoryOwner: 'owner',
-    stats: {
-      installs: 1,
-      rating: 1,
-      ratingCount: 1,
-      trendingDaily: 1,
-      trendingMonthly: 1,
-      trendingWeekly: 1,
-    },
+    installs: 1,
+    rating: 1,
+    ratingCount: 1,
+    trendingDaily: 1,
+    trendingMonthly: 1,
+    trendingWeekly: 1,
   })
 })
 
@@ -280,7 +276,7 @@ test('should notify self for valid input', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should not notify self for empty page', async () => {
+test('should notify self for empty page', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
@@ -289,18 +285,31 @@ test('should not notify self for empty page', async () => {
 
   const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
   await scrapeThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(0)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should notify extract themes job each repository', async () => {
+test('should notify self for invalid input', async () => {
   const services = createServices()
-  const themes = createValidThemes()
+  const themes = createInvalidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
     .spyOn(services.scrapeThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const notifySpy = jest.spyOn(services.extractThemes, 'notify')
+  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
   await scrapeThemes(services)
-  expect(notifySpy).toHaveBeenCalledTimes(2)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })
+
+// test('should notify extract themes job each repository', async () => {
+//   const services = createServices()
+//   const themes = createValidThemes()
+//   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+//   jest
+//     .spyOn(services.scrapeThemes, 'receive')
+//     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
+
+//   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
+//   await scrapeThemes(services)
+//   expect(notifySpy).toHaveBeenCalledTimes(2)
+// })

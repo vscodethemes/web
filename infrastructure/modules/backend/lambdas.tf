@@ -6,7 +6,7 @@ module "scrape_themes" {
   sqs_receive_arns = ["${aws_sqs_queue.scrape_themes.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.scrape_themes.arn}", "${aws_sqs_queue.scrape_themes_deadletter.arn}", "${aws_sqs_queue.extract_themes.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.scrape_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}", "${aws_sns_topic.extract_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}"]
 
   environment_variables {
     JOB                          = "scrapeThemes"
@@ -26,7 +26,7 @@ module "extract_themes" {
   sqs_receive_arns = ["${aws_sqs_queue.extract_themes.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.extract_themes.arn}", "${aws_sqs_queue.extract_themes_deadletter.arn}", "${aws_sqs_queue.extract_colors.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}", "${aws_sns_topic.extract_colors.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}"]
 
   environment_variables {
     JOB                           = "extractThemes"
@@ -48,7 +48,7 @@ module "extract_colors" {
   sqs_receive_arns = ["${aws_sqs_queue.extract_colors.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.extract_colors.arn}", "${aws_sqs_queue.extract_colors_deadletter.arn}", "${aws_sqs_queue.save_theme.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_colors.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}", "${aws_sns_topic.save_theme.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}"]
 
   environment_variables {
     JOB                           = "extractColors"

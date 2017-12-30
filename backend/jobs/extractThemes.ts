@@ -16,6 +16,9 @@ export default async function run(services: Services): Promise<any> {
     return
   }
 
+  // Process the next job in the queue.
+  await extractThemes.notify()
+
   logger.log('Proccessing extractThemes job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
@@ -51,12 +54,7 @@ export default async function run(services: Services): Promise<any> {
     )
 
     // For each theme source, create a job to extract the colors.
-    await Promise.all(
-      themes.map(async theme => {
-        await extractColors.create(theme)
-        await extractColors.notify()
-      }),
-    )
+    await Promise.all(themes.map(extractColors.create))
 
     // Job succeeded.
     await extractThemes.succeed(job)

@@ -19,14 +19,12 @@ function createJob(): JobMessage<ExtractColorsPayload> {
       repositoryOwner: 'owner',
       repositoryBranch: 'master',
       repositoryPath: './themes/theme.json',
-      stats: {
-        installs: 1,
-        rating: 1,
-        ratingCount: 1,
-        trendingDaily: 1,
-        trendingWeekly: 1,
-        trendingMonthly: 1,
-      },
+      installs: 1,
+      rating: 1,
+      ratingCount: 1,
+      trendingDaily: 1,
+      trendingWeekly: 1,
+      trendingMonthly: 1,
     },
   }
 }
@@ -127,7 +125,7 @@ test('should succeed job for valid input', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should not notify self for valid input', async () => {
+test('should notify self', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
     JSON.stringify({ name: 'name', colors: createColors() }),
@@ -138,7 +136,7 @@ test('should not notify self for valid input', async () => {
 
   const notifySpy = jest.spyOn(services.extractColors, 'notify')
   await extractColors(services)
-  expect(notifySpy).toHaveBeenCalledTimes(0)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
 test('should create save theme jobs for valid input', async () => {
@@ -155,16 +153,16 @@ test('should create save theme jobs for valid input', async () => {
   expect(createSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should notify save theme jobs for valid input', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', colors: createColors() }),
-  )
-  jest
-    .spyOn(services.extractColors, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
+// test('should notify save theme jobs for valid input', async () => {
+//   const services = createServices()
+//   fetch.mockResponseOnce(
+//     JSON.stringify({ name: 'name', colors: createColors() }),
+//   )
+//   jest
+//     .spyOn(services.extractColors, 'receive')
+//     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const notifySpy = jest.spyOn(services.saveTheme, 'notify')
-  await extractColors(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
-})
+//   const notifySpy = jest.spyOn(services.saveTheme, 'notify')
+//   await extractColors(services)
+//   expect(notifySpy).toHaveBeenCalledTimes(1)
+// })
