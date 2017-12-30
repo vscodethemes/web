@@ -104,12 +104,6 @@ function createJob<P>(
     retry: async (message: JobMessage<P>) => {
       // Don't delete the message, processing will timeout and cause SQS to
       // retry according to it's redrive policy.
-      // Notify to execute the lambda function again.
-      const params = {
-        TopicArn: topicArn,
-        Message: `${jobName}-retry`,
-      }
-      await sns.publish(params).promise()
     },
   }
 }
