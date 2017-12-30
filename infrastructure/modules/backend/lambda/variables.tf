@@ -5,6 +5,14 @@ variable "sns_trigger_arn" {
   default = ""
 }
 
+variable "cloudwatch_trigger_name" {
+  default = ""
+}
+
+variable "cloudwatch_trigger_arn" {
+  default = ""
+}
+
 variable "sns_publish_arns" {
   type    = "list"
   default = []

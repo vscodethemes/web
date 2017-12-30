@@ -81,9 +81,11 @@ module "save_theme" {
 }
 
 module "run_all" {
-  source      = "./lambda"
-  name        = "run_all"
-  environment = "${var.environment}"
+  source                  = "./lambda"
+  name                    = "run_all"
+  environment             = "${var.environment}"
+  cloudwatch_trigger_name = "${aws_cloudwatch_event_rule.run_all.name}"
+  cloudwatch_trigger_arn  = "${aws_cloudwatch_event_rule.run_all.arn}"
 
   sns_publish_arns = [
     "${aws_sns_topic.scrape_themes.arn}",

@@ -81,3 +81,18 @@ resource "aws_lambda_permission" "sns" {
   principal     = "sns.amazonaws.com"
   source_arn    = "${var.sns_trigger_arn}"
 }
+
+resource "aws_cloudwatch_event_target" "event_target" {
+  count = "${var.cloudwatch_trigger_name != "" ? 1 : 0}"
+  rule  = "${var.cloudwatch_trigger_name}"
+  arn   = "${aws_lambda_function.lambda.arn}"
+}
+
+resource "aws_lambda_permission" "cloudwatch" {
+  count         = "${var.cloudwatch_trigger_name != "" ? 1 : 0}"
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.lambda.function_name}"
+  principal     = "events.amazonaws.com"
+  source_arn    = "${var.cloudwatch_trigger_arn}"
+}
