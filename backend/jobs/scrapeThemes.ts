@@ -23,6 +23,9 @@ export default async function run(services: Services): Promise<any> {
     return
   }
 
+  // Process the next job in the queue.
+  await scrapeThemes.notify()
+
   logger.log('Proccessing scrapeThemes job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
@@ -40,10 +43,9 @@ export default async function run(services: Services): Promise<any> {
       await scrapeThemes.succeed(job)
       return
     }
+
     // Create a job to process the next page.
     await scrapeThemes.create({ page: page + 1 })
-    // Process the next job in the queue.
-    await scrapeThemes.notify()
 
     // Get all themes with repository URLs.
     const themesWithRepos = filterThemes(services, themes)
@@ -55,13 +57,7 @@ export default async function run(services: Services): Promise<any> {
     logger.log(themesWithRepos)
 
     // Create a job to extract the themes of each repository.
-    await Promise.all(
-      themesWithRepos.map(async theme => {
-        await extractThemes.create(theme)
-        // Start the extract themes job.
-        await extractThemes.notify()
-      }),
-    )
+    await Promise.all(themesWithRepos.map(extractThemes.create))
 
     // Job succeeded.
     await scrapeThemes.succeed(job)
@@ -175,14 +171,12 @@ function filterThemes(
       if (repoUrlProp) {
         extracted.push({
           ...extractRepositoryInfo(repoUrlProp.value),
-          stats: {
-            installs: extractStatistic(theme, 'install'),
-            rating: extractStatistic(theme, 'averagerating'),
-            ratingCount: extractStatistic(theme, 'ratingcount'),
-            trendingDaily: extractStatistic(theme, 'trendingdaily'),
-            trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
-            trendingMonthly: extractStatistic(theme, 'trendingweekly'),
-          },
+          installs: extractStatistic(theme, 'install'),
+          rating: extractStatistic(theme, 'averagerating'),
+          ratingCount: extractStatistic(theme, 'ratingcount'),
+          trendingDaily: extractStatistic(theme, 'trendingdaily'),
+          trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
+          trendingMonthly: extractStatistic(theme, 'trendingweekly'),
         })
       } else {
         // Skip themes without github url.

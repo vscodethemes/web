@@ -7,8 +7,8 @@ resource "aws_lambda_function" "lambda" {
   handler          = "build/backend/handler.default"
   runtime          = "nodejs6.10"
 
-  # This should be a value greater than the SQS visibility timeout.
-  timeout = 15
+  # This should be a value greater than the SQS receive timeouts.
+  timeout = 20
 
   # Limits our lambda function to only process one job at a time. 
   # For a recursive job, notifying itself before the execution of the current

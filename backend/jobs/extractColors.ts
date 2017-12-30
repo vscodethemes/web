@@ -11,6 +11,9 @@ export default async function run(services: Services): Promise<any> {
     return
   }
 
+  // Process the next job in the queue.
+  await extractColors.notify()
+
   logger.log('Proccessing extractColors job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
@@ -35,7 +38,6 @@ export default async function run(services: Services): Promise<any> {
 
     // Create a job to save the theme.
     await saveTheme.create(theme)
-    await saveTheme.notify()
 
     // Job succeeded.
     await extractColors.succeed(job)

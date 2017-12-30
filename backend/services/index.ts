@@ -117,7 +117,7 @@ function createJob<P>(
 export default function createServices(): Services {
   return {
     fetch,
-    // Ouputs to CloudWatch
+    // Ouputs to CloudWatch.
     logger: {
       log: obj => {
         console.log(obj)

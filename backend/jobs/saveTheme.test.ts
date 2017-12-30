@@ -15,14 +15,12 @@ function createJob(): JobMessage<SaveThemePayload> {
       repositoryOwner: 'owner',
       repositoryBranch: 'master',
       repositoryPath: './themes/theme.json',
-      stats: {
-        installs: 1,
-        rating: 1,
-        ratingCount: 1,
-        trendingDaily: 1,
-        trendingWeekly: 1,
-        trendingMonthly: 1,
-      },
+      installs: 1,
+      rating: 1,
+      ratingCount: 1,
+      trendingDaily: 1,
+      trendingWeekly: 1,
+      trendingMonthly: 1,
       colors: {
         'activityBar.background': 'color',
         'activityBar.foreground': 'color',
@@ -100,7 +98,7 @@ test('should add to index for valid input', async () => {
   })
 })
 
-test('should not notify self for valid input', async () => {
+test('should notify self for valid input', async () => {
   const services = createServices()
   jest
     .spyOn(services.saveTheme, 'receive')
@@ -108,5 +106,5 @@ test('should not notify self for valid input', async () => {
 
   const notifySpy = jest.spyOn(services.saveTheme, 'notify')
   await saveTheme(services)
-  expect(notifySpy).toHaveBeenCalledTimes(0)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
 })

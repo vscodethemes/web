@@ -1,4 +1,3 @@
-// import * as algoliasearch from 'algoliasearch'
 import { SaveThemePayloadRuntime } from '../../types/runtime'
 import { SaveThemePayload, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
@@ -15,6 +14,9 @@ export default async function run(services: Services): Promise<any> {
     logger.log('No more jobs to process.')
     return
   }
+
+  // Process the next job in the queue.
+  await saveTheme.notify()
 
   logger.log('Proccessing saveTheme job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
