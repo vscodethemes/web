@@ -9,12 +9,12 @@ export default async function run(services: Services): Promise<any> {
     logger,
   } = services
 
-  logger.log('Notifing scrapeThemes...')
+  logger.log('Notify:ing scrapeThemes...')
   await scrapeThemes.notify()
-  logger.log('Notifing extractThemes...')
+  logger.log('Notifying extractThemes...')
   await extractThemes.notify()
-  logger.log('Notifing extractColors...')
+  logger.log('Notifying extractColors...')
   await extractColors.notify()
-  logger.log('Notifing saveTheme...')
+  logger.log('Notifying saveTheme...')
   await saveTheme.notify()
 }
