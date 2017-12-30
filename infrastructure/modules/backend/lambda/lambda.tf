@@ -32,19 +32,49 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
 }
 
-resource "aws_iam_role_policy" "lambda" {
-  name   = "${var.name}"
+resource "aws_iam_role_policy" "cloudwatch_policy" {
+  name   = "${var.name}_cloudwatch"
   role   = "${aws_iam_role.lambda.id}"
-  policy = "${data.aws_iam_policy_document.lambda_policy.json}"
+  policy = "${data.aws_iam_policy_document.cloudwatch_policy.json}"
+}
+
+resource "aws_iam_role_policy" "sns_publish_policy" {
+  count  = "${length(var.sns_publish_arns) == 0 ? 0 : 1}"
+  name   = "${var.name}_sns_publish"
+  role   = "${aws_iam_role.lambda.id}"
+  policy = "${data.aws_iam_policy_document.sns_publish_policy.json}"
+}
+
+resource "aws_iam_role_policy" "sqs_receive_policy" {
+  count  = "${length(var.sqs_receive_arns) == 0 ? 0 : 1}"
+  name   = "${var.name}_sqs_receive"
+  role   = "${aws_iam_role.lambda.id}"
+  policy = "${data.aws_iam_policy_document.sqs_receive_policy.json}"
+}
+
+resource "aws_iam_role_policy" "sqs_send_policy" {
+  count  = "${length(var.sqs_send_arns) == 0 ? 0 : 1}"
+  name   = "${var.name}_sqs_send"
+  role   = "${aws_iam_role.lambda.id}"
+  policy = "${data.aws_iam_policy_document.sqs_send_policy.json}"
+}
+
+resource "aws_iam_role_policy" "sqs_delete_policy" {
+  count  = "${length(var.sqs_delete_arns) == 0 ? 0 : 1}"
+  name   = "${var.name}_sqs_delete"
+  role   = "${aws_iam_role.lambda.id}"
+  policy = "${data.aws_iam_policy_document.sqs_delete_policy.json}"
 }
 
 resource "aws_sns_topic_subscription" "subscription" {
+  count     = "${var.sns_trigger_arn != "" ? 1 : 0}"
   topic_arn = "${var.sns_trigger_arn}"
   protocol  = "lambda"
   endpoint  = "${aws_lambda_function.lambda.arn}"
 }
 
 resource "aws_lambda_permission" "sns" {
+  count         = "${var.sns_trigger_arn != "" ? 1 : 0}"
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.lambda.arn}"
