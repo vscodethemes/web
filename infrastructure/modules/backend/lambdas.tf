@@ -79,3 +79,25 @@ module "save_theme" {
     ALGOLIA_API_KEY           = "${var.algolia_api_key}"
   }
 }
+
+module "run_all" {
+  source      = "./lambda"
+  name        = "run_all"
+  environment = "${var.environment}"
+
+  sns_publish_arns = [
+    "${aws_sns_topic.scrape_themes.arn}",
+    "${aws_sns_topic.extract_themes.arn}",
+    "${aws_sns_topic.extract_colors.arn}",
+    "${aws_sns_topic.save_theme.arn}",
+  ]
+
+  environment_variables {
+    JOB                       = "runAll"
+    SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
+    SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
+    SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"
+    ALGOLIA_APP_ID            = "${var.algolia_app_id}"
+    ALGOLIA_API_KEY           = "${var.algolia_api_key}"
+  }
+}
