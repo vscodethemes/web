@@ -52,6 +52,17 @@ test('should not process empty job', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
+test('should notify extract colors when no more jobs', async () => {
+  const services = createServices()
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(null))
+
+  const notifySpy = jest.spyOn(services.saveTheme, 'notify')
+  await extractColors(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+})
+
 test('should fail job if it has an invalid payload', async () => {
   const services = createServices()
   jest
@@ -152,17 +163,3 @@ test('should create save theme jobs for valid input', async () => {
   await extractColors(services)
   expect(createSpy).toHaveBeenCalledTimes(1)
 })
-
-// test('should notify save theme jobs for valid input', async () => {
-//   const services = createServices()
-//   fetch.mockResponseOnce(
-//     JSON.stringify({ name: 'name', colors: createColors() }),
-//   )
-//   jest
-//     .spyOn(services.extractColors, 'receive')
-//     .mockImplementation(() => Promise.resolve(createJob()))
-
-//   const notifySpy = jest.spyOn(services.saveTheme, 'notify')
-//   await extractColors(services)
-//   expect(notifySpy).toHaveBeenCalledTimes(1)
-// })

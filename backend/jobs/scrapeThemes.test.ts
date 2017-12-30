@@ -97,6 +97,17 @@ test('should not process empty job', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
+test('should notify extract themes when no more jobs', async () => {
+  const services = createServices()
+  jest
+    .spyOn(services.scrapeThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(null))
+
+  const notifySpy = jest.spyOn(services.extractThemes, 'notify')
+  await scrapeThemes(services)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+})
+
 test('should fail job if it has an invalid payload', async () => {
   const services = createServices()
   jest
@@ -300,16 +311,3 @@ test('should notify self for invalid input', async () => {
   await scrapeThemes(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
-
-// test('should notify extract themes job each repository', async () => {
-//   const services = createServices()
-//   const themes = createValidThemes()
-//   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
-//   jest
-//     .spyOn(services.scrapeThemes, 'receive')
-//     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
-
-//   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
-//   await scrapeThemes(services)
-//   expect(notifySpy).toHaveBeenCalledTimes(2)
-// })

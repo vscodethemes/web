@@ -13,6 +13,7 @@ export default async function run(services: Services): Promise<any> {
   const job = await extractThemes.receive()
   if (!job) {
     logger.log('No more jobs to process.')
+    await extractColors.notify()
     return
   }
 
