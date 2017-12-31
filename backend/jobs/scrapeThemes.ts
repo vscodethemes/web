@@ -19,8 +19,8 @@ export default async function run(services: Services): Promise<any> {
 
   const job = await scrapeThemes.receive()
   if (!job) {
-    logger.log('No more jobs to process.')
     await extractThemes.notify()
+    logger.log('No more jobs to process.')
     return
   }
 

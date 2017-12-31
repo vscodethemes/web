@@ -77,3 +77,23 @@ resource "aws_sqs_queue" "save_theme_deadletter" {
     environment = "${var.environment}"
   }
 }
+
+# Publish frontend.
+resource "aws_sqs_queue" "publish_frontend" {
+  name                       = "publish_frontend"
+  visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
+  receive_wait_time_seconds  = "${var.sqs_receive_timeout}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.publish_frontend_deadletter.arn}\",\"maxReceiveCount\":4}"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}
+
+resource "aws_sqs_queue" "publish_frontend_deadletter" {
+  name = "publish_frontend_deadletter"
+
+  tags {
+    environment = "${var.environment}"
+  }
+}

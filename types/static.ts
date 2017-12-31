@@ -67,6 +67,7 @@ export interface Services {
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>
+  publishFrontend: Job<void>
 }
 
 export type JobHandler = (services: Services) => Promise<any>
@@ -78,4 +79,10 @@ export interface JobHandlers {
 export interface RepositoryInfo {
   repository: string
   repositoryOwner: string
+}
+
+export interface File {
+  name: string
+  type: string
+  contents: Buffer
 }
