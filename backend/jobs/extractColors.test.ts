@@ -52,7 +52,7 @@ test('should not process empty job', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
-test('should notify extract colors when no more jobs', async () => {
+test('should notify save theme when no more jobs', async () => {
   const services = createServices()
   jest
     .spyOn(services.extractColors, 'receive')

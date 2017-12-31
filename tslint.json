@@ -9,6 +9,7 @@
     "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": false,
     "no-unused-variable": true,
-    "interface-name": false
+    "interface-name": false,
+    "no-submodule-imports": false
   }
 }

@@ -14,6 +14,8 @@ import {
 } from '../../types/static'
 
 const {
+  ALGOLIA_APP_ID,
+  ALGOLIA_API_KEY,
   SCRAPE_THEMES_QUEUE_URL,
   SCRAPE_THEMES_DEADLETTER_URL,
   SCRAPE_THEMES_TOPIC_ARN,
@@ -26,8 +28,9 @@ const {
   SAVE_THEME_QUEUE_URL,
   SAVE_THEME_DEADLETTER_URL,
   SAVE_THEME_TOPIC_ARN,
-  ALGOLIA_APP_ID,
-  ALGOLIA_API_KEY,
+  PUBLISH_FRONTEND_QUEUE_URL,
+  PUBLISH_FRONTEND_DEADLETTER_URL,
+  PUBLISH_FRONTEND_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -151,6 +154,12 @@ export default function createServices(): Services {
       SAVE_THEME_QUEUE_URL,
       SAVE_THEME_DEADLETTER_URL,
       SAVE_THEME_TOPIC_ARN,
+    ),
+    publishFrontend: createJob<void>(
+      'publishFrontend',
+      PUBLISH_FRONTEND_QUEUE_URL,
+      PUBLISH_FRONTEND_DEADLETTER_URL,
+      PUBLISH_FRONTEND_TOPIC_ARN,
     ),
   }
 }

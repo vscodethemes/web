@@ -6,7 +6,7 @@ module "scrape_themes" {
   sqs_receive_arns = ["${aws_sqs_queue.scrape_themes.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.scrape_themes.arn}", "${aws_sqs_queue.scrape_themes_deadletter.arn}", "${aws_sqs_queue.extract_themes.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.scrape_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}", "${aws_sns_topic.extract_themes.arn}"]
 
   environment_variables {
     JOB                          = "scrapeThemes"
@@ -26,7 +26,7 @@ module "extract_themes" {
   sqs_receive_arns = ["${aws_sqs_queue.extract_themes.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.extract_themes.arn}", "${aws_sqs_queue.extract_themes_deadletter.arn}", "${aws_sqs_queue.extract_colors.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_themes.arn}", "${aws_sns_topic.extract_colors.arn}"]
 
   environment_variables {
     JOB                           = "extractThemes"
@@ -48,7 +48,7 @@ module "extract_colors" {
   sqs_receive_arns = ["${aws_sqs_queue.extract_colors.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.extract_colors.arn}", "${aws_sqs_queue.extract_colors_deadletter.arn}", "${aws_sqs_queue.save_theme.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.extract_colors.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.extract_colors.arn}", "${aws_sns_topic.save_theme.arn}"]
 
   environment_variables {
     JOB                           = "extractColors"
@@ -68,15 +68,35 @@ module "save_theme" {
   sqs_receive_arns = ["${aws_sqs_queue.save_theme.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.save_theme.arn}", "${aws_sqs_queue.save_theme_deadletter.arn}"]
   sqs_delete_arns  = ["${aws_sqs_queue.save_theme.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.save_theme.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.save_theme.arn}", "${aws_sns_topic.publish_frontend.arn}"]
 
   environment_variables {
-    JOB                       = "saveTheme"
-    SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
-    SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
-    SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"
-    ALGOLIA_APP_ID            = "${var.algolia_app_id}"
-    ALGOLIA_API_KEY           = "${var.algolia_api_key}"
+    JOB                        = "saveTheme"
+    ALGOLIA_APP_ID             = "${var.algolia_app_id}"
+    ALGOLIA_API_KEY            = "${var.algolia_api_key}"
+    SAVE_THEME_TOPIC_ARN       = "${aws_sns_topic.save_theme.arn}"
+    SAVE_THEME_QUEUE_URL       = "${aws_sqs_queue.save_theme.id}"
+    SAVE_THEME_DEADLETTER_URL  = "${aws_sqs_queue.save_theme_deadletter.id}"
+    PUBLISH_FRONTEND_TOPIC_ARN = "${aws_sns_topic.publish_frontend.arn}"
+    PUBLISH_FRONTEND_QUEUE_URL = "${aws_sqs_queue.publish_frontend.id}"
+  }
+}
+
+module "publish_frontend" {
+  source           = "./lambda"
+  name             = "publish_frontend"
+  environment      = "${var.environment}"
+  sns_trigger_arn  = "${aws_sns_topic.publish_frontend.arn}"
+  sqs_receive_arns = ["${aws_sqs_queue.publish_frontend.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.publish_frontend.arn}", "${aws_sqs_queue.publish_frontend_deadletter.arn}"]
+  sqs_delete_arns  = ["${aws_sqs_queue.publish_frontend.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.publish_frontend.arn}"]
+
+  environment_variables {
+    JOB                             = "publishFrontend"
+    PUBLISH_FRONTEND_TOPIC_ARN      = "${aws_sns_topic.publish_frontend.arn}"
+    PUBLISH_FRONTEND_QUEUE_URL      = "${aws_sqs_queue.publish_frontend.id}"
+    PUBLISH_FRONTEND_DEADLETTER_URL = "${aws_sqs_queue.publish_frontend_deadletter.id}"
   }
 }
 
