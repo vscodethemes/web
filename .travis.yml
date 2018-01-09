@@ -32,6 +32,7 @@ script:
 - yarn lint
 - yarn test
 - yarn install-production-dependencies
+- yarn copy-assets
 - yarn package
 - yarn terraform-init
 - yarn terraform-plan
