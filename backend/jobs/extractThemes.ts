@@ -50,7 +50,8 @@ export default async function run(services: Services): Promise<any> {
       theme => ({
         ...payload,
         repositoryBranch: branch,
-        repositoryPath: theme.path,
+        // Trims './path' -> 'path'.
+        repositoryPath: theme.path.replace(/^\.\//, ''),
       }),
     )
 

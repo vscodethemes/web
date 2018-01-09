@@ -3,7 +3,7 @@ import { SaveThemePayload, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export function createObjectId(theme: SaveThemePayload) {
-  return `${theme.repositoryOwner}|${theme.repository}|${theme.repositoryPath}`
+  return `${theme.repositoryOwner}$${theme.repository}$${theme.repositoryPath}`
 }
 
 export default async function run(services: Services): Promise<any> {
