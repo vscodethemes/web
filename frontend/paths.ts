@@ -14,3 +14,9 @@ export const output = isProduction
     path.resolve(__dirname, 'build')
   : // Output to build directory in development.
     path.resolve(__dirname, '../build')
+
+export const loaders = isProduction
+  ? // Specify an absolute path to fix errors finding loaders in production.
+    path.resolve(__dirname, '../node_modules')
+  : // Use the webpack default in development.
+    'node_modules'

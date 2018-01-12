@@ -16,6 +16,9 @@ export default async function createWebackConfig() {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
     },
+    resolveLoader: {
+      modules: [paths.loaders],
+    },
     module: {
       rules: [
         {
