@@ -3,6 +3,12 @@ import * as webpack from 'webpack'
 import * as paths from './paths'
 
 export default async function createWebackConfig() {
+  // TODO: Fetch initial props
+  // Ideally this could be done inside the <Route> component
+  // so we can pass the paths to prerender to StaticSiteGeneratorPlugin
+  //   ie. (/, /popular, /new, /trending, /popular?tag=dark, ...)
+  //   ... How should we handle pagination?
+
   const config: webpack.Configuration = {
     devtool: 'source-map',
     entry: {
