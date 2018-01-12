@@ -3,7 +3,7 @@ import * as MemoryFS from 'memory-fs'
 import * as mime from 'mime'
 import * as path from 'path'
 import * as webpack from 'webpack'
-import createWebpackConfig from '../../frontend/webpack.config.prod'
+import createWebpackConfig from '../../frontend/webpack.config'
 import { File, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
@@ -57,6 +57,8 @@ async function getConfig(): Promise<webpack.Configuration> {
 async function compile(config: webpack.Configuration): Promise<File[]> {
   const compiler = webpack(config)
   const fs = new MemoryFS()
+  // Configures webpack to compile to memory.
+  compiler.outputFileSystem = fs
 
   const runCompiler = promisify(compiler.run, { context: compiler })
   const stats = await runCompiler()
@@ -67,7 +69,7 @@ async function compile(config: webpack.Configuration): Promise<File[]> {
 
   const files = fs.readdirSync(config.output.path).map((name: string) => ({
     name,
-    type: mime.lookup(name),
+    type: mime.getType(name),
     contents: fs.readFileSync(path.resolve(config.output.path, name)),
   }))
 
