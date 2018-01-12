@@ -19,7 +19,7 @@ export default async function run(services: Services): Promise<any> {
   // Process the next job in the queue.
   await publishFrontend.notify()
 
-  logger.log('Proccessing extractColors job...')
+  logger.log('Processing publishFrontend job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
 
   try {
