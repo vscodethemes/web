@@ -10,6 +10,7 @@ module "scrape_themes" {
 
   environment_variables {
     JOB                          = "scrapeThemes"
+    NODE_ENV                     = "production"
     SCRAPE_THEMES_TOPIC_ARN      = "${aws_sns_topic.scrape_themes.arn}"
     SCRAPE_THEMES_QUEUE_URL      = "${aws_sqs_queue.scrape_themes.id}"
     SCRAPE_THEMES_DEADLETTER_URL = "${aws_sqs_queue.scrape_themes_deadletter.id}"
@@ -30,6 +31,7 @@ module "extract_themes" {
 
   environment_variables {
     JOB                           = "extractThemes"
+    NODE_ENV                      = "production"
     EXTRACT_THEMES_TOPIC_ARN      = "${aws_sns_topic.extract_themes.arn}"
     EXTRACT_THEMES_QUEUE_URL      = "${aws_sqs_queue.extract_themes.id}"
     EXTRACT_THEMES_DEADLETTER_URL = "${aws_sqs_queue.extract_themes_deadletter.id}"
@@ -52,6 +54,7 @@ module "extract_colors" {
 
   environment_variables {
     JOB                           = "extractColors"
+    NODE_ENV                      = "production"
     EXTRACT_COLORS_TOPIC_ARN      = "${aws_sns_topic.extract_colors.arn}"
     EXTRACT_COLORS_QUEUE_URL      = "${aws_sqs_queue.extract_colors.id}"
     EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors_deadletter.id}"
@@ -72,6 +75,7 @@ module "save_theme" {
 
   environment_variables {
     JOB                        = "saveTheme"
+    NODE_ENV                   = "production"
     ALGOLIA_APP_ID             = "${var.algolia_app_id}"
     ALGOLIA_API_KEY            = "${var.algolia_api_key}"
     SAVE_THEME_TOPIC_ARN       = "${aws_sns_topic.save_theme.arn}"
@@ -94,6 +98,7 @@ module "publish_frontend" {
 
   environment_variables {
     JOB                             = "publishFrontend"
+    NODE_ENV                        = "production"
     PUBLISH_FRONTEND_TOPIC_ARN      = "${aws_sns_topic.publish_frontend.arn}"
     PUBLISH_FRONTEND_QUEUE_URL      = "${aws_sqs_queue.publish_frontend.id}"
     PUBLISH_FRONTEND_DEADLETTER_URL = "${aws_sqs_queue.publish_frontend_deadletter.id}"
@@ -116,6 +121,7 @@ module "run_all" {
 
   environment_variables {
     JOB                      = "runAll"
+    NODE_ENV                 = "production"
     SCRAPE_THEMES_TOPIC_ARN  = "${aws_sns_topic.scrape_themes.arn}"
     EXTRACT_THEMES_TOPIC_ARN = "${aws_sns_topic.extract_themes.arn}"
     EXTRACT_COLORS_TOPIC_ARN = "${aws_sns_topic.extract_colors.arn}"
@@ -133,6 +139,7 @@ module "init" {
 
   environment_variables {
     JOB                     = "init"
+    NODE_ENV                = "production"
     SCRAPE_THEMES_QUEUE_URL = "${aws_sqs_queue.scrape_themes.id}"
   }
 }
