@@ -15,7 +15,7 @@ export default async function run(services: Services): Promise<any> {
   // Process the next job in the queue.
   await extractColors.notify()
 
-  logger.log('Proccessing extractColors job...')
+  logger.log('Processing extractColors job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 

@@ -27,7 +27,7 @@ export default async function run(services: Services): Promise<any> {
   // Process the next job in the queue.
   await scrapeThemes.notify()
 
-  logger.log('Proccessing scrapeThemes job...')
+  logger.log('Processing scrapeThemes job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
