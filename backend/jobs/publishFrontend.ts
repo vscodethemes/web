@@ -29,6 +29,7 @@ export default async function run(services: Services): Promise<any> {
     logger.log(compilation)
     // TODO: Upload compilation to S3 bucket.
     // TODO: Invalidate CloudFront distribution.
+    await publishFrontend.succeed(job)
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)
