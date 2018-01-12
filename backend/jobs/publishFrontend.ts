@@ -53,7 +53,7 @@ export default async function run(services: Services): Promise<any> {
 
 async function getConfig(): Promise<webpack.Configuration> {
   try {
-    const config = await createWebpackConfig()
+    const config = await createWebpackConfig({ path: '/' })
     return config
   } catch (err) {
     throw new TransientJobError(`Error creating config: ${err.message}`)

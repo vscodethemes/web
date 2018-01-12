@@ -1,10 +1,13 @@
 import * as StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin'
 import * as webpack from 'webpack'
+import { WebpackConfigOptions } from '../types/static'
 import * as paths from './paths'
 
-export default async function createWebackConfig() {
+export default async function createWebackConfig({
+  path,
+}: WebpackConfigOptions) {
   // TODO: Fetch initial props
-  // Ideally this could be done inside the <Route> component
+  // This should be done inside the <Route> component
   // so we can pass the paths to prerender to StaticSiteGeneratorPlugin
   //   ie. (/, /popular, /new, /trending, /popular?tag=dark, ...)
   //   ... How should we handle pagination?
@@ -54,7 +57,7 @@ export default async function createWebackConfig() {
         },
       }),
       new StaticSiteGeneratorPlugin({
-        paths: ['/'],
+        paths: [path],
         locals: {
           enableDevServer: true,
         },

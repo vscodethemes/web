@@ -86,3 +86,7 @@ export interface File {
   type: string
   contents: Buffer
 }
+
+export interface WebpackConfigOptions {
+  path: string
+}
