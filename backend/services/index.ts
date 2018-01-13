@@ -28,9 +28,6 @@ const {
   SAVE_THEME_QUEUE_URL,
   SAVE_THEME_DEADLETTER_URL,
   SAVE_THEME_TOPIC_ARN,
-  PUBLISH_FRONTEND_QUEUE_URL,
-  PUBLISH_FRONTEND_DEADLETTER_URL,
-  PUBLISH_FRONTEND_TOPIC_ARN,
 } = process.env
 
 const sqs = new AWS.SQS()
@@ -154,12 +151,6 @@ export default function createServices(): Services {
       SAVE_THEME_QUEUE_URL,
       SAVE_THEME_DEADLETTER_URL,
       SAVE_THEME_TOPIC_ARN,
-    ),
-    publishFrontend: createJob<void>(
-      'publishFrontend',
-      PUBLISH_FRONTEND_QUEUE_URL,
-      PUBLISH_FRONTEND_DEADLETTER_URL,
-      PUBLISH_FRONTEND_TOPIC_ARN,
     ),
   }
 }

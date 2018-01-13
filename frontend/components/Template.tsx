@@ -1,4 +1,3 @@
-// tslint:disable jsx-key
 import * as React from 'react'
 import { SSR } from '../ssr'
 
@@ -7,12 +6,24 @@ export interface TemplateProps {
   js: string[]
   body: string
   ssr: SSR
-  // enableGoogleAnalytics: boolean
-  // trackingId: string
   enableDevServer: boolean
+  enableGoogleAnalytics: boolean
+  googleAnalyticsTrackingId: string
 }
 
+const cdnBaseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/'
+
 export default function Template(props: TemplateProps) {
+  const scripts: React.ReactNode[] = []
+
+  // Add the dev server reload script in development.
+  if (props.enableDevServer) {
+    scripts.push(<script src="http://localhost:8080/webpack-dev-server.js" />)
+  }
+
+  // Add the webpack bundle.
+  props.js.forEach(src => scripts.push(<script src={src} />))
+
   return (
     <html lang="en" data-timestamp={new Date().toISOString()}>
       <head>
@@ -31,10 +42,7 @@ export default function Template(props: TemplateProps) {
             __html: `window.ssr = ${JSON.stringify(props.ssr)}`,
           }}
         />
-        {props.js.map(src => <script src={src} />)}
-        {props.enableDevServer && (
-          <script src="http://localhost:8080/webpack-dev-server.js" />
-        )}
+        {scripts}
       </body>
     </html>
   )
