@@ -5,3 +5,4 @@ coverage/
 *.tfstate
 *.tfstate.*
 terraform.plan
+.DS_STORE

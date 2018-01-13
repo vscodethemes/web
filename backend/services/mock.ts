@@ -34,6 +34,5 @@ export default function createServices(): Services {
     extractThemes: createJob<ExtractThemesPayload>(),
     extractColors: createJob<ExtractColorsPayload>(),
     saveTheme: createJob<SaveThemePayload>(),
-    publishFrontend: createJob<void>(),
   }
 }

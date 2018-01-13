@@ -109,9 +109,5 @@ export default function createServices(): Services {
         },
       },
     }),
-    publishFrontend: createJob<void>('publishFrontend', {
-      receiptHandle: '',
-      payload: null,
-    }),
   }
 }

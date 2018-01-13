@@ -2,21 +2,17 @@ import { extractCritical } from 'emotion-server'
 import * as React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import AppContainer from './components/AppContainer'
-import Template from './components/Template'
-
-// import { AppProps } from './components/App'
+import Template, { TemplateProps } from './components/Template'
 
 export interface SSROptions {
-  // appProps: AppProps
-  enableGoogleAnalytics: boolean
-  trackingId: string
   enableDevServer: boolean
+  enableGoogleAnalytics: boolean
+  googleAnalyticsTrackingId: string
   webpackStats: any
 }
 
 export interface SSR {
   cssIds: any
-  // props: AppProps
 }
 
 export default function ssr(options: SSROptions) {
@@ -27,14 +23,14 @@ export default function ssr(options: SSROptions) {
     renderToString(<AppContainer />),
   )
 
-  const props = {
+  const props: TemplateProps = {
     css,
     js,
     body,
-    ssr: { cssIds /*, props: options.appProps*/ },
+    ssr: { cssIds },
     enableDevServer: options.enableDevServer,
     enableGoogleAnalytics: options.enableGoogleAnalytics,
-    trackingId: options.trackingId,
+    googleAnalyticsTrackingId: options.googleAnalyticsTrackingId,
   }
 
   const html = `

@@ -7,12 +7,11 @@ export function createObjectId(theme: SaveThemePayload) {
 }
 
 export default async function run(services: Services): Promise<any> {
-  const { saveTheme, publishFrontend, logger } = services
+  const { saveTheme, logger } = services
 
   const job = await saveTheme.receive()
   if (!job) {
     logger.log('No more jobs to process.')
-    await publishFrontend.notify()
     return
   }
 

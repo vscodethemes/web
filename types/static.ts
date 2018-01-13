@@ -67,7 +67,6 @@ export interface Services {
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>
-  publishFrontend: Job<void>
 }
 
 export type JobHandler = (services: Services) => Promise<any>
