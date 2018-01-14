@@ -3,6 +3,6 @@ import App from './App'
 
 export default class AppContainer extends React.Component<{}, {}> {
   public render(): React.ReactNode {
-    return <App>hello, world.</App>
+    return <App />
   }
 }
