@@ -1,8 +1,8 @@
 node_modules/
 build/
 coverage/
+.DS_STORE
 .terraform/
 *.tfstate
 *.tfstate.*
 terraform.plan
-.DS_STORE

@@ -4,7 +4,7 @@ import * as webpack from 'webpack'
 import { WebpackConfigOptions } from '../types/static'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
-// const isProduction = nodeEnv === 'production'
+const isProduction = nodeEnv === 'production'
 const isDevelopment = nodeEnv === 'development'
 
 const config: webpack.Configuration = {
@@ -13,7 +13,7 @@ const config: webpack.Configuration = {
     main: path.resolve(__dirname, './index.ts'),
   },
   output: {
-    filename: `[name].js`,
+    filename: `[name]-[hash].js`,
     path: path.resolve(__dirname, '../build/frontend'),
     libraryTarget: 'umd',
   },
@@ -27,14 +27,6 @@ const config: webpack.Configuration = {
         use: ['babel-loader?presets[]=es2015', 'awesome-typescript-loader'],
         exclude: /node_modules/,
       },
-      // TODO: Do we still need to do this? Maybe only in prod because we aren't minifying in dev.
-      // We need to run js through babel because uglify doesn't support all of es2015.
-      // https://github.com/terinjokes/gulp-uglify/issues/66
-      // {
-      //   test: /\.js?$/,
-      //   use: ['babel-loader?presets[]=es2015'],
-      //   exclude: /node_modules/,
-      // },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
         use: ['url-loader?limit=10000'],
@@ -55,6 +47,10 @@ const config: webpack.Configuration = {
       },
     }),
   ],
+}
+
+if (isProduction) {
+  config.plugins = [...config.plugins, new webpack.optimize.UglifyJsPlugin()]
 }
 
 export default config
