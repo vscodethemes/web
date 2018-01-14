@@ -3763,7 +3763,7 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-memory-fs@^0.4.0, memory-fs@^0.4.1, memory-fs@~0.4.1:
+memory-fs@^0.4.0, memory-fs@~0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/memory-fs/-/memory-fs-0.4.1.tgz#3a9a20b8462523e447cfbc7e8bb80ed667bfc552"
   dependencies:
@@ -3871,6 +3871,10 @@ min-document@^2.19.0:
   resolved "https://registry.yarnpkg.com/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
   dependencies:
     dom-walk "^0.1.0"
+
+minify-css-string@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/minify-css-string/-/minify-css-string-1.0.0.tgz#201bd949271e19f6e0af0a1dc0ccc583de47c630"
 
 minimalistic-assert@^1.0.0:
   version "1.0.0"

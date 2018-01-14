@@ -1,9 +1,11 @@
 import * as minimist from 'minimist'
 import createServices from '../backend/services/local'
+import { run } from './shared'
 
 const args = minimist(process.argv.slice(2))
+const jobPath = args._[0]
 
-async function invoke(jobPath: string) {
+run(async () => {
   const { default: job } = await import(jobPath)
   try {
     await job(createServices())
@@ -11,6 +13,4 @@ async function invoke(jobPath: string) {
     // tslint:disable-next-line no-console
     console.error(`${jobPath} errored with:`, err)
   }
-}
-
-invoke(args._[0]).catch(console.error)
+})
