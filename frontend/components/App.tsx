@@ -1,7 +1,7 @@
-import styled from 'react-emotion'
+import * as React from 'react'
 
-const App = styled('div')({
-  fontFamily: 'sans-serif',
-})
-
-export default App
+export default class App extends React.Component<{}, {}> {
+  public render(): React.ReactNode {
+    return 'hello, world.'
+  }
+}
