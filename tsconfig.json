@@ -19,5 +19,9 @@
     "scripts",
     "frontend",
     "**/*.test.ts"
-  ]
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": true,
+    "useCache": true
+  }
 }

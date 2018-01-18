@@ -1,3 +1,4 @@
+import { CheckerPlugin } from 'awesome-typescript-loader'
 import * as path from 'path'
 import * as StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin'
 import * as webpack from 'webpack'
@@ -6,6 +7,8 @@ import { WebpackConfigOptions } from '../types/static'
 const nodeEnv = process.env.NODE_ENV || 'development'
 const isProduction = nodeEnv === 'production'
 const isDevelopment = nodeEnv === 'development'
+
+process.env.BABEL_ENV = nodeEnv
 
 const config: webpack.Configuration = {
   devtool: 'source-map',
@@ -24,17 +27,18 @@ const config: webpack.Configuration = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader?presets[]=es2015', 'awesome-typescript-loader'],
+        use: 'awesome-typescript-loader',
         exclude: /node_modules/,
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
-        use: ['url-loader?limit=10000'],
+        use: 'url-loader?limit=10000',
         exclude: /node_modules/,
       },
     ],
   },
   plugins: [
+    new CheckerPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),

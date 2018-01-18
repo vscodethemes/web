@@ -24,24 +24,14 @@
   },
   "dependencies": {
     "algoliasearch": "^3.24.8",
-    "awesome-typescript-loader": "^3.4.1",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "emotion": "^8.0.12",
-    "emotion-server": "^8.0.12",
-    "emotion-theming": "^8.0.12",
-    "file-loader": "^1.1.6",
     "global": "^4.3.2",
-    "live-server": "^1.2.0",
     "mime": "^2.2.0",
     "node-fetch": "^1.7.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-emotion": "^8.0.12",
+    "react-router": "^4.2.0",
     "runtypes": "^0.13.1",
-    "static-site-generator-webpack-plugin": "^3.4.1",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
@@ -56,14 +46,23 @@
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.3",
     "@types/webpack": "^3.8.1",
+    "awesome-typescript-loader": "^3.4.1",
     "aws-sdk": "^2.175.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-emotion": "^8.0.12",
+    "babel-preset-latest": "^6.24.1",
     "bestzip": "^1.1.4",
     "bluebird": "^3.5.1",
+    "emotion": "^8.0.12",
+    "emotion-server": "^8.0.12",
+    "emotion-theming": "^8.0.12",
+    "file-loader": "^1.1.6",
     "jest": "^21.2.1",
     "jest-fetch-mock": "^1.3.3",
     "minify-css-string": "^1.0.0",
     "minimist": "^1.2.0",
     "prettier": "^1.8.2",
+    "static-site-generator-webpack-plugin": "^3.4.1",
     "ts-jest": "^21.2.4",
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
@@ -71,7 +70,47 @@
     "tslint-eslint-rules": "^4.1.1",
     "tslint-react": "^3.2.0",
     "typescript": "^2.6.1",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ],
+    "env": {
+      "production": {
+        "plugins": [
+          [
+            "emotion",
+            {
+              "hoist": true
+            }
+          ]
+        ]
+      },
+      "development": {
+        "plugins": [
+          [
+            "emotion",
+            {
+              "sourceMap": true,
+              "autoLabel": true
+            }
+          ]
+        ]
+      },
+      "test": {
+        "plugins": [
+          [
+            "emotion",
+            {
+              "inline": true
+            }
+          ]
+        ]
+      }
+    }
   },
   "prettier": {
     "semi": false,

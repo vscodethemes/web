@@ -1,9 +1,9 @@
 import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import { SSR } from '../ssr'
-import * as theme from '../theme'
+import theme from '../theme'
 
-export interface TemplateProps {
+export interface DocumentProps {
   css: string
   js: string[]
   body: string
@@ -25,7 +25,7 @@ injectGlobal({
   },
 })
 
-export default function Template(props: TemplateProps) {
+export default function Document(props: DocumentProps) {
   const scripts: React.ReactNode[] = []
 
   // Add the dev server reload script in development.
@@ -37,7 +37,7 @@ export default function Template(props: TemplateProps) {
   props.js.forEach(src => scripts.push(<script src={src} />))
 
   return (
-    <html lang="en" data-timestamp={new Date().toISOString()}>
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -49,8 +49,11 @@ export default function Template(props: TemplateProps) {
           rel="stylesheet"
         />
         <title>{props.enableDevServer ? '[DEV] ' : ''}VSCodeThemes</title>
-        {/* <style>{`html{font-size: 14px;} body{margin: 0;}`}</style> */}
-        <style>{props.css}</style>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: props.css,
+          }}
+        />
       </head>
       <body>
         <div id="react-root" dangerouslySetInnerHTML={{ __html: props.body }} />
