@@ -45,7 +45,7 @@ const config: webpack.Configuration = {
       },
     }),
     new StaticSiteGeneratorPlugin({
-      paths: ['/', '/trending', '/new'],
+      paths: ['/', '/trending/', '/new/'],
       locals: {
         enableDevServer: isDevelopment,
       },
