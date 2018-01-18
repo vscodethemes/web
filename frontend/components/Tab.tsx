@@ -14,6 +14,8 @@ const Tab = ({ theme, ...props }: NavLinkProps & { theme: Theme }) => {
   )
 }
 
+const dotSize = 4
+
 const styles = (theme: Theme) =>
   css({
     position: 'relative',
@@ -21,6 +23,7 @@ const styles = (theme: Theme) =>
     textDecoration: 'none',
     color: theme.colors.primary[500],
     opacity: 0.6,
+    padding: theme.spacing.sm + dotSize,
     ':hover': { opacity: 1 },
   })
 
@@ -30,12 +33,14 @@ const activeStyles = (theme: Theme) =>
     '::after': {
       content: `''`,
       position: 'absolute',
-      bottom: -theme.spacing.sm,
+      // Compensate for bottom padding by moving the dot up
+      // by the same amount.
+      bottom: theme.spacing.sm - theme.spacing.xs,
       left: '50%',
-      marginLeft: -2,
-      height: 4,
-      width: 4,
-      borderRadius: 4,
+      marginLeft: -dotSize / 2,
+      height: dotSize,
+      width: dotSize,
+      borderRadius: dotSize,
       backgroundColor: theme.colors.primary[700],
     },
   })
