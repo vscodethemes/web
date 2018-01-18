@@ -1,5 +1,7 @@
+# TODO: Only allow ready access from CF origin.
+
 data "aws_iam_policy_document" "bucket_policy" {
-  # allows public reads from everyone to the s3 bucket
+  # Allows public reads from everyone to the s3 bucket.
   statement {
     actions   = ["s3:GetObject"]
     resources = ["arn:aws:s3:::${var.domain}/*"]

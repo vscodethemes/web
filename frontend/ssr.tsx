@@ -1,8 +1,8 @@
 import { extractCritical } from 'emotion-server'
 import * as React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
-import AppContainer from './components/AppContainer'
-import Template, { TemplateProps } from './components/Template'
+import App from './components/App'
+import Document, { DocumentProps } from './components/Document'
 
 export interface SSROptions {
   enableDevServer: boolean
@@ -20,10 +20,12 @@ export default function ssr(options: SSROptions) {
   const js = assets.filter(value => value.match(/\.js$/))
 
   const { html: body, css, ids: cssIds } = extractCritical(
-    renderToString(<AppContainer />),
+    renderToString(<App />),
   )
 
-  const props: TemplateProps = {
+  console.log(css)
+
+  const props: DocumentProps = {
     css,
     js,
     body,
@@ -35,7 +37,7 @@ export default function ssr(options: SSROptions) {
 
   const html = `
     <!doctype html>
-    ${renderToStaticMarkup(<Template {...props} />)}
+    ${renderToStaticMarkup(<Document {...props} />)}
   `
 
   return html
