@@ -1,21 +1,25 @@
 import { ThemeProvider } from 'emotion-theming'
 import * as React from 'react'
+import { RouteComponentProps, withRouter } from 'react-router'
 import theme, { Theme } from '../theme'
 import Container from './Container'
 import Form from './Form'
 import Tab from './Tab'
 import Tabs from './Tabs'
 
-export default class App extends React.Component<{}, {}> {
+class App extends React.Component<RouteComponentProps<{}>, {}> {
   public render(): React.ReactNode {
+    const { search } = this.props.location
     return (
       <ThemeProvider theme={theme}>
         <Container>
           <Form>
             <Tabs>
-              <Tab active={true}>Trending</Tab>
-              <Tab>Popular</Tab>
-              <Tab>New</Tab>
+              <Tab to={{ pathname: '/', search }} exact={true}>
+                Popular
+              </Tab>
+              <Tab to={{ pathname: '/trending', search }}>Trending</Tab>
+              <Tab to={{ pathname: '/new', search }}>New</Tab>
             </Tabs>
           </Form>
         </Container>
@@ -23,3 +27,5 @@ export default class App extends React.Component<{}, {}> {
     )
   }
 }
+
+export default withRouter(App)
