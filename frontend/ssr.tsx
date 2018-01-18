@@ -1,10 +1,12 @@
 import { extractCritical } from 'emotion-server'
 import * as React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
+import { StaticRouter } from 'react-router'
 import App from './components/App'
 import Document, { DocumentProps } from './components/Document'
 
 export interface SSROptions {
+  path: string
   enableDevServer: boolean
   enableGoogleAnalytics: boolean
   googleAnalyticsTrackingId: string
@@ -20,10 +22,12 @@ export default function ssr(options: SSROptions) {
   const js = assets.filter(value => value.match(/\.js$/))
 
   const { html: body, css, ids: cssIds } = extractCritical(
-    renderToString(<App />),
+    renderToString(
+      <StaticRouter location={{ pathname: options.path }}>
+        <App />
+      </StaticRouter>,
+    ),
   )
-
-  console.log(css)
 
   const props: DocumentProps = {
     css,

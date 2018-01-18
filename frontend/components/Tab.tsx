@@ -1,34 +1,43 @@
+import { withTheme } from 'emotion-theming'
 import * as React from 'react'
-import styled, { css } from 'react-emotion'
+import { css } from 'react-emotion'
+import { NavLink, NavLinkProps } from 'react-router-dom'
 import { Theme } from '../theme'
 
-export interface TabProps {
-  active?: boolean
+const Tab = ({ theme, ...props }: NavLinkProps & { theme: Theme }) => {
+  return (
+    <NavLink
+      {...props}
+      className={styles(theme)}
+      activeClassName={activeStyles(theme)}
+    />
+  )
 }
 
-const Tab = styled('div')((props: TabProps & { theme: Theme }) => ({
-  position: 'relative',
-  fontWeight: 'bold',
-  color: props.theme.colors.primary[500],
-  ...props.active ? active(props.theme) : inactive,
-}))
+const styles = (theme: Theme) =>
+  css({
+    position: 'relative',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    color: theme.colors.primary[500],
+    opacity: 0.6,
+    ':hover': { opacity: 1 },
+  })
 
-const active = (theme: Theme) => ({
-  '::after': {
-    content: `''`,
-    position: 'absolute',
-    bottom: -theme.spacing.sm,
-    left: '50%',
-    marginLeft: -2,
-    height: 4,
-    width: 4,
-    borderRadius: 4,
-    backgroundColor: theme.colors.primary[700],
-  },
-})
+const activeStyles = (theme: Theme) =>
+  css({
+    opacity: 1,
+    '::after': {
+      content: `''`,
+      position: 'absolute',
+      bottom: -theme.spacing.sm,
+      left: '50%',
+      marginLeft: -2,
+      height: 4,
+      width: 4,
+      borderRadius: 4,
+      backgroundColor: theme.colors.primary[700],
+    },
+  })
 
-const inactive = {
-  opacity: 0.6,
-}
-
-export default Tab as React.SFC<TabProps>
+export default withTheme(Tab) as React.ComponentClass<NavLinkProps>
