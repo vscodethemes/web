@@ -6,6 +6,7 @@ declare module 'react-emotion'
 declare module 'memory-fs'
 declare module 'mime'
 declare module 'minify-css-string'
+declare module 'fs-readdir-recursive'
 
 declare module '*.png' {
   export default string

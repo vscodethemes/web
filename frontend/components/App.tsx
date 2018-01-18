@@ -18,8 +18,8 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
               <Tab to={{ pathname: '/', search }} exact={true}>
                 Popular
               </Tab>
-              <Tab to={{ pathname: '/trending', search }}>Trending</Tab>
-              <Tab to={{ pathname: '/new', search }}>New</Tab>
+              <Tab to={{ pathname: '/trending/', search }}>Trending</Tab>
+              <Tab to={{ pathname: '/new/', search }}>New</Tab>
             </Tabs>
           </Form>
         </Container>

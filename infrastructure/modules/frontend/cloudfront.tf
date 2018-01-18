@@ -1,7 +1,17 @@
 resource "aws_cloudfront_distribution" "distribution" {
   origin {
-    domain_name = "${aws_s3_bucket.bucket.bucket_domain_name}"
+    domain_name = "${aws_s3_bucket.bucket.website_endpoint}"
     origin_id   = "S3Origin"
+
+    // Specifying custom_origin_config forces AWS API to consider the 
+    // S3 bucket a proper website.
+    // https://kupczynski.info/2017/03/06/terraform-cloudfront-s3-static-hosting.html
+    custom_origin_config {
+      origin_protocol_policy = "http-only"
+      http_port              = "80"
+      https_port             = "443"
+      origin_ssl_protocols   = ["TLSv1"]
+    }
   }
 
   aliases = ["${var.domain}", "www.${var.domain}"]

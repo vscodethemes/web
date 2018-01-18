@@ -31,7 +31,8 @@
     "invoke-extractColors":
       "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
     "invoke:saveTheme": "ts-node scripts/invoke ../backend/jobs/saveTheme.ts",
-    "upload-frontend": "NODE_ENV=production ts-node scripts/uploadFrontend"
+    "upload-frontend":
+      "AWS_ACCESS_KEY=$TF_VAR_aws_access_key AWS_SECRET_KEY=$TF_VAR_aws_secret_key NODE_ENV=production ts-node scripts/uploadFrontend"
   },
   "dependencies": {
     "algoliasearch": "^3.24.8",
@@ -71,6 +72,7 @@
     "emotion-server": "^8.0.12",
     "emotion-theming": "^8.0.12",
     "file-loader": "^1.1.6",
+    "fs-readdir-recursive": "^1.1.0",
     "jest": "^21.2.1",
     "jest-fetch-mock": "^1.3.3",
     "minify-css-string": "^1.0.0",

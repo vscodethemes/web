@@ -2,6 +2,7 @@
 import * as AWS from 'aws-sdk'
 import { promisify } from 'bluebird'
 import * as fs from 'fs'
+import * as readDir from 'fs-readdir-recursive'
 import * as mime from 'mime'
 import * as path from 'path'
 import * as webpack from 'webpack'
@@ -10,8 +11,8 @@ import config from '../frontend/webpack.config'
 import { File } from '../types/static'
 import { getTerraformOutput, run } from './shared'
 
-const accessKeyId = process.env.TF_VAR_aws_access_key
-const secretAccessKey = process.env.TF_VAR_aws_secret_key
+const accessKeyId = process.env.AWS_ACCESS_KEY
+const secretAccessKey = process.env.AWS_SECRET_KEY
 const bucket = getTerraformOutput('s3_bucket')
 const distributionId = getTerraformOutput('cf_distribution_id')
 
@@ -32,12 +33,20 @@ run(async () => {
 })
 
 async function getFiles(): Promise<File[]> {
-  // Constructs the list of files that were created by the webpack compiler.
-  const files = fs.readdirSync(config.output.path).map((name: string) => ({
-    name,
-    type: mime.getType(name),
-    contents: fs.readFileSync(path.resolve(config.output.path, name)),
-  }))
+  const files: File[] = []
+
+  readDir(config.output.path).forEach((name: string) => {
+    const filePath = path.resolve(config.output.path, name)
+    const isDirectory = fs.lstatSync(filePath).isDirectory()
+
+    if (!isDirectory) {
+      files.push({
+        name,
+        type: mime.getType(name),
+        contents: fs.readFileSync(filePath),
+      })
+    }
+  })
 
   return files
 }

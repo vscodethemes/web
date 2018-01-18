@@ -1,5 +1,3 @@
-# TODO: Only allow ready access from CF origin.
-
 data "aws_iam_policy_document" "bucket_policy" {
   # Allows public reads from everyone to the s3 bucket.
   statement {
