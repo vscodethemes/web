@@ -1,7 +1,7 @@
 import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import { SSR } from '../ssr'
-import theme from '../theme'
+import theme, { rootFontSize } from '../theme'
 
 export interface DocumentProps {
   css: string
@@ -17,11 +17,15 @@ const cdnBaseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/'
 
 injectGlobal({
   html: {
-    fontSize: theme.rootFontSize,
+    fontSize: rootFontSize,
   },
   body: {
     fontFamily: theme.fontFamily,
     margin: 0,
+    backgroundColor: theme.colors.background,
+  },
+  '*, *:before, *:after': {
+    boxSizing: 'border-box',
   },
 })
 

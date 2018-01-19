@@ -1,12 +1,21 @@
-import Colors from './colors/Colors'
-
 export default interface Theme {
-  rootFontSize: number
   fontFamily: string
-  pageWidth: number
-  formWidth: number
+  fontSizes: {
+    sm: number
+    md: number
+  }
   colors: {
-    primary: Colors
+    background: string
+    text: string
+    primary: string
+    lightPrimary: string
+    gray: string
+    lightGray: string
+    darkGray: string
+  }
+  borderRadius: {
+    sm: number
+    md: number
   }
   spacing: {
     xs: number
@@ -15,5 +24,9 @@ export default interface Theme {
     lg: number
     xl: number
     xxl: number
+  }
+  shadows: {
+    sm: string
+    md: string
   }
 }

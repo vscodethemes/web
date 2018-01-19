@@ -10,6 +10,7 @@
     "object-literal-sort-keys": false,
     "no-unused-variable": true,
     "interface-name": false,
-    "no-submodule-imports": false
+    "no-submodule-imports": false,
+    "jsx-no-lambda": false
   }
 }
