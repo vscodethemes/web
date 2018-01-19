@@ -1,8 +1,8 @@
 import * as React from 'react'
 import styled from 'react-emotion'
-import { Theme } from '../theme'
+import { em, Theme, ThemeProps } from '../theme'
 
-export default styled('div')((props: { theme: Theme }) => ({
-  marginTop: props.theme.spacing.xxl,
-  maxWidth: props.theme.formWidth,
+export default styled('div')(({ theme }: ThemeProps) => ({
+  marginTop: theme.spacing.xxl,
+  maxWidth: em(280),
 }))

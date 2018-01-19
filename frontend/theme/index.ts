@@ -1,15 +1,33 @@
-import blue from './colors/blue'
 import Theme from './Theme'
 
-const spacingUnit = 10
+export interface ThemeProps {
+  theme: Theme
+}
+
+export const spacingUnit = 10
+export const rootFontSize = 14
+
+export const em = (px: number) =>
+  `${Math.round(px / rootFontSize * 100) / 100}em`
 
 const theme: Theme = {
-  rootFontSize: 14,
   fontFamily: 'Montserrat, sans-serif',
-  pageWidth: 840,
-  formWidth: 280,
+  fontSizes: {
+    sm: 12,
+    md: 14,
+  },
   colors: {
-    primary: blue,
+    background: '#ffffff',
+    text: '#6c6c6c',
+    primary: '#00a8ff',
+    lightPrimary: '#66cbff',
+    gray: '#e8e8e8',
+    lightGray: '#f5f5f5',
+    darkGray: '#d4d4d4',
+  },
+  borderRadius: {
+    sm: 4,
+    md: 6,
   },
   spacing: {
     xs: spacingUnit / 2,
@@ -18,6 +36,10 @@ const theme: Theme = {
     lg: spacingUnit * 4,
     xl: spacingUnit * 7,
     xxl: spacingUnit * 10,
+  },
+  shadows: {
+    sm: '0px 6px 20px rgba(0, 0, 0, 0.07)',
+    md: '0px 6px 20px rgba(0, 0, 0, 0.12)',
   },
 }
 
