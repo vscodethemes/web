@@ -5,34 +5,22 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "start":
-      "NODE_ENV=development webpack-dev-server --config ./frontend/webpack.config.ts --inline false --history-api-fallback",
+    "start": "NODE_ENV=development webpack-dev-server --config ./frontend/webpack.config.ts --inline false --history-api-fallback",
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "tslint --project .",
-    "build":
-      "tsc && NODE_ENV=production yarn webpack --config ./frontend/webpack.config.ts",
-    "install-production-dependencies":
-      "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
-    "package":
-      "bestzip build/lambda.zip build/backend build/types build/node_modules",
-    "terraform-init":
-      "cd infrastructure/env-production && terraform init -input=false -backend-config \"region=$TF_VAR_region\" -backend-config \"access_key=$TF_VAR_aws_access_key\" -backend-config \"secret_key=$TF_VAR_aws_secret_key\"",
-    "terraform-plan":
-      "cd infrastructure/env-production && terraform get && terraform plan -input=false -out=terraform.plan",
-    "terraform-apply":
-      "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
-    "terraform-output":
-      "cd infrastructure/env-production && terraform output -json > ../../build/terraform-output.json",
-    "invoke-scrapeThemes":
-      "ts-node scripts/invoke ../backend/jobs/scrapeThemes.ts",
-    "invoke-extractThemes":
-      "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
-    "invoke-extractColors":
-      "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
+    "build": "tsc && NODE_ENV=production yarn webpack --config ./frontend/webpack.config.ts",
+    "install-production-dependencies": "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
+    "package": "bestzip build/lambda.zip build/backend build/types build/node_modules",
+    "terraform-init": "cd infrastructure/env-production && terraform init -input=false -backend-config \"region=$TF_VAR_region\" -backend-config \"access_key=$TF_VAR_aws_access_key\" -backend-config \"secret_key=$TF_VAR_aws_secret_key\"",
+    "terraform-plan": "cd infrastructure/env-production && terraform get && terraform plan -input=false -out=terraform.plan",
+    "terraform-apply": "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
+    "terraform-output": "cd infrastructure/env-production && terraform output -json > ../../build/terraform-output.json",
+    "invoke-scrapeThemes": "ts-node scripts/invoke ../backend/jobs/scrapeThemes.ts",
+    "invoke-extractThemes": "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
+    "invoke-extractColors": "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
     "invoke:saveTheme": "ts-node scripts/invoke ../backend/jobs/saveTheme.ts",
-    "upload-frontend":
-      "AWS_ACCESS_KEY=$TF_VAR_aws_access_key AWS_SECRET_KEY=$TF_VAR_aws_secret_key NODE_ENV=production ts-node scripts/uploadFrontend"
+    "upload-frontend": "AWS_ACCESS_KEY=$TF_VAR_aws_access_key AWS_SECRET_KEY=$TF_VAR_aws_secret_key NODE_ENV=production ts-node scripts/uploadFrontend"
   },
   "dependencies": {
     "algoliasearch": "^3.24.8",
@@ -41,7 +29,6 @@
     "node-fetch": "^1.7.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-emotion": "^8.0.12",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "runtypes": "^0.13.1",
@@ -70,7 +57,6 @@
     "bluebird": "^3.5.1",
     "emotion": "^8.0.12",
     "emotion-server": "^8.0.12",
-    "emotion-theming": "^8.0.12",
     "file-loader": "^1.1.6",
     "fs-readdir-recursive": "^1.1.0",
     "jest": "^21.2.1",
@@ -91,7 +77,9 @@
     "webpack-dev-server": "^2.9.7"
   },
   "babel": {
-    "presets": ["latest"],
+    "presets": [
+      "latest"
+    ],
     "env": {
       "production": {
         "plugins": [
@@ -137,8 +125,17 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "mapCoverage": true,
-    "collectCoverageFrom": ["backend/**", "frontend/**"],
+    "collectCoverageFrom": [
+      "backend/**",
+      "frontend/**"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

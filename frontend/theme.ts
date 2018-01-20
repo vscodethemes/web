@@ -1,16 +1,10 @@
-import Theme from './Theme'
-
-export interface ThemeProps {
-  theme: Theme
-}
-
-export const spacingUnit = 10
+const spacingUnit = 10
 export const rootFontSize = 14
 
 export const em = (px: number) =>
   `${Math.round(px / rootFontSize * 100) / 100}em`
 
-const theme: Theme = {
+export default {
   fontFamily: 'Montserrat, sans-serif',
   fontSizes: {
     sm: 12,
@@ -42,6 +36,3 @@ const theme: Theme = {
     md: '0px 6px 20px rgba(0, 0, 0, 0.12)',
   },
 }
-
-export default theme
-export { default as Theme } from './Theme'

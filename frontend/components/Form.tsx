@@ -1,8 +1,18 @@
+import { css } from 'emotion'
 import * as React from 'react'
-import styled from 'react-emotion'
-import { em, Theme, ThemeProps } from '../theme'
+import theme, { em } from '../theme'
 
-export default styled('div')(({ theme }: ThemeProps) => ({
+interface FormProps {
+  children: React.ReactNode
+}
+
+const Form = ({ children }: FormProps) => (
+  <div className={styles}>{children}</div>
+)
+
+const styles = css({
   marginTop: theme.spacing.xxl,
   maxWidth: em(280),
-}))
+})
+
+export default Form
