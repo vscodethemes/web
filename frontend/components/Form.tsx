@@ -6,13 +6,15 @@ interface FormProps {
   children: React.ReactNode
 }
 
-const Form = ({ children }: FormProps) => (
-  <div className={styles}>{children}</div>
+const Form: React.SFC<FormProps> = ({ children }) => (
+  <div className={classes.form}>{children}</div>
 )
 
-const styles = css({
-  marginTop: theme.spacing.xxl,
-  maxWidth: em(280),
-})
+const classes = {
+  form: css({
+    marginTop: em(theme.spacing.xxl),
+    maxWidth: em(280),
+  }),
+}
 
 export default Form
