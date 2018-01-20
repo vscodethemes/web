@@ -1,7 +1,7 @@
 import { css, cx } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
-import Icon, { Icons } from './Icon'
+import Icon, { classes as iconClasses, Icons } from './Icon'
 
 interface InputProps {
   type: 'text' | 'search' | 'email' | 'password'
@@ -11,62 +11,77 @@ interface InputProps {
   onChange: (value: string) => any
 }
 
-const Input = ({ icon, onChange, ...inputProps }: InputProps) => (
-  <div className={containerStyles}>
+const Input: React.SFC<InputProps> = ({
+  type,
+  value,
+  placeholder,
+  icon,
+  onChange,
+}) => (
+  <div className={classes.container}>
     {icon && (
-      <div className={iconStyles}>
+      <div className={classes.icon}>
         <Icon icon="search" />
       </div>
     )}
     <input
-      className={cx(inputStyles, icon && inputIconStyles)}
+      type={type}
+      value={value}
+      placeholder={placeholder}
       onChange={evt => onChange(evt.target.value)}
-      {...inputProps}
+      className={cx(classes.input, icon && classes.inputIcon)}
     />
   </div>
 )
 
-const containerStyles = css({
-  position: 'relative',
-})
+Input.defaultProps = {
+  type: 'text',
+  value: '',
+}
 
-const inputStyles = css({
-  display: 'block',
-  width: '100%',
-  height: em(44),
-  lineHeight: em(44),
-  fontSize: em(theme.fontSizes.md),
-  padding: `${em(theme.spacing.sm)} ${em(theme.spacing.md)}}`,
-  marginBottom: em(theme.spacing.md),
-  color: theme.colors.text,
-  backgroundColor: theme.colors.lightGray,
-  border: `1px solid ${theme.colors.gray}`,
-  borderRadius: theme.borderRadius.md,
-  boxShadow: theme.shadows.sm,
-  ':focus': {
-    borderColor: theme.colors.darkGray,
-  },
-  '::placeholder': {
-    color: theme.colors.darkGray,
-    opacity: 1,
-  },
-})
+const classes = {
+  container: css({
+    position: 'relative',
+  }),
 
-const inputIconStyles = css({
-  paddingLeft: em(theme.spacing.lg),
-})
+  input: css({
+    display: 'block',
+    width: '100%',
+    height: em(44),
+    lineHeight: em(44),
+    fontSize: em(theme.fontSizes.md),
+    padding: `${em(theme.spacing.sm)} ${em(theme.spacing.md)}}`,
+    marginBottom: em(theme.spacing.md),
+    color: theme.colors.text,
+    backgroundColor: theme.colors.lightGray,
+    border: `1px solid ${theme.colors.gray}`,
+    borderRadius: theme.borderRadius.md,
+    boxShadow: theme.shadows.sm,
+    ':focus': {
+      borderColor: theme.colors.darkGray,
+    },
+    '::placeholder': {
+      color: theme.colors.darkGray,
+      opacity: 1,
+    },
+  }),
 
-const iconStyles = css({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  height: em(44),
-  display: 'flex',
-  alignItems: 'center',
-  paddingLeft: em(theme.fontSizes.md),
-  '> svg': {
-    fill: theme.colors.darkGray,
-  },
-})
+  inputIcon: css({
+    paddingLeft: em(theme.spacing.lg),
+  }),
+
+  icon: css({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: em(44),
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: em(theme.fontSizes.md),
+    [`.${iconClasses.svg}`]: {
+      fill: theme.colors.darkGray,
+    },
+  }),
+}
 
 export default Input

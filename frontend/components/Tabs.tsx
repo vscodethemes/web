@@ -6,16 +6,18 @@ interface TabsProps {
   children: React.ReactNode
 }
 
-const Tabs = ({ children }: TabsProps) => (
-  <div className={styles}>{children}</div>
+const Tabs: React.SFC<TabsProps> = ({ children }) => (
+  <div className={classes.tabs}>{children}</div>
 )
 
-const styles = css({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  marginBottom: theme.spacing.md,
-  maxWidth: em(220),
-})
+const classes = {
+  tabs: css({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.md,
+    maxWidth: em(220),
+  }),
+}
 
 export default Tabs
