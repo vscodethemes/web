@@ -1,11 +1,21 @@
+import { css } from 'emotion'
 import * as React from 'react'
-import styled from 'react-emotion'
-import { em, Theme, ThemeProps } from '../theme'
+import theme, { em } from '../theme'
 
-export default styled('div')(({ theme }: ThemeProps) => ({
+interface TabsProps {
+  children: React.ReactNode
+}
+
+const Tabs = ({ children }: TabsProps) => (
+  <div className={styles}>{children}</div>
+)
+
+const styles = css({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
   marginBottom: theme.spacing.md,
   maxWidth: em(220),
-}))
+})
+
+export default Tabs

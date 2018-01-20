@@ -1,10 +1,20 @@
+import { css } from 'emotion'
 import * as React from 'react'
-import styled from 'react-emotion'
-import { em, Theme } from '../theme'
+import theme, { em } from '../theme'
 
-export default styled('div')((props: { theme: Theme }) => ({
+interface ContainerProps {
+  children: React.ReactNode
+}
+
+const Container = ({ children }: ContainerProps) => (
+  <div className={styles}>{children}</div>
+)
+
+const styles = css({
   margin: '0 auto',
   maxWidth: em(840),
-  paddingLeft: props.theme.spacing.md,
-  paddingRight: props.theme.spacing.md,
-}))
+  paddingLeft: theme.spacing.md,
+  paddingRight: theme.spacing.md,
+})
+
+export default Container

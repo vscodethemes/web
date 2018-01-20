@@ -1,7 +1,5 @@
-import { ThemeProvider } from 'emotion-theming'
 import * as React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
-import theme, { Theme } from '../theme'
 import Container from './Container'
 import Form from './Form'
 import Input from './Input'
@@ -26,26 +24,24 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
     const { search } = this.state
 
     return (
-      <ThemeProvider theme={theme}>
-        <Container>
-          <Form>
-            <Tabs>
-              <Tab to={{ pathname: '/', search }} exact={true}>
-                Popular
-              </Tab>
-              <Tab to={{ pathname: '/trending/', search }}>Trending</Tab>
-              <Tab to={{ pathname: '/new/', search }}>New</Tab>
-            </Tabs>
-            <Input
-              type="search"
-              icon="search"
-              placeholder="Search VSCode Themes"
-              value={search}
-              onChange={this.handleSearchChange}
-            />
-          </Form>
-        </Container>
-      </ThemeProvider>
+      <Container>
+        <Form>
+          <Tabs>
+            <Tab to={{ pathname: '/', search }} exact={true}>
+              Popular
+            </Tab>
+            <Tab to={{ pathname: '/trending/', search }}>Trending</Tab>
+            <Tab to={{ pathname: '/new/', search }}>New</Tab>
+          </Tabs>
+          <Input
+            type="search"
+            icon="search"
+            placeholder="Search VSCode Themes"
+            value={search}
+            onChange={this.handleSearchChange}
+          />
+        </Form>
+      </Container>
     )
   }
 
