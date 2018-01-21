@@ -3,45 +3,37 @@ node_js:
 - 6.10.3
 env:
   global:
-    # TF_VAR_aws_access_key
-    # TF_VAR_aws_secret_key
-    # TF_VAR_region
-    # TF_VAR_github_client_id
-    # TF_VAR_github_client_secret
-    # TF_VAR_algolia_app_id
-    # TF_VAR_algolia_api_key
-    secure: j5u1q9fSIBmb5nlqZ4G+tTVaMevDG0ViyMI9Zt7VHOOLNrMzIrW9jvxWc2yvZyCGUKQYneKYnbSs3NOifDUgXATfn8evE8LOh9pO4k9CsjhbAmfJNX5vrsICNMFvtEHayUHkSpjlpc01rRTlpvhbyJJ2c92AErSXkQFeBN+jfC+tnj8xgWMm9PbUa0vVD0wNTqAaIUmYv0DcmsIUdg4dHgWeqaoI8Yq8zXY+MxUixKkDxF0YYKYi00l0VSxTtYzANa3TwycWa68ufRFGjNTVhXSnGdYDdF11bvNxpYx67dZPprrLYuY7oomfozm7QHOmHh5SOwXd7QCmycw5EIYHR2w8i4/0DWkKoUFceBS/GhLkep2U8H90zZoTHmcWm55UAAVMcPTkmZDiy8CSS6iKxmzFKClnqxU1ecyrNMGRI3SpOeWqvrt8ufUwlnKz5+zHYWrAcIpFk+AoD1uyJtuNHfuiMUbmIhjV71An054ZTdaHeYJRFw1oG5bI0UcjLa/lvcZvRcZA12Y7s4mZ0mLBnk9IYosEN3q2mOZy851L6nR+TpWJwxNMVaXvCxhc9+Tbc3d1oBFbjIsoZ0fc11zPli4xhioiZ9gTnfkWcvWAnLCHGw6NTZsFU77suyCrlJ5Bhv1s380WQyqAueAcCX0KoivUO1O5r92Wxcy/g3vTFuQ=
+    secure: dObW7eMs65aW5HgJLn2p4JsIrQAsjCTGVMWhP1ooAiKit8hbtFjuic97WcZlNfyS/IIOmaMWzTbqtMr7bCvTGdWRucOt+Wud81qrRbbosr0RS2QpudYG9tTvwUsaW8rUNrg3CpHHPHN7jEX0gU48EJPr63nWrRAW1//WYwHRdwQxgKLNv4bKWfhXURK4hKCKhK8ZhP0xRbUyHd0AnEv61jhDyCxDCgoPZMjy0UhfRzK+x1CLM3Rkqj/k8G7Axe7TkFActfi5R26MxCr96+ATho37xZAGQKV2ZgMdwJreQOGMBcL4YuNioFfXhibxvgtZLG2y2u4SInBNVm8RAlebDUyh21fQSwM3nTa7KxMd4dvaKwxs8lRuNGaEUMSgR4ZMFJCvrDEYKczor5hLnea2shl/0r5t8YXx/g4xlq0cDYwiZNuIcIMoJViXK1/IsS/ulgtKh8i7M+uDMNqxKBAZ+dxe2+EBKvEYya663ZUgPbJxVcWVBgIglc+Rzko9U+tGafz3LifNLSoDuxTB7rPpu3q722kHKKdGt1sKsijCIuIWSfxNCrW0TNItwxkFVNDPP79FO4HfWoi/0wv8F8m5iqGnuo6W1aabQyywS2yj2AgwHw//E/nPhzkVsz806GSL1AXZzeG/1UrpFXzOldM+VAek/O7h09KfIS/h5kWEFAs=
 before_install:
-  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-  - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
-  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq yarn
-  - curl -fSL "https://releases.hashicorp.com/terraform/0.11.1/terraform_0.11.1_linux_amd64.zip"
-    -o terraform.zip
-  - sudo unzip terraform.zip -d /opt/terraform
-  - sudo ln -s /opt/terraform/terraform /usr/bin/terraform
-  - rm -f terraform.zip
+- curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+- sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
+- echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+- sudo apt-get update -qq
+- sudo apt-get install -y -qq yarn
+- curl -fSL "https://releases.hashicorp.com/terraform/0.11.2/terraform_0.11.2_linux_amd64.zip"
+  -o terraform.zip
+- sudo unzip terraform.zip -d /opt/terraform
+- sudo ln -s /opt/terraform/terraform /usr/bin/terraform
+- rm -f terraform.zip
 cache:
   directories:
-    - "$HOME/.yarn-cache"
+  - "$HOME/.yarn-cache"
 install:
-  - yarn install --frozen-lockfile
+- yarn install --frozen-lockfile
 script:
-  - yarn build
-  - yarn lint
-  - yarn test
-  - yarn install-production-dependencies
-  - yarn package
-  - yarn terraform-init
-  - yarn terraform-plan
+- yarn build
+- yarn lint
+- yarn test
+- yarn install-production-dependencies
+- yarn package
+- yarn terraform-init
+- yarn terraform-plan
 deploy:
 - provider: script
   skip_cleanup: true
-  script: 
-    - yarn terraform-apply
-    - yarn terraform-output
-    - yarn upload-frontend
+  script:
+  - yarn terraform-apply
+  - yarn upload-frontend
   on:
     repo: jschr/VSCodeThemes
     branch: production

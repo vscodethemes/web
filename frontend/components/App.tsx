@@ -17,6 +17,9 @@ interface QueryParams {
 
 class App extends React.Component<RouteComponentProps<{}>, {}> {
   public componentDidMount() {
+    // The query string does not exist when server-side rendering
+    // so we need to force update if it exists in order for the
+    // form to be sync'd.
     if (this.props.location.search) {
       this.forceUpdate()
     }
@@ -25,7 +28,6 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
   public render(): React.ReactNode {
     const { location } = this.props
     const params = this.parseQueryParams()
-
     return (
       <Container>
         <Form>
@@ -33,10 +35,10 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
             <Tab to={{ pathname: '/', search: location.search }} exact={true}>
               Popular
             </Tab>
-            <Tab to={{ pathname: '/trending/', search: location.search }}>
+            <Tab to={{ pathname: '/trending', search: location.search }}>
               Trending
             </Tab>
-            <Tab to={{ pathname: '/new/', search: location.search }}>New</Tab>
+            <Tab to={{ pathname: '/new', search: location.search }}>New</Tab>
           </Tabs>
           <Input
             type="search"
@@ -69,7 +71,6 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   private parseQueryParams = (): QueryParams => {
     const params = qs.parse(this.props.location.search)
-
     return {
       search: params.search,
       light: 'light' in params,
@@ -80,14 +81,18 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   private setQueryParams = (params: any) => {
     const { location, history } = this.props
+    // Format the query string to be more concise.
     Object.keys(params).forEach(key => {
+      // Remove falsey values.
       if (!params[key]) {
         delete params[key]
       }
+      // Convert "true" to "1".
       if (params[key] === true) {
         params[key] = 1
       }
     })
+    // Update url query params.
     history.push(`${location.pathname}?${qs.stringify(params)}`)
   }
 }

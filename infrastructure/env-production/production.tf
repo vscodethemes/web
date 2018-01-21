@@ -29,12 +29,6 @@ module "backend" {
   algolia_api_key      = "${var.algolia_api_key}"
 }
 
-module "frontend" {
-  source      = "../modules/frontend"
-  environment = "production"
-  domain      = "vscodethemes.com"
-}
-
 output "scrape_themes_sns_topic_arn" {
   value = "${module.backend.scrape_themes_sns_topic_arn}"
 }
@@ -69,16 +63,4 @@ output "extract_colors_sqs_queue_url" {
 
 output "extract_colors_sqs_deadletter_queue_url" {
   value = "${module.backend.extract_colors_sqs_deadletter_queue_url}"
-}
-
-output "s3_bucket" {
-  value = "${module.frontend.s3_bucket}"
-}
-
-output "cf_distribution_id" {
-  value = "${module.frontend.cf_distribution_id}"
-}
-
-output "cf_domain_name" {
-  value = "${module.frontend.cf_domain_name}"
 }
