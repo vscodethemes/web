@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 6.10.3
+  - 6.10.3
 before_install:
   - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
   - sudo apt-key adv --keyserver pgp.mit.edu --recv D101F7899D41F3C3
@@ -14,23 +14,23 @@ before_install:
   - rm -f terraform.zip
 cache:
   directories:
-  - "$HOME/.yarn-cache"
+    - "$HOME/.yarn-cache"
 install:
-- yarn install --frozen-lockfile
+  - yarn install --frozen-lockfile
 script:
-- yarn build
-- yarn lint
-- yarn test
-- yarn install-production-dependencies
-- yarn package
-- yarn terraform-init
-- yarn terraform-plan
+  - yarn build
+  - yarn lint
+  - yarn test
+  - yarn install-production-dependencies
+  - yarn package
+  - yarn terraform-init
+  - yarn terraform-plan
 deploy:
-- provider: script
-  skip_cleanup: true
-  script:
-  - yarn terraform-apply
-  - yarn upload-frontend
-  on:
-    repo: jschr/VSCodeThemes
-    branch: production
+  - provider: script
+    skip_cleanup: true
+    script:
+      - yarn terraform-apply
+      - yarn upload-frontend
+    on:
+      repo: jschr/VSCodeThemes
+      branch: production
