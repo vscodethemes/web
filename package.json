@@ -11,7 +11,7 @@
     "coverage": "jest --coverage",
     "lint": "tslint --project .",
     "build":
-      "rm -rf build && tsc && rm -rf build/frontend && NODE_ENV=production && yarn webpack --config ./frontend/webpack.config.ts",
+      "rm -rf build && tsc && rm -rf build/frontend && ALGOLIA_APP_ID=$TF_VAR_algolia_app_id NODE_ENV=production yarn webpack --config ./frontend/webpack.config.ts",
     "install-production-dependencies":
       "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
     "package":
@@ -29,7 +29,8 @@
     "invoke-extractColors":
       "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
     "invoke:saveTheme": "ts-node scripts/invoke ../backend/jobs/saveTheme.ts",
-    "upload-frontend": "ts-node scripts/uploadFrontend"
+    "upload-frontend": "ts-node scripts/uploadFrontend",
+    "deploy": "yarn terraform-apply && yarn upload-frontend"
   },
   "dependencies": {
     "algoliasearch": "^3.24.9",

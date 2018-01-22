@@ -28,9 +28,7 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:
-      - yarn terraform-apply
-      - yarn upload-frontend
+    script: yarn deploy
     on:
       repo: jschr/VSCodeThemes
       branch: production
