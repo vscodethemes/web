@@ -8,10 +8,7 @@ const siteId = process.env.NETLIFY_SITE_ID
 
 run(async () => {
   console.info('Uploading frontend...')
-  await netlify.deploy({
-    access_token: accessToken,
-    site_id: siteId,
-    dir: path.resolve(__dirname, '../build/frontend'),
-  })
+  const dir = path.resolve(__dirname, '../build/frontend')
+  await netlify.deploy({ dir, access_token: accessToken, site_id: siteId })
   console.info('Done.')
 })
