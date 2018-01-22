@@ -13,8 +13,6 @@ export interface DocumentProps {
   googleAnalyticsTrackingId: string
 }
 
-const cdnBaseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/'
-
 injectGlobal({
   html: {
     fontSize: rootFontSize,

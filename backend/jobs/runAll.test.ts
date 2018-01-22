@@ -1,4 +1,3 @@
-import { Services } from '../../types/static'
 import createServices from '../services/mock'
 import runAll from './runAll'
 

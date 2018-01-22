@@ -1,9 +1,4 @@
-import {
-  Colors,
-  JobMessage,
-  SaveThemePayload,
-  Services,
-} from '../../types/static'
+import { JobMessage, SaveThemePayload } from '../../types/static'
 import createServices from '../services/mock'
 import saveTheme, { createObjectId } from './saveTheme'
 
@@ -39,7 +34,6 @@ test('should not process empty job', async () => {
     .mockImplementation(() => Promise.resolve(null))
 
   const fetchSpy = jest.spyOn(services, 'fetch')
-  const notifySpy = jest.spyOn(services.saveTheme, 'notify')
   const succeedSpy = jest.spyOn(services.saveTheme, 'succeed')
   await saveTheme(services)
   expect(fetchSpy).toHaveBeenCalledTimes(0)

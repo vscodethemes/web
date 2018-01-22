@@ -3,7 +3,6 @@ import {
   ExtractThemesPayload,
   JobMessage,
   PackageJSON,
-  Services,
 } from '../../types/static'
 import createServices from '../services/mock'
 import extractThemes from './extractThemes'
@@ -44,7 +43,6 @@ test('should not process empty job', async () => {
     .mockImplementation(() => Promise.resolve(null))
 
   const fetchSpy = jest.spyOn(services, 'fetch')
-  const notifySpy = jest.spyOn(services.extractThemes, 'notify')
   const succeedSpy = jest.spyOn(services.extractThemes, 'succeed')
   await extractThemes(services)
   expect(fetchSpy).toHaveBeenCalledTimes(0)
