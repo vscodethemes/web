@@ -11,6 +11,7 @@ function createJob(): JobMessage<SaveThemePayload> {
   return {
     receiptHandle: '',
     payload: {
+      name: 'name',
       repository: 'repo',
       repositoryOwner: 'owner',
       repositoryBranch: 'master',

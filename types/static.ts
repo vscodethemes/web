@@ -80,12 +80,7 @@ export interface RepositoryInfo {
   repositoryOwner: string
 }
 
-export interface File {
-  name: string
-  type: string
-  contents: Buffer
-}
-
-export interface WebpackConfigOptions {
-  path: string
+export interface Theme extends SaveThemePayload {
+  objectID: string
+  colors: Colors
 }

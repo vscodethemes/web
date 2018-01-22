@@ -2,7 +2,6 @@ import { CheckerPlugin } from 'awesome-typescript-loader'
 import * as path from 'path'
 import * as StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin'
 import * as webpack from 'webpack'
-import { WebpackConfigOptions } from '../types/static'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const isProduction = nodeEnv === 'production'
@@ -27,7 +26,7 @@ const config: webpack.Configuration = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'awesome-typescript-loader',
+        use: 'awesome-typescript-loader?useBabel=true&useCache=true',
         exclude: /node_modules/,
       },
       {
@@ -42,6 +41,8 @@ const config: webpack.Configuration = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
+        ALGOLIA_APP_ID: JSON.stringify(process.env.ALGOLIA_APP_ID),
+        ALGOLIA_SEARCH_KEY: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY),
       },
     }),
     new StaticSiteGeneratorPlugin({
