@@ -11,5 +11,5 @@
     "skipLibCheck": true
   },
   "types": ["node", "aws-lambda"],
-  "exclude": ["node_modules", "scripts", "frontend", "**/*.test.ts"]
+  "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 import * as fetch from 'jest-fetch-mock'
-import { Extension, Services } from '../../types/static'
+import { Extension } from '../../types/static'
 import createServices from '../services/mock'
 import scrapeThemes, { GITHUB_PROPERTY_NAME } from './scrapeThemes'
 
@@ -157,14 +157,12 @@ test('should fail job if fetch returns invalid extensions', async () => {
 
 test('should not create job for next page when current page is empty', async () => {
   const services = createServices()
-  const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
     .spyOn(services.scrapeThemes, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
   const createSpy = jest.spyOn(services.scrapeThemes, 'create')
-  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
   await scrapeThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(0)
 })
@@ -217,7 +215,6 @@ test('should succeed job for valid input', async () => {
 
 test('should succeed job for empty page', async () => {
   const services = createServices()
-  const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
     .spyOn(services.scrapeThemes, 'receive')
