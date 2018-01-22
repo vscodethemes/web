@@ -17,10 +17,6 @@ interface SearchParams {
   highContrast: boolean
 }
 
-interface QueryParams {
-  [key: string]: any
-}
-
 class App extends React.Component<RouteComponentProps<{}>, {}> {
   public componentDidMount() {
     // The query string does not exist when server-side rendering
@@ -97,21 +93,24 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     }
   }
 
-  private setQueryParams = (params: QueryParams) => {
+  private setQueryParams = (params: SearchParams) => {
     const { location, history } = this.props
-    // Format the query string to be more concise.
-    Object.keys(params).forEach(key => {
-      // Remove falsey values.
-      if (!params[key]) {
-        delete params[key]
-      }
-      // Convert true to 1.
-      if (params[key] === true) {
-        params[key] = 1
-      }
-    })
-    // Update url query params.
-    history.push(`${location.pathname}?${qs.stringify(params)}`)
+    const queryParams: any = {}
+
+    if (params.search) {
+      queryParams.search = params.search
+    }
+    if (params.light) {
+      queryParams.light = 1
+    }
+    if (params.dark) {
+      queryParams.dark = 1
+    }
+    if (params.highContrast) {
+      queryParams.highContrast = 1
+    }
+
+    history.push(`${location.pathname}?${qs.stringify(queryParams)}`)
   }
 }
 
