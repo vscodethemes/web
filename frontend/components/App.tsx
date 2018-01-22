@@ -1,18 +1,24 @@
+import { css } from 'emotion'
 import * as qs from 'query-string'
 import * as React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import theme, { em } from '../theme'
 import Checkbox from './Checkbox'
-import Container from './Container'
-import Form from './Form'
 import Input from './Input'
+import Search, { SortByOptions } from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
 
+interface SearchParams {
+  sortBy: SortByOptions
+  search: string
+  dark: boolean
+  light: boolean
+  highContrast: boolean
+}
+
 interface QueryParams {
-  search?: string
-  dark?: boolean
-  light?: boolean
-  highContrast?: boolean
+  [key: string]: any
 }
 
 class App extends React.Component<RouteComponentProps<{}>, {}> {
@@ -27,10 +33,11 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   public render(): React.ReactNode {
     const { location } = this.props
-    const params = this.parseQueryParams()
+    const params = this.getSearchParams()
+
     return (
-      <Container>
-        <Form>
+      <div className={classes.container}>
+        <div className={classes.aside}>
           <Tabs>
             <Tab to={{ pathname: '/', search: location.search }} exact={true}>
               Popular
@@ -64,14 +71,25 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
               this.setQueryParams({ ...params, highContrast })
             }
           />
-        </Form>
-      </Container>
+        </div>
+        <div className={classes.main}>
+          <Search {...params} />
+        </div>
+      </div>
     )
   }
 
-  private parseQueryParams = (): QueryParams => {
-    const params = qs.parse(this.props.location.search)
+  private getSearchParams = (): SearchParams => {
+    const { search, pathname } = this.props.location
+    const params = qs.parse(search)
+
+    let sortBy: SortByOptions = 'installs'
+    if (pathname === '/trending') {
+      sortBy = 'trending'
+    }
+
     return {
+      sortBy,
       search: params.search,
       light: 'light' in params,
       dark: 'dark' in params,
@@ -79,7 +97,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     }
   }
 
-  private setQueryParams = (params: any) => {
+  private setQueryParams = (params: QueryParams) => {
     const { location, history } = this.props
     // Format the query string to be more concise.
     Object.keys(params).forEach(key => {
@@ -87,7 +105,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
       if (!params[key]) {
         delete params[key]
       }
-      // Convert "true" to "1".
+      // Convert true to 1.
       if (params[key] === true) {
         params[key] = 1
       }
@@ -95,6 +113,27 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     // Update url query params.
     history.push(`${location.pathname}?${qs.stringify(params)}`)
   }
+}
+
+const asideWidth = 280
+
+const classes = {
+  container: css({
+    margin: '0 auto',
+    maxWidth: em(840),
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+  }),
+
+  aside: css({
+    position: 'fixed',
+    width: em(asideWidth),
+    marginTop: em(theme.spacing.xxl),
+  }),
+
+  main: css({
+    paddingLeft: em(asideWidth + theme.spacing.xxl),
+  }),
 }
 
 export default withRouter(App)

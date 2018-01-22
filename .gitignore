@@ -7,3 +7,4 @@ coverage/
 *.tfstate.*
 terraform.plan
 .awcache
+*.env

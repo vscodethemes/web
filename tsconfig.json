@@ -10,18 +10,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "types": [
-    "node",
-    "aws-lambda"
-  ],
-  "exclude": [
-    "node_modules",
-    "scripts",
-    "frontend",
-    "**/*.test.ts"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": true,
-    "useCache": true
-  }
+  "types": ["node", "aws-lambda"],
+  "exclude": ["node_modules", "scripts", "frontend", "**/*.test.ts"]
 }

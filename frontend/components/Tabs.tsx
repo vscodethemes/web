@@ -2,11 +2,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
 
-interface TabsProps {
-  children: React.ReactNode
-}
-
-const Tabs: React.SFC<TabsProps> = ({ children }) => (
+const Tabs: React.SFC<{}> = ({ children }) => (
   <div className={classes.tabs}>{children}</div>
 )
 

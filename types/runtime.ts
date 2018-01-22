@@ -78,6 +78,7 @@ export const ColorsRuntime = Record({
 })
 
 export const SaveThemePayloadRuntime = Record({
+  name: String,
   repository: String,
   repositoryOwner: String,
   repositoryBranch: String,

@@ -91,6 +91,7 @@ export default function createServices(): Services {
     saveTheme: createJob<SaveThemePayload>('saveTheme', {
       receiptHandle: '',
       payload: {
+        name: 'One Dark',
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
         repositoryPath: './themes/OneDark-Pro.json',
