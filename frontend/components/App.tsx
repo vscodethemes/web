@@ -115,23 +115,44 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 }
 
 const asideWidth = 280
+const mainWidth = 420
+const containerGutter = theme.gutters.md
+const asideGutter = theme.gutters.xl
+const containerWidth =
+  asideWidth + asideGutter + mainWidth + containerGutter * 2
+const breakpoints = [containerWidth]
 
 const classes = {
   container: css({
+    width: '100%',
+    maxWidth: em(containerWidth),
     margin: '0 auto',
-    maxWidth: em(840),
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: em(containerGutter),
+    paddingRight: em(containerGutter),
   }),
 
   aside: css({
     position: 'fixed',
+    top: theme.gutters.xxl,
+    left: '50%',
     width: em(asideWidth),
-    marginTop: em(theme.spacing.xxl),
+    marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
+
+    [`@media (max-width: ${breakpoints[0]}px)`]: {
+      left: em(containerGutter),
+      marginLeft: 0,
+    },
   }),
 
   main: css({
-    paddingLeft: em(asideWidth + theme.spacing.xxl),
+    flex: 1,
+    maxWidth: em(mainWidth),
+    [`@media (max-width: ${breakpoints[0]}px)`]: {
+      marginLeft: em(asideWidth + containerGutter),
+    },
   }),
 }
 

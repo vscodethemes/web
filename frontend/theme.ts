@@ -23,7 +23,7 @@ export default {
     sm: 4,
     md: 6,
   },
-  spacing: {
+  gutters: {
     xs: spacingUnit / 2,
     sm: spacingUnit,
     md: spacingUnit * 2,

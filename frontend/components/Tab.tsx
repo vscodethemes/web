@@ -21,7 +21,7 @@ const classes = {
     fontWeight: 'bold',
     textDecoration: 'none',
     color: theme.colors.lightPrimary,
-    paddingBottom: theme.spacing.sm,
+    paddingBottom: theme.gutters.sm,
     outline: 0,
     ':hover, :focus': {
       opacity: 1,

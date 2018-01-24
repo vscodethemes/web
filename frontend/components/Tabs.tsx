@@ -11,7 +11,7 @@ const classes = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: theme.spacing.md,
+    marginBottom: theme.gutters.md,
     maxWidth: em(220),
   }),
 }
