@@ -1,21 +1,14 @@
 import { css } from 'emotion'
-import * as qs from 'query-string'
 import * as React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { SearchParams } from '../../types/static'
 import theme, { em } from '../theme'
+import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
 import Input from './Input'
-import Search, { SortByOptions } from './Search'
+import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
-
-interface SearchParams {
-  sortBy: SortByOptions
-  search: string
-  dark: boolean
-  light: boolean
-  highContrast: boolean
-}
 
 class App extends React.Component<RouteComponentProps<{}>, {}> {
   public componentDidMount() {
@@ -29,7 +22,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   public render(): React.ReactNode {
     const { location } = this.props
-    const params = this.getSearchParams()
+    const params = searchParams.fromLocation(location)
 
     return (
       <div className={classes.container}>
@@ -75,63 +68,52 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     )
   }
 
-  private getSearchParams = (): SearchParams => {
-    const { search, pathname } = this.props.location
-    const params = qs.parse(search)
-
-    let sortBy: SortByOptions = 'installs'
-    if (pathname === '/trending') {
-      sortBy = 'trending'
-    }
-
-    return {
-      sortBy,
-      search: params.search,
-      light: 'light' in params,
-      dark: 'dark' in params,
-      highContrast: 'highContrast' in params,
-    }
-  }
-
   private setQueryParams = (params: SearchParams) => {
     const { location, history } = this.props
-    const queryParams: any = {}
-
-    if (params.search) {
-      queryParams.search = params.search
-    }
-    if (params.light) {
-      queryParams.light = 1
-    }
-    if (params.dark) {
-      queryParams.dark = 1
-    }
-    if (params.highContrast) {
-      queryParams.highContrast = 1
-    }
-
-    history.push(`${location.pathname}?${qs.stringify(queryParams)}`)
+    const querystring = searchParams.toQueryString(params)
+    history.push(`${location.pathname}?${querystring}`)
   }
 }
 
 const asideWidth = 280
+const mainWidth = 420
+const containerGutter = theme.gutters.md
+const asideGutter = theme.gutters.xl
+const containerWidth =
+  asideWidth + asideGutter + mainWidth + containerGutter * 2
+const breakpoints = [containerWidth]
 
 const classes = {
   container: css({
+    width: '100%',
+    maxWidth: em(containerWidth),
     margin: '0 auto',
-    maxWidth: em(840),
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: em(containerGutter),
+    paddingRight: em(containerGutter),
   }),
 
   aside: css({
     position: 'fixed',
+    top: theme.gutters.xxl,
+    left: '50%',
     width: em(asideWidth),
-    marginTop: em(theme.spacing.xxl),
+    marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
+
+    [`@media (max-width: ${breakpoints[0]}px)`]: {
+      left: em(containerGutter),
+      marginLeft: 0,
+    },
   }),
 
   main: css({
-    paddingLeft: em(asideWidth + theme.spacing.xxl),
+    flex: 1,
+    maxWidth: em(mainWidth),
+    [`@media (max-width: ${breakpoints[0]}px)`]: {
+      marginLeft: em(asideWidth + containerGutter),
+    },
   }),
 }
 

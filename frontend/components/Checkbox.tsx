@@ -28,7 +28,7 @@ const classes = {
   label: css({
     display: 'flex',
     alignItems: 'center',
-    marginBottom: em(theme.spacing.sm),
+    marginBottom: em(theme.gutters.sm),
     cursor: 'pointer',
   }),
 
@@ -39,7 +39,7 @@ const classes = {
 
   input: css({
     margin: 0,
-    marginRight: em(theme.spacing.sm),
+    marginRight: em(theme.gutters.sm),
   }),
 }
 

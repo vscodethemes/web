@@ -50,8 +50,8 @@ const classes = {
     height: em(44),
     lineHeight: em(44),
     fontSize: em(theme.fontSizes.md),
-    padding: `${em(theme.spacing.sm)} ${em(theme.spacing.md)}}`,
-    marginBottom: em(theme.spacing.md),
+    padding: `${em(theme.gutters.sm)} ${em(theme.gutters.md)}}`,
+    marginBottom: em(theme.gutters.md),
     color: theme.colors.text,
     backgroundColor: theme.colors.lightGray,
     border: `1px solid ${theme.colors.gray}`,
@@ -67,7 +67,7 @@ const classes = {
   }),
 
   inputIcon: css({
-    paddingLeft: em(theme.spacing.lg),
+    paddingLeft: em(theme.gutters.lg),
   }),
 
   icon: css({

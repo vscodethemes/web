@@ -1,8 +1,9 @@
 import * as algoliasearch from 'algoliasearch'
+import { css } from 'emotion'
 import * as React from 'react'
-import { Theme } from '../../types/static'
-
-export type SortByOptions = 'installs' | 'trending'
+import { SortByOptions, Theme } from '../../types/static'
+import theme, { em } from '../theme'
+import ThemePreview from './ThemePreview'
 
 interface SearchProps {
   sortBy: SortByOptions
@@ -45,28 +46,17 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
       this.props.sortBy !== nextProps.sortBy ||
       this.props.search !== nextProps.search
     ) {
+      window.scrollTo(0, 0)
       this.search(nextProps)
     }
   }
 
   public render() {
-    return this.state.themes.map(theme => (
-      <pre key={theme.objectID}>
-        {JSON.stringify(
-          {
-            name: theme.name,
-            installs: theme.installs,
-            rating: theme.rating,
-            trendingMonthly: theme.trendingMonthly,
-            repositoryOwner: theme.repositoryOwner,
-            repository: theme.repository,
-            colors: theme.colors,
-          },
-          null,
-          '  ',
-        )}
-      </pre>
-    ))
+    return (
+      <div className={styles.container}>
+        {this.state.themes.map(t => <ThemePreview key={t.objectID} {...t} />)}
+      </div>
+    )
   }
 
   private async search(props: SearchProps) {
@@ -75,6 +65,12 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     })
     this.setState({ themes: results.hits })
   }
+}
+
+const styles = {
+  container: css({
+    paddingTop: em(theme.gutters.lg),
+  }),
 }
 
 export default Search
