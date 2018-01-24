@@ -1,11 +1,9 @@
 import * as algoliasearch from 'algoliasearch'
 import { css } from 'emotion'
 import * as React from 'react'
-import { Theme } from '../../types/static'
+import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import ThemePreview from './ThemePreview'
-
-export type SortByOptions = 'installs' | 'trending'
 
 interface SearchProps {
   sortBy: SortByOptions

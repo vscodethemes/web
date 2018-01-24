@@ -84,3 +84,13 @@ export interface Theme extends SaveThemePayload {
   objectID: string
   colors: Colors
 }
+
+export type SortByOptions = 'installs' | 'trending'
+
+export interface SearchParams {
+  sortBy: SortByOptions
+  search: string
+  dark: boolean
+  light: boolean
+  highContrast: boolean
+}

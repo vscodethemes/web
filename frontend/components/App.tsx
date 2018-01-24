@@ -1,21 +1,14 @@
 import { css } from 'emotion'
-import * as qs from 'query-string'
 import * as React from 'react'
 import { RouteComponentProps, withRouter } from 'react-router'
+import { SearchParams } from '../../types/static'
 import theme, { em } from '../theme'
+import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
 import Input from './Input'
-import Search, { SortByOptions } from './Search'
+import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
-
-interface SearchParams {
-  sortBy: SortByOptions
-  search: string
-  dark: boolean
-  light: boolean
-  highContrast: boolean
-}
 
 class App extends React.Component<RouteComponentProps<{}>, {}> {
   public componentDidMount() {
@@ -29,7 +22,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   public render(): React.ReactNode {
     const { location } = this.props
-    const params = this.getSearchParams()
+    const params = searchParams.fromLocation(location)
 
     return (
       <div className={classes.container}>
@@ -75,42 +68,10 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     )
   }
 
-  private getSearchParams = (): SearchParams => {
-    const { search, pathname } = this.props.location
-    const params = qs.parse(search)
-
-    let sortBy: SortByOptions = 'installs'
-    if (pathname === '/trending') {
-      sortBy = 'trending'
-    }
-
-    return {
-      sortBy,
-      search: params.search,
-      light: 'light' in params,
-      dark: 'dark' in params,
-      highContrast: 'highContrast' in params,
-    }
-  }
-
   private setQueryParams = (params: SearchParams) => {
     const { location, history } = this.props
-    const queryParams: any = {}
-
-    if (params.search) {
-      queryParams.search = params.search
-    }
-    if (params.light) {
-      queryParams.light = 1
-    }
-    if (params.dark) {
-      queryParams.dark = 1
-    }
-    if (params.highContrast) {
-      queryParams.highContrast = 1
-    }
-
-    history.push(`${location.pathname}?${qs.stringify(queryParams)}`)
+    const querystring = searchParams.toQueryString(params)
+    history.push(`${location.pathname}?${querystring}`)
   }
 }
 
