@@ -1,5 +1,6 @@
 import { injectGlobal } from 'emotion'
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { SSR } from '../ssr'
 import theme, { rootFontSize } from '../theme'
 
@@ -28,6 +29,7 @@ injectGlobal({
 })
 
 export default function Document(props: DocumentProps) {
+  const helmet = Helmet.renderStatic()
   const scripts: React.ReactNode[] = []
 
   // Add the dev server reload script in development.
@@ -50,7 +52,7 @@ export default function Document(props: DocumentProps) {
           href="https://fonts.googleapis.com/css?family=Montserrat:500,700"
           rel="stylesheet"
         />
-        <title>{props.enableDevServer ? '[DEV] ' : ''}VSCodeThemes</title>
+        {helmet.title.toComponent()}
         <style
           dangerouslySetInnerHTML={{
             __html: props.css,
