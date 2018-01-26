@@ -1,7 +1,6 @@
-## VSCode Themes
+[![vscodethemes](frontend/assets/logo.png)
 
-[![Build Status](https://travis-ci.org/jschr/VSCodeThemes.svg?branch=production)](https://travis-ci.org/jschr/VSCodeThemes)
-[![Coverage Status](https://coveralls.io/repos/github/jschr/VSCodeThemes/badge.svg)](https://coveralls.io/github/jschr/VSCodeThemes)
+[![Build Status](https://travis-ci.org/jschr/vscodethemes.svg?branch=production)](https://travis-ci.org/jschr/vscodethemes)
 
 ### Terraform Gotchas
 
