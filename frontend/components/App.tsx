@@ -1,5 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { SearchParams } from '../../types/static'
 import theme, { em } from '../theme'
@@ -10,6 +11,12 @@ import Logo from './Logo'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
+
+const titles: { [key: string]: string } = {
+  '/': 'Popular',
+  '/trending': 'Trending',
+  '/new': 'New',
+}
 
 class App extends React.Component<RouteComponentProps<{}>, {}> {
   public componentDidMount() {
@@ -27,6 +34,9 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
     return (
       <div className={classes.container}>
+        <Helmet>
+          <title>{titles[location.pathname]}</title>
+        </Helmet>
         <div className={classes.aside}>
           <Logo />
           <Tabs>
