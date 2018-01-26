@@ -1,4 +1,4 @@
-[![vscodethemes](frontend/assets/logo.png)
+![vscodethemes](frontend/assets/logo.png)
 
 [![Build Status](https://travis-ci.org/jschr/vscodethemes.svg?branch=production)](https://travis-ci.org/jschr/vscodethemes)
 
