@@ -6,6 +6,7 @@ import theme, { em } from '../theme'
 import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
 import Input from './Input'
+import Logo from './Logo'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
@@ -27,6 +28,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     return (
       <div className={classes.container}>
         <div className={classes.aside}>
+          <Logo />
           <Tabs>
             <Tab to={{ pathname: '/', search: location.search }} exact={true}>
               Popular
@@ -97,7 +99,6 @@ const classes = {
 
   aside: css({
     position: 'fixed',
-    top: theme.gutters.xxl,
     left: '50%',
     width: em(asideWidth),
     marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
