@@ -69,7 +69,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
 const styles = {
   container: css({
-    paddingTop: em(theme.gutters.lg),
+    paddingTop: em(theme.gutters.md),
   }),
 }
 

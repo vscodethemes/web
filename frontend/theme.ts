@@ -29,7 +29,6 @@ export default {
     md: spacingUnit * 2,
     lg: spacingUnit * 4,
     xl: spacingUnit * 7,
-    xxl: spacingUnit * 10,
   },
   shadows: {
     sm: '0px 6px 20px rgba(0, 0, 0, 0.07)',
