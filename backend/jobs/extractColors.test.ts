@@ -1,5 +1,6 @@
 import * as fetch from 'jest-fetch-mock'
 import { Colors, ExtractColorsPayload, JobMessage } from '../../types/static'
+import colorVariables from '../colorVariables'
 import createServices from '../services/mock'
 import extractColors from './extractColors'
 
@@ -23,13 +24,26 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   }
 }
 
-function createColors(): Colors {
-  return {
-    'activityBar.background': 'color',
-    'activityBar.foreground': 'color',
-    'statusBar.foreground': 'color',
-    'statusBar.background': 'color',
+// Creates a valid color payload by swapping the keys
+function createColors(removeOptional: boolean): Colors {
+  const payloadColors = Object.keys(colorVariables).reduce(
+    (colors: any, key: string) => {
+      const colorVar = colorVariables[key]
+      colors[colorVar.key] = 'color'
+      return colors
+    },
+    {},
+  )
+
+  if (removeOptional) {
+    delete payloadColors.editorGroupHeaderTabsBorder
+    delete payloadColors.tabActiveBorder
+    delete payloadColors.tabBorder
+    delete payloadColors.contrastActiveBorder
+    delete payloadColors.contrastBorder
   }
+
+  return payloadColors
 }
 
 test('should not process empty job', async () => {
@@ -93,7 +107,27 @@ test('should fail job if fetching the theme returns invalid response data', asyn
 
 test('should fail job if fetching the theme returns invalid name', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ name: null, colors: {} }))
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: null, type: 'dark', colors: createColors(false) }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const failSpy = jest.spyOn(services.extractColors, 'fail')
+  await extractColors(services)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should fail job if fetching the theme returns invalid type', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      name: null,
+      type: 'invalid',
+      colors: createColors(false),
+    }),
+  )
   jest
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
@@ -105,7 +139,9 @@ test('should fail job if fetching the theme returns invalid name', async () => {
 
 test('should fail job if fetching the theme returns invalid colors', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ name: 'name', colors: {} }))
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', type: 'dark', colors: null }),
+  )
   jest
     .spyOn(services.extractColors, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
@@ -115,10 +151,24 @@ test('should fail job if fetching the theme returns invalid colors', async () =>
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should succeed job for valid input', async () => {
+test('should succeed job for valid input with all fields', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', colors: createColors() }),
+    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const succeedSpy = jest.spyOn(services.extractColors, 'succeed')
+  await extractColors(services)
+  expect(succeedSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should succeed job for valid input without optional fields', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(true) }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -132,7 +182,7 @@ test('should succeed job for valid input', async () => {
 test('should notify self', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', colors: createColors() }),
+    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -146,7 +196,7 @@ test('should notify self', async () => {
 test('should create save theme jobs for valid input', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', colors: createColors() }),
+    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
   )
   jest
     .spyOn(services.extractColors, 'receive')

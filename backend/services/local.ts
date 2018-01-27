@@ -1,6 +1,7 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
 import {
+  Colors,
   ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
@@ -9,6 +10,7 @@ import {
   ScrapeThemesPayload,
   Services,
 } from '../../types/static'
+import colorVariables from '../colorVariables'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
@@ -37,6 +39,14 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
     },
   }
 }
+
+const payloadColors = Object.keys(colorVariables).reduce(
+  (colors: Colors, key: string) => {
+    colors[key] = colorVariables[key].key
+    return colors
+  },
+  {},
+)
 
 export default function createServices(): Services {
   return {
@@ -92,6 +102,7 @@ export default function createServices(): Services {
       receiptHandle: '',
       payload: {
         name: 'One Dark',
+        type: 'dark',
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
         repositoryPath: './themes/OneDark-Pro.json',
@@ -102,12 +113,7 @@ export default function createServices(): Services {
         trendingDaily: 0,
         trendingWeekly: 0,
         trendingMonthly: 0,
-        colors: {
-          'activityBar.background': '#ffffff',
-          'activityBar.foreground': '#ffffff',
-          'statusBar.background': '#ffffff',
-          'statusBar.foreground': '#ffffff',
-        },
+        colors: payloadColors as Colors,
       },
     }),
   }

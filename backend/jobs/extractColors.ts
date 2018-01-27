@@ -1,5 +1,10 @@
-import { ColorsRuntime, ExtractColorsPayloadRuntime } from '../../types/runtime'
-import { Colors, Services } from '../../types/static'
+import {
+  ColorsRuntime,
+  ExtractColorsPayloadRuntime,
+  ThemeTypeRuntime,
+} from '../../types/runtime'
+import { Colors, Services, ThemeType } from '../../types/static'
+import colorVariables from '../colorVariables'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -26,7 +31,7 @@ export default async function run(services: Services): Promise<any> {
 
     const { payload } = job
     // Fetch the theme's colors from it's repository.
-    const { name, colors } = await fetchTheme(
+    const theme = await fetchTheme(
       services,
       payload.repositoryOwner,
       payload.repository,
@@ -34,11 +39,10 @@ export default async function run(services: Services): Promise<any> {
       payload.repositoryPath,
     )
 
-    const theme = { ...payload, name, colors }
     logger.log(`Theme: ${JSON.stringify(theme)}`)
 
     // Create a job to save the theme.
-    await saveTheme.create(theme)
+    await saveTheme.create({ ...payload, ...theme })
 
     // Job succeeded.
     await extractColors.succeed(job)
@@ -67,8 +71,10 @@ async function fetchTheme(
   repository: string,
   repositoryBranch: string,
   repositoryPath: string,
-): Promise<{ name: string; colors: Colors }> {
-  let theme
+): Promise<{ name: string; type: ThemeType; colors: Colors }> {
+  let name: string
+  let type: ThemeType
+  let colors: any
   const { fetch, logger } = services
   const baseUrl = 'https://raw.githubusercontent.com'
   const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
@@ -91,33 +97,32 @@ async function fetchTheme(
   try {
     const data = await response.json()
     logger.log(`fetchTheme: ${JSON.stringify(data)}`)
-
-    theme = {
-      name: data.name,
-      colors: {
-        'activityBar.background': data.colors['activityBar.background'],
-        'activityBar.foreground': data.colors['activityBar.foreground'],
-        'statusBar.background': data.colors['statusBar.background'],
-        'statusBar.foreground': data.colors['statusBar.foreground'],
-        // TODO: Add required colors for rendering the editor.
-      },
-    }
+    name = data.name
+    type = data.type
+    colors = Object.keys(colorVariables).reduce((c: Colors, key: string) => {
+      const colorVar = colorVariables[key]
+      c[key] = data.colors[colorVar.key] || colorVar.defaults[type]
+      return c
+    }, {})
   } catch (err) {
     logger.error(err)
     throw new PermanentJobError('fetchTheme error: Invalid response data')
   }
 
-  if (!theme.name) {
+  if (!name) {
+    throw new PermanentJobError(`fetchTheme error: Missing name.`)
+  }
+
+  if (!ThemeTypeRuntime.guard(type)) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid name: ${JSON.stringify(theme)}`,
+      `fetchTheme error: Invalid type: ${JSON.stringify(type)}`,
+    )
+  }
+  if (!ColorsRuntime.guard(colors)) {
+    throw new PermanentJobError(
+      `fetchTheme error: Invalid colors: ${JSON.stringify(colors)}`,
     )
   }
 
-  if (!ColorsRuntime.guard(theme.colors)) {
-    throw new PermanentJobError(
-      `fetchTheme error: Invalid colors: ${JSON.stringify(theme)}`,
-    )
-  }
-
-  return theme
+  return { name, type, colors }
 }

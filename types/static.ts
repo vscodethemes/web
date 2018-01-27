@@ -11,6 +11,7 @@ import {
   PublisherRuntime,
   SaveThemePayloadRuntime,
   ScrapeThemesPayloadRuntime,
+  ThemeTypeRuntime,
   VersionRuntime,
 } from './runtime'
 
@@ -23,8 +24,24 @@ export type Version = Static<typeof VersionRuntime>
 export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
 export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type PackageJSON = Static<typeof PackageJSONRuntime>
-export type Colors = Static<typeof ColorsRuntime>
+export type ThemeType = Static<typeof ThemeTypeRuntime>
 export type SaveThemePayload = Static<typeof SaveThemePayloadRuntime>
+
+export interface Colors extends Static<typeof ColorsRuntime> {
+  [index: string]: string
+}
+
+export interface ColorVariables {
+  [index: string]: {
+    key: string
+    defaults: {
+      light: string | null
+      dark: string | null
+      hc: string | null
+      [index: string]: string
+    }
+  }
+}
 
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
