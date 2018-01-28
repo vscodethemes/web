@@ -103,11 +103,20 @@ export interface Theme extends SaveThemePayload {
 }
 
 export type SortByOptions = 'installs' | 'trending'
+export type LanguageOptions = 'javascript' | 'css' | 'html'
 
 export interface SearchParams {
   sortBy: SortByOptions
-  search: string
-  dark: boolean
-  light: boolean
-  highContrast: boolean
+  search?: string
+  dark?: boolean
+  light?: boolean
+  highContrast?: boolean
+  lang?: LanguageOptions
+}
+
+export interface Icons {
+  [key: string]: {
+    viewBox: string
+    path: string
+  }
 }

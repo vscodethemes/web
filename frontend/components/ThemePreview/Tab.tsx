@@ -6,28 +6,54 @@ import { activityBarWidth } from './ActivityBar'
 import { topBarHeight } from './Topbar'
 
 interface TabProps {
-  background: string
+  active: boolean
   border?: string
-  borderBottom?: string
+  activeBackground: string
+  activeForeground: string
+  activeBorder?: string
+  inactiveBackground: string
+  inactiveForeground: string
+  inactiveBorder?: string
+  onClick: () => any
 }
 
-const Tab: React.SFC<TabProps> = ({ background, border, borderBottom }) => (
-  <div
+const Tab: React.SFC<TabProps> = ({
+  active,
+  border,
+  activeBackground,
+  activeForeground,
+  activeBorder,
+  inactiveBackground,
+  inactiveForeground,
+  inactiveBorder,
+  children,
+  onClick,
+}) => (
+  <button
     className={classes.tab}
     style={{
-      background,
-      // borderLeft: border ? `1px solid ${border}` : '',
+      background: active ? activeBackground : inactiveBackground,
+      color: active ? activeForeground : inactiveForeground,
       borderRight: border ? `1px solid ${border}` : '',
-      borderBottom: borderBottom ? `1px solid ${borderBottom}` : '',
+      borderBottom: active && activeBorder ? `1px solid ${activeBorder}` : '',
     }}
-  />
+    onClick={onClick}
+  >
+    {children}
+  </button>
 )
 
 const classes = {
   tab: css({
-    display: 'inline-block',
     height: '100%',
-    width: '25%',
+    width: '30%',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: em(theme.fontSizes.xs),
+    cursor: 'pointer',
+    border: 'none',
+    background: 'transparent',
   }),
 }
 

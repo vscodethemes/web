@@ -46,7 +46,7 @@ const classes = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: em(theme.fontSizes.xs),
-    fontWeight: 'normal',
+    fontWeight: 'bold',
     margin: 0,
   }),
 }

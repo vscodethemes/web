@@ -1,11 +1,12 @@
 const spacingUnit = 10
 export const rootFontSize = 14
+export const fontFamily = 'Montserrat'
 
 export const em = (px: number) =>
   `${Math.round(px / rootFontSize * 100) / 100}em`
 
 export default {
-  fontFamily: 'Montserrat, sans-serif',
+  fontFamily: `${fontFamily}, sans-serif`,
   fontSizes: {
     xs: 10,
     sm: 12,
@@ -17,15 +18,15 @@ export default {
 
     // Light theme.
     // background: '#ffffff',
-    // backgroundHighlight: '#f5f5f5',
-    // backgroundLowlight: '#d4d4d4',
+    // inputBackground: '#f5f5f5',
+    // inputBorder: '#d4d4d4',
     // text: '#8c8c8c',
     // textMuted: '#cacaca',
 
     // Dark theme.
     background: '#202026',
-    backgroundHighlight: '#28282F',
-    backgroundLowlight: '#18181F',
+    inputBackground: '#28282F',
+    inputBorder: '#18181F',
     text: '#84848F',
     textMuted: '#58585F',
   },
@@ -41,7 +42,7 @@ export default {
     xl: spacingUnit * 7,
   },
   shadows: {
-    sm: '0px 6px 20px rgba(0, 0, 0, 0.1)',
-    md: '0px 6px 20px rgba(0, 0, 0, 0.25)',
+    sm: '0px 6px 20px rgba(0, 0, 0, 0.2)',
+    md: '0px 6px 20px rgba(0, 0, 0, 0.35)',
   },
 }

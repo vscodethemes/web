@@ -53,8 +53,8 @@ const classes = {
     padding: `${em(theme.gutters.sm)} ${em(theme.gutters.md)}}`,
     marginBottom: em(theme.gutters.md),
     color: theme.colors.text,
-    backgroundColor: theme.colors.backgroundHighlight,
-    border: `1px solid ${theme.colors.backgroundLowlight}`,
+    backgroundColor: theme.colors.inputBackground,
+    border: `1px solid ${theme.colors.inputBorder}`,
     borderRadius: theme.borderRadius.md,
     boxShadow: theme.shadows.sm,
     ':focus': {

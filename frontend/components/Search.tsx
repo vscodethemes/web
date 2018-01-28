@@ -3,7 +3,6 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
-import ThemePreview from './ThemePreview'
 
 interface SearchProps {
   sortBy: SortByOptions
@@ -11,6 +10,7 @@ interface SearchProps {
   dark: boolean
   light: boolean
   highContrast: boolean
+  children: (theme: Theme) => React.ReactNode
 }
 
 interface SearchState {
@@ -54,7 +54,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   public render() {
     return (
       <div className={styles.container}>
-        {this.state.themes.map(t => <ThemePreview key={t.objectID} {...t} />)}
+        {this.state.themes.map(this.props.children)}
       </div>
     )
   }

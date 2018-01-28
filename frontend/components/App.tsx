@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { SearchParams } from '../../types/static'
+import { LanguageOptions, SearchParams, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
@@ -10,6 +10,7 @@ import Input from './Input'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
+import ThemePreview from './ThemePreview'
 
 const titles: { [key: string]: string } = {
   '/': 'Popular',
@@ -30,8 +31,6 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
   public render(): React.ReactNode {
     const { location } = this.props
     const params = searchParams.fromLocation(location)
-
-    console.log('path', location.pathname)
 
     return (
       <div className={classes.container}>
@@ -86,7 +85,16 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
           />
         </div>
         <div className={classes.main}>
-          <Search {...params} />
+          <Search {...params}>
+            {(t: Theme) => (
+              <ThemePreview
+                key={t.objectID}
+                {...t}
+                language={params.lang}
+                onLanguage={lang => this.setQueryParams({ ...params, lang })}
+              />
+            )}
+          </Search>
         </div>
       </div>
     )
