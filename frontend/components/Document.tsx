@@ -2,7 +2,7 @@ import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { SSR } from '../ssr'
-import theme, { rootFontSize } from '../theme'
+import theme, { em, rootFontSize } from '../theme'
 
 export interface DocumentProps {
   css: string
@@ -20,6 +20,8 @@ injectGlobal({
   },
   body: {
     fontFamily: theme.fontFamily,
+    fontWeight: 'normal',
+    letterSpacing: em(0.6),
     margin: 0,
     backgroundColor: theme.colors.background,
   },

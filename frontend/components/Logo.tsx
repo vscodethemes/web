@@ -17,7 +17,7 @@ const classes = {
   image: css({
     maxWidth: em(160),
     marginTop: em(theme.gutters.lg),
-    marginBottom: em(theme.gutters.lg),
+    marginBottom: em(theme.gutters.xl),
   }),
 }
 

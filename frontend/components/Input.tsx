@@ -53,15 +53,15 @@ const classes = {
     padding: `${em(theme.gutters.sm)} ${em(theme.gutters.md)}}`,
     marginBottom: em(theme.gutters.md),
     color: theme.colors.text,
-    backgroundColor: theme.colors.lightGray,
-    border: `1px solid ${theme.colors.gray}`,
+    backgroundColor: theme.colors.backgroundHighlight,
+    border: `1px solid ${theme.colors.backgroundLowlight}`,
     borderRadius: theme.borderRadius.md,
     boxShadow: theme.shadows.sm,
     ':focus': {
-      borderColor: theme.colors.darkGray,
+      borderColor: theme.colors.primary,
     },
     '::placeholder': {
-      color: theme.colors.darkGray,
+      color: theme.colors.textMuted,
       opacity: 1,
     },
   }),
@@ -79,7 +79,7 @@ const classes = {
     alignItems: 'center',
     paddingLeft: em(theme.fontSizes.md),
     [`.${iconClasses.svg}`]: {
-      fill: theme.colors.darkGray,
+      fill: theme.colors.textMuted,
     },
   }),
 }
