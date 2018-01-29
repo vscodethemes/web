@@ -2,15 +2,15 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { SearchParams } from '../../types/static'
+import { SearchParams, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
 import Input from './Input'
-import Logo from './Logo'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
+import ThemePreview from './ThemePreview'
 
 const titles: { [key: string]: string } = {
   '/': 'Popular',
@@ -38,15 +38,26 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
           <title>{titles[location.pathname]}</title>
         </Helmet>
         <div className={classes.aside}>
-          <Logo />
           <Tabs>
-            <Tab to={{ pathname: '/', search: location.search }} exact={true}>
+            <Tab
+              color="#B8E63B"
+              to={{ pathname: '/', search: location.search }}
+              exact={true}
+            >
               Popular
             </Tab>
-            <Tab to={{ pathname: '/trending', search: location.search }}>
+            <Tab
+              color="#880055"
+              to={{ pathname: '/trending', search: location.search }}
+            >
               Trending
             </Tab>
-            <Tab to={{ pathname: '/new', search: location.search }}>New</Tab>
+            <Tab
+              color="#E70258"
+              to={{ pathname: '/new', search: location.search }}
+            >
+              New
+            </Tab>
           </Tabs>
           <Input
             type="search"
@@ -74,7 +85,16 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
           />
         </div>
         <div className={classes.main}>
-          <Search {...params} />
+          <Search {...params}>
+            {(t: Theme) => (
+              <ThemePreview
+                key={t.objectID}
+                {...t}
+                language={params.lang}
+                onLanguage={lang => this.setQueryParams({ ...params, lang })}
+              />
+            )}
+          </Search>
         </div>
       </div>
     )
@@ -111,6 +131,7 @@ const classes = {
     position: 'fixed',
     left: '50%',
     width: em(asideWidth),
+    marginTop: em(theme.gutters.xl),
     marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
 
     [`@media (max-width: ${breakpoints[0]}px)`]: {

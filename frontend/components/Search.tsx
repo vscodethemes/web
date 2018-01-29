@@ -3,7 +3,6 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
-import ThemePreview from './ThemePreview'
 
 interface SearchProps {
   sortBy: SortByOptions
@@ -11,6 +10,7 @@ interface SearchProps {
   dark: boolean
   light: boolean
   highContrast: boolean
+  children: (theme: Theme) => React.ReactNode
 }
 
 interface SearchState {
@@ -54,7 +54,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   public render() {
     return (
       <div className={styles.container}>
-        {this.state.themes.map(t => <ThemePreview key={t.objectID} {...t} />)}
+        {this.state.themes.map(this.props.children)}
       </div>
     )
   }
@@ -62,6 +62,8 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   private async search(props: SearchProps) {
     const results = await this.indicies[props.sortBy].search({
       query: props.search,
+      page: 0,
+      hitsPerPage: 10,
     })
     this.setState({ themes: results.hits })
   }
@@ -69,7 +71,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
 const styles = {
   container: css({
-    paddingTop: em(theme.gutters.md),
+    paddingTop: em(theme.gutters.lg),
   }),
 }
 

@@ -17,8 +17,3 @@ resource "aws_sns_topic" "extract_colors" {
 resource "aws_sns_topic" "save_theme" {
   name = "save_theme"
 }
-
-# Publish frontend.
-resource "aws_sns_topic" "publish_frontend" {
-  name = "publish_frontend"
-}

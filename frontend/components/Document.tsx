@@ -2,7 +2,7 @@ import { injectGlobal } from 'emotion'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { SSR } from '../ssr'
-import theme, { rootFontSize } from '../theme'
+import theme, { em, fontFamily, rootFontSize } from '../theme'
 
 export interface DocumentProps {
   css: string
@@ -20,6 +20,8 @@ injectGlobal({
   },
   body: {
     fontFamily: theme.fontFamily,
+    fontWeight: 'normal',
+    letterSpacing: em(0.6),
     margin: 0,
     backgroundColor: theme.colors.background,
   },
@@ -49,7 +51,11 @@ export default function Document(props: DocumentProps) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="shortcut icon" href={`/${require('../assets/icon.png')}`} />
         <link
-          href="https://fonts.googleapis.com/css?family=Montserrat:500,700"
+          href={`https://fonts.googleapis.com/css?family=${fontFamily}:400,600`}
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400"
           rel="stylesheet"
         />
         {helmet.title.toComponent()}

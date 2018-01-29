@@ -1,4 +1,13 @@
-import { Array, Number, Record, String, Tuple } from 'runtypes'
+import {
+  Array,
+  Literal,
+  Null,
+  Number,
+  Record,
+  String,
+  Tuple,
+  Union,
+} from 'runtypes'
 
 export const PublisherRuntime = Record({
   publisherName: String,
@@ -57,37 +66,68 @@ export const PackageJSONRuntime = Record({
   }),
 })
 
-export const ExtractColorsPayloadRuntime = Record({
-  repository: String,
-  repositoryOwner: String,
-  repositoryBranch: String,
-  repositoryPath: String,
-  installs: Number,
-  rating: Number,
-  ratingCount: Number,
-  trendingDaily: Number,
-  trendingWeekly: Number,
-  trendingMonthly: Number,
-})
+export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
+  Record({
+    repositoryBranch: String,
+    repositoryPath: String,
+  }),
+)
 
 export const ColorsRuntime = Record({
-  'activityBar.background': String,
-  'activityBar.foreground': String,
-  'statusBar.background': String,
-  'statusBar.foreground': String,
+  activityBarBackground: String,
+  activityBarForeground: String,
+  statusBarBackground: String,
+  statusBarForeground: String,
+  editorBackground: String,
+  editorGroupHeaderTabsBackground: String,
+  editorLineNumberForeground: String,
+  tabActiveBackground: String,
+  tabActiveForeground: String,
+  tabInactiveBackground: String,
+  tabInactiveForeground: String,
+  editorGroupHeaderTabsBorder: String.Or(Null),
+  tabActiveBorder: String.Or(Null),
+  tabBorder: String.Or(Null),
+  contrastActiveBorder: String.Or(Null),
+  contrastBorder: String.Or(Null),
 })
 
-export const SaveThemePayloadRuntime = Record({
-  name: String,
-  repository: String,
-  repositoryOwner: String,
-  repositoryBranch: String,
-  repositoryPath: String,
-  installs: Number,
-  rating: Number,
-  ratingCount: Number,
-  trendingDaily: Number,
-  trendingWeekly: Number,
-  trendingMonthly: Number,
-  colors: ColorsRuntime,
+export const TokensRuntime = Record({
+  keywordForeground: String,
+  keywordFontStyle: String,
+  variableForeground: String,
+  variableFontStyle: String,
+  literalForeground: String,
+  literalFontStyle: String,
+  numberForeground: String,
+  numberFontStyle: String,
+  stringForeground: String,
+  stringFontStyle: String,
+  commentForeground: String,
+  commentFontStyle: String,
+  classForeground: String,
+  classFontStyle: String,
+  functionForeground: String,
+  functionFontStyle: String,
+  selectorForeground: String,
+  selectorFontStyle: String,
+  tagForeground: String,
+  tagFontStyle: String,
+  attributeForeground: String,
+  attributeFontStyle: String,
 })
+
+export const ThemeTypeRuntime = Union(
+  Literal('light'),
+  Literal('dark'),
+  Literal('hc'),
+)
+
+export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
+  Record({
+    name: String,
+    type: ThemeTypeRuntime,
+    colors: ColorsRuntime,
+    tokens: TokensRuntime,
+  }),
+)

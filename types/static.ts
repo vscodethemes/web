@@ -11,6 +11,8 @@ import {
   PublisherRuntime,
   SaveThemePayloadRuntime,
   ScrapeThemesPayloadRuntime,
+  ThemeTypeRuntime,
+  TokensRuntime,
   VersionRuntime,
 } from './runtime'
 
@@ -23,8 +25,39 @@ export type Version = Static<typeof VersionRuntime>
 export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
 export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type PackageJSON = Static<typeof PackageJSONRuntime>
-export type Colors = Static<typeof ColorsRuntime>
 export type SaveThemePayload = Static<typeof SaveThemePayloadRuntime>
+export type ThemeType = Static<typeof ThemeTypeRuntime>
+
+export interface Colors extends Static<typeof ColorsRuntime> {
+  [key: string]: string
+}
+
+export interface Tokens extends Static<typeof TokensRuntime> {
+  [key: string]: string
+}
+
+export interface GUIVariables {
+  [key: string]: {
+    key: string
+    defaults: {
+      light: string | null
+      dark: string | null
+      hc: string | null
+      [key: string]: string
+    }
+  }
+}
+
+export interface TokenVariables {
+  [key: string]: {
+    scope: string[]
+    defaults: {
+      foreground: string | null
+      fontStyle: string | null
+      [key: string]: string
+    }
+  }
+}
 
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
@@ -83,14 +116,24 @@ export interface RepositoryInfo {
 export interface Theme extends SaveThemePayload {
   objectID: string
   colors: Colors
+  tokens: Tokens
 }
 
 export type SortByOptions = 'installs' | 'trending'
+export type LanguageOptions = 'javascript' | 'css' | 'html'
 
 export interface SearchParams {
   sortBy: SortByOptions
-  search: string
-  dark: boolean
-  light: boolean
-  highContrast: boolean
+  search?: string
+  dark?: boolean
+  light?: boolean
+  highContrast?: boolean
+  lang?: LanguageOptions
+}
+
+export interface Icons {
+  [key: string]: {
+    viewBox: string
+    path: string
+  }
 }

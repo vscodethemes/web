@@ -1,5 +1,9 @@
 import * as qs from 'query-string'
-import { SearchParams, SortByOptions } from '../../types/static'
+import {
+  LanguageOptions,
+  SearchParams,
+  SortByOptions,
+} from '../../types/static'
 
 interface Location {
   pathname: string
@@ -14,12 +18,19 @@ export function fromLocation(location: Location) {
     sortBy = 'trending'
   }
 
+  const languages = ['javascript', 'css', 'html']
+  let lang: LanguageOptions = 'javascript'
+  if (languages.indexOf(params.lang) >= 0) {
+    lang = params.lang
+  }
+
   return {
     sortBy,
     search: params.search,
     light: 'light' in params,
     dark: 'dark' in params,
     highContrast: 'highContrast' in params,
+    lang,
   }
 }
 export function toQueryString(params: SearchParams) {
@@ -36,6 +47,9 @@ export function toQueryString(params: SearchParams) {
   }
   if (params.highContrast) {
     queryParams.highContrast = 1
+  }
+  if (params.lang) {
+    queryParams.lang = params.lang
   }
 
   return qs.stringify(queryParams)
