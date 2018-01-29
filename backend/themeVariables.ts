@@ -165,6 +165,7 @@ export const tokens: TokenVariables = {
       'support.variable',
       'punctuation.definition.variable',
       'variable.language',
+      'constant.language',
     ],
     defaults: {
       foreground: null,
@@ -173,7 +174,14 @@ export const tokens: TokenVariables = {
   },
 
   number: {
-    scope: ['constant.numeric'],
+    scope: [
+      'constant.numeric',
+      'variable',
+      'meta.definition.variable.name',
+      'support.variable',
+      'punctuation.definition.variable',
+      'variable.language',
+    ],
     defaults: {
       foreground: null,
       fontStyle: 'normal',
@@ -181,7 +189,15 @@ export const tokens: TokenVariables = {
   },
 
   literal: {
-    scope: ['constant.language', 'constant.numeric'],
+    scope: [
+      'constant.language',
+      'constant.numeric',
+      'variable',
+      'meta.definition.variable.name',
+      'support.variable',
+      'punctuation.definition.variable',
+      'variable.language',
+    ],
     defaults: {
       foreground: null,
       fontStyle: 'normal',
@@ -189,7 +205,7 @@ export const tokens: TokenVariables = {
   },
 
   string: {
-    scope: ['string'],
+    scope: ['string', 'punctuation'],
     defaults: {
       foreground: null,
       fontStyle: 'normal',

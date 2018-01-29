@@ -44,7 +44,10 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   public async componentWillReceiveProps(nextProps: SearchProps) {
     if (
       this.props.sortBy !== nextProps.sortBy ||
-      this.props.search !== nextProps.search
+      this.props.search !== nextProps.search ||
+      this.props.dark !== nextProps.dark ||
+      this.props.light !== nextProps.light ||
+      this.props.highContrast !== nextProps.highContrast
     ) {
       window.scrollTo(0, 0)
       this.search(nextProps)
@@ -60,11 +63,25 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   }
 
   private async search(props: SearchProps) {
+    const types: string[] = []
+
+    if (props.dark) {
+      types.push('type:dark')
+    }
+    if (props.light) {
+      types.push('type:light')
+    }
+    if (props.highContrast) {
+      types.push('type:hc')
+    }
+
     const results = await this.indicies[props.sortBy].search({
       query: props.search,
+      filters: types.join(' OR '),
       page: 0,
       hitsPerPage: 10,
     })
+
     this.setState({ themes: results.hits })
   }
 }
