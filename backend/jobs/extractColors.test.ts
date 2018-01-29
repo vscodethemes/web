@@ -1,7 +1,7 @@
 import * as fetch from 'jest-fetch-mock'
-import { Colors, ExtractColorsPayload, JobMessage } from '../../types/static'
-import colorVariables from '../colorVariables'
+import { ExtractColorsPayload, JobMessage } from '../../types/static'
 import createServices from '../services/mock'
+import * as themeVariables from '../themeVariables'
 import extractColors from './extractColors'
 
 afterEach(() => fetch.resetMocks())
@@ -24,16 +24,14 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   }
 }
 
-// Creates a valid color payload by swapping the keys
-function createColors(removeOptional: boolean): Colors {
-  const payloadColors = Object.keys(colorVariables).reduce(
-    (colors: any, key: string) => {
-      const colorVar = colorVariables[key]
-      colors[colorVar.key] = 'color'
-      return colors
-    },
-    {},
-  )
+// Creates a valid colors payload.
+function createColors(removeOptional: boolean): any {
+  const payloadColors: any = {}
+
+  Object.keys(themeVariables.gui).forEach(key => {
+    const colorVar = themeVariables.gui[key]
+    payloadColors[colorVar.key] = 'color'
+  })
 
   if (removeOptional) {
     delete payloadColors.editorGroupHeaderTabsBorder
@@ -44,6 +42,25 @@ function createColors(removeOptional: boolean): Colors {
   }
 
   return payloadColors
+}
+
+// Creates a valid tokenColors payload.
+function createTokenColors(): any {
+  const tokenPayload: any[] = []
+
+  Object.keys(themeVariables.tokens).forEach(key => {
+    const tokenVar = themeVariables.tokens[key]
+
+    tokenPayload.push({
+      scope: [tokenVar.scope[0]],
+      settings: {
+        foreground: 'color',
+        fontStyle: 'fontStyle',
+      },
+    })
+  }, [])
+
+  return tokenPayload
 }
 
 test('should not process empty job', async () => {
@@ -108,7 +125,12 @@ test('should fail job if fetching the theme returns invalid response data', asyn
 test('should fail job if fetching the theme returns invalid name', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: null, type: 'dark', colors: createColors(false) }),
+    JSON.stringify({
+      name: null,
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: createTokenColors(),
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -126,6 +148,7 @@ test('should fail job if fetching the theme returns invalid type', async () => {
       name: null,
       type: 'invalid',
       colors: createColors(false),
+      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -140,7 +163,31 @@ test('should fail job if fetching the theme returns invalid type', async () => {
 test('should fail job if fetching the theme returns invalid colors', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', type: 'dark', colors: null }),
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: null,
+      tokenColors: createTokenColors(),
+    }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const failSpy = jest.spyOn(services.extractColors, 'fail')
+  await extractColors(services)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should fail job if fetching the theme returns invalid colors', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: null,
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -154,7 +201,12 @@ test('should fail job if fetching the theme returns invalid colors', async () =>
 test('should succeed job for valid input with all fields', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: createTokenColors(),
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -168,7 +220,12 @@ test('should succeed job for valid input with all fields', async () => {
 test('should succeed job for valid input without optional fields', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(true) }),
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(true),
+      tokenColors: createTokenColors(),
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -182,7 +239,12 @@ test('should succeed job for valid input without optional fields', async () => {
 test('should notify self', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: createTokenColors(),
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')
@@ -196,7 +258,12 @@ test('should notify self', async () => {
 test('should create save theme jobs for valid input', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
-    JSON.stringify({ name: 'name', type: 'dark', colors: createColors(false) }),
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: createTokenColors(),
+    }),
   )
   jest
     .spyOn(services.extractColors, 'receive')

@@ -49,6 +49,7 @@ const classes = {
     width: '100%',
     height: em(44),
     lineHeight: em(44),
+    letterSpacing: em(0.6),
     fontSize: em(theme.fontSizes.md),
     padding: `${em(theme.gutters.sm)} ${em(theme.gutters.md)}}`,
     marginBottom: em(theme.gutters.md),

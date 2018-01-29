@@ -9,8 +9,9 @@ import {
   SaveThemePayload,
   ScrapeThemesPayload,
   Services,
+  Tokens,
 } from '../../types/static'
-import colorVariables from '../colorVariables'
+import * as themeVariables from '../themeVariables'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
@@ -40,10 +41,19 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   }
 }
 
-const payloadColors = Object.keys(colorVariables).reduce(
+const payloadColors = Object.keys(themeVariables.gui).reduce(
   (colors: Colors, key: string) => {
-    colors[key] = colorVariables[key].key
+    colors[key] = 'color'
     return colors
+  },
+  {},
+)
+
+const payloadTokens = Object.keys(themeVariables.tokens).reduce(
+  (tokens: Tokens, key: string) => {
+    tokens[`${key}Foreground`] = 'color'
+    tokens[`${key}FontStyle`] = 'fontStyle'
+    return tokens
   },
   {},
 )
@@ -114,6 +124,7 @@ export default function createServices(): Services {
         trendingWeekly: 0,
         trendingMonthly: 0,
         colors: payloadColors as Colors,
+        tokens: payloadTokens as Tokens,
       },
     }),
   }

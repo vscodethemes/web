@@ -1,6 +1,5 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import { Theme } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 interface EditorProps {
@@ -12,9 +11,6 @@ const Editor: React.SFC<EditorProps> = ({ background, children }) => (
     {children}
   </div>
 )
-
-const topBarHeight = 7
-const activityBarWidth = 10
 
 const classes = {
   editor: css({

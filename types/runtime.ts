@@ -92,6 +92,31 @@ export const ColorsRuntime = Record({
   contrastBorder: String.Or(Null),
 })
 
+export const TokensRuntime = Record({
+  keywordForeground: String,
+  keywordFontStyle: String,
+  variableForeground: String,
+  variableFontStyle: String,
+  literalForeground: String,
+  literalFontStyle: String,
+  numberForeground: String,
+  numberFontStyle: String,
+  stringForeground: String,
+  stringFontStyle: String,
+  commentForeground: String,
+  commentFontStyle: String,
+  classForeground: String,
+  classFontStyle: String,
+  functionForeground: String,
+  functionFontStyle: String,
+  selectorForeground: String,
+  selectorFontStyle: String,
+  tagForeground: String,
+  tagFontStyle: String,
+  attributeForeground: String,
+  attributeFontStyle: String,
+})
+
 export const ThemeTypeRuntime = Union(
   Literal('light'),
   Literal('dark'),
@@ -103,5 +128,6 @@ export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
     name: String,
     type: ThemeTypeRuntime,
     colors: ColorsRuntime,
+    tokens: TokensRuntime,
   }),
 )

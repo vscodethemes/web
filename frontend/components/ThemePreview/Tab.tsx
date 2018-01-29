@@ -1,9 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import { Theme } from '../../../types/static'
 import theme, { em } from '../../theme'
-import { activityBarWidth } from './ActivityBar'
-import { topBarHeight } from './Topbar'
 
 interface TabProps {
   active: boolean

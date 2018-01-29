@@ -1,4 +1,3 @@
-import { css } from 'emotion'
 import * as React from 'react'
 import { LanguageOptions, Theme } from '../../../types/static'
 import ActivityBar from './ActivityBar'
@@ -8,7 +7,7 @@ import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
 import TabContent from './TabContent'
-import TopBar from './Topbar'
+import TopBar from './TopBar'
 
 interface ThemePreviewProps extends Theme {
   language: LanguageOptions
@@ -24,6 +23,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
   repositoryOwner,
   repository,
   colors,
+  tokens,
   language,
   onLanguage,
 }) => {
@@ -52,7 +52,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           active={language === 'javascript'}
           onClick={() => onLanguage('javascript')}
         >
-          index.js
+          main.js
         </Tab>
         <Tab
           {...tabProps}
@@ -66,11 +66,11 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           active={language === 'html'}
           onClick={() => onLanguage('html')}
         >
-          document.html
+          index.html
         </Tab>
       </TabBar>
       <TabContent>
-        <Code language={language} />
+        <Code language={language} tokens={tokens} />
       </TabContent>
       <StatusBar
         background={colors.statusBarBackground}

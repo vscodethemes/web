@@ -1,10 +1,10 @@
-class Incrementer {
+class IncrementNumber {
   constructor(number) {
-    this.number = number
+    this.number = number || 0
   }
 
   inc() {
-    // Prevent integer overflow.
+    // Prevent integer overflow
     if (this.number <= Number.MAX_VALUE) {
       this.number += 1
     }

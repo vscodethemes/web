@@ -9,7 +9,7 @@ import htmlLanguage from 'react-syntax-highlighter/languages/hljs/xml'
 import SyntaxHighlighter, {
   registerLanguage,
 } from 'react-syntax-highlighter/light'
-import { LanguageOptions } from '../../../types/static'
+import { LanguageOptions, Tokens } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 registerLanguage('css', cssLanguage)
@@ -24,11 +24,12 @@ const templates = {
 
 interface CodeProps {
   language: LanguageOptions
+  tokens: Tokens
 }
 
-const Code: React.SFC<CodeProps> = ({ language }) => (
+const Code: React.SFC<CodeProps> = ({ language, tokens }) => (
   <div className={classes.code}>
-    <SyntaxHighlighter language={language} style={styles}>
+    <SyntaxHighlighter language={language} style={createStyles(tokens)}>
       {templates[language]}
     </SyntaxHighlighter>
   </div>
@@ -47,100 +48,129 @@ const classes = {
   }),
 }
 
-const styles = {
-  'hljs-comment': {
-    color: '#65737e',
-  },
-  'hljs-quote': {
-    color: '#65737e',
-  },
-  'hljs-variable': {
-    color: '#bf616a',
-  },
-  'hljs-template-variable': {
-    color: '#bf616a',
-  },
-  'hljs-tag': {
-    color: '#bf616a',
-  },
-  'hljs-name': {
-    color: '#bf616a',
-  },
-  'hljs-selector-id': {
-    color: '#bf616a',
-  },
-  'hljs-selector-class': {
-    color: '#bf616a',
-  },
-  'hljs-regexp': {
-    color: '#bf616a',
-  },
-  'hljs-deletion': {
-    color: '#bf616a',
-  },
-  'hljs-number': {
-    color: '#d08770',
-  },
-  'hljs-built_in': {
-    color: '#d08770',
-  },
-  'hljs-builtin-name': {
-    color: '#d08770',
-  },
-  'hljs-literal': {
-    color: '#d08770',
-  },
-  'hljs-type': {
-    color: '#d08770',
-  },
-  'hljs-params': {
-    color: '#d08770',
-  },
-  'hljs-meta': {
-    color: '#d08770',
-  },
-  'hljs-link': {
-    color: '#d08770',
-  },
-  'hljs-attribute': {
-    color: '#ebcb8b',
-  },
-  'hljs-string': {
-    color: '#a3be8c',
-  },
-  'hljs-symbol': {
-    color: '#a3be8c',
-  },
-  'hljs-bullet': {
-    color: '#a3be8c',
-  },
-  'hljs-addition': {
-    color: '#a3be8c',
-  },
-  'hljs-title': {
-    color: '#8fa1b3',
-  },
-  'hljs-section': {
-    color: '#8fa1b3',
-  },
-  'hljs-keyword': {
-    color: '#b48ead',
-  },
-  'hljs-selector-tag': {
-    color: '#b48ead',
-  },
-  hljs: {
-    display: 'block',
-    overflowX: 'auto',
-    background: 'transparent',
-    color: '#c0c5ce',
-  },
-  'hljs-emphasis': {
-    fontStyle: 'italic',
-  },
-  'hljs-strong': {
-    fontWeight: 'bold',
-  },
+function createStyles(tokens: Tokens) {
+  return {
+    // Base
+    hljs: {
+      display: 'block',
+      overflowX: 'auto',
+      background: 'transparent',
+      color: '#c0c5ce',
+    },
+    'hljs-emphasis': {
+      fontStyle: 'italic',
+    },
+    'hljs-strong': {
+      fontWeight: 'bold',
+    },
+    // Comments
+    'hljs-comment': {
+      color: tokens.commentForeground,
+      fontStyle: tokens.commentFontStyle,
+    },
+    // Numbers
+    'hljs-number': {
+      color: tokens.numberForeground,
+      fontStyle: tokens.numberFontStyle,
+    },
+    // Strings
+    'hljs-string': {
+      color: tokens.stringForeground,
+      fontStyle: tokens.stringFontStyle,
+    },
+    'hljs-link': {
+      color: tokens.stringForeground,
+      fontStyle: tokens.stringFontStyle,
+    },
+    'hljs-quote': {
+      color: tokens.stringForeground,
+      fontStyle: tokens.stringFontStyle,
+    },
+    // Variables
+    'hljs-variable': {
+      color: tokens.variableForeground,
+      fontStyle: tokens.variableFontStyle,
+    },
+    'hljs-params': {
+      color: tokens.variableForeground,
+      fontStyle: tokens.variableFontStyle,
+    },
+    'hljs-template-variable': {
+      color: tokens.variableForeground,
+      fontStyle: tokens.variableFontStyle,
+    },
+    'hljs-type': {
+      color: tokens.variableForeground,
+      fontStyle: tokens.variableFontStyle,
+    },
+    // Keywords
+    'hljs-keyword': {
+      color: tokens.keywordForeground,
+      fontStyle: tokens.keywordFontStyle,
+    },
+    'hljs-built_in': {
+      color: tokens.keywordForeground,
+      fontStyle: tokens.keywordFontStyle,
+    },
+    'hljs-builtin-name': {
+      color: tokens.keywordForeground,
+      fontStyle: tokens.keywordFontStyle,
+    },
+    'hljs-symbol': {
+      color: tokens.keywordForeground,
+      fontStyle: tokens.keywordFontStyle,
+    },
+    'hljs-meta': {
+      color: tokens.keywordForeground,
+      fontStyle: tokens.keywordFontStyle,
+    },
+    // Literals
+    'hljs-literal': {
+      color: tokens.literalForeground,
+      fontStyle: tokens.literalFontStyle,
+    },
+    // Classes
+    'hljs-class': {
+      color: tokens.classForeground,
+      fontStyle: tokens.classFontStyle,
+    },
+    'hljs-title': {
+      color: tokens.classForeground,
+      fontStyle: tokens.classFontStyle,
+    },
+    // Functions
+    'hljs-function': {
+      color: tokens.functionForeground,
+      fontStyle: tokens.functionFontStyle,
+    },
+    // HTML tags
+    'hljs-tag': {
+      color: tokens.tagForeground,
+      fontStyle: tokens.tagFontStyle,
+    },
+    'hljs-name': {
+      color: tokens.tagForeground,
+      fontStyle: tokens.tagFontStyle,
+    },
+    // HTML attributes
+    'hljs-attribute': {
+      ccolor: tokens.attributesForeground,
+      fontStyle: tokens.attributesFontStyle,
+    },
+    // CSS selectors
+    'hljs-selector-id': {
+      color: tokens.selectorForeground,
+      fontStyle: tokens.selectorFontStyle,
+    },
+    'hljs-selector-class': {
+      color: tokens.selectorForeground,
+      fontStyle: tokens.selectorFontStyle,
+    },
+    'hljs-selector-tag': {
+      color: tokens.selectorForeground,
+      fontStyle: tokens.selectorFontStyle,
+    },
+  }
 }
 
 export default Code

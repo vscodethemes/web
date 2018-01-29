@@ -1,8 +1,7 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import { Theme } from '../../../types/static'
 import theme, { em } from '../../theme'
-import { topBarHeight } from './Topbar'
+import Icon from '../Icon'
 
 export const statusBarHeight = 7
 
@@ -20,6 +19,8 @@ const StatusBar: React.SFC<StatusBarProps> = ({
   foreground,
   repository,
   repositoryOwner,
+  installs,
+  rating,
 }) => (
   <div className={classes.statusBar} style={{ background }}>
     <a
@@ -35,8 +36,26 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         {repositoryOwner}/{repository}
       </span>
     </a>
+    <div
+      className={classes.installs}
+      style={{ color: foreground }}
+      title="installs"
+    >
+      <Icon className={classes.icon} icon="download" fill={foreground} />
+      <span className={classes.text}>{formatInstalls(installs)}</span>
+    </div>
   </div>
 )
+
+function formatInstalls(installs: number) {
+  if (installs > 1000000) {
+    return `${Math.round(installs / 1000000 * 10) / 10}m`
+  }
+  if (installs > 1000) {
+    return `${Math.round(installs / 1000 * 10) / 10}k`
+  }
+  return installs
+}
 
 const classes = {
   statusBar: css({
@@ -71,7 +90,18 @@ const classes = {
 
   text: css({
     fontSize: theme.fontSizes.xs,
-    letterSpacing: em(1.25),
+  }),
+
+  installs: css({
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  }),
+
+  icon: css({
+    height: em(theme.fontSizes.xs * 1.35),
+    marginRight: em(theme.gutters.xs),
   }),
 }
 

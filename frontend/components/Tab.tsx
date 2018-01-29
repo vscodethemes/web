@@ -17,7 +17,7 @@ const Tab: React.SFC<TabProps> = ({ color, ...navLinkProps }) => {
   )
 }
 
-const boxWidth = 46
+const boxWidth = 40
 const boxHeight = 2
 
 const classes = {
@@ -48,7 +48,6 @@ const classes = {
       height: em(boxHeight),
       width: em(boxWidth),
       borderRadius: em(boxHeight),
-      // backgroundColor: theme.colors.primary,
     },
   }),
 

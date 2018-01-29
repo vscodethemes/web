@@ -62,6 +62,8 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   private async search(props: SearchProps) {
     const results = await this.indicies[props.sortBy].search({
       query: props.search,
+      page: 0,
+      hitsPerPage: 10,
     })
     this.setState({ themes: results.hits })
   }
