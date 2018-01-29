@@ -205,7 +205,12 @@ export const tokens: TokenVariables = {
   },
 
   string: {
-    scope: ['string', 'punctuation'],
+    scope: [
+      'string',
+      'punctuation',
+      'entity.other.attribute-name',
+      'constant.language',
+    ],
     defaults: {
       foreground: null,
       fontStyle: 'normal',
@@ -226,6 +231,9 @@ export const tokens: TokenVariables = {
       'support.type',
       'entity.name.type',
       'entity.name.class',
+      'keyword',
+      'storage',
+      'storage.type',
     ],
     defaults: {
       foreground: null,
@@ -234,7 +242,14 @@ export const tokens: TokenVariables = {
   },
 
   function: {
-    scope: ['entity.name.function', 'support.function', 'variable.function'],
+    scope: [
+      'entity.name.function',
+      'support.function',
+      'variable.function',
+      'keyword',
+      'storage',
+      'storage.type',
+    ],
     defaults: {
       foreground: null,
       fontStyle: 'normal',
