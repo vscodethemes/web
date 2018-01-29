@@ -49,6 +49,7 @@ const classes = {
 }
 
 function createStyles(tokens: Tokens) {
+  // Class reference: http://highlightjs.readthedocs.io/en/latest/css-classes-reference.html
   return {
     // Base
     hljs: {
