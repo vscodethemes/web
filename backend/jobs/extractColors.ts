@@ -96,9 +96,10 @@ async function fetchTheme(
     )
   }
 
+  let data: any
   try {
-    const data = await response.json()
-    logger.log(`fetchTheme: ${JSON.stringify(data)}`)
+    logger.log(`Fetching theme...`)
+    data = await response.json()
     name = data.name
     type = data.type
     if (data.colors) {
@@ -118,21 +119,26 @@ async function fetchTheme(
 
   if (!ThemeTypeRuntime.guard(type)) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid type: ${JSON.stringify(type)}`,
+      `fetchTheme error: Invalid type: ${JSON.stringify(type)}
+        Theme: ${JSON.stringify(data)}`,
     )
   }
 
   if (!ColorsRuntime.guard(colors)) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid colors: ${JSON.stringify(colors)}`,
+      `fetchTheme error: Invalid colors: ${JSON.stringify(colors)}
+        Theme: ${JSON.stringify(data)}`,
     )
   }
 
   if (!TokensRuntime.guard(tokens)) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid tokens: ${JSON.stringify(tokens)}`,
+      `fetchTheme error: Invalid tokens: ${JSON.stringify(tokens)}
+        Theme: ${JSON.stringify(data)}`,
     )
   }
+
+  logger.log(`fetchTheme success: ${JSON.stringify(data)}`)
 
   return { name, type, colors, tokens }
 }
