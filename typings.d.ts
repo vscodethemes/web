@@ -8,7 +8,5 @@ declare module 'minify-css-string'
 declare module 'netlify'
 declare module 'react-syntax-highlighter/*'
 declare module 'raw-loader!*'
-
-declare module '*.png' {
-  export default string
-}
+declare module '*.png'
+declare module '*.svg'
