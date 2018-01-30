@@ -18,11 +18,11 @@ const AlgoliaLogo: React.SFC<{}> = () => (
           y2="-27.7%"
           id="a"
         >
-          <stop stop-color="#00AEFF" offset="0%" />
-          <stop stop-color="#3369E7" offset="100%" />
+          <stop stopColor="#00AEFF" offset="0%" />
+          <stop stopColor="#3369E7" offset="100%" />
         </linearGradient>
       </defs>
-      <g fill="none" fill-rule="evenodd">
+      <g fill="none" fillRule="evenodd">
         <path
           d="M59.4.022h13.3c1.308 0 2.376 1.057 2.376 2.364V15.62c0 1.302-1.063 2.364-2.377 2.364H59.4c-1.31 0-2.378-1.057-2.378-2.364V2.38c0-1.3 1.063-2.358 2.377-2.358z"
           fill="url(#a)"

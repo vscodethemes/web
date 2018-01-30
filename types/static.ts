@@ -119,7 +119,7 @@ export interface Theme extends SaveThemePayload {
   tokens: Tokens
 }
 
-export type SortByOptions = 'installs' | 'trending'
+export type SortByOptions = 'installs' | 'trending' | 'new'
 export type LanguageOptions = 'javascript' | 'css' | 'html'
 
 export interface SearchParams {

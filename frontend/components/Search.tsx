@@ -30,6 +30,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   private indicies: {
     installs: algoliasearch.AlgoliaIndex
     trending: algoliasearch.AlgoliaIndex
+    new: algoliasearch.AlgoliaIndex
   }
 
   public componentDidMount() {
@@ -41,6 +42,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     this.indicies = {
       installs: client.initIndex('themes_by_installs_desc'),
       trending: client.initIndex('themes_by_trending_desc'),
+      new: client.initIndex('themes_by_publishDate_desc'),
     }
 
     Promise.all([this.search(this.props), this.searchFacets(this.props)])
