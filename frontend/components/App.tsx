@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { SearchParams, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import * as searchParams from '../utils/searchParams'
+import AlgoliaLogo from './AlgoliaLogo'
 import Checkbox from './Checkbox'
 import Input from './Input'
 import Logo from './Logo'
@@ -111,6 +112,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               />
             )}
           </Search>
+          <AlgoliaLogo />
         </div>
       </div>
     )
