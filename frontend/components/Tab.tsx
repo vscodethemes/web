@@ -30,7 +30,7 @@ const classes = {
     paddingBottom: theme.gutters.sm,
     outline: 0,
     ':hover, :focus': {
-      opacity: 1,
+      color: `${theme.colors.primary}`,
     },
   }),
 
