@@ -6,6 +6,11 @@ function createJob(): JobMessage<SaveThemePayload> {
   return {
     receiptHandle: '',
     payload: {
+      extensionId: 'extensionId',
+      lastUpdated: 'lastUpdated',
+      publishedDate: 'publishedDate',
+      releaseDate: 'releaseDate',
+      shortDescription: 'shortDescription',
       name: 'name',
       type: 'dark',
       repository: 'repo',
