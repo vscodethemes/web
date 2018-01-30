@@ -16,6 +16,8 @@ export function fromLocation(location: Location) {
   let sortBy: SortByOptions = 'installs'
   if (location.pathname === '/trending') {
     sortBy = 'trending'
+  } else if (location.pathname === '/new') {
+    sortBy = 'new'
   }
 
   const languages = ['javascript', 'css', 'html']
