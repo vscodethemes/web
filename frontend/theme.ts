@@ -13,15 +13,16 @@ export default {
     md: 14,
   },
   colors: {
-    primary: '#00a8ff',
-    lightPrimary: '#66cbff',
+    primary: '#00A8FF',
+    lightPrimary: '#66CBFF',
+    secondary: '#D4D4D4',
 
     // Light theme.
-    // background: '#ffffff',
-    // inputBackground: '#f5f5f5',
-    // inputBorder: '#d4d4d4',
-    // text: '#8c8c8c',
-    // textMuted: '#cacaca',
+    // background: '#FFFFFF',
+    // inputBackground: '#F5F5F5',
+    // inputBorder: '#D4D4D4',
+    // text: '#8C8C8C',
+    // textMuted: '#CACACA',
 
     // Dark theme.
     background: '#202026',

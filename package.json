@@ -61,6 +61,7 @@
     "bestzip": "^1.1.4",
     "emotion": "^8.0.12",
     "emotion-server": "^8.0.12",
+    "favicons-webpack-plugin": "^0.0.7",
     "file-loader": "^1.1.6",
     "jest": "^21.2.1",
     "jest-fetch-mock": "^1.3.3",
