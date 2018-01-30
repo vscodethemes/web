@@ -102,7 +102,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
     const dark = facetHits.find((f: FacetHit) => f.value === 'dark')
     const light = facetHits.find((f: FacetHit) => f.value === 'light')
-    this.props.onFacetResults(dark.count, light.count)
+    this.props.onFacetResults(dark ? dark.count : 0, light ? light.count : 0)
   }
 }
 

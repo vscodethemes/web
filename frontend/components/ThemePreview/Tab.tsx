@@ -1,4 +1,4 @@
-import { css } from 'emotion'
+import { css, cx } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
 
@@ -27,7 +27,7 @@ const Tab: React.SFC<TabProps> = ({
   onClick,
 }) => (
   <button
-    className={classes.tab}
+    className={cx(classes.tab, active && classes.active)}
     style={{
       background: active ? activeBackground : inactiveBackground,
       color: active ? activeForeground : inactiveForeground,
@@ -51,6 +51,16 @@ const classes = {
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
+    ':hover': {
+      textDecoration: 'underline wavy',
+    },
+  }),
+
+  active: css({
+    cursor: 'default',
+    ':hover': {
+      textDecoration: 'none',
+    },
   }),
 }
 
