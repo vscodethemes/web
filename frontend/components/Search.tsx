@@ -4,13 +4,18 @@ import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 
+interface FacetHit {
+  value: string
+  count: number
+}
+
 interface SearchProps {
   sortBy: SortByOptions
   search: string
   dark: boolean
   light: boolean
-  highContrast: boolean
   children: (theme: Theme) => React.ReactNode
+  onFacetResults: (totalDark: number, totalLight: number) => any
 }
 
 interface SearchState {
@@ -38,16 +43,17 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
       trending: client.initIndex('themes_by_trending_desc'),
     }
 
-    this.search(this.props)
+    Promise.all([this.search(this.props), this.searchFacets(this.props)])
   }
 
-  public async componentWillReceiveProps(nextProps: SearchProps) {
-    if (
+  public componentWillReceiveProps(nextProps: SearchProps) {
+    if (this.props.search !== nextProps.search) {
+      window.scrollTo(0, 0)
+      Promise.all([this.search(nextProps), this.searchFacets(nextProps)])
+    } else if (
       this.props.sortBy !== nextProps.sortBy ||
-      this.props.search !== nextProps.search ||
       this.props.dark !== nextProps.dark ||
-      this.props.light !== nextProps.light ||
-      this.props.highContrast !== nextProps.highContrast
+      this.props.light !== nextProps.light
     ) {
       window.scrollTo(0, 0)
       this.search(nextProps)
@@ -71,18 +77,30 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     if (props.light) {
       types.push('type:light')
     }
-    if (props.highContrast) {
-      types.push('type:hc')
-    }
 
-    const results = await this.indicies[props.sortBy].search({
+    const { hits } = await this.indicies[props.sortBy].search({
       query: props.search,
       filters: types.join(' OR '),
       page: 0,
       hitsPerPage: 10,
+      facets: 'type',
     })
 
-    this.setState({ themes: results.hits })
+    this.setState({ themes: hits })
+  }
+
+  private async searchFacets(props: SearchProps) {
+    const { facetHits } = await this.indicies[
+      props.sortBy
+    ].searchForFacetValues({
+      query: props.search,
+      facetName: 'type',
+      facetQuery: '*',
+    })
+
+    const dark = facetHits.find((f: FacetHit) => f.value === 'dark')
+    const light = facetHits.find((f: FacetHit) => f.value === 'light')
+    this.props.onFacetResults(dark.count, light.count)
   }
 }
 

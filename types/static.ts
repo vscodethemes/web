@@ -127,7 +127,6 @@ export interface SearchParams {
   search?: string
   dark?: boolean
   light?: boolean
-  highContrast?: boolean
   lang?: LanguageOptions
 }
 

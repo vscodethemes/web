@@ -29,7 +29,6 @@ export function fromLocation(location: Location) {
     search: params.search,
     light: 'light' in params,
     dark: 'dark' in params,
-    highContrast: 'highContrast' in params,
     lang,
   }
 }
@@ -44,9 +43,6 @@ export function toQueryString(params: SearchParams) {
   }
   if (params.dark) {
     queryParams.dark = 1
-  }
-  if (params.highContrast) {
-    queryParams.highContrast = 1
   }
   if (params.lang) {
     queryParams.lang = params.lang
