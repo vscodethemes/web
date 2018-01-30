@@ -15,9 +15,9 @@ import Tabs from './Tabs'
 import ThemePreview from './ThemePreview'
 
 const titles: { [key: string]: string } = {
-  '/': 'Popular',
-  '/trending': 'Trending',
-  '/new': 'New',
+  '/': 'Popular | VSCode Themes',
+  '/trending': 'Trending | VSCode Themes',
+  '/new': 'New | VSCode Themes',
 }
 
 interface AppState {
