@@ -32,9 +32,7 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         className={classes.pic}
         src={`https://github.com/${repositoryOwner}.png?size=40`}
       />
-      <span className={classes.text}>
-        {repositoryOwner}/{repository}
-      </span>
+      <span className={classes.text}>{repositoryOwner}</span>
     </a>
     <div
       className={classes.installs}
