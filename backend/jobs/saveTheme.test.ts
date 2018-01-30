@@ -7,9 +7,9 @@ function createJob(): JobMessage<SaveThemePayload> {
     receiptHandle: '',
     payload: {
       extensionId: 'extensionId',
-      lastUpdated: 'lastUpdated',
-      publishedDate: 'publishedDate',
-      releaseDate: 'releaseDate',
+      lastUpdated: 1,
+      publishedDate: 1,
+      releaseDate: 1,
       shortDescription: 'shortDescription',
       name: 'name',
       type: 'dark',

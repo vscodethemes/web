@@ -14,9 +14,9 @@ function createJob(): JobMessage<ExtractThemesPayload> {
     receiptHandle: '',
     payload: {
       extensionId: 'extensionId',
-      lastUpdated: 'lastUpdated',
-      publishedDate: 'publishedDate',
-      releaseDate: 'releaseDate',
+      lastUpdated: 1,
+      publishedDate: 1,
+      releaseDate: 1,
       shortDescription: 'shortDescription',
       repository: 'repo',
       repositoryOwner: 'owner',
@@ -174,9 +174,9 @@ test('should create extract theme jobs for valid input', async () => {
   expect(createSpy).toHaveBeenCalledTimes(2)
   expect(createSpy.mock.calls[0][0]).toEqual({
     extensionId: 'extensionId',
-    lastUpdated: 'lastUpdated',
-    publishedDate: 'publishedDate',
-    releaseDate: 'releaseDate',
+    lastUpdated: 1,
+    publishedDate: 1,
+    releaseDate: 1,
     shortDescription: 'shortDescription',
     repository: 'repo',
     repositoryOwner: 'owner',
@@ -191,9 +191,9 @@ test('should create extract theme jobs for valid input', async () => {
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
     extensionId: 'extensionId',
-    lastUpdated: 'lastUpdated',
-    publishedDate: 'publishedDate',
-    releaseDate: 'releaseDate',
+    lastUpdated: 1,
+    publishedDate: 1,
+    releaseDate: 1,
     shortDescription: 'shortDescription',
     repository: 'repo',
     repositoryOwner: 'owner',
