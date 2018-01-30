@@ -81,17 +81,6 @@ test('should not process empty job', async () => {
   expect(succeedSpy).toHaveBeenCalledTimes(0)
 })
 
-test('should notify save theme when no more jobs', async () => {
-  const services = createServices()
-  jest
-    .spyOn(services.extractColors, 'receive')
-    .mockImplementation(() => Promise.resolve(null))
-
-  const notifySpy = jest.spyOn(services.saveTheme, 'notify')
-  await extractColors(services)
-  expect(notifySpy).toHaveBeenCalledTimes(1)
-})
-
 test('should fail job if it has an invalid payload', async () => {
   const services = createServices()
   jest
