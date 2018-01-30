@@ -14,7 +14,12 @@ const createValidThemes = (): Extension[] => {
   ]
   return [
     {
-      extensionName: 'valid1',
+      extensionName: 'extensionName1',
+      extensionId: 'extensionId',
+      lastUpdated: 'lastUpdated',
+      publishedDate: 'publishedDate',
+      releaseDate: 'releaseDate',
+      shortDescription: 'shortDescription',
       publisher: {
         publisherName: 'test',
       },
@@ -25,24 +30,6 @@ const createValidThemes = (): Extension[] => {
             {
               key: GITHUB_PROPERTY_NAME,
               value: 'https://github.com/owner/repo',
-            },
-          ],
-        },
-      ],
-      statistics,
-    },
-    {
-      extensionName: 'valid2',
-      publisher: {
-        publisherName: 'test',
-      },
-      versions: [
-        {
-          lastUpdated: '2000-01-00T00:00:00.000',
-          properties: [
-            {
-              key: GITHUB_PROPERTY_NAME,
-              value: 'www.github.com/owner/repo.git',
             },
           ],
         },
@@ -250,16 +237,11 @@ test('should create job for repositories', async () => {
   await scrapeThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
   expect(createSpy.mock.calls[0][0]).toEqual({
-    repository: 'repo',
-    repositoryOwner: 'owner',
-    installs: 1,
-    rating: 1,
-    ratingCount: 1,
-    trendingDaily: 1,
-    trendingMonthly: 1,
-    trendingWeekly: 1,
-  })
-  expect(createSpy.mock.calls[1][0]).toEqual({
+    extensionId: 'extensionId',
+    lastUpdated: 'lastUpdated',
+    publishedDate: 'publishedDate',
+    releaseDate: 'releaseDate',
+    shortDescription: 'shortDescription',
     repository: 'repo',
     repositoryOwner: 'owner',
     installs: 1,

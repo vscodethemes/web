@@ -171,13 +171,18 @@ function filterThemes(
 
       if (repoUrlProp) {
         extracted.push({
-          ...extractRepositoryInfo(repoUrlProp.value),
+          extensionId: theme.extensionId,
+          lastUpdated: theme.lastUpdated,
+          publishedDate: theme.publishedDate,
+          releaseDate: theme.releaseDate,
+          shortDescription: theme.shortDescription,
           installs: extractStatistic(theme, 'install'),
           rating: extractStatistic(theme, 'averagerating'),
           ratingCount: extractStatistic(theme, 'ratingcount'),
           trendingDaily: extractStatistic(theme, 'trendingdaily'),
           trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
           trendingMonthly: extractStatistic(theme, 'trendingweekly'),
+          ...extractRepositoryInfo(repoUrlProp.value),
         })
       } else {
         // Skip themes without github url.

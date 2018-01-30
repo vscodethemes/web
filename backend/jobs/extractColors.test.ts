@@ -10,6 +10,11 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   return {
     receiptHandle: '',
     payload: {
+      extensionId: 'extensionId',
+      lastUpdated: 'lastUpdated',
+      publishedDate: 'publishedDate',
+      releaseDate: 'releaseDate',
+      shortDescription: 'shortDescription',
       repository: 'repo',
       repositoryOwner: 'owner',
       repositoryBranch: 'master',
