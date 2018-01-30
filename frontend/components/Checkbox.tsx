@@ -5,10 +5,13 @@ import theme, { em } from '../theme'
 interface CheckboxProps {
   checked: boolean
   onChange: (value: boolean) => any
-  label?: string
 }
 
-const Checkbox: React.SFC<CheckboxProps> = ({ checked, onChange, label }) => (
+const Checkbox: React.SFC<CheckboxProps> = ({
+  checked,
+  onChange,
+  children,
+}) => (
   <label className={classes.label}>
     <input
       type="checkbox"
@@ -16,7 +19,7 @@ const Checkbox: React.SFC<CheckboxProps> = ({ checked, onChange, label }) => (
       onChange={evt => onChange(evt.target.checked)}
       className={classes.input}
     />
-    <span className={classes.text}>{label}</span>
+    <div className={classes.text}>{children}</div>
   </label>
 )
 
@@ -33,6 +36,9 @@ const classes = {
   }),
 
   text: css({
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
     fontSize: em(theme.fontSizes.md),
     color: theme.colors.text,
   }),

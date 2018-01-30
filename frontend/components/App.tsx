@@ -19,7 +19,17 @@ const titles: { [key: string]: string } = {
   '/new': 'New',
 }
 
-class App extends React.Component<RouteComponentProps<{}>, {}> {
+interface AppState {
+  totalDark: number | null
+  totalLight: number | null
+}
+
+class App extends React.Component<RouteComponentProps<{}>, AppState> {
+  public state: AppState = {
+    totalDark: null,
+    totalLight: null,
+  }
+
   public componentDidMount() {
     // The query string does not exist when server-side rendering
     // so we need to force update if it exists in order for the
@@ -31,6 +41,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
 
   public render(): React.ReactNode {
     const { location } = this.props
+    const { totalDark, totalLight } = this.state
     const params = searchParams.fromLocation(location)
 
     return (
@@ -72,24 +83,25 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
           />
           <Checkbox
             checked={params.dark}
-            label="Dark"
             onChange={dark => this.setQueryParams({ ...params, dark })}
-          />
+          >
+            Dark
+            {totalDark !== null && (
+              <span className={classes.facet}>| {totalDark}</span>
+            )}
+          </Checkbox>
           <Checkbox
             checked={params.light}
-            label="Light"
             onChange={light => this.setQueryParams({ ...params, light })}
-          />
-          <Checkbox
-            checked={params.highContrast}
-            label="High Contrast"
-            onChange={highContrast =>
-              this.setQueryParams({ ...params, highContrast })
-            }
-          />
+          >
+            Light
+            {totalLight !== null && (
+              <span className={classes.facet}>| {totalLight}</span>
+            )}
+          </Checkbox>
         </div>
         <div className={classes.main}>
-          <Search {...params}>
+          <Search {...params} onFacetResults={this.setFacetResults}>
             {(t: Theme) => (
               <ThemePreview
                 key={t.objectID}
@@ -109,10 +121,14 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
     const querystring = searchParams.toQueryString(params)
     history.push(`${location.pathname}?${querystring}`)
   }
+
+  private setFacetResults = (totalDark: number, totalLight: number) => {
+    this.setState({ totalDark, totalLight })
+  }
 }
 
 const headerHeight = 34
-const asideWidth = 280
+const asideWidth = 260
 const mainWidth = 420
 const containerGutter = theme.gutters.md
 const asideGutter = theme.gutters.xl
@@ -161,6 +177,14 @@ const classes = {
     [`@media (max-width: ${breakpoints[0]}px)`]: {
       marginLeft: em(asideWidth + containerGutter),
     },
+  }),
+
+  facet: css({
+    // flex: 1,
+    // textAlign: 'right',
+    color: theme.colors.textMuted,
+    fontSize: em(theme.fontSizes.xs),
+    marginLeft: em(theme.gutters.sm),
   }),
 }
 
