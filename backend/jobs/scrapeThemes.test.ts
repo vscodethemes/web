@@ -3,6 +3,8 @@ import { Extension } from '../../types/static'
 import createServices from '../services/mock'
 import scrapeThemes, { GITHUB_PROPERTY_NAME } from './scrapeThemes'
 
+const date = new Date()
+
 const createValidThemes = (): Extension[] => {
   const statistics = [
     { statisticName: 'install', value: 1 },
@@ -16,9 +18,9 @@ const createValidThemes = (): Extension[] => {
     {
       extensionName: 'extensionName1',
       extensionId: 'extensionId',
-      lastUpdated: 'lastUpdated',
-      publishedDate: 'publishedDate',
-      releaseDate: 'releaseDate',
+      lastUpdated: date.toISOString(),
+      publishedDate: date.toISOString(),
+      releaseDate: date.toISOString(),
       shortDescription: 'shortDescription',
       publisher: {
         publisherName: 'test',
@@ -238,9 +240,9 @@ test('should create job for repositories', async () => {
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
   expect(createSpy.mock.calls[0][0]).toEqual({
     extensionId: 'extensionId',
-    lastUpdated: 'lastUpdated',
-    publishedDate: 'publishedDate',
-    releaseDate: 'releaseDate',
+    lastUpdated: +date,
+    publishedDate: +date,
+    releaseDate: +date,
     shortDescription: 'shortDescription',
     repository: 'repo',
     repositoryOwner: 'owner',

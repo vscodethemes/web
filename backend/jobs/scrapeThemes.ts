@@ -172,9 +172,9 @@ function filterThemes(
       if (repoUrlProp) {
         extracted.push({
           extensionId: theme.extensionId,
-          lastUpdated: theme.lastUpdated,
-          publishedDate: theme.publishedDate,
-          releaseDate: theme.releaseDate,
+          lastUpdated: +new Date(theme.lastUpdated),
+          publishedDate: +new Date(theme.publishedDate),
+          releaseDate: +new Date(theme.releaseDate),
           shortDescription: theme.shortDescription,
           installs: extractStatistic(theme, 'install'),
           rating: extractStatistic(theme, 'averagerating'),
