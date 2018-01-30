@@ -7,6 +7,7 @@ import theme, { em } from '../theme'
 import * as searchParams from '../utils/searchParams'
 import Checkbox from './Checkbox'
 import Input from './Input'
+import Logo from './Logo'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
@@ -37,6 +38,9 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
         <Helmet>
           <title>{titles[location.pathname]}</title>
         </Helmet>
+        <div className={classes.header}>
+          <Logo />
+        </div>
         <div className={classes.aside}>
           <Tabs>
             <Tab
@@ -107,6 +111,7 @@ class App extends React.Component<RouteComponentProps<{}>, {}> {
   }
 }
 
+const headerHeight = 34
 const asideWidth = 280
 const mainWidth = 420
 const containerGutter = theme.gutters.md
@@ -123,15 +128,25 @@ const classes = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    paddingTop: em(headerHeight),
     paddingLeft: em(containerGutter),
     paddingRight: em(containerGutter),
+  }),
+
+  header: css({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: em(headerHeight),
+    borderBottom: `1px solid ${theme.colors.inputBorder}`,
   }),
 
   aside: css({
     position: 'fixed',
     left: '50%',
     width: em(asideWidth),
-    marginTop: em(theme.gutters.xl),
+    marginTop: em(headerHeight + theme.gutters.lg),
     marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
 
     [`@media (max-width: ${breakpoints[0]}px)`]: {

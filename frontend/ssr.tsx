@@ -19,7 +19,8 @@ export interface SSR {
 
 export default function ssr(options: SSROptions) {
   const assets = Object.keys(options.webpackStats.compilation.assets)
-  const js = assets.filter(value => value.match(/\.js$/))
+  const js = assets.filter(value => /\.js$/.test(value))
+  const favicon = assets.find(value => /\.ico$/.test(value))
 
   const { html: body, css, ids: cssIds } = extractCritical(
     renderToString(
@@ -30,6 +31,7 @@ export default function ssr(options: SSROptions) {
   )
 
   const props: DocumentProps = {
+    favicon,
     css,
     js,
     body,

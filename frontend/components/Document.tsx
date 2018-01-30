@@ -5,6 +5,7 @@ import { SSR } from '../ssr'
 import theme, { em, fontFamily, rootFontSize } from '../theme'
 
 export interface DocumentProps {
+  favicon: string
   css: string
   js: string[]
   body: string
@@ -38,7 +39,6 @@ export default function Document(props: DocumentProps) {
   if (props.enableDevServer) {
     scripts.push(<script src="http://localhost:8080/webpack-dev-server.js" />)
   }
-
   // Add the webpack bundle.
   props.js.forEach(src => scripts.push(<script src={`/${src}`} />))
 
@@ -49,7 +49,7 @@ export default function Document(props: DocumentProps) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link rel="shortcut icon" href={`/${require('../assets/icon.png')}`} />
+        <link rel="shortcut icon" href={props.favicon} />
         <link
           href={`https://fonts.googleapis.com/css?family=${fontFamily}:400,600`}
           rel="stylesheet"

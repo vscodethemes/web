@@ -1,4 +1,5 @@
 import { CheckerPlugin } from 'awesome-typescript-loader'
+import * as FaviconsWebpackPlugin from 'favicons-webpack-plugin'
 import * as path from 'path'
 import * as StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin'
 import * as webpack from 'webpack'
@@ -43,6 +44,24 @@ const config: webpack.Configuration = {
         NODE_ENV: JSON.stringify(nodeEnv),
         ALGOLIA_APP_ID: JSON.stringify(process.env.ALGOLIA_APP_ID),
         ALGOLIA_SEARCH_KEY: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY),
+      },
+    }),
+    new FaviconsWebpackPlugin({
+      logo: path.resolve(__dirname, './assets/icon.png'),
+      title: 'VSCodeThemes',
+      persistentCache: true,
+      emitStats: false,
+      icons: {
+        android: false,
+        appleIcon: false,
+        appleStartup: false,
+        coast: false,
+        favicons: true,
+        firefox: false,
+        opengraph: false,
+        twitter: false,
+        yandex: false,
+        windows: false,
       },
     }),
     new StaticSiteGeneratorPlugin({
