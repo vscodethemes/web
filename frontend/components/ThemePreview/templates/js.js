@@ -1,16 +1,16 @@
 class IncrementNumber {
-  constructor(number) {
-    this.integer = parseInt(number)
+  constructor(num) {
+    this.number = parseInt(num)
   }
 
   inc() {
     // Prevent integer overflow
-    if (this.integer < Number.MAX_VALUE) {
-      this.integer += 1
+    if (this.number < Number.MAX_VALUE) {
+      this.number += 1
     }
   }
 
   toString() {
-    return `Incremented number to ${this.integer}`
+    return `Incremented number to ${this.number}`
   }
 }

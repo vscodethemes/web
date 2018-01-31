@@ -2,8 +2,6 @@ import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
 
-export const topBarHeight = 7
-
 export interface TopBarProps {
   name: string
   type: string
@@ -26,6 +24,8 @@ const TopBar: React.SFC<TopBarProps> = ({ name, type }) => (
     </h1>
   </div>
 )
+
+export const topBarHeight = 7
 
 const classes = {
   topBar: css({

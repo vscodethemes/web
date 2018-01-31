@@ -17,7 +17,7 @@ const classes = {
   link: css({
     color: theme.colors.primary,
     textDecoration: 'none',
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     height: '100%',
     padding: `0 ${em(theme.gutters.md)}`,

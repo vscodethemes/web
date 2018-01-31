@@ -17,8 +17,8 @@ interface ThemePreviewProps extends Theme {
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   name,
   type,
-  installs,
-  rating,
+  extensionName,
+  publisherName,
   trendingMonthly,
   repositoryOwner,
   repository,
@@ -77,8 +77,8 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         foreground={colors.statusBarForeground}
         repository={repository}
         repositoryOwner={repositoryOwner}
-        installs={installs}
-        rating={rating}
+        extensionName={extensionName}
+        publisherName={publisherName}
       />
     </Editor>
   )

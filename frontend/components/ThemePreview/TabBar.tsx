@@ -3,8 +3,6 @@ import * as React from 'react'
 import { activityBarWidth } from './ActivityBar'
 import { topBarHeight } from './TopBar'
 
-export const tabBarHeight = 9
-
 interface TabBarProps {
   background: string
   border: string
@@ -18,6 +16,8 @@ const TabBar: React.SFC<TabBarProps> = ({ background, border, children }) => (
     {children}
   </div>
 )
+
+export const tabBarHeight = 9
 
 const classes = {
   tabBar: css({

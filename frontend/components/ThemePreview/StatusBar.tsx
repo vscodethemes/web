@@ -1,17 +1,15 @@
-import { css } from 'emotion'
+import { css, cx } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
 import Icon from '../Icon'
-
-export const statusBarHeight = 7
 
 interface StatusBarProps {
   background: string
   foreground: string
   repository: string
   repositoryOwner: string
-  installs: number
-  rating: number
+  extensionName: string
+  publisherName: string
 }
 
 const StatusBar: React.SFC<StatusBarProps> = ({
@@ -19,8 +17,8 @@ const StatusBar: React.SFC<StatusBarProps> = ({
   foreground,
   repository,
   repositoryOwner,
-  installs,
-  rating,
+  extensionName,
+  publisherName,
 }) => (
   <div className={classes.statusBar} style={{ background }}>
     <a
@@ -32,28 +30,22 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         className={classes.pic}
         src={`https://github.com/${repositoryOwner}.png?size=40`}
       />
-      <span className={classes.text}>{repositoryOwner}</span>
+      {repositoryOwner}
     </a>
-    <div
-      className={classes.installs}
+    {/* TODO: Link to market place for non-desktop OSs */}
+    <a
+      className={cx(classes.link, classes.secondary)}
+      href={`vscode:extension/${publisherName}.${extensionName}`}
       style={{ color: foreground }}
-      title="installs"
     >
-      <Icon className={classes.icon} icon="download" fill={foreground} />
-      <span className={classes.text}>{formatInstalls(installs)}</span>
-    </div>
+      Open in VSCode
+      <Icon className={classes.icon} icon="open" fill={foreground} />
+    </a>
   </div>
 )
 
-function formatInstalls(installs: number) {
-  if (installs > 1000000) {
-    return `${Math.round(installs / 1000000 * 10) / 10}m`
-  }
-  if (installs > 1000) {
-    return `${Math.round(installs / 1000 * 10) / 10}k`
-  }
-  return installs
-}
+export const statusBarHeight = 7
+const statusBarGutter = 4
 
 const classes = {
   statusBar: css({
@@ -62,7 +54,6 @@ const classes = {
     left: 0,
     width: '100%',
     height: `${statusBarHeight}%`,
-    padding: '0 2%',
     borderBottomLeftRadius: em(theme.borderRadius.md),
     borderBottomRightRadius: em(theme.borderRadius.md),
     display: 'flex',
@@ -70,36 +61,38 @@ const classes = {
   }),
 
   link: css({
+    flex: 1,
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none',
+    fontSize: theme.fontSizes.xs,
+    height: '100%',
     ':hover': {
       textDecoration: 'underline wavy',
+      opacity: 1,
     },
   }),
 
   pic: css({
-    width: em(theme.fontSizes.xs * 1.35),
-    height: em(theme.fontSizes.xs * 1.35),
-    borderRadius: '100%',
+    width: em(theme.fontSizes.xs * 2),
+    height: em(theme.fontSizes.xs * 2),
+    marginLeft: `${statusBarGutter}%`,
     marginRight: em(theme.gutters.xs),
     objectFit: 'cover',
+    borderRadius: '100%',
   }),
 
-  text: css({
-    fontSize: theme.fontSizes.xs,
-  }),
-
-  installs: css({
-    flex: 1,
+  secondary: css({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    opacity: 0.75,
   }),
 
   icon: css({
-    height: em(theme.fontSizes.xs * 1.35),
-    marginRight: em(theme.gutters.xs),
+    height: em(theme.fontSizes.xs * 1.75),
+    marginLeft: em(theme.gutters.xs),
+    marginRight: `${statusBarGutter}%`,
   }),
 }
 
