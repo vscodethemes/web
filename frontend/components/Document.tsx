@@ -22,7 +22,7 @@ injectGlobal({
   body: {
     fontFamily: theme.fontFamily,
     fontWeight: 'normal',
-    letterSpacing: em(0.6),
+    letterSpacing: em(0.3),
     margin: 0,
     backgroundColor: theme.colors.background,
   },
