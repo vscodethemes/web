@@ -11,6 +11,8 @@ function createJob(): JobMessage<ExtractColorsPayload> {
     receiptHandle: '',
     payload: {
       extensionId: 'extensionId',
+      extensionName: 'extensionName',
+      publisherName: 'publisherName',
       lastUpdated: 1,
       publishedDate: 1,
       releaseDate: 1,

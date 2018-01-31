@@ -84,6 +84,8 @@ export default function createServices(): Services {
       receiptHandle: '',
       payload: {
         extensionId: 'extensionId',
+        extensionName: 'extensionName',
+        publisherName: 'publisherName',
         lastUpdated: 1,
         publishedDate: 1,
         releaseDate: 1,
@@ -102,6 +104,8 @@ export default function createServices(): Services {
       receiptHandle: '',
       payload: {
         extensionId: 'extensionId',
+        extensionName: 'extensionName',
+        publisherName: 'publisherName',
         lastUpdated: 1,
         publishedDate: 1,
         releaseDate: 1,
@@ -122,6 +126,8 @@ export default function createServices(): Services {
       receiptHandle: '',
       payload: {
         extensionId: 'extensionId',
+        extensionName: 'extensionName',
+        publisherName: 'publisherName',
         lastUpdated: 1,
         publishedDate: 1,
         releaseDate: 1,

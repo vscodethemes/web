@@ -29,8 +29,8 @@ export const StatisticRuntime = Record({
 })
 
 export const ExtensionRuntime = Record({
-  extensionName: String,
   extensionId: String,
+  extensionName: String,
   lastUpdated: String,
   publishedDate: String,
   releaseDate: String,
@@ -50,6 +50,8 @@ export const ScrapeThemesPayloadRuntime = Record({
 
 export const ExtractThemesPayloadRuntime = Record({
   extensionId: String,
+  extensionName: String,
+  publisherName: String,
   lastUpdated: Number,
   publishedDate: Number,
   releaseDate: Number,

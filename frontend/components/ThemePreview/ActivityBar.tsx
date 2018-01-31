@@ -4,8 +4,6 @@ import Icon from '../Icon'
 import { statusBarHeight } from './StatusBar'
 import { topBarHeight } from './TopBar'
 
-export const activityBarWidth = 9
-
 interface ActivityBarProps {
   background: string
   foreground: string
@@ -23,6 +21,8 @@ const ActivityBar: React.SFC<ActivityBarProps> = ({
     <Icon className={classes.icon} icon="vscodeExtensions" fill={foreground} />
   </div>
 )
+
+export const activityBarWidth = 9
 
 const classes = {
   activityBar: css({

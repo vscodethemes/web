@@ -23,7 +23,7 @@ const createValidThemes = (): Extension[] => {
       releaseDate: date.toISOString(),
       shortDescription: 'shortDescription',
       publisher: {
-        publisherName: 'test',
+        publisherName: 'publisherName',
       },
       versions: [
         {
@@ -240,6 +240,8 @@ test('should create job for repositories', async () => {
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
   expect(createSpy.mock.calls[0][0]).toEqual({
     extensionId: 'extensionId',
+    extensionName: 'extensionName1',
+    publisherName: 'publisherName',
     lastUpdated: +date,
     publishedDate: +date,
     releaseDate: +date,

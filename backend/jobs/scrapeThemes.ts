@@ -172,6 +172,8 @@ function filterThemes(
       if (repoUrlProp) {
         extracted.push({
           extensionId: theme.extensionId,
+          extensionName: theme.extensionName,
+          publisherName: theme.publisher.publisherName,
           lastUpdated: +new Date(theme.lastUpdated),
           publishedDate: +new Date(theme.publishedDate),
           releaseDate: +new Date(theme.releaseDate),

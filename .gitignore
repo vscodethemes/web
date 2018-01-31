@@ -8,3 +8,4 @@ coverage/
 terraform.plan
 .awcache
 *.env
+*.log
