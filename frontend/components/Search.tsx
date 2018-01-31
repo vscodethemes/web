@@ -3,6 +3,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
+import generatePlaceholderThemes from '../utils/generatePlaceholderThemes'
 
 interface FacetHit {
   value: string
@@ -22,9 +23,12 @@ interface SearchState {
   themes: Theme[]
 }
 
+const hitsPerPage = 10
+const placeholders = generatePlaceholderThemes(hitsPerPage)
+
 class Search extends React.PureComponent<SearchProps, SearchState> {
   public state: SearchState = {
-    themes: [],
+    themes: placeholders,
   }
 
   private indicies: {
@@ -32,6 +36,8 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     trending: algoliasearch.AlgoliaIndex
     new: algoliasearch.AlgoliaIndex
   }
+
+  private timeout: NodeJS.Timer
 
   public componentDidMount() {
     const client = algoliasearch(
@@ -80,29 +86,48 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
       types.push('type:light')
     }
 
-    const { hits } = await this.indicies[props.sortBy].search({
-      query: props.search,
-      filters: types.join(' OR '),
-      page: 0,
-      hitsPerPage: 10,
-      facets: 'type',
-    })
-
-    this.setState({ themes: hits })
+    try {
+      this.startPlaceholdersTimer()
+      const { hits } = await this.indicies[props.sortBy].search({
+        query: props.search,
+        filters: types.join(' OR '),
+        page: 0,
+        hitsPerPage,
+        facets: 'type',
+      })
+      this.stopPlaceholdersTimer()
+      this.setState({ themes: hits })
+    } catch (err) {
+      throw new Error(`Error searching: ${err.message}.`)
+    }
   }
 
   private async searchFacets(props: SearchProps) {
-    const { facetHits } = await this.indicies[
-      props.sortBy
-    ].searchForFacetValues({
-      query: props.search,
-      facetName: 'type',
-      facetQuery: '*',
-    })
+    try {
+      const { facetHits } = await this.indicies[
+        props.sortBy
+      ].searchForFacetValues({
+        query: props.search,
+        facetName: 'type',
+        facetQuery: '*',
+      })
 
-    const dark = facetHits.find((f: FacetHit) => f.value === 'dark')
-    const light = facetHits.find((f: FacetHit) => f.value === 'light')
-    this.props.onFacetResults(dark ? dark.count : 0, light ? light.count : 0)
+      const dark = facetHits.find((f: FacetHit) => f.value === 'dark')
+      const light = facetHits.find((f: FacetHit) => f.value === 'light')
+      this.props.onFacetResults(dark ? dark.count : 0, light ? light.count : 0)
+    } catch (err) {
+      throw new Error(`Error searching facets: ${err.message}.`)
+    }
+  }
+
+  private startPlaceholdersTimer() {
+    this.timeout = setTimeout(() => {
+      this.setState({ themes: placeholders })
+    }, 100)
+  }
+
+  private stopPlaceholdersTimer() {
+    clearTimeout(this.timeout)
   }
 }
 

@@ -24,7 +24,6 @@ const classes = {
   link: css({
     position: 'relative',
     fontWeight: 'bold',
-    letterSpacing: em(1.2),
     textDecoration: 'none',
     color: theme.colors.lightPrimary,
     paddingBottom: theme.gutters.sm,

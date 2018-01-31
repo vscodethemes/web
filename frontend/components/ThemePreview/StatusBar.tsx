@@ -21,26 +21,30 @@ const StatusBar: React.SFC<StatusBarProps> = ({
   publisherName,
 }) => (
   <div className={classes.statusBar} style={{ background }}>
-    <a
-      className={classes.link}
-      href={`https://github.com/${repositoryOwner}/${repository}`}
-      style={{ color: foreground }}
-    >
-      <img
-        className={classes.pic}
-        src={`https://github.com/${repositoryOwner}.png?size=40`}
-      />
-      {repositoryOwner}
-    </a>
+    {repositoryOwner && (
+      <a
+        className={classes.link}
+        href={`https://github.com/${repositoryOwner}/${repository}`}
+        style={{ color: foreground }}
+      >
+        <img
+          className={classes.pic}
+          src={`https://github.com/${repositoryOwner}.png?size=40`}
+        />
+        {repositoryOwner}
+      </a>
+    )}
     {/* TODO: Link to market place for non-desktop OSs */}
-    <a
-      className={cx(classes.link, classes.secondary)}
-      href={`vscode:extension/${publisherName}.${extensionName}`}
-      style={{ color: foreground }}
-    >
-      Open in VSCode
-      <Icon className={classes.icon} icon="open" fill={foreground} />
-    </a>
+    {publisherName && (
+      <a
+        className={cx(classes.link, classes.secondary)}
+        href={`vscode:extension/${publisherName}.${extensionName}`}
+        style={{ color: foreground }}
+      >
+        Open in VSCode
+        <Icon className={classes.icon} icon="open" fill={foreground} />
+      </a>
+    )}
   </div>
 )
 

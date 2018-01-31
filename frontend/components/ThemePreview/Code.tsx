@@ -44,6 +44,7 @@ const classes = {
     '& code': {
       fontFamily: 'Source Code Pro, monospace',
       fontSize: em(theme.fontSizes.xs),
+      lineHeight: em(theme.fontSizes.xs),
     },
   }),
 }

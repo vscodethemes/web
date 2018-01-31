@@ -17,6 +17,7 @@ interface ThemePreviewProps extends Theme {
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   name,
   type,
+  extensionId,
   extensionName,
   publisherName,
   trendingMonthly,
@@ -35,6 +36,8 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
     inactiveForeground: colors.tabInactiveForeground,
     border: colors.tabBorder,
   }
+
+  const isPlaceholder = !extensionId
 
   return (
     <Editor background={colors.editorBackground}>
@@ -70,7 +73,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         </Tab>
       </TabBar>
       <TabContent>
-        <Code language={language} tokens={tokens} />
+        {!isPlaceholder && <Code language={language} tokens={tokens} />}
       </TabContent>
       <StatusBar
         background={colors.statusBarBackground}
