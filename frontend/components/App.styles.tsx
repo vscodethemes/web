@@ -2,8 +2,8 @@ import { css } from 'emotion'
 import theme, { em } from '../theme'
 
 const headerHeight = 34
-const asideWidth = 260
-const mainWidth = 420
+const asideWidth = 250
+const mainWidth = 450
 const containerGutter = theme.gutters.md
 const asideGutter = theme.gutters.xl
 const containerWidth =
