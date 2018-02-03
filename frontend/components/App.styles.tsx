@@ -51,9 +51,3 @@ export const main = css({
     marginLeft: em(asideWidth + containerGutter),
   },
 })
-
-export const searchFooter = css({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-})

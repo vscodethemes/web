@@ -110,8 +110,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
             {...params}
             onFacetResults={this.setFacetResults}
             onPages={this.setTotalPages}
-          >
-            {(t: Theme) => (
+            renderTheme={(t: Theme) => (
               <ThemePreview
                 key={t.objectID}
                 {...t}
@@ -119,8 +118,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
                 onLanguage={lang => this.setQueryParams({ ...params, lang })}
               />
             )}
-          </Search>
-          <div className={classes.searchFooter}>
+          >
             {totalPages !== null && (
               <Pagination
                 totalPages={totalPages}
@@ -129,7 +127,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               />
             )}
             <AlgoliaLogo />
-          </div>
+          </Search>
         </div>
       </div>
     )
