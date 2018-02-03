@@ -1,13 +1,17 @@
 import { css } from 'emotion'
 import * as React from 'react'
+import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 interface EditorProps {
-  background: string
+  colors: Colors
 }
 
-const Editor: React.SFC<EditorProps> = ({ background, children }) => (
-  <div className={classes.editor} style={{ background }}>
+const Editor: React.SFC<EditorProps> = ({ colors, children }) => (
+  <div
+    className={classes.editor}
+    style={{ background: colors.editorBackground }}
+  >
     {children}
   </div>
 )

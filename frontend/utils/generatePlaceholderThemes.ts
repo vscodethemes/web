@@ -1,8 +1,15 @@
 import { Theme } from '../../types/static'
 import theme from '../theme'
 
+const sym = Symbol()
+
+export function isPlaceholder(obj: any) {
+  return obj.__placeholder === sym
+}
+
 export default function generatePlaceholderThemes(count: number): Theme[] {
   return Array.from(new Array(count), (_, index) => ({
+    __placeholder: sym,
     objectID: `placeholder-${index}`,
     extensionId: '',
     type: null,
@@ -24,11 +31,13 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
     trendingWeekly: -1,
     trendingMonthly: -1,
     colors: {
+      // VSCode GUI
       activityBarBackground: theme.colors.background,
       activityBarForeground: theme.colors.background,
       statusBarBackground: theme.colors.background,
       statusBarForeground: theme.colors.background,
       editorBackground: theme.colors.background,
+      editorForeground: theme.colors.background,
       editorGroupHeaderTabsBackground: theme.colors.background,
       editorGroupHeaderTabsBorder: theme.colors.background,
       editorLineNumberForeground: theme.colors.background,
@@ -40,30 +49,39 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
       tabInactiveForeground: theme.colors.background,
       contrastActiveBorder: null,
       contrastBorder: null,
-    },
-    tokens: {
+      // Tokens
+      commentForeground: theme.colors.background,
+      commentFontStyle: 'normal',
+      punctuationForeground: theme.colors.background,
+      punctuationFontStyle: 'normal',
       keywordForeground: theme.colors.background,
       keywordFontStyle: 'normal',
-      variableForeground: theme.colors.background,
-      variableFontStyle: 'normal',
+      classForeground: theme.colors.background,
+      classFontStyle: 'normal',
       literalForeground: theme.colors.background,
       literalFontStyle: 'normal',
       numberForeground: theme.colors.background,
       numberFontStyle: 'normal',
       stringForeground: theme.colors.background,
       stringFontStyle: 'normal',
-      commentForeground: theme.colors.background,
-      commentFontStyle: 'normal',
-      classForeground: theme.colors.background,
-      classFontStyle: 'normal',
+      variableForeground: theme.colors.background,
+      variableFontStyle: 'normal',
+      operatorForeground: theme.colors.background,
+      operatorFontStyle: 'normal',
       functionForeground: theme.colors.background,
       functionFontStyle: 'normal',
-      selectorForeground: theme.colors.background,
-      selectorFontStyle: 'normal',
+      functionParamForeground: theme.colors.background,
+      functionParamFontStyle: 'normal',
       tagForeground: theme.colors.background,
       tagFontStyle: 'normal',
       attributeForeground: theme.colors.background,
       attributeFontStyle: 'normal',
+      attributeValueForeground: theme.colors.background,
+      attributeValueFontStyle: 'normal',
+      propertyForeground: theme.colors.background,
+      propertyFontStyle: 'normal',
+      selectorForeground: theme.colors.background,
+      selectorFontStyle: 'normal',
     },
   }))
 }

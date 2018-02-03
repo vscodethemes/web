@@ -1,38 +1,27 @@
 import { css, cx } from 'emotion'
 import * as React from 'react'
+import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 interface TabProps {
+  colors: Colors
   active: boolean
-  border?: string
-  activeBackground: string
-  activeForeground: string
-  activeBorder?: string
-  inactiveBackground: string
-  inactiveForeground: string
-  inactiveBorder?: string
   onClick: () => any
 }
 
-const Tab: React.SFC<TabProps> = ({
-  active,
-  border,
-  activeBackground,
-  activeForeground,
-  activeBorder,
-  inactiveBackground,
-  inactiveForeground,
-  inactiveBorder,
-  children,
-  onClick,
-}) => (
+const Tab: React.SFC<TabProps> = ({ colors, active, children, onClick }) => (
   <button
     className={cx(classes.tab, active && classes.active)}
     style={{
-      background: active ? activeBackground : inactiveBackground,
-      color: active ? activeForeground : inactiveForeground,
-      borderRight: border ? `1px solid ${border}` : '',
-      borderBottom: active && activeBorder ? `1px solid ${activeBorder}` : '',
+      background: active
+        ? colors.tabActiveBackground
+        : colors.tabInactiveBackground,
+      color: active ? colors.tabActiveForeground : colors.tabInactiveForeground,
+      borderRight: colors.tabBorder ? `1px solid ${colors.tabBorder}` : '',
+      borderBottom:
+        active && colors.tabActiveBorder
+          ? `1px solid ${colors.tabActiveBorder}`
+          : '',
     }}
     onClick={onClick}
   >
