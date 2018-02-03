@@ -58,8 +58,9 @@ const classes = {
     border: `1px solid ${theme.colors.inputBorder}`,
     borderRadius: theme.borderRadius.md,
     boxShadow: theme.shadows.sm,
+    WebkitAppearance: 'none',
     ':focus': {
-      borderColor: theme.colors.primary,
+      borderColor: theme.colors.palette[0],
     },
     '::placeholder': {
       color: theme.colors.textMuted,

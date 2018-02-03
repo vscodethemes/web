@@ -15,15 +15,17 @@ interface SearchProps {
   search: string
   dark: boolean
   light: boolean
+  page: number
   children: (theme: Theme) => React.ReactNode
   onFacetResults: (totalDark: number, totalLight: number) => any
+  onPages: (totalPages: number) => any
 }
 
 interface SearchState {
   themes: Theme[]
 }
 
-const hitsPerPage = 10
+const hitsPerPage = 12
 const placeholders = generatePlaceholderThemes(hitsPerPage)
 
 class Search extends React.PureComponent<SearchProps, SearchState> {
@@ -61,7 +63,8 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     } else if (
       this.props.sortBy !== nextProps.sortBy ||
       this.props.dark !== nextProps.dark ||
-      this.props.light !== nextProps.light
+      this.props.light !== nextProps.light ||
+      this.props.page !== nextProps.page
     ) {
       window.scrollTo(0, 0)
       this.search(nextProps)
@@ -88,15 +91,16 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
     try {
       this.startPlaceholdersTimer()
-      const { hits } = await this.indicies[props.sortBy].search({
+      const { hits, nbPages } = await this.indicies[props.sortBy].search({
         query: props.search,
         filters: types.join(' OR '),
-        page: 0,
+        page: props.page - 1,
         hitsPerPage,
         facets: 'type',
       })
       this.stopPlaceholdersTimer()
       this.setState({ themes: hits })
+      this.props.onPages(nbPages)
     } catch (err) {
       throw new Error(`Error searching: ${err.message}.`)
     }

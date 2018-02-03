@@ -12,7 +12,7 @@ const classes = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: theme.gutters.md,
-    maxWidth: em(220),
+    maxWidth: em(210),
   }),
 }
 

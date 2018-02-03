@@ -1,21 +1,21 @@
 const spacingUnit = 10
 export const rootFontSize = 14
-export const fontFamily = 'Montserrat'
 
 export const em = (px: number) =>
   `${Math.round(px / rootFontSize * 100) / 100}em`
 
 export default {
-  fontFamily: `${fontFamily}, sans-serif`,
+  fontFamily:
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif',
+  fontFamilyMono:
+    '"SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace',
   fontSizes: {
     xs: 10,
     sm: 12,
     md: 14,
   },
   colors: {
-    primary: '#00A8FF',
-    lightPrimary: '#66CBFF',
-    secondary: '#D4D4D4',
+    palette: ['#00A8FF', '#B8E63B', '#E70258', '#880055', '#FAF100'],
 
     // Light theme.
     // background: '#FFFFFF',
@@ -28,8 +28,8 @@ export default {
     background: '#202026',
     inputBackground: '#28282F',
     inputBorder: '#18181F',
-    text: '#84848F',
-    textMuted: '#58585F',
+    text: '#D4D4D4',
+    textMuted: '#606066',
   },
   borderRadius: {
     sm: 4,
