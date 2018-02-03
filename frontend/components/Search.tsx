@@ -16,7 +16,7 @@ interface SearchProps {
   dark: boolean
   light: boolean
   page: number
-  children: (theme: Theme) => React.ReactNode
+  renderTheme: (theme: Theme) => React.ReactNode
   onFacetResults: (totalDark: number, totalLight: number) => any
   onPages: (totalPages: number) => any
 }
@@ -72,9 +72,13 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   }
 
   public render() {
+    const { renderTheme, children } = this.props
+    const { themes } = this.state
+
     return (
-      <div className={styles.container}>
-        {this.state.themes.map(this.props.children)}
+      <div className={classes.container}>
+        {themes.map(renderTheme)}
+        <div className={classes.footer}>{children}</div>
       </div>
     )
   }
@@ -135,9 +139,15 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   }
 }
 
-const styles = {
+const classes = {
   container: css({
     paddingTop: em(theme.gutters.lg),
+  }),
+
+  footer: css({
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   }),
 }
 
