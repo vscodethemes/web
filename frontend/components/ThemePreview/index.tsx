@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { LanguageOptions, Theme } from '../../../types/static'
+import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
@@ -24,48 +25,31 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
   repositoryOwner,
   repository,
   colors,
-  tokens,
   language,
   onLanguage,
+  ...rest,
 }) => {
-  const tabProps = {
-    activeBackground: colors.tabActiveBackground,
-    activeForeground: colors.tabActiveForeground,
-    activeBorder: colors.tabActiveBorder,
-    inactiveBackground: colors.tabInactiveBackground,
-    inactiveForeground: colors.tabInactiveForeground,
-    border: colors.tabBorder,
-  }
-
-  const isPlaceholder = !extensionId
-
   return (
-    <Editor background={colors.editorBackground}>
+    <Editor colors={colors}>
       <TopBar name={name} type={type} />
-      <ActivityBar
-        background={colors.activityBarBackground}
-        foreground={colors.activityBarForeground}
-      />
-      <TabBar
-        background={colors.editorGroupHeaderTabsBackground}
-        border={colors.editorGroupHeaderTabsBorder}
-      >
+      <ActivityBar colors={colors} />
+      <TabBar colors={colors}>
         <Tab
-          {...tabProps}
+          colors={colors}
           active={language === 'javascript'}
           onClick={() => onLanguage('javascript')}
         >
           main.js
         </Tab>
         <Tab
-          {...tabProps}
+          colors={colors}
           active={language === 'css'}
           onClick={() => onLanguage('css')}
         >
           styles.css
         </Tab>
         <Tab
-          {...tabProps}
+          colors={colors}
           active={language === 'html'}
           onClick={() => onLanguage('html')}
         >
@@ -73,11 +57,10 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         </Tab>
       </TabBar>
       <TabContent>
-        {!isPlaceholder && <Code language={language} tokens={tokens} />}
+        {!isPlaceholder(rest) && <Code colors={colors} language={language} />}
       </TabContent>
       <StatusBar
-        background={colors.statusBarBackground}
-        foreground={colors.statusBarForeground}
+        colors={colors}
         repository={repository}
         repositoryOwner={repositoryOwner}
         extensionName={extensionName}

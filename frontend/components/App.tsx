@@ -119,7 +119,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               />
             )}
           >
-            {totalPages !== null && (
+            {totalPages > 1 && (
               <Pagination
                 totalPages={totalPages}
                 page={params.page}

@@ -11,7 +11,6 @@ export const gui: GUIVariables = {
       hc: '#000000',
     },
   },
-
   activityBarForeground: {
     key: 'activityBar.foreground',
     defaults: {
@@ -20,7 +19,6 @@ export const gui: GUIVariables = {
       hc: '#FFFFFF',
     },
   },
-
   statusBarBackground: {
     key: 'statusBar.background',
     defaults: {
@@ -29,7 +27,6 @@ export const gui: GUIVariables = {
       hc: null,
     },
   },
-
   statusBarForeground: {
     key: 'statusBar.foreground',
     defaults: {
@@ -38,7 +35,6 @@ export const gui: GUIVariables = {
       hc: '#FFFFFF',
     },
   },
-
   editorBackground: {
     key: 'editor.background',
     defaults: {
@@ -47,7 +43,14 @@ export const gui: GUIVariables = {
       hc: '#000000',
     },
   },
-
+  editorForeground: {
+    key: 'editor.foreground',
+    defaults: {
+      dark: '#BBBBBB',
+      light: '#333333',
+      hc: '#FFFFFF',
+    },
+  },
   editorGroupHeaderTabsBackground: {
     key: 'editorGroupHeader.tabsBackground',
     defaults: {
@@ -56,7 +59,6 @@ export const gui: GUIVariables = {
       hc: null,
     },
   },
-
   editorGroupHeaderTabsBorder: {
     key: 'editorGroupHeader.tabsBorder',
     defaults: {
@@ -65,7 +67,6 @@ export const gui: GUIVariables = {
       hc: '#6FC3DF',
     },
   },
-
   editorLineNumberForeground: {
     key: 'editorLineNumber.foreground',
     defaults: {
@@ -74,7 +75,6 @@ export const gui: GUIVariables = {
       hc: '#FFFFFF',
     },
   },
-
   tabActiveBackground: {
     key: 'tab.activeBackground',
     defaults: {
@@ -83,7 +83,6 @@ export const gui: GUIVariables = {
       hc: '#000000',
     },
   },
-
   tabActiveForeground: {
     key: 'tab.activeForeground',
     defaults: {
@@ -92,7 +91,6 @@ export const gui: GUIVariables = {
       hc: '#FFFFFF',
     },
   },
-
   tabActiveBorder: {
     key: 'tab.activeBorder',
     defaults: {
@@ -101,7 +99,6 @@ export const gui: GUIVariables = {
       hc: null,
     },
   },
-
   tabBorder: {
     key: 'tab.border',
     defaults: {
@@ -110,7 +107,6 @@ export const gui: GUIVariables = {
       hc: '#6FC3DF',
     },
   },
-
   tabInactiveBackground: {
     key: 'tab.inactiveBackground',
     defaults: {
@@ -119,7 +115,6 @@ export const gui: GUIVariables = {
       hc: null,
     },
   },
-
   tabInactiveForeground: {
     key: 'tab.inactiveForeground',
     defaults: {
@@ -128,7 +123,6 @@ export const gui: GUIVariables = {
       hc: '#FFFFFF',
     },
   },
-
   contrastActiveBorder: {
     key: 'contrastActiveBorder',
     defaults: {
@@ -137,7 +131,6 @@ export const gui: GUIVariables = {
       hc: '#F38518',
     },
   },
-
   contrastBorder: {
     key: 'contrastBorder',
     defaults: {
@@ -149,113 +142,103 @@ export const gui: GUIVariables = {
 }
 
 // Token scopes are pulled from https://www.sublimetext.com/docs/3/scope_naming.html
+const keywordScopes = ['keyword', 'keyword.control', 'storage', 'storage.type']
 export const tokens: TokenVariables = {
-  keyword: {
-    scope: ['keyword', 'storage', 'storage.type'],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  variable: {
-    scope: [
-      'variable',
-      'meta.definition.variable.name',
-      'support.variable',
-      'punctuation.definition.variable',
-      'variable.language',
-      'constant.language',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  number: {
-    scope: [
-      'constant.numeric',
-      'variable',
-      'meta.definition.variable.name',
-      'support.variable',
-      'punctuation.definition.variable',
-      'variable.language',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  literal: {
-    scope: [
-      'constant.language',
-      'constant.numeric',
-      'variable',
-      'meta.definition.variable.name',
-      'support.variable',
-      'punctuation.definition.variable',
-      'variable.language',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  string: {
-    scope: [
-      'string',
-      'punctuation',
-      'entity.other.attribute-name',
-      'constant.language',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
   comment: {
-    scope: ['comment'],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
+    scope: ['comment', 'comment.line', 'comment.block'],
   },
-
+  punctuation: {
+    scope: [
+      'meta.block',
+      'punctuation.section.block.begin',
+      'punctuation.section.block.end',
+      'meta.braces',
+      'punctuation.section.braces.begin',
+      'punctuation.section.braces.end',
+      'meta.group',
+      'punctuation.section.group.begin',
+      'punctuation.section.group.end',
+      'meta.parens',
+      'punctuation.section.parens.begin',
+      'punctuation.section.parens.end',
+    ],
+  },
+  keyword: {
+    scope: keywordScopes,
+  },
   class: {
     scope: [
       'support.class',
       'support.type',
       'entity.name.type',
       'entity.name.class',
-      'keyword',
-      'storage',
-      'storage.type',
+      'meta.class',
+      // Use keyword scopes as a fallback.
+      ...keywordScopes,
     ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
   },
-
+  literal: {
+    scope: ['constant.language', 'constant.numeric'],
+  },
+  number: {
+    scope: ['constant.numeric'],
+  },
+  string: {
+    scope: [
+      'string',
+      'string.quoted.single',
+      'string.quoted.double',
+      'string.quoted.triple',
+    ],
+  },
+  variable: {
+    scope: ['variable', 'variable.other', 'variable.other.readwrite'],
+  },
+  operator: {
+    scope: [
+      'keyword.operator',
+      'keyword.operator.assignment',
+      'keyword.operator.arithmetic',
+      'keyword.operator.bitwise',
+      'keyword.operator.logical',
+      'keyword.operator.word',
+    ],
+  },
   function: {
     scope: [
-      'entity.name.function',
+      'meta.function',
+      'storage.function',
       'support.function',
+      'entity.name.function',
       'variable.function',
-      'keyword',
-      'storage',
-      'storage.type',
     ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
   },
-
+  functionParam: {
+    scope: ['meta.function.parameters', 'variable.parameter'],
+  },
+  // html
+  tag: {
+    scope: ['entity.name.tag', 'meta.tag'],
+  },
+  attribute: {
+    scope: ['entity.other.attribute-name', 'meta.tag'],
+  },
+  attributeValue: {
+    scope: [
+      'string.quoted.double.html',
+      'string.unquoted.html',
+      'punctuation.definition.string.begin.html',
+      'punctuation.definition.string.end.html',
+    ],
+  },
+  // css
+  property: {
+    scope: [
+      'punctuation.section.property-list.css',
+      'support.type.property-name.media.css',
+      'support.type.vendor-prefix.css',
+    ],
+  },
   selector: {
     scope: [
       'entity.name.tag.css',
@@ -265,40 +248,6 @@ export const tokens: TokenVariables = {
       'entity.other.attribute-name.parent-selector.css',
       'entity.other.attribute-name.pseudo-class.css',
       'entity.other.attribute-name.pseudo-element.css',
-      'keyword',
-      'storage',
-      'storage.type',
     ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  tag: {
-    scope: [
-      'entity.name.tag',
-      'source.js.embedded.html',
-      'keyword',
-      'storage',
-      'storage.type',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
-  },
-
-  attribute: {
-    scope: [
-      'entity.other.attribute-name',
-      'keyword',
-      'storage',
-      'storage.type',
-    ],
-    defaults: {
-      foreground: null,
-      fontStyle: 'normal',
-    },
   },
 }

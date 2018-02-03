@@ -1,11 +1,11 @@
 import { css, cx } from 'emotion'
 import * as React from 'react'
+import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
 import Icon from '../Icon'
 
 interface StatusBarProps {
-  background: string
-  foreground: string
+  colors: Colors
   repository: string
   repositoryOwner: string
   extensionName: string
@@ -13,19 +13,21 @@ interface StatusBarProps {
 }
 
 const StatusBar: React.SFC<StatusBarProps> = ({
-  background,
-  foreground,
+  colors,
   repository,
   repositoryOwner,
   extensionName,
   publisherName,
 }) => (
-  <div className={classes.statusBar} style={{ background }}>
+  <div
+    className={classes.statusBar}
+    style={{ background: colors.statusBarBackground }}
+  >
     {repositoryOwner && (
       <a
         className={classes.link}
         href={`https://github.com/${repositoryOwner}/${repository}`}
-        style={{ color: foreground }}
+        style={{ color: colors.statusBarForeground }}
       >
         <img
           className={classes.pic}
@@ -39,10 +41,14 @@ const StatusBar: React.SFC<StatusBarProps> = ({
       <a
         className={cx(classes.link, classes.secondary)}
         href={`vscode:extension/${publisherName}.${extensionName}`}
-        style={{ color: foreground }}
+        style={{ color: colors.statusBarForeground }}
       >
         Open in VSCode
-        <Icon className={classes.icon} icon="open" fill={foreground} />
+        <Icon
+          className={classes.icon}
+          icon="open"
+          fill={colors.statusBarForeground}
+        />
       </a>
     )}
   </div>

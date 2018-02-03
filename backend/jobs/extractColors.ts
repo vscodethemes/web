@@ -2,11 +2,11 @@ import {
   ColorsRuntime,
   ExtractColorsPayloadRuntime,
   ThemeTypeRuntime,
-  TokensRuntime,
 } from '../../types/runtime'
-import { Colors, Services, ThemeType, Tokens } from '../../types/static'
+import { Colors, Services, ThemeType } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
-import * as themeVariables from '../themeVariables'
+import extractGUIColors from '../utils/extractGUIColors'
+import extractTokenColors from '../utils/extractTokenColors'
 
 export default async function run(services: Services): Promise<any> {
   const { extractColors, saveTheme, logger } = services
@@ -71,11 +71,10 @@ async function fetchTheme(
   repository: string,
   repositoryBranch: string,
   repositoryPath: string,
-): Promise<{ name: string; type: ThemeType; colors: Colors; tokens: Tokens }> {
+): Promise<{ name: string; type: ThemeType; colors: Colors }> {
   let name: string
   let type: ThemeType
-  let colors: Colors
-  let tokens: Tokens
+  let colors: Partial<Colors>
   const { fetch, logger } = services
   const baseUrl = 'https://raw.githubusercontent.com'
   const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
@@ -101,11 +100,13 @@ async function fetchTheme(
     data = await response.json()
     name = data.name
     type = data.type
-    if (data.colors) {
-      colors = extractGUIColors(type, data.colors)
-    }
-    if (data.tokenColors) {
-      tokens = extractTokenColors(data.tokenColors)
+    if (data.colors && data.tokenColors) {
+      const guiColors = extractGUIColors(type, data.colors)
+      const tokenColors = extractTokenColors(
+        guiColors.editorForeground,
+        data.tokenColors,
+      )
+      colors = { ...guiColors, ...tokenColors }
     }
   } catch (err) {
     logger.error(err)
@@ -130,75 +131,7 @@ async function fetchTheme(
     )
   }
 
-  if (!TokensRuntime.guard(tokens)) {
-    throw new PermanentJobError(
-      `fetchTheme error: Invalid tokens: ${JSON.stringify(tokens)}
-        Theme: ${JSON.stringify(data)}`,
-    )
-  }
-
   logger.log(`fetchTheme success: ${JSON.stringify(data)}`)
 
-  return { name, type, colors, tokens }
-}
-
-function extractGUIColors(type: ThemeType, data: any): Colors {
-  const colors: any = {}
-
-  Object.keys(themeVariables.gui).forEach(key => {
-    const colorVar = themeVariables.gui[key]
-    // Initially set color to the default and override
-    // if we find a match.
-    colors[key] = colorVar.defaults[type]
-    if (data[colorVar.key]) {
-      colors[key] = data[colorVar.key]
-    }
-  })
-
-  return colors as Colors
-}
-
-function extractTokenColors(data: any): Tokens {
-  const tokens: any = {}
-
-  Object.keys(themeVariables.tokens).forEach(key => {
-    const tokenVar = themeVariables.tokens[key]
-    // Initially set token styles to the defaults and override
-    // if we find a token with a matching scope.
-    tokens[`${key}Foreground`] = tokenVar.defaults.foreground
-    tokens[`${key}FontStyle`] = tokenVar.defaults.fontStyle
-    // Ensure tokenColors is an array
-    if (Array.isArray(data)) {
-      for (const token of data) {
-        // Check if one of the scopes matches anything in tokenColors.
-        // The first match wins.
-        for (const scope of tokenVar.scope) {
-          // Tokens in tokenColors can have multiple scopes defined as an array
-          // or a string delimited by ',' or a single scope defined as a string.
-          let scopes = []
-          if (typeof token.scope === 'string') {
-            scopes = token.scope.split(',')
-          } else if (Array.isArray(token.scope)) {
-            scopes = token.scope
-          }
-
-          if (scopes.indexOf(scope) >= 0) {
-            // We found a matching token, override the defaults if applicable.
-            if (
-              token.settings &&
-              typeof token.settings === 'object' &&
-              token.settings.foreground
-            ) {
-              tokens[`${key}Foreground`] = token.settings.foreground
-              if (token.settings.fontStyle) {
-                tokens[`${key}FontStyle`] = token.settings.fontStyle
-              }
-            }
-          }
-        }
-      }
-    }
-  })
-
-  return tokens as Tokens
+  return { name, type, colors }
 }

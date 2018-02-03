@@ -3,13 +3,13 @@ import * as cssTemplate from 'raw-loader!./templates/css.css' // tslint:disable-
 import * as jsTemplate from 'raw-loader!./templates/js.js' // tslint:disable-line
 import * as htmlTemplate from 'raw-loader!./templates/html.html' // tslint:disable-line
 import * as React from 'react'
-import cssLanguage from 'react-syntax-highlighter/languages/hljs/css'
-import jsLanguage from 'react-syntax-highlighter/languages/hljs/javascript'
-import htmlLanguage from 'react-syntax-highlighter/languages/hljs/xml'
+import cssLanguage from 'react-syntax-highlighter/languages/prism/css'
+import jsLanguage from 'react-syntax-highlighter/languages/prism/javascript'
+import htmlLanguage from 'react-syntax-highlighter/languages/prism/markup'
 import SyntaxHighlighter, {
   registerLanguage,
-} from 'react-syntax-highlighter/light'
-import { LanguageOptions, Tokens } from '../../../types/static'
+} from 'react-syntax-highlighter/prism-light'
+import { Colors, LanguageOptions } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 registerLanguage('css', cssLanguage)
@@ -24,12 +24,12 @@ const templates = {
 
 interface CodeProps {
   language: LanguageOptions
-  tokens: Tokens
+  colors: Colors
 }
 
-const Code: React.SFC<CodeProps> = ({ language, tokens }) => (
+const Code: React.SFC<CodeProps> = ({ language, colors }) => (
   <div className={classes.code}>
-    <SyntaxHighlighter language={language} style={createStyles(tokens)}>
+    <SyntaxHighlighter language={language} style={createStyles(colors)}>
       {templates[language]}
     </SyntaxHighlighter>
   </div>
@@ -40,6 +40,7 @@ const classes = {
     padding: em(theme.gutters.xs),
     '& pre': {
       margin: 0,
+      padding: '1%',
     },
     '& code': {
       fontFamily: theme.fontFamilyMono,
@@ -49,129 +50,87 @@ const classes = {
   }),
 }
 
-function createStyles(tokens: Tokens) {
-  // Class reference: http://highlightjs.readthedocs.io/en/latest/css-classes-reference.html
+function createStyles(colors: Colors) {
   return {
     // Base
-    hljs: {
-      display: 'block',
-      overflowX: 'auto',
-      background: 'transparent',
-      // TODO: This should use colors.editorForeground.
-      color: theme.colors.text,
+    'pre[class*="language-"]': {
+      fontFamily: theme.fontFamilyMono,
+      lineHeight: '1',
+      color: colors.editorForeground,
     },
-    'hljs-emphasis': {
-      fontStyle: 'italic',
+    comment: {
+      color: colors.commentForeground,
+      fontStyle: colors.commentFontStyle,
     },
-    'hljs-strong': {
-      fontWeight: 'bold',
+    'block-comment': {
+      color: colors.commentForeground,
+      fontStyle: colors.commentFontStyle,
     },
-    // Comments
-    'hljs-comment': {
-      color: tokens.commentForeground,
-      fontStyle: tokens.commentFontStyle,
+    punctuation: {
+      color: colors.punctuationForeground,
+      fontStyle: colors.punctuationFontStyle,
     },
-    // Numbers
-    'hljs-number': {
-      color: tokens.numberForeground,
-      fontStyle: tokens.numberFontStyle,
+    keyword: {
+      color: colors.keywordForeground,
+      fontStyle: colors.keywordFontStyle,
     },
-    // Strings
-    'hljs-string': {
-      color: tokens.stringForeground,
-      fontStyle: tokens.stringFontStyle,
+    'class-name': {
+      color: colors.classForeground,
+      fontStyle: colors.classFontStyle,
     },
-    'hljs-link': {
-      color: tokens.stringForeground,
-      fontStyle: tokens.stringFontStyle,
+    boolean: {
+      color: colors.literalForeground,
+      fontStyle: colors.literalFontStyle,
     },
-    'hljs-quote': {
-      color: tokens.stringForeground,
-      fontStyle: tokens.stringFontStyle,
+    constant: {
+      color: colors.literalForeground,
+      fontStyle: colors.literalFontStyle,
     },
-    // Variables
-    'hljs-variable': {
-      color: tokens.variableForeground,
-      fontStyle: tokens.variableFontStyle,
+    symbol: {
+      color: colors.literalForeground,
+      fontStyle: colors.literalFontStyle,
     },
-    'hljs-params': {
-      color: tokens.variableForeground,
-      fontStyle: tokens.variableFontStyle,
+    number: {
+      color: colors.numberForeground,
+      fontStyle: colors.numberFontStyle,
     },
-    'hljs-template-variable': {
-      color: tokens.variableForeground,
-      fontStyle: tokens.variableFontStyle,
+    string: {
+      color: colors.stringForeground,
+      fontStyle: colors.stringFontStyle,
     },
-    'hljs-type': {
-      color: tokens.variableForeground,
-      fontStyle: tokens.variableFontStyle,
+    variable: {
+      color: colors.variableForeground,
+      fontStyle: colors.variableFontStyle,
     },
-    // Keywords
-    'hljs-keyword': {
-      color: tokens.keywordForeground,
-      fontStyle: tokens.keywordFontStyle,
+    operator: {
+      color: colors.operatorForeground,
+      fontStyle: colors.operatorFontStyle,
     },
-    'hljs-built_in': {
-      color: tokens.keywordForeground,
-      fontStyle: tokens.keywordFontStyle,
+    function: {
+      color: colors.functionForeground,
+      fontStyle: colors.functionFontStyle,
     },
-    'hljs-builtin-name': {
-      color: tokens.keywordForeground,
-      fontStyle: tokens.keywordFontStyle,
+    // html
+    tag: {
+      color: colors.tagForeground,
+      fontStyle: colors.tagFontStyle,
     },
-    'hljs-symbol': {
-      color: tokens.keywordForeground,
-      fontStyle: tokens.keywordFontStyle,
+    'attr-name': {
+      color: colors.attributeForeground,
+      fontStyle: colors.attributeFontStyle,
     },
-    'hljs-meta': {
-      color: tokens.keywordForeground,
-      fontStyle: tokens.keywordFontStyle,
+    'attr-value': {
+      color: colors.attributeValueForeground,
+      fontStyle: colors.attributeValueFontStyle,
     },
-    // Literals
-    'hljs-literal': {
-      color: tokens.literalForeground,
-      fontStyle: tokens.literalFontStyle,
+    // css
+    property: {
+      color: colors.propertyForeground,
+      fontStyle: colors.propertyFontStyle,
     },
-    // Classes
-    'hljs-class': {
-      color: tokens.classForeground,
-      fontStyle: tokens.classFontStyle,
-    },
-    'hljs-title': {
-      color: tokens.classForeground,
-      fontStyle: tokens.classFontStyle,
-    },
-    // Functions
-    'hljs-function': {
-      color: tokens.functionForeground,
-      fontStyle: tokens.functionFontStyle,
-    },
-    // HTML tags
-    'hljs-tag': {
-      color: tokens.tagForeground,
-      fontStyle: tokens.tagFontStyle,
-    },
-    'hljs-name': {
-      color: tokens.tagForeground,
-      fontStyle: tokens.tagFontStyle,
-    },
-    // HTML attributes
-    'hljs-attribute': {
-      ccolor: tokens.attributesForeground,
-      fontStyle: tokens.attributesFontStyle,
-    },
-    // CSS selectors
-    'hljs-selector-id': {
-      color: tokens.selectorForeground,
-      fontStyle: tokens.selectorFontStyle,
-    },
-    'hljs-selector-class': {
-      color: tokens.selectorForeground,
-      fontStyle: tokens.selectorFontStyle,
-    },
-    'hljs-selector-tag': {
-      color: tokens.selectorForeground,
-      fontStyle: tokens.selectorFontStyle,
+    selector: {
+      color: colors.selectorForeground,
+      fontStyle: colors.selectorFontStyle,
     },
   }
 }

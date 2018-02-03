@@ -86,11 +86,13 @@ export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
 )
 
 export const ColorsRuntime = Record({
+  // VSCode GUI
   activityBarBackground: String,
   activityBarForeground: String,
   statusBarBackground: String,
   statusBarForeground: String,
   editorBackground: String,
+  editorForeground: String,
   editorGroupHeaderTabsBackground: String,
   editorLineNumberForeground: String,
   tabActiveBackground: String,
@@ -102,31 +104,39 @@ export const ColorsRuntime = Record({
   tabBorder: String.Or(Null),
   contrastActiveBorder: String.Or(Null),
   contrastBorder: String.Or(Null),
-})
-
-export const TokensRuntime = Record({
+  // Syntax Tokens
+  commentForeground: String,
+  commentFontStyle: String,
+  punctuationForeground: String,
+  punctuationFontStyle: String,
   keywordForeground: String,
   keywordFontStyle: String,
-  variableForeground: String,
-  variableFontStyle: String,
+  classForeground: String,
+  classFontStyle: String,
   literalForeground: String,
   literalFontStyle: String,
   numberForeground: String,
   numberFontStyle: String,
   stringForeground: String,
   stringFontStyle: String,
-  commentForeground: String,
-  commentFontStyle: String,
-  classForeground: String,
-  classFontStyle: String,
+  variableForeground: String,
+  variableFontStyle: String,
+  operatorForeground: String,
+  operatorFontStyle: String,
   functionForeground: String,
   functionFontStyle: String,
-  selectorForeground: String,
-  selectorFontStyle: String,
+  functionParamForeground: String,
+  functionParamFontStyle: String,
   tagForeground: String,
   tagFontStyle: String,
   attributeForeground: String,
   attributeFontStyle: String,
+  attributeValueForeground: String,
+  attributeValueFontStyle: String,
+  propertyForeground: String,
+  propertyFontStyle: String,
+  selectorForeground: String,
+  selectorFontStyle: String,
 })
 
 export const ThemeTypeRuntime = Union(
@@ -140,6 +150,5 @@ export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
     name: String,
     type: ThemeTypeRuntime,
     colors: ColorsRuntime,
-    tokens: TokensRuntime,
   }),
 )

@@ -1,17 +1,22 @@
 import { css } from 'emotion'
 import * as React from 'react'
+import { Colors } from '../../../types/static'
 import { activityBarWidth } from './ActivityBar'
 import { topBarHeight } from './TopBar'
 
 interface TabBarProps {
-  background: string
-  border: string
+  colors: Colors
 }
 
-const TabBar: React.SFC<TabBarProps> = ({ background, border, children }) => (
+const TabBar: React.SFC<TabBarProps> = ({ colors, children }) => (
   <div
     className={classes.tabBar}
-    style={{ background, borderBottom: border ? `1px solid ${border}` : '' }}
+    style={{
+      background: colors.editorGroupHeaderTabsBackground,
+      borderBottom: colors.editorGroupHeaderTabsBorder
+        ? `1px solid ${colors.editorGroupHeaderTabsBorder}`
+        : '',
+    }}
   >
     {children}
   </div>

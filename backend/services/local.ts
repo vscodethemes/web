@@ -1,7 +1,6 @@
 // tslint:disable no-console
 import fetch from 'node-fetch'
 import {
-  Colors,
   ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
@@ -9,7 +8,6 @@ import {
   SaveThemePayload,
   ScrapeThemesPayload,
   Services,
-  Tokens,
 } from '../../types/static'
 import * as themeVariables from '../themeVariables'
 
@@ -41,22 +39,23 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   }
 }
 
-const payloadColors = Object.keys(themeVariables.gui).reduce(
-  (colors: Colors, key: string) => {
+function createVSCodeGUIColors(): any {
+  return Object.keys(themeVariables.gui).reduce((colors: any, key: string) => {
     colors[key] = 'color'
     return colors
-  },
-  {},
-)
+  }, {})
+}
 
-const payloadTokens = Object.keys(themeVariables.tokens).reduce(
-  (tokens: Tokens, key: string) => {
-    tokens[`${key}Foreground`] = 'color'
-    tokens[`${key}FontStyle`] = 'fontStyle'
-    return tokens
-  },
-  {},
-)
+function createTokenColors(): any {
+  return Object.keys(themeVariables.tokens).reduce(
+    (tokens: any, key: string) => {
+      tokens[`${key}Foreground`] = 'color'
+      tokens[`${key}FontStyle`] = 'fontStyle'
+      return tokens
+    },
+    {},
+  )
+}
 
 export default function createServices(): Services {
   return {
@@ -144,8 +143,10 @@ export default function createServices(): Services {
         trendingDaily: 0,
         trendingWeekly: 0,
         trendingMonthly: 0,
-        colors: payloadColors as Colors,
-        tokens: payloadTokens as Tokens,
+        colors: {
+          ...createVSCodeGUIColors(),
+          ...createTokenColors(),
+        },
       },
     }),
   }

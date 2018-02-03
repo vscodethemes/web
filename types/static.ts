@@ -12,7 +12,6 @@ import {
   SaveThemePayloadRuntime,
   ScrapeThemesPayloadRuntime,
   ThemeTypeRuntime,
-  TokensRuntime,
   VersionRuntime,
 } from './runtime'
 
@@ -22,19 +21,12 @@ export type ScrapeThemesPayload = Static<typeof ScrapeThemesPayloadRuntime>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
+export type Colors = Static<typeof ColorsRuntime>
 export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
 export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type PackageJSON = Static<typeof PackageJSONRuntime>
 export type SaveThemePayload = Static<typeof SaveThemePayloadRuntime>
 export type ThemeType = Static<typeof ThemeTypeRuntime>
-
-export interface Colors extends Static<typeof ColorsRuntime> {
-  [key: string]: string
-}
-
-export interface Tokens extends Static<typeof TokensRuntime> {
-  [key: string]: string
-}
 
 export interface GUIVariables {
   [key: string]: {
@@ -51,11 +43,6 @@ export interface GUIVariables {
 export interface TokenVariables {
   [key: string]: {
     scope: string[]
-    defaults: {
-      foreground: string | null
-      fontStyle: string | null
-      [key: string]: string
-    }
   }
 }
 
@@ -116,7 +103,6 @@ export interface RepositoryInfo {
 export interface Theme extends SaveThemePayload {
   objectID: string
   colors: Colors
-  tokens: Tokens
 }
 
 export type SortByOptions = 'installs' | 'trending' | 'new'
