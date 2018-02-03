@@ -73,7 +73,6 @@ const classes = {
     height: '100%',
     ':hover': {
       textDecoration: 'underline wavy',
-      opacity: 1,
     },
   }),
 
@@ -90,7 +89,6 @@ const classes = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    opacity: 0.75,
   }),
 
   icon: css({

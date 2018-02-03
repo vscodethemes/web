@@ -1,14 +1,16 @@
-import { css } from 'emotion'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { RouteComponentProps, withRouter } from 'react-router'
 import { SearchParams, Theme } from '../../types/static'
-import theme, { em } from '../theme'
+import theme from '../theme'
 import * as searchParams from '../utils/searchParams'
 import AlgoliaLogo from './AlgoliaLogo'
+import * as classes from './App.styles'
 import Checkbox from './Checkbox'
+import Facet from './Facet'
 import Input from './Input'
 import Logo from './Logo'
+import Pagination from './Pagination'
 import Search from './Search'
 import Tab from './Tab'
 import Tabs from './Tabs'
@@ -23,12 +25,14 @@ const titles: { [key: string]: string } = {
 interface AppState {
   totalDark: number | null
   totalLight: number | null
+  totalPages: number | null
 }
 
 class App extends React.Component<RouteComponentProps<{}>, AppState> {
   public state: AppState = {
     totalDark: null,
     totalLight: null,
+    totalPages: null,
   }
 
   public componentDidMount() {
@@ -42,7 +46,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
 
   public render(): React.ReactNode {
     const { location } = this.props
-    const { totalDark, totalLight } = this.state
+    const { totalDark, totalLight, totalPages } = this.state
     const params = searchParams.fromLocation(location)
 
     return (
@@ -56,20 +60,20 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
         <div className={classes.aside}>
           <Tabs>
             <Tab
-              color="#B8E63B"
+              color={theme.colors.palette[1]}
               to={{ pathname: '/', search: location.search }}
               exact={true}
             >
               Popular
             </Tab>
             <Tab
-              color="#880055"
+              color={theme.colors.palette[2]}
               to={{ pathname: '/trending', search: location.search }}
             >
               Trending
             </Tab>
             <Tab
-              color="#E70258"
+              color={theme.colors.palette[3]}
               to={{ pathname: '/new', search: location.search }}
             >
               New
@@ -80,29 +84,33 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
             icon="search"
             placeholder="Search VSCode Themes"
             value={params.search}
-            onChange={search => this.setQueryParams({ ...params, search })}
+            onChange={search =>
+              this.setQueryParams({ ...params, search, page: 1 })
+            }
           />
           <Checkbox
             checked={params.dark}
-            onChange={dark => this.setQueryParams({ ...params, dark })}
+            onChange={dark => this.setQueryParams({ ...params, dark, page: 1 })}
           >
             Dark
-            {totalDark !== null && (
-              <span className={classes.facet}>| {totalDark}</span>
-            )}
+            {totalDark !== null && <Facet>| {totalDark}</Facet>}
           </Checkbox>
           <Checkbox
             checked={params.light}
-            onChange={light => this.setQueryParams({ ...params, light })}
+            onChange={light =>
+              this.setQueryParams({ ...params, light, page: 1 })
+            }
           >
             Light
-            {totalLight !== null && (
-              <span className={classes.facet}>| {totalLight}</span>
-            )}
+            {totalLight !== null && <Facet>| {totalLight}</Facet>}
           </Checkbox>
         </div>
         <div className={classes.main}>
-          <Search {...params} onFacetResults={this.setFacetResults}>
+          <Search
+            {...params}
+            onFacetResults={this.setFacetResults}
+            onPages={this.setTotalPages}
+          >
             {(t: Theme) => (
               <ThemePreview
                 key={t.objectID}
@@ -112,7 +120,16 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               />
             )}
           </Search>
-          <AlgoliaLogo />
+          <div className={classes.searchFooter}>
+            {totalPages !== null && (
+              <Pagination
+                totalPages={totalPages}
+                page={params.page}
+                onPage={page => this.setQueryParams({ ...params, page })}
+              />
+            )}
+            <AlgoliaLogo />
+          </div>
         </div>
       </div>
     )
@@ -127,67 +144,10 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
   private setFacetResults = (totalDark: number, totalLight: number) => {
     this.setState({ totalDark, totalLight })
   }
-}
 
-const headerHeight = 34
-const asideWidth = 260
-const mainWidth = 420
-const containerGutter = theme.gutters.md
-const asideGutter = theme.gutters.xl
-const containerWidth =
-  asideWidth + asideGutter + mainWidth + containerGutter * 2
-const breakpoints = [containerWidth]
-
-const classes = {
-  container: css({
-    width: '100%',
-    maxWidth: em(containerWidth),
-    margin: '0 auto',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingTop: em(headerHeight),
-    paddingLeft: em(containerGutter),
-    paddingRight: em(containerGutter),
-  }),
-
-  header: css({
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: em(headerHeight),
-    borderBottom: `1px solid ${theme.colors.inputBorder}`,
-  }),
-
-  aside: css({
-    position: 'fixed',
-    left: '50%',
-    width: em(asideWidth),
-    marginTop: em(headerHeight + theme.gutters.lg),
-    marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
-
-    [`@media (max-width: ${breakpoints[0]}px)`]: {
-      left: em(containerGutter),
-      marginLeft: 0,
-    },
-  }),
-
-  main: css({
-    flex: 1,
-    maxWidth: em(mainWidth),
-    [`@media (max-width: ${breakpoints[0]}px)`]: {
-      marginLeft: em(asideWidth + containerGutter),
-    },
-  }),
-
-  facet: css({
-    // flex: 1,
-    // textAlign: 'right',
-    color: theme.colors.textMuted,
-    fontSize: em(theme.fontSizes.xs),
-    marginLeft: em(theme.gutters.sm),
-  }),
+  private setTotalPages = (totalPages: number) => {
+    this.setState({ totalPages })
+  }
 }
 
 export default withRouter(App)

@@ -15,7 +15,7 @@ const Logo: React.SFC<{}> = () => (
 
 const classes = {
   link: css({
-    color: theme.colors.primary,
+    color: theme.colors.palette[0],
     textDecoration: 'none',
     display: 'inline-flex',
     alignItems: 'center',
@@ -36,12 +36,14 @@ const classes = {
   text: css({
     fontSize: theme.fontSizes.md,
     fontWeight: 'bold',
-    color: theme.colors.secondary,
+    color: theme.colors.text,
+    letterSpacing: em(-0.3),
   }),
 
   primary: css({
     fontWeight: 'normal',
-    color: theme.colors.primary,
+    color: theme.colors.palette[0],
+    letterSpacing: em(0.3),
   }),
 }
 

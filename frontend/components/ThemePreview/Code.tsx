@@ -42,7 +42,7 @@ const classes = {
       margin: 0,
     },
     '& code': {
-      fontFamily: 'Source Code Pro, monospace',
+      fontFamily: theme.fontFamilyMono,
       fontSize: em(theme.fontSizes.xs),
       lineHeight: em(theme.fontSizes.xs),
     },
@@ -57,7 +57,8 @@ function createStyles(tokens: Tokens) {
       display: 'block',
       overflowX: 'auto',
       background: 'transparent',
-      color: '#c0c5ce',
+      // TODO: This should use colors.editorForeground.
+      color: theme.colors.text,
     },
     'hljs-emphasis': {
       fontStyle: 'italic',

@@ -4,6 +4,8 @@ import theme, { em } from '../theme'
 
 export type Icons =
   | 'cart'
+  | 'chevronDoubleLeft'
+  | 'chevronDoubleRight'
   | 'download'
   | 'github'
   | 'open'
@@ -36,6 +38,16 @@ const icons = {
     viewBox: '0 0 24 24',
     path:
       'M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z',
+  },
+  chevronDoubleLeft: {
+    viewBox: '0 0 24 24',
+    path:
+      'M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z',
+  },
+  chevronDoubleRight: {
+    viewBox: '0 0 24 24',
+    path:
+      'M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z',
   },
   download: {
     viewBox: '0 0 24 24',
@@ -96,7 +108,7 @@ const icons = {
 
 export const classes = {
   svg: css({
-    fill: theme.colors.text,
+    fill: 'currentColor',
     height: em(theme.fontSizes.md * 1.5),
   }),
 }

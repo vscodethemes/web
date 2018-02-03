@@ -17,7 +17,7 @@ const Tab: React.SFC<TabProps> = ({ color, ...navLinkProps }) => {
   )
 }
 
-const boxWidth = 40
+const boxWidth = 36
 const boxHeight = 2
 
 const classes = {
@@ -25,11 +25,11 @@ const classes = {
     position: 'relative',
     fontWeight: 'bold',
     textDecoration: 'none',
-    color: theme.colors.lightPrimary,
+    color: theme.colors.text,
     paddingBottom: theme.gutters.sm,
     outline: 0,
     ':hover, :focus': {
-      color: `${theme.colors.primary}`,
+      color: `${theme.colors.palette[0]}`,
     },
   }),
 
@@ -37,7 +37,7 @@ const classes = {
     // The order that emotion adds rules is not guaranteed so we need
     // to add !important to override the non-active color. I hope there's
     // a better way.
-    color: `${theme.colors.primary} !important`,
+    color: `${theme.colors.palette[0]} !important`,
     '::after': {
       content: `''`,
       position: 'absolute',

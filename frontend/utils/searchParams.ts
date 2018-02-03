@@ -31,6 +31,7 @@ export function fromLocation(location: Location) {
     search: params.search,
     light: 'light' in params,
     dark: 'dark' in params,
+    page: parseInt(params.page, 10) || 1,
     lang,
   }
 }
@@ -48,6 +49,9 @@ export function toQueryString(params: SearchParams) {
   }
   if (params.lang) {
     queryParams.lang = params.lang
+  }
+  if (params.page) {
+    queryParams.page = params.page
   }
 
   return qs.stringify(queryParams)
