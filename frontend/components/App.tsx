@@ -8,7 +8,6 @@ import AlgoliaLogo from './AlgoliaLogo'
 import * as classes from './App.styles'
 import Checkbox from './Checkbox'
 import Facet from './Facet'
-import Footer from './Footer'
 import Input from './Input'
 import Logo from './Logo'
 import Pagination from './Pagination'
@@ -60,54 +59,58 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
             <Logo />
           </div>
           <div className={classes.aside}>
-            <Tabs>
-              <Tab
-                color={theme.colors.palette[1]}
-                to={{ pathname: '/', search: location.search }}
-                exact={true}
+            <div className={classes.sortby}>
+              <Tabs>
+                <Tab
+                  color={theme.colors.palette[1]}
+                  to={{ pathname: '/', search: location.search }}
+                  exact={true}
+                >
+                  Popular
+                </Tab>
+                <Tab
+                  color={theme.colors.palette[2]}
+                  to={{ pathname: '/trending', search: location.search }}
+                >
+                  Trending
+                </Tab>
+                <Tab
+                  color={theme.colors.palette[3]}
+                  to={{ pathname: '/new', search: location.search }}
+                >
+                  New
+                </Tab>
+              </Tabs>
+            </div>
+            <div className={classes.filters}>
+              <Input
+                type="search"
+                icon="search"
+                placeholder="Search VSCode Themes"
+                value={params.search}
+                onChange={search =>
+                  this.setQueryParams({ ...params, search, page: 1 })
+                }
+              />
+              <Checkbox
+                checked={params.dark}
+                onChange={dark =>
+                  this.setQueryParams({ ...params, dark, page: 1 })
+                }
               >
-                Popular
-              </Tab>
-              <Tab
-                color={theme.colors.palette[2]}
-                to={{ pathname: '/trending', search: location.search }}
+                Dark
+                {totalDark !== null && <Facet>| {totalDark}</Facet>}
+              </Checkbox>
+              <Checkbox
+                checked={params.light}
+                onChange={light =>
+                  this.setQueryParams({ ...params, light, page: 1 })
+                }
               >
-                Trending
-              </Tab>
-              <Tab
-                color={theme.colors.palette[3]}
-                to={{ pathname: '/new', search: location.search }}
-              >
-                New
-              </Tab>
-            </Tabs>
-            <Input
-              type="search"
-              icon="search"
-              placeholder="Search VSCode Themes"
-              value={params.search}
-              onChange={search =>
-                this.setQueryParams({ ...params, search, page: 1 })
-              }
-            />
-            <Checkbox
-              checked={params.dark}
-              onChange={dark =>
-                this.setQueryParams({ ...params, dark, page: 1 })
-              }
-            >
-              Dark
-              {totalDark !== null && <Facet>| {totalDark}</Facet>}
-            </Checkbox>
-            <Checkbox
-              checked={params.light}
-              onChange={light =>
-                this.setQueryParams({ ...params, light, page: 1 })
-              }
-            >
-              Light
-              {totalLight !== null && <Facet>| {totalLight}</Facet>}
-            </Checkbox>
+                Light
+                {totalLight !== null && <Facet>| {totalLight}</Facet>}
+              </Checkbox>
+            </div>
           </div>
           <div className={classes.main}>
             <Search
@@ -117,7 +120,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               renderTheme={(t: Theme) => (
                 <ThemePreview
                   key={t.objectID}
-                  {...t}
+                  theme={t}
                   language={params.lang}
                   onLanguage={lang => this.setQueryParams({ ...params, lang })}
                 />
@@ -133,9 +136,9 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
             </Search>
           </div>
         </div>
-        <Footer>
+        <div className={classes.footer}>
           <AlgoliaLogo />
-        </Footer>
+        </div>
       </React.Fragment>
     )
   }

@@ -80,7 +80,7 @@ const classes = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: theme.gutters.lg,
+    marginBottom: em(theme.gutters.lg - theme.gutters.sm),
     color: theme.colors.text,
     maxWidth: em(320),
   }),
@@ -99,6 +99,7 @@ const classes = {
     border: 'none',
     color: theme.colors.text,
     cursor: 'pointer',
+    outline: 'none',
     ':hover': {
       color: theme.colors.palette[0],
     },

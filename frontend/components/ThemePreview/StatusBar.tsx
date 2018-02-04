@@ -12,6 +12,11 @@ interface StatusBarProps {
   publisherName: string
 }
 
+const isBrowser = typeof navigator !== 'undefined'
+const isDesktopOS = ['Win', 'Mac', 'Linux'].some(
+  os => isBrowser && navigator.appVersion.indexOf(os) >= 0,
+)
+
 const StatusBar: React.SFC<StatusBarProps> = ({
   colors,
   repository,
@@ -40,10 +45,16 @@ const StatusBar: React.SFC<StatusBarProps> = ({
     {publisherName && (
       <a
         className={cx(classes.link, classes.secondary)}
-        href={`vscode:extension/${publisherName}.${extensionName}`}
+        href={
+          isDesktopOS
+            ? `vscode:extension/${publisherName}.${extensionName}`
+            : `https://marketplace.visualstudio.com/items?itemName=${
+                publisherName
+              }.${extensionName}`
+        }
         style={{ color: colors.statusBarForeground }}
       >
-        Open in VSCode
+        Open in {isDesktopOS ? 'VSCode' : 'Marketplace'}
         <Icon
           className={classes.icon}
           icon="open"

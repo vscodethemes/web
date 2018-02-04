@@ -1,7 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
-import theme, { em } from '../../theme'
 import {
   collapseWidth,
   containerGutter,

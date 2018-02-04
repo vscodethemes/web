@@ -2,18 +2,21 @@ import { css, cx } from 'emotion'
 import * as React from 'react'
 import { NavLink, NavLinkProps } from 'react-router-dom'
 import theme, { em } from '../theme'
+import { collapseWidth } from './App.styles'
 
 interface TabProps extends NavLinkProps {
   color: string
 }
 
-const Tab: React.SFC<TabProps> = ({ color, ...navLinkProps }) => {
+const Tab: React.SFC<TabProps> = ({ color, children, ...navLinkProps }) => {
   return (
     <NavLink
       {...navLinkProps}
       className={classes.link}
       activeClassName={cx(classes.active, classes.highlight(color))}
-    />
+    >
+      <span className={classes.text}>{children}</span>
+    </NavLink>
   )
 }
 
@@ -31,6 +34,14 @@ const classes = {
     ':hover, :focus': {
       color: `${theme.colors.palette[0]}`,
     },
+    [`@media (max-width: ${collapseWidth}px)`]: {
+      paddingBottom: 0,
+      paddingTop: theme.gutters.sm,
+    },
+  }),
+
+  text: css({
+    fontSize: em(theme.fontSizes.md),
   }),
 
   active: css({
@@ -47,6 +58,10 @@ const classes = {
       height: em(boxHeight),
       width: em(boxWidth),
       borderRadius: em(boxHeight),
+      [`@media (max-width: ${collapseWidth}px)`]: {
+        bottom: 'auto',
+        top: 0,
+      },
     },
   }),
 

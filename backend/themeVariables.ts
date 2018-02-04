@@ -143,6 +143,7 @@ export const gui: GUIVariables = {
 
 // Token scopes are pulled from https://www.sublimetext.com/docs/3/scope_naming.html
 const keywordScopes = ['keyword', 'keyword.control', 'storage', 'storage.type']
+const tagScopes = ['entity.name.tag', 'meta.tag']
 export const tokens: TokenVariables = {
   comment: {
     scope: ['comment', 'comment.line', 'comment.block'],
@@ -218,10 +219,10 @@ export const tokens: TokenVariables = {
   },
   // html
   tag: {
-    scope: ['entity.name.tag', 'meta.tag'],
+    scope: tagScopes,
   },
   attribute: {
-    scope: ['entity.other.attribute-name', 'meta.tag'],
+    scope: ['entity.other.attribute-name', ...tagScopes],
   },
   attributeValue: {
     scope: [
@@ -237,6 +238,7 @@ export const tokens: TokenVariables = {
       'punctuation.section.property-list.css',
       'support.type.property-name.media.css',
       'support.type.vendor-prefix.css',
+      ...keywordScopes,
     ],
   },
   selector: {
@@ -248,6 +250,7 @@ export const tokens: TokenVariables = {
       'entity.other.attribute-name.parent-selector.css',
       'entity.other.attribute-name.pseudo-class.css',
       'entity.other.attribute-name.pseudo-element.css',
+      ...tagScopes,
     ],
   },
 }
