@@ -2,6 +2,12 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
+import {
+  collapseWidth,
+  containerGutter,
+  containerWidth,
+  mainMaxWidth,
+} from '../App.styles'
 
 interface EditorProps {
   colors: Colors
@@ -23,11 +29,18 @@ const classes = {
     left: 0,
     width: '100%',
     background: '#f0f0f0',
-    borderRadius: em(theme.borderRadius.md),
-    marginBottom: em(theme.gutters.lg),
-    boxShadow: theme.shadows.md,
-    // Preserve a 4:3 aspect ratio.
-    paddingTop: `${100 / (4 / 3)}%`,
+    // Fixed aspect ratio
+    paddingTop: `${100 / (16 / 10)}%`,
+
+    [`@media (max-width: ${containerWidth}px)`]: {
+      fontSize: '0.8rem',
+    },
+    [`@media (max-width: ${collapseWidth}px)`]: {
+      fontSize: '1rem',
+    },
+    [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
+      fontSize: '0.8rem',
+    },
   }),
 }
 

@@ -54,16 +54,11 @@ const StatusBar: React.SFC<StatusBarProps> = ({
   </div>
 )
 
-export const statusBarHeight = 7
-const statusBarGutter = 4
+const statusBarGutter = theme.gutters.xs
 
 const classes = {
   statusBar: css({
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    height: `${statusBarHeight}%`,
+    height: `${em(theme.fontSizes.xs + statusBarGutter * 2)}`,
     borderBottomLeftRadius: em(theme.borderRadius.md),
     borderBottomRightRadius: em(theme.borderRadius.md),
     display: 'flex',

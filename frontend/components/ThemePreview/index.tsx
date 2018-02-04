@@ -1,5 +1,7 @@
+import { css } from 'emotion'
 import * as React from 'react'
 import { LanguageOptions, Theme } from '../../../types/static'
+import theme, { em } from '../../theme'
 import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
@@ -30,35 +32,37 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
   ...rest,
 }) => {
   return (
-    <Editor colors={colors}>
+    <div className={classes.container}>
       <TopBar name={name} type={type} />
-      <ActivityBar colors={colors} />
-      <TabBar colors={colors}>
-        <Tab
-          colors={colors}
-          active={language === 'javascript'}
-          onClick={() => onLanguage('javascript')}
-        >
-          main.js
-        </Tab>
-        <Tab
-          colors={colors}
-          active={language === 'css'}
-          onClick={() => onLanguage('css')}
-        >
-          styles.css
-        </Tab>
-        <Tab
-          colors={colors}
-          active={language === 'html'}
-          onClick={() => onLanguage('html')}
-        >
-          index.html
-        </Tab>
-      </TabBar>
-      <TabContent>
-        {!isPlaceholder(rest) && <Code colors={colors} language={language} />}
-      </TabContent>
+      <Editor colors={colors}>
+        <ActivityBar colors={colors} />
+        <TabBar colors={colors}>
+          <Tab
+            colors={colors}
+            active={language === 'javascript'}
+            onClick={() => onLanguage('javascript')}
+          >
+            main.js
+          </Tab>
+          <Tab
+            colors={colors}
+            active={language === 'css'}
+            onClick={() => onLanguage('css')}
+          >
+            styles.css
+          </Tab>
+          <Tab
+            colors={colors}
+            active={language === 'html'}
+            onClick={() => onLanguage('html')}
+          >
+            index.html
+          </Tab>
+        </TabBar>
+        <TabContent>
+          {!isPlaceholder(rest) && <Code colors={colors} language={language} />}
+        </TabContent>
+      </Editor>
       <StatusBar
         colors={colors}
         repository={repository}
@@ -66,8 +70,16 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         extensionName={extensionName}
         publisherName={publisherName}
       />
-    </Editor>
+    </div>
   )
+}
+
+const classes = {
+  container: css({
+    position: 'relative',
+    marginBottom: em(theme.gutters.lg),
+    boxShadow: theme.shadows.md,
+  }),
 }
 
 export default ThemePreview

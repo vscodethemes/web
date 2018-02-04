@@ -3,12 +3,14 @@ import theme, { em } from '../theme'
 
 const headerHeight = 34
 const asideWidth = 250
-const mainWidth = 450
-const containerGutter = theme.gutters.md
-const asideGutter = theme.gutters.xl
-const containerWidth =
-  asideWidth + asideGutter + mainWidth + containerGutter * 2
-const breakpoints = [containerWidth]
+const asideGutter = theme.gutters.lg
+const mainMinWidth = 330
+export const mainMaxWidth = 430
+export const containerGutter = theme.gutters.md
+export const containerWidth =
+  asideWidth + asideGutter + mainMaxWidth + containerGutter * 2
+export const collapseWidth =
+  asideWidth + asideGutter + mainMinWidth + containerGutter * 2
 
 export const container = css({
   width: '100%',
@@ -36,18 +38,34 @@ export const aside = css({
   left: '50%',
   width: em(asideWidth),
   marginTop: em(headerHeight + theme.gutters.lg),
-  marginLeft: em(-asideWidth - asideGutter - asideGutter / 2),
+  marginLeft: em(-containerWidth / 2 + containerGutter),
 
-  [`@media (max-width: ${breakpoints[0]}px)`]: {
+  [`@media (max-width: ${containerWidth}px)`]: {
     left: em(containerGutter),
     marginLeft: 0,
+  },
+  [`@media (max-width: ${collapseWidth}px)`]: {
+    display: 'none',
   },
 })
 
 export const main = css({
   flex: 1,
-  maxWidth: em(mainWidth),
-  [`@media (max-width: ${breakpoints[0]}px)`]: {
-    marginLeft: em(asideWidth + containerGutter),
+  maxWidth: em(mainMaxWidth),
+
+  [`@media (max-width: ${containerWidth}px)`]: {
+    marginLeft: em(asideWidth + asideGutter),
   },
+  [`@media (max-width: ${containerWidth}px)`]: {
+    marginLeft: em(asideWidth + asideGutter),
+  },
+  [`@media (max-width: ${collapseWidth}px)`]: {
+    margin: '0 auto',
+  },
+})
+
+export const footer = css({
+  width: '100%',
+  borderTop: `1px solid ${theme.colors.inputBorder}`,
+  paddingTop: em(theme.gutters.md),
 })

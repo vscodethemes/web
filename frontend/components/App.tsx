@@ -8,6 +8,7 @@ import AlgoliaLogo from './AlgoliaLogo'
 import * as classes from './App.styles'
 import Checkbox from './Checkbox'
 import Facet from './Facet'
+import Footer from './Footer'
 import Input from './Input'
 import Logo from './Logo'
 import Pagination from './Pagination'
@@ -50,86 +51,92 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
     const params = searchParams.fromLocation(location)
 
     return (
-      <div className={classes.container}>
-        <Helmet>
-          <title>{titles[location.pathname]}</title>
-        </Helmet>
-        <div className={classes.header}>
-          <Logo />
-        </div>
-        <div className={classes.aside}>
-          <Tabs>
-            <Tab
-              color={theme.colors.palette[1]}
-              to={{ pathname: '/', search: location.search }}
-              exact={true}
+      <React.Fragment>
+        <div className={classes.container}>
+          <Helmet>
+            <title>{titles[location.pathname]}</title>
+          </Helmet>
+          <div className={classes.header}>
+            <Logo />
+          </div>
+          <div className={classes.aside}>
+            <Tabs>
+              <Tab
+                color={theme.colors.palette[1]}
+                to={{ pathname: '/', search: location.search }}
+                exact={true}
+              >
+                Popular
+              </Tab>
+              <Tab
+                color={theme.colors.palette[2]}
+                to={{ pathname: '/trending', search: location.search }}
+              >
+                Trending
+              </Tab>
+              <Tab
+                color={theme.colors.palette[3]}
+                to={{ pathname: '/new', search: location.search }}
+              >
+                New
+              </Tab>
+            </Tabs>
+            <Input
+              type="search"
+              icon="search"
+              placeholder="Search VSCode Themes"
+              value={params.search}
+              onChange={search =>
+                this.setQueryParams({ ...params, search, page: 1 })
+              }
+            />
+            <Checkbox
+              checked={params.dark}
+              onChange={dark =>
+                this.setQueryParams({ ...params, dark, page: 1 })
+              }
             >
-              Popular
-            </Tab>
-            <Tab
-              color={theme.colors.palette[2]}
-              to={{ pathname: '/trending', search: location.search }}
+              Dark
+              {totalDark !== null && <Facet>| {totalDark}</Facet>}
+            </Checkbox>
+            <Checkbox
+              checked={params.light}
+              onChange={light =>
+                this.setQueryParams({ ...params, light, page: 1 })
+              }
             >
-              Trending
-            </Tab>
-            <Tab
-              color={theme.colors.palette[3]}
-              to={{ pathname: '/new', search: location.search }}
+              Light
+              {totalLight !== null && <Facet>| {totalLight}</Facet>}
+            </Checkbox>
+          </div>
+          <div className={classes.main}>
+            <Search
+              {...params}
+              onFacetResults={this.setFacetResults}
+              onPages={this.setTotalPages}
+              renderTheme={(t: Theme) => (
+                <ThemePreview
+                  key={t.objectID}
+                  {...t}
+                  language={params.lang}
+                  onLanguage={lang => this.setQueryParams({ ...params, lang })}
+                />
+              )}
             >
-              New
-            </Tab>
-          </Tabs>
-          <Input
-            type="search"
-            icon="search"
-            placeholder="Search VSCode Themes"
-            value={params.search}
-            onChange={search =>
-              this.setQueryParams({ ...params, search, page: 1 })
-            }
-          />
-          <Checkbox
-            checked={params.dark}
-            onChange={dark => this.setQueryParams({ ...params, dark, page: 1 })}
-          >
-            Dark
-            {totalDark !== null && <Facet>| {totalDark}</Facet>}
-          </Checkbox>
-          <Checkbox
-            checked={params.light}
-            onChange={light =>
-              this.setQueryParams({ ...params, light, page: 1 })
-            }
-          >
-            Light
-            {totalLight !== null && <Facet>| {totalLight}</Facet>}
-          </Checkbox>
+              {totalPages > 1 && (
+                <Pagination
+                  totalPages={totalPages}
+                  page={params.page}
+                  onPage={page => this.setQueryParams({ ...params, page })}
+                />
+              )}
+            </Search>
+          </div>
         </div>
-        <div className={classes.main}>
-          <Search
-            {...params}
-            onFacetResults={this.setFacetResults}
-            onPages={this.setTotalPages}
-            renderTheme={(t: Theme) => (
-              <ThemePreview
-                key={t.objectID}
-                {...t}
-                language={params.lang}
-                onLanguage={lang => this.setQueryParams({ ...params, lang })}
-              />
-            )}
-          >
-            {totalPages > 1 && (
-              <Pagination
-                totalPages={totalPages}
-                page={params.page}
-                onPage={page => this.setQueryParams({ ...params, page })}
-              />
-            )}
-            <AlgoliaLogo />
-          </Search>
-        </div>
-      </div>
+        <Footer>
+          <AlgoliaLogo />
+        </Footer>
+      </React.Fragment>
     )
   }
 

@@ -2,6 +2,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import theme, { em } from '../theme'
+import { containerGutter, mainMaxWidth } from './App.styles'
 
 const Logo: React.SFC<{}> = () => (
   <Link to="/" className={classes.link}>
@@ -28,9 +29,11 @@ const classes = {
 
   image: css({
     marginTop: em(1),
-    marginLeft: em(-2),
     marginRight: em(theme.gutters.xs),
     height: em(theme.fontSizes.md * 0.9),
+    [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
+      // marginLeft: em(-containerGutter + theme.gutters.xs),
+    },
   }),
 
   text: css({

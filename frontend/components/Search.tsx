@@ -4,6 +4,7 @@ import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import generatePlaceholderThemes from '../utils/generatePlaceholderThemes'
+import { containerGutter, mainMaxWidth } from './App.styles'
 
 interface FacetHit {
   value: string
@@ -142,6 +143,9 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 const classes = {
   container: css({
     paddingTop: em(theme.gutters.lg),
+    [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
+      paddingTop: em(theme.gutters.md),
+    },
   }),
 
   footer: css({
