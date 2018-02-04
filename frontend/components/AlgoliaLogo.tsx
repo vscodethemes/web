@@ -48,7 +48,7 @@ const classes = {
   link: css({
     display: 'inline-block',
     textDecoration: 'none',
-    marginBottom: em(theme.gutters.lg),
+    marginRight: em(theme.gutters.md),
   }),
 }
 

@@ -12,6 +12,11 @@ interface StatusBarProps {
   publisherName: string
 }
 
+const isBrowser = typeof navigator !== 'undefined'
+const isDesktopOS = ['Win', 'Mac', 'Linux'].some(
+  os => isBrowser && navigator.appVersion.indexOf(os) >= 0,
+)
+
 const StatusBar: React.SFC<StatusBarProps> = ({
   colors,
   repository,
@@ -40,10 +45,16 @@ const StatusBar: React.SFC<StatusBarProps> = ({
     {publisherName && (
       <a
         className={cx(classes.link, classes.secondary)}
-        href={`vscode:extension/${publisherName}.${extensionName}`}
+        href={
+          isDesktopOS
+            ? `vscode:extension/${publisherName}.${extensionName}`
+            : `https://marketplace.visualstudio.com/items?itemName=${
+                publisherName
+              }.${extensionName}`
+        }
         style={{ color: colors.statusBarForeground }}
       >
-        Open in VSCode
+        Open in {isDesktopOS ? 'VSCode' : 'Marketplace'}
         <Icon
           className={classes.icon}
           icon="open"
@@ -54,16 +65,11 @@ const StatusBar: React.SFC<StatusBarProps> = ({
   </div>
 )
 
-export const statusBarHeight = 7
-const statusBarGutter = 4
+const statusBarGutter = theme.gutters.xs
 
 const classes = {
   statusBar: css({
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    height: `${statusBarHeight}%`,
+    height: `${em(theme.fontSizes.xs + statusBarGutter * 2)}`,
     borderBottomLeftRadius: em(theme.borderRadius.md),
     borderBottomRightRadius: em(theme.borderRadius.md),
     display: 'flex',
