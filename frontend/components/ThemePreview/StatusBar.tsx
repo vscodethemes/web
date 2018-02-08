@@ -1,4 +1,5 @@
 import { css, cx } from 'emotion'
+import * as useragent from 'express-useragent'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
@@ -13,9 +14,7 @@ interface StatusBarProps {
 }
 
 const isBrowser = typeof navigator !== 'undefined'
-const isDesktopOS = ['Win', 'Mac', 'Linux'].some(
-  os => isBrowser && navigator.appVersion.indexOf(os) >= 0,
-)
+const isDesktop = isBrowser && useragent.parse(navigator.userAgent).isDesktop
 
 const StatusBar: React.SFC<StatusBarProps> = ({
   colors,
@@ -46,7 +45,7 @@ const StatusBar: React.SFC<StatusBarProps> = ({
       <a
         className={cx(classes.link, classes.secondary)}
         href={
-          isDesktopOS
+          isDesktop
             ? `vscode:extension/${publisherName}.${extensionName}`
             : `https://marketplace.visualstudio.com/items?itemName=${
                 publisherName
@@ -54,7 +53,7 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         }
         style={{ color: colors.statusBarForeground }}
       >
-        Open in {isDesktopOS ? 'VSCode' : 'Marketplace'}
+        Open in {isDesktop ? 'VSCode' : 'Marketplace'}
         <Icon
           className={classes.icon}
           icon="open"
