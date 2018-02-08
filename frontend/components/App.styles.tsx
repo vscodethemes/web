@@ -54,8 +54,10 @@ export const aside = css({
   marginLeft: em(-containerWidth / 2 + containerGutter),
 
   [`@media (max-width: ${containerWidth}px)`]: {
+    top: 0,
     left: em(containerGutter),
     marginLeft: 0,
+    marginTop: em(headerHeight + theme.gutters.md),
   },
   [`@media (max-width: ${collapseWidth}px)`]: {
     position: 'static',
