@@ -2,7 +2,6 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
 import { activityBarWidth } from './ActivityBar'
-import { topBarHeight } from './TopBar'
 
 interface TabBarProps {
   colors: Colors
@@ -22,12 +21,12 @@ const TabBar: React.SFC<TabBarProps> = ({ colors, children }) => (
   </div>
 )
 
-export const tabBarHeight = 9
+export const tabBarHeight = 10
 
 const classes = {
   tabBar: css({
     position: 'absolute',
-    top: `${topBarHeight}%`,
+    top: 0,
     left: `${activityBarWidth}%`,
     width: `${100 - activityBarWidth}%`,
     height: `${tabBarHeight}%`,

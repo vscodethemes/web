@@ -25,15 +25,9 @@ const TopBar: React.SFC<TopBarProps> = ({ name, type }) => (
   </div>
 )
 
-export const topBarHeight = 7
-
 const classes = {
   topBar: css({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: `${topBarHeight}%`,
+    height: `${em(theme.fontSizes.xs + theme.gutters.xs * 2)}`,
     borderTopLeftRadius: em(theme.borderRadius.md),
     borderTopRightRadius: em(theme.borderRadius.md),
     boxShadow: '0px 1px 1px rgba(0,0,0,0.1)',

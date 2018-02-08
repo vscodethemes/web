@@ -1,11 +1,3 @@
-function fill(from: number, to: number) {
-  const array: number[] = []
-  for (let i = from; i <= to; i += 1) {
-    array.push(i)
-  }
-  return array
-}
-
 /**
  * Generates a set of pages for the provided total pages. Ensures
  * the active page is centered unless we can't fill the specified number
@@ -32,7 +24,7 @@ export default function generatePages(
   let startPage = Math.max(page - Math.floor(maxVisiblePages / 2), 1)
   let endPage = startPage + (maxVisiblePages - 1)
   // If we've gone over the total number of pages, reset the active page
-  // such that the end page is the total number of
+  // such that the end page is the total number of pages.
   if (endPage > totalPages) {
     startPage = Math.max(startPage - (endPage - totalPages), 1)
     endPage = startPage + (maxVisiblePages - 1)
@@ -55,4 +47,12 @@ export default function generatePages(
   }
 
   return pages
+}
+
+function fill(from: number, to: number) {
+  const array: number[] = []
+  for (let i = from; i <= to; i += 1) {
+    array.push(i)
+  }
+  return array
 }

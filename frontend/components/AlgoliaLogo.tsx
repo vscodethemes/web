@@ -1,6 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import theme, { em } from '../theme'
+import theme from '../theme'
 
 const AlgoliaLogo: React.SFC<{}> = () => (
   <a className={classes.link} href="https://www.algolia.com">
@@ -48,7 +48,6 @@ const classes = {
   link: css({
     display: 'inline-block',
     textDecoration: 'none',
-    marginBottom: em(theme.gutters.lg),
   }),
 }
 

@@ -1,73 +1,81 @@
+import { css } from 'emotion'
 import * as React from 'react'
 import { LanguageOptions, Theme } from '../../../types/static'
+import theme, { em } from '../../theme'
 import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
+import Loading from './Loading'
 import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
 import TabContent from './TabContent'
 import TopBar from './TopBar'
 
-interface ThemePreviewProps extends Theme {
+interface ThemePreviewProps {
+  theme: Theme
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => void
 }
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
-  name,
-  type,
-  extensionId,
-  extensionName,
-  publisherName,
-  trendingMonthly,
-  repositoryOwner,
-  repository,
-  colors,
+  theme: themeProps,
   language,
   onLanguage,
-  ...rest,
 }) => {
   return (
-    <Editor colors={colors}>
-      <TopBar name={name} type={type} />
-      <ActivityBar colors={colors} />
-      <TabBar colors={colors}>
-        <Tab
-          colors={colors}
-          active={language === 'javascript'}
-          onClick={() => onLanguage('javascript')}
-        >
-          main.js
-        </Tab>
-        <Tab
-          colors={colors}
-          active={language === 'css'}
-          onClick={() => onLanguage('css')}
-        >
-          styles.css
-        </Tab>
-        <Tab
-          colors={colors}
-          active={language === 'html'}
-          onClick={() => onLanguage('html')}
-        >
-          index.html
-        </Tab>
-      </TabBar>
-      <TabContent>
-        {!isPlaceholder(rest) && <Code colors={colors} language={language} />}
-      </TabContent>
+    <div className={classes.container}>
+      <TopBar name={themeProps.name} type={themeProps.type} />
+      <Editor colors={themeProps.colors}>
+        <ActivityBar colors={themeProps.colors} />
+        <TabBar colors={themeProps.colors}>
+          <Tab
+            colors={themeProps.colors}
+            active={language === 'javascript'}
+            onClick={() => onLanguage('javascript')}
+          >
+            main.js
+          </Tab>
+          <Tab
+            colors={themeProps.colors}
+            active={language === 'css'}
+            onClick={() => onLanguage('css')}
+          >
+            styles.css
+          </Tab>
+          <Tab
+            colors={themeProps.colors}
+            active={language === 'html'}
+            onClick={() => onLanguage('html')}
+          >
+            index.html
+          </Tab>
+        </TabBar>
+        <TabContent>
+          {!isPlaceholder(themeProps) && (
+            <Code colors={themeProps.colors} language={language} />
+          )}
+        </TabContent>
+        {isPlaceholder(themeProps) && <Loading />}
+      </Editor>
       <StatusBar
-        colors={colors}
-        repository={repository}
-        repositoryOwner={repositoryOwner}
-        extensionName={extensionName}
-        publisherName={publisherName}
+        colors={themeProps.colors}
+        repository={themeProps.repository}
+        repositoryOwner={themeProps.repositoryOwner}
+        extensionName={themeProps.extensionName}
+        publisherName={themeProps.publisherName}
       />
-    </Editor>
+    </div>
   )
+}
+
+const classes = {
+  container: css({
+    position: 'relative',
+    marginBottom: em(theme.gutters.lg),
+    boxShadow: theme.shadows.md,
+  }),
 }
 
 export default ThemePreview

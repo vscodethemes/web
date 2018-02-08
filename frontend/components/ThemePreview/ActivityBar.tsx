@@ -2,8 +2,6 @@ import { css, cx } from 'emotion'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
 import Icon from '../Icon'
-import { statusBarHeight } from './StatusBar'
-import { topBarHeight } from './TopBar'
 
 interface ActivityBarProps {
   colors: Colors
@@ -42,15 +40,15 @@ const ActivityBar: React.SFC<ActivityBarProps> = ({ colors }) => (
   </div>
 )
 
-export const activityBarWidth = 9
+export const activityBarWidth = 8
 
 const classes = {
   activityBar: css({
     position: 'absolute',
-    top: `${topBarHeight}%`,
+    top: 0,
     left: 0,
     width: `${activityBarWidth}%`,
-    height: `${100 - topBarHeight - statusBarHeight}%`,
+    height: '100%',
     paddingTop: '1%',
   }),
 
