@@ -1,16 +1,14 @@
-class IncrementNumber {
-  constructor(num) {
-    this.number = parseInt(num)
-  }
+const btn = document.getElementById('btn')
+let count = 0
 
-  inc() {
-    // Prevent integer overflow
-    if (this.number < Number.MAX_VALUE) {
-      this.number += 1
-    }
-  }
-
-  toString() {
-    return `Incremented number to ${this.number}`
-  }
+function render() {
+  btn.innerText = count
 }
+
+btn.addEventListener('click', () => {
+  // Count from 1 to 10.
+  if (count < 10) {
+    count += 1
+    render()
+  }
+})

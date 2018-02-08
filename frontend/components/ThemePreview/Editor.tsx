@@ -1,12 +1,7 @@
 import { css } from 'emotion'
 import * as React from 'react'
 import { Colors } from '../../../types/static'
-import {
-  collapseWidth,
-  containerGutter,
-  containerWidth,
-  mainMaxWidth,
-} from '../App.styles'
+import { containerGutter, mainMinWidth } from '../App.styles'
 
 interface EditorProps {
   colors: Colors
@@ -31,14 +26,8 @@ const classes = {
     // Fixed aspect ratio
     paddingTop: `${100 / (16 / 10)}%`,
 
-    [`@media (max-width: ${containerWidth}px)`]: {
-      fontSize: '0.8rem',
-    },
-    [`@media (max-width: ${collapseWidth}px)`]: {
-      fontSize: '1rem',
-    },
-    [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
-      fontSize: '0.8rem',
+    [`@media (max-width: ${mainMinWidth + containerGutter * 2}px)`]: {
+      fontSize: '0.85rem',
     },
   }),
 }

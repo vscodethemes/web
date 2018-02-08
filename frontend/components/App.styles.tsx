@@ -2,17 +2,16 @@ import { css } from 'emotion'
 import theme, { em } from '../theme'
 
 const headerHeight = 34
-const sortbyHeight = 38
+const headerHeightCollapsed = 40
 const asideWidth = 250
 const asideGutter = theme.gutters.lg
-const mainMinWidth = 330
+export const mainMinWidth = 320
 export const mainMaxWidth = 430
 export const containerGutter = theme.gutters.md
 export const containerWidth =
   asideWidth + asideGutter + mainMaxWidth + containerGutter * 2
 export const collapseWidth =
   asideWidth + asideGutter + mainMinWidth + containerGutter * 2
-const backgroundColor99 = `${theme.colors.background}F5` // FA = 96% transparency for 8-digit hex value.
 
 export const container = css({
   width: '100%',
@@ -24,6 +23,11 @@ export const container = css({
   paddingTop: em(headerHeight),
   paddingLeft: em(containerGutter),
   paddingRight: em(containerGutter),
+
+  [`@media (max-width: ${collapseWidth}px)`]: {
+    flexDirection: 'column',
+    paddingTop: em(headerHeightCollapsed),
+  },
 })
 
 export const header = css({
@@ -34,10 +38,11 @@ export const header = css({
   height: em(headerHeight),
   padding: `0 ${em(containerGutter)}`,
   borderBottom: `1px solid ${theme.colors.inputBorder}`,
-  backgroundColor: backgroundColor99,
+  backgroundColor: `${theme.colors.background}F5`, // FA = 96% transparency for 8-digit hex value.
 
   [`@media (max-width: ${collapseWidth}px)`]: {
     zIndex: 100,
+    height: em(headerHeightCollapsed),
   },
 })
 
@@ -55,29 +60,38 @@ export const aside = css({
   [`@media (max-width: ${collapseWidth}px)`]: {
     position: 'static',
     margin: 0,
-    width: 0,
+    width: '100%',
   },
 })
 
 export const sortby = css({
+  height: em(headerHeight),
+  marginBottom: em(theme.gutters.md),
+
   [`@media (max-width: ${collapseWidth}px)`]: {
     position: 'fixed',
     zIndex: 200,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: backgroundColor99,
-    borderTop: `1px solid ${theme.colors.inputBorder}`,
-    height: em(sortbyHeight),
+    top: 0,
+    left: em(theme.gutters.lg),
+    right: em(theme.gutters.lg),
+    height: em(headerHeightCollapsed),
     display: 'flex',
     alignItems: 'flex-end',
     justifyContent: 'center',
+    marginBottom: 0,
   },
 })
 
 export const filters = css({
   [`@media (max-width: ${collapseWidth}px)`]: {
-    display: 'none',
+    padding: `${em(containerGutter)} 0`,
+    borderBottom: `1px solid ${theme.colors.inputBorder}`,
+  },
+})
+
+export const facets = css({
+  [`@media (max-width: ${collapseWidth}px)`]: {
+    display: 'flex',
   },
 })
 
@@ -92,6 +106,7 @@ export const main = css({
     marginLeft: em(asideWidth + asideGutter),
   },
   [`@media (max-width: ${collapseWidth}px)`]: {
+    width: '100%',
     margin: '0 auto',
   },
 })
@@ -105,7 +120,6 @@ export const footer = css({
 
   [`@media (max-width: ${collapseWidth}px)`]: {
     justifyContent: 'center',
-    marginBottom: em(sortbyHeight),
     backgroundColor: theme.colors.inputBorder,
   },
 })

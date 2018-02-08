@@ -2,16 +2,16 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import theme, { em } from '../theme'
-import { containerGutter, mainMaxWidth } from './App.styles'
+import { collapseWidth } from './App.styles'
 
 const Logo: React.SFC<{}> = () => (
   <Link to="/" className={classes.link}>
     <svg className={classes.icon} viewBox="0 0 57 57">
       <g
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         transform="translate(-4.000000, -4.000000)"
       >
         <g transform="translate(4.000000, 4.000000)">
@@ -121,9 +121,6 @@ const classes = {
     marginTop: em(1.5),
     marginRight: em(theme.gutters.xs),
     height: em(theme.fontSizes.md * 0.9),
-    [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
-      // marginLeft: em(-containerGutter + theme.gutters.xs),
-    },
   }),
 
   text: css({
@@ -131,6 +128,10 @@ const classes = {
     fontWeight: 'bold',
     color: theme.colors.text,
     letterSpacing: em(-0.3),
+
+    [`@media (max-width: ${collapseWidth}px)`]: {
+      display: 'none',
+    },
   }),
 
   primary: css({

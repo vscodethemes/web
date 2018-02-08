@@ -92,24 +92,26 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
                   this.setQueryParams({ ...params, search, page: 1 })
                 }
               />
-              <Checkbox
-                checked={params.dark}
-                onChange={dark =>
-                  this.setQueryParams({ ...params, dark, page: 1 })
-                }
-              >
-                Dark
-                {totalDark !== null && <Facet>| {totalDark}</Facet>}
-              </Checkbox>
-              <Checkbox
-                checked={params.light}
-                onChange={light =>
-                  this.setQueryParams({ ...params, light, page: 1 })
-                }
-              >
-                Light
-                {totalLight !== null && <Facet>| {totalLight}</Facet>}
-              </Checkbox>
+              <div className={classes.facets}>
+                <Checkbox
+                  checked={params.dark}
+                  onChange={dark =>
+                    this.setQueryParams({ ...params, dark, page: 1 })
+                  }
+                >
+                  Dark
+                  {totalDark !== null && <Facet>| {totalDark}</Facet>}
+                </Checkbox>
+                <Checkbox
+                  checked={params.light}
+                  onChange={light =>
+                    this.setQueryParams({ ...params, light, page: 1 })
+                  }
+                >
+                  Light
+                  {totalLight !== null && <Facet>| {totalLight}</Facet>}
+                </Checkbox>
+              </div>
             </div>
           </div>
           <div className={classes.main}>

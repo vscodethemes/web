@@ -6,7 +6,7 @@ import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
-import Spinner from './Spinner'
+import Loading from './Loading'
 import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
@@ -20,32 +20,32 @@ interface ThemePreviewProps {
 }
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
-  theme,
+  theme: themeProps,
   language,
   onLanguage,
 }) => {
   return (
     <div className={classes.container}>
-      <TopBar name={theme.name} type={theme.type} />
-      <Editor colors={theme.colors}>
-        <ActivityBar colors={theme.colors} />
-        <TabBar colors={theme.colors}>
+      <TopBar name={themeProps.name} type={themeProps.type} />
+      <Editor colors={themeProps.colors}>
+        <ActivityBar colors={themeProps.colors} />
+        <TabBar colors={themeProps.colors}>
           <Tab
-            colors={theme.colors}
+            colors={themeProps.colors}
             active={language === 'javascript'}
             onClick={() => onLanguage('javascript')}
           >
             main.js
           </Tab>
           <Tab
-            colors={theme.colors}
+            colors={themeProps.colors}
             active={language === 'css'}
             onClick={() => onLanguage('css')}
           >
             styles.css
           </Tab>
           <Tab
-            colors={theme.colors}
+            colors={themeProps.colors}
             active={language === 'html'}
             onClick={() => onLanguage('html')}
           >
@@ -53,18 +53,18 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           </Tab>
         </TabBar>
         <TabContent>
-          {!isPlaceholder(theme) && (
-            <Code colors={theme.colors} language={language} />
+          {!isPlaceholder(themeProps) && (
+            <Code colors={themeProps.colors} language={language} />
           )}
         </TabContent>
-        {isPlaceholder(theme) && <Spinner />}
+        {isPlaceholder(themeProps) && <Loading />}
       </Editor>
       <StatusBar
-        colors={theme.colors}
-        repository={theme.repository}
-        repositoryOwner={theme.repositoryOwner}
-        extensionName={theme.extensionName}
-        publisherName={theme.publisherName}
+        colors={themeProps.colors}
+        repository={themeProps.repository}
+        repositoryOwner={themeProps.repositoryOwner}
+        extensionName={themeProps.extensionName}
+        publisherName={themeProps.publisherName}
       />
     </div>
   )
