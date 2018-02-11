@@ -39,6 +39,13 @@ export default async function run(services: Services): Promise<any> {
       payload.repositoryPath,
     )
 
+    theme.name = theme.name || payload.name
+    if (!theme.name) {
+      throw new PermanentJobError(
+        `Missing name for theme: '${JSON.stringify(theme)}'`,
+      )
+    }
+
     logger.log(`Theme: ${JSON.stringify(theme)}`)
 
     // Create a job to save the theme.
@@ -111,10 +118,6 @@ async function fetchTheme(
     throw new PermanentJobError(
       `fetchTheme error: Invalid response data for '${url}'`,
     )
-  }
-
-  if (!name) {
-    throw new PermanentJobError(`fetchTheme error: Missing name for '${url}'`)
   }
 
   if (!ThemeTypeRuntime.guard(type)) {

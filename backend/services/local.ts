@@ -103,6 +103,7 @@ export default function createServices(): Services {
     extractColors: createJob<ExtractColorsPayload>('extractColors', {
       receiptHandle: '',
       payload: {
+        name: 'name',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
         publisherName: 'publisherName',

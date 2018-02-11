@@ -48,6 +48,7 @@ export default async function run(services: Services): Promise<any> {
     const themes: ExtractColorsPayload[] = packageJson.contributes.themes.map(
       theme => ({
         ...payload,
+        name: theme.label,
         repositoryBranch: branch,
         // Trims './path' -> 'path'.
         repositoryPath: theme.path.replace(/^\.\//, ''),

@@ -82,6 +82,7 @@ export const PackageJSONRuntime = Record({
 
 export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
+    name: String.Or(Null),
     repositoryBranch: String,
     repositoryPath: String,
   }),

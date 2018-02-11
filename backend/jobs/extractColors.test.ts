@@ -10,6 +10,7 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   return {
     receiptHandle: '',
     payload: {
+      name: 'name',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',
@@ -121,6 +122,8 @@ test('should fail job if fetching the theme returns invalid response data', asyn
 
 test('should fail job if fetching the theme returns invalid name', async () => {
   const services = createServices()
+  const job = createJob()
+  delete job.payload.name
   fetch.mockResponseOnce(
     JSON.stringify({
       name: null,
@@ -131,7 +134,7 @@ test('should fail job if fetching the theme returns invalid name', async () => {
   )
   jest
     .spyOn(services.extractColors, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
+    .mockImplementation(() => Promise.resolve(job))
 
   const failSpy = jest.spyOn(services.extractColors, 'fail')
   await extractColors(services)
