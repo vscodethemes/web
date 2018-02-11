@@ -11,6 +11,7 @@ function createJob(): JobMessage<ExtractColorsPayload> {
     receiptHandle: '',
     payload: {
       name: 'name',
+      type: 'dark',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',

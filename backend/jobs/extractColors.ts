@@ -46,6 +46,13 @@ export default async function run(services: Services): Promise<any> {
       )
     }
 
+    theme.type = theme.type || payload.type
+    if (!ThemeTypeRuntime.guard(theme.type)) {
+      throw new PermanentJobError(
+        `Invalid type for theme: ${JSON.stringify(theme)}`,
+      )
+    }
+
     logger.log(`Theme: ${JSON.stringify(theme)}`)
 
     // Create a job to save the theme.
@@ -117,14 +124,6 @@ async function fetchTheme(
     logger.error(err)
     throw new PermanentJobError(
       `fetchTheme error: Invalid response data for '${url}'`,
-    )
-  }
-
-  if (!ThemeTypeRuntime.guard(type)) {
-    throw new PermanentJobError(
-      `fetchTheme error: Invalid type: ${JSON.stringify(type)}
-        URL: ${url}
-        Theme: ${JSON.stringify(data)}`,
     )
   }
 

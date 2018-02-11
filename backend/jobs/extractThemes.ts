@@ -2,7 +2,12 @@ import {
   ExtractThemesPayloadRuntime,
   PackageJSONRuntime,
 } from '../../types/runtime'
-import { ExtractColorsPayload, PackageJSON, Services } from '../../types/static'
+import {
+  ExtractColorsPayload,
+  PackageJSON,
+  Services,
+  ThemeType,
+} from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
@@ -46,13 +51,23 @@ export default async function run(services: Services): Promise<any> {
 
     // A package.json definition can contain multiple theme sources.
     const themes: ExtractColorsPayload[] = packageJson.contributes.themes.map(
-      theme => ({
-        ...payload,
-        name: theme.label,
-        repositoryBranch: branch,
-        // Trims './path' -> 'path'.
-        repositoryPath: theme.path.replace(/^\.\//, ''),
-      }),
+      theme => {
+        let type
+        if (theme.uiTheme === 'vs-dark') {
+          type = 'dark'
+        } else if (theme.uiTheme === 'vs-light') {
+          type = 'light'
+        }
+
+        return {
+          ...payload,
+          type: type as ThemeType,
+          name: theme.label,
+          repositoryBranch: branch,
+          // Trims './path' -> 'path'.
+          repositoryPath: theme.path.replace(/^\.\//, ''),
+        }
+      },
     )
 
     // For each theme source, create a job to extract the colors.

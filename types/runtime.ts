@@ -80,9 +80,16 @@ export const PackageJSONRuntime = Record({
   }),
 })
 
+export const ThemeTypeRuntime = Union(
+  Literal('light'),
+  Literal('dark'),
+  Literal('hc'),
+)
+
 export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
     name: String.Or(Null),
+    type: ThemeTypeRuntime.Or(Null),
     repositoryBranch: String,
     repositoryPath: String,
   }),
@@ -141,12 +148,6 @@ export const ColorsRuntime = Record({
   selectorForeground: String,
   selectorFontStyle: String,
 })
-
-export const ThemeTypeRuntime = Union(
-  Literal('light'),
-  Literal('dark'),
-  Literal('hc'),
-)
 
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
   Record({

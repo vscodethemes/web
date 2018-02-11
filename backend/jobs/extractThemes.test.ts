@@ -177,6 +177,7 @@ test('should create extract theme jobs for valid input', async () => {
   expect(createSpy).toHaveBeenCalledTimes(2)
   expect(createSpy.mock.calls[0][0]).toEqual({
     name: 'name',
+    type: 'dark',
     extensionId: 'extensionId',
     extensionName: 'extensionName',
     publisherName: 'publisherName',
@@ -198,6 +199,7 @@ test('should create extract theme jobs for valid input', async () => {
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
     name: 'name',
+    type: 'dark',
     extensionId: 'extensionId',
     extensionName: 'extensionName',
     publisherName: 'publisherName',

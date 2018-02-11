@@ -104,6 +104,7 @@ export default function createServices(): Services {
       receiptHandle: '',
       payload: {
         name: 'name',
+        type: 'dark',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
         publisherName: 'publisherName',
