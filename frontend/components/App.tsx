@@ -4,10 +4,10 @@ import { RouteComponentProps, withRouter } from 'react-router'
 import { SearchParams, Theme } from '../../types/static'
 import theme from '../theme'
 import * as searchParams from '../utils/searchParams'
-import AlgoliaLogo from './AlgoliaLogo'
 import * as classes from './App.styles'
 import Checkbox from './Checkbox'
 import Facet from './Facet'
+import Footer from './Footer'
 import Input from './Input'
 import Logo from './Logo'
 import Pagination from './Pagination'
@@ -139,9 +139,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
             </Search>
           </div>
         </div>
-        <div className={classes.footer}>
-          <AlgoliaLogo />
-        </div>
+        <Footer />
       </React.Fragment>
     )
   }

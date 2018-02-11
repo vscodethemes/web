@@ -80,7 +80,19 @@ export default function Document(props: DocumentProps) {
           name="description"
           content="Search VSCode themes with inline previews"
         />
-        <link rel="shortcut icon" href={props.favicon} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:creator" content="@_jschr" />
+        <meta name="twitter:url" content="https://vscodethemes.com" />
+        <meta name="twitter:title" content="VSCodeThemes" />
+        <meta
+          name="twitter:description"
+          content="Search VSCode themes with inline previews"
+        />
+        <meta
+          name="twitter:image"
+          content={`${require('../assets/screenshot.png')}`}
+        />
+        <link rel="shortcut icon" href={`/${props.favicon}`} />
         {helmet.title.toComponent()}
         <style
           dangerouslySetInnerHTML={{

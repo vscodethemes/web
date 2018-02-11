@@ -114,16 +114,3 @@ export const main = css({
     margin: '0 auto',
   },
 })
-
-export const footer = css({
-  width: '100%',
-  borderTop: `1px solid ${theme.colors.inputBorder}`,
-  padding: em(containerGutter),
-  display: 'flex',
-  justifyContent: 'flex-end',
-
-  [`@media (max-width: ${collapseWidth}px)`]: {
-    justifyContent: 'center',
-    backgroundColor: theme.colors.inputBorder,
-  },
-})
