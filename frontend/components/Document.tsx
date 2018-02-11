@@ -78,7 +78,7 @@ export default function Document(props: DocumentProps) {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
           name="description"
-          content="Search VSCode themes with inline previews"
+          content="Preview themes from the VSCode marketplace."
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:creator" content="@_jschr" />
@@ -86,7 +86,7 @@ export default function Document(props: DocumentProps) {
         <meta name="twitter:title" content="VSCodeThemes" />
         <meta
           name="twitter:description"
-          content="Search VSCode themes with inline previews"
+          content="Preview themes from the VSCode marketplace."
         />
         <meta
           name="twitter:image"
