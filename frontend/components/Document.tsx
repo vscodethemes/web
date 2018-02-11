@@ -90,7 +90,7 @@ export default function Document(props: DocumentProps) {
         />
         <meta
           name="twitter:image"
-          content={`${require('../assets/screenshot.png')}`}
+          content={`https://vscodethemes.com/${require('../assets/screenshot.png')}`}
         />
         <link rel="shortcut icon" href={`/${props.favicon}`} />
         {helmet.title.toComponent()}
