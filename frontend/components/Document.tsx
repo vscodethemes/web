@@ -76,6 +76,10 @@ export default function Document(props: DocumentProps) {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="description"
+          content="Search VSCode themes with inline previews"
+        />
         <link rel="shortcut icon" href={props.favicon} />
         {helmet.title.toComponent()}
         <style
@@ -85,7 +89,6 @@ export default function Document(props: DocumentProps) {
         />
       </head>
       <body>
-        <div>{props.googleAnalyticsId}</div>
         <div id="react-root" dangerouslySetInnerHTML={{ __html: props.body }} />
         <script
           dangerouslySetInnerHTML={{
