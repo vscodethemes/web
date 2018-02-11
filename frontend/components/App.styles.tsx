@@ -101,6 +101,7 @@ export const facets = css({
 export const main = css({
   flex: 1,
   maxWidth: em(mainMaxWidth),
+  display: 'flex',
 
   [`@media (max-width: ${containerWidth}px)`]: {
     marginLeft: em(asideWidth + asideGutter),
