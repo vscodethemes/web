@@ -206,6 +206,7 @@ function filterThemes(
 function extractRepositoryInfo(url: string): RepositoryInfo {
   const [repositoryOwner, repository] = url
     .replace(/^(https:\/\/)?(www\.)?github\.com\//, '')
+    .replace(/^git@github\.com:/, '')
     .replace(/\.git$/, '')
     .split('/')
 
