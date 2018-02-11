@@ -1,6 +1,33 @@
-![vscodethemes](frontend/assets/logo.png)
+[![vscodethemes](frontend/assets/logo.png)](https://vscodethemes.com)
 
 [![Build Status](https://travis-ci.org/jschr/vscodethemes.svg?branch=production)](https://travis-ci.org/jschr/vscodethemes)
+
+---
+
+Preview themes from the VSCode marketplace.
+
+**Built with**
+
+* [AWS Lambda](https://aws.amazon.com/lambda/),
+  [SQS](https://aws.amazon.com/sqs/) and [SNS](https://aws.amazon.com/sns/)
+* [Typescript](https://www.typescriptlang.org/)
+* [Terraform](https://www.terraform.io/)
+* [React](https://reactjs.org/) and
+  [Syntax Highlighter](https://github.com/conorhastings/react-syntax-highlighter)
+* [Webpack](https://webpack.js.org/) and
+  [Static Site Generator Plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin)
+
+## How it works
+
+[TODO]
+
+### Sharing runtime and static types
+
+[TODO]
+
+## CI / CD
+
+[TODO]
 
 ### Terraform Gotchas
 
