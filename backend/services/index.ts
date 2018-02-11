@@ -9,16 +9,16 @@ import {
   Job,
   JobMessage,
   SaveThemePayload,
-  ScrapeThemesPayload,
+  ScrapeExtensionsPayload,
   Services,
 } from '../../types/static'
 
 const {
   ALGOLIA_APP_ID,
   ALGOLIA_API_KEY,
-  SCRAPE_THEMES_QUEUE_URL,
-  SCRAPE_THEMES_DEADLETTER_URL,
-  SCRAPE_THEMES_TOPIC_ARN,
+  SCRAPE_EXTENSIONS_QUEUE_URL,
+  SCRAPE_EXTENSIONS_DEADLETTER_URL,
+  SCRAPE_EXTENSIONS_TOPIC_ARN,
   EXTRACT_THEMES_QUEUE_URL,
   EXTRACT_THEMES_DEADLETTER_URL,
   EXTRACT_THEMES_TOPIC_ARN,
@@ -128,11 +128,11 @@ export default function createServices(): Services {
         return result
       },
     },
-    scrapeThemes: createJob<ScrapeThemesPayload>(
-      'scrapeThemes',
-      SCRAPE_THEMES_QUEUE_URL,
-      SCRAPE_THEMES_DEADLETTER_URL,
-      SCRAPE_THEMES_TOPIC_ARN,
+    scrapeExtensions: createJob<ScrapeExtensionsPayload>(
+      'scrapeExtensions',
+      SCRAPE_EXTENSIONS_QUEUE_URL,
+      SCRAPE_EXTENSIONS_DEADLETTER_URL,
+      SCRAPE_EXTENSIONS_TOPIC_ARN,
     ),
     extractThemes: createJob<ExtractThemesPayload>(
       'extractThemes',

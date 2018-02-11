@@ -2,15 +2,15 @@ import { Services } from '../../types/static'
 
 export default async function run(services: Services): Promise<any> {
   const {
-    scrapeThemes,
+    scrapeExtensions,
     extractThemes,
     extractColors,
     saveTheme,
     logger,
   } = services
 
-  logger.log('Notifying scrapeThemes...')
-  await scrapeThemes.notify()
+  logger.log('Notifying scrapeExtensions...')
+  await scrapeExtensions.notify()
   logger.log('Notifying extractThemes...')
   await extractThemes.notify()
   logger.log('Notifying extractColors...')

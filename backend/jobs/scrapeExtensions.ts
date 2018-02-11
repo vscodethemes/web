@@ -1,6 +1,6 @@
 import {
   ExtensionRuntime,
-  ScrapeThemesPayloadRuntime,
+  ScrapeExtensionsPayloadRuntime,
 } from '../../types/runtime'
 import {
   Extension,
@@ -15,9 +15,9 @@ export const GITHUB_PROPERTY_NAME =
   'Microsoft.VisualStudio.Services.Links.GitHub'
 
 export default async function run(services: Services): Promise<any> {
-  const { scrapeThemes, extractThemes, logger } = services
+  const { scrapeExtensions, extractThemes, logger } = services
 
-  const job = await scrapeThemes.receive()
+  const job = await scrapeExtensions.receive()
   if (!job) {
     await extractThemes.notify()
     logger.log('No more jobs to process.')
@@ -25,14 +25,14 @@ export default async function run(services: Services): Promise<any> {
   }
 
   // Process the next job in the queue.
-  await scrapeThemes.notify()
+  await scrapeExtensions.notify()
 
-  logger.log('Processing scrapeThemes job...')
+  logger.log('Processing scrapeExtensions job...')
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
   try {
-    if (!ScrapeThemesPayloadRuntime.guard(job.payload)) {
+    if (!ScrapeExtensionsPayloadRuntime.guard(job.payload)) {
       throw new PermanentJobError('Invalid job payload.')
     }
 
@@ -41,12 +41,12 @@ export default async function run(services: Services): Promise<any> {
     const themes = await fetchMarketplaceThemes(services, page)
     if (themes.length === 0) {
       logger.log('No more pages to process.')
-      await scrapeThemes.succeed(job)
+      await scrapeExtensions.succeed(job)
       return
     }
 
     // Create a job to process the next page.
-    await scrapeThemes.create({ page: page + 1 })
+    await scrapeExtensions.create({ page: page + 1 })
 
     // Get all themes with repository URLs.
     const themesWithRepos = filterThemes(services, themes)
@@ -61,7 +61,7 @@ export default async function run(services: Services): Promise<any> {
     await Promise.all(themesWithRepos.map(extractThemes.create))
 
     // Job succeeded.
-    await scrapeThemes.succeed(job)
+    await scrapeExtensions.succeed(job)
 
     logger.log(`
       Page: ${page}
@@ -71,13 +71,13 @@ export default async function run(services: Services): Promise<any> {
   } catch (err) {
     if (TransientJobError.is(err)) {
       logger.log(err.message)
-      await scrapeThemes.retry(job)
+      await scrapeExtensions.retry(job)
     } else if (PermanentJobError.is(err)) {
       logger.log(err.message)
-      await scrapeThemes.fail(job, err)
+      await scrapeExtensions.fail(job, err)
     } else {
       logger.log('Unexpected Error.')
-      await scrapeThemes.fail(job, err)
+      await scrapeExtensions.fail(job, err)
       // Rethrow error for global error handlers.
       throw err
     }

@@ -1,21 +1,21 @@
-module "scrape_themes" {
+module "scrape_extensions" {
   source           = "./lambda"
-  name             = "scrape_themes"
+  name             = "scrape_extensions"
   environment      = "${var.environment}"
-  sns_trigger_arn  = "${aws_sns_topic.scrape_themes.arn}"
-  sqs_receive_arns = ["${aws_sqs_queue.scrape_themes.arn}"]
-  sqs_send_arns    = ["${aws_sqs_queue.scrape_themes.arn}", "${aws_sqs_queue.scrape_themes_deadletter.arn}", "${aws_sqs_queue.extract_themes.arn}"]
-  sqs_delete_arns  = ["${aws_sqs_queue.scrape_themes.arn}"]
-  sns_publish_arns = ["${aws_sns_topic.scrape_themes.arn}", "${aws_sns_topic.extract_themes.arn}"]
+  sns_trigger_arn  = "${aws_sns_topic.scrape_extensions.arn}"
+  sqs_receive_arns = ["${aws_sqs_queue.scrape_extensions.arn}"]
+  sqs_send_arns    = ["${aws_sqs_queue.scrape_extensions.arn}", "${aws_sqs_queue.scrape_extensions_deadletter.arn}", "${aws_sqs_queue.extract_themes.arn}"]
+  sqs_delete_arns  = ["${aws_sqs_queue.scrape_extensions.arn}"]
+  sns_publish_arns = ["${aws_sns_topic.scrape_extensions.arn}", "${aws_sns_topic.extract_themes.arn}"]
 
   environment_variables {
-    JOB                          = "scrapeThemes"
-    NODE_ENV                     = "production"
-    SCRAPE_THEMES_TOPIC_ARN      = "${aws_sns_topic.scrape_themes.arn}"
-    SCRAPE_THEMES_QUEUE_URL      = "${aws_sqs_queue.scrape_themes.id}"
-    SCRAPE_THEMES_DEADLETTER_URL = "${aws_sqs_queue.scrape_themes_deadletter.id}"
-    EXTRACT_THEMES_TOPIC_ARN     = "${aws_sns_topic.extract_themes.arn}"
-    EXTRACT_THEMES_QUEUE_URL     = "${aws_sqs_queue.extract_themes.id}"
+    JOB                              = "scrapeExtensions"
+    NODE_ENV                         = "production"
+    SCRAPE_EXTENSIONS_TOPIC_ARN      = "${aws_sns_topic.scrape_extensions.arn}"
+    SCRAPE_EXTENSIONS_QUEUE_URL      = "${aws_sqs_queue.scrape_extensions.id}"
+    SCRAPE_EXTENSIONS_DEADLETTER_URL = "${aws_sqs_queue.scrape_extensions_deadletter.id}"
+    EXTRACT_THEMES_TOPIC_ARN         = "${aws_sns_topic.extract_themes.arn}"
+    EXTRACT_THEMES_QUEUE_URL         = "${aws_sqs_queue.extract_themes.id}"
   }
 }
 
@@ -92,19 +92,20 @@ module "run_all" {
   cloudwatch_trigger_arn  = "${aws_cloudwatch_event_rule.run_all.arn}"
 
   sns_publish_arns = [
-    "${aws_sns_topic.scrape_themes.arn}",
+    "${aws_sns_topic.scrape_extensions.arn}",
     "${aws_sns_topic.extract_themes.arn}",
     "${aws_sns_topic.extract_colors.arn}",
     "${aws_sns_topic.save_theme.arn}",
   ]
 
   environment_variables {
-    JOB                      = "runAll"
-    NODE_ENV                 = "production"
-    SCRAPE_THEMES_TOPIC_ARN  = "${aws_sns_topic.scrape_themes.arn}"
-    EXTRACT_THEMES_TOPIC_ARN = "${aws_sns_topic.extract_themes.arn}"
-    EXTRACT_COLORS_TOPIC_ARN = "${aws_sns_topic.extract_colors.arn}"
-    SAVE_THEME_TOPIC_ARN     = "${aws_sns_topic.save_theme.arn}"
+    JOB      = "runAll"
+    NODE_ENV = "production"
+
+    SCRAPE_EXTENSIONS_TOPIC_ARN = "${aws_sns_topic.scrape_extensions.arn}"
+    EXTRACT_THEMES_TOPIC_ARN    = "${aws_sns_topic.extract_themes.arn}"
+    EXTRACT_COLORS_TOPIC_ARN    = "${aws_sns_topic.extract_colors.arn}"
+    SAVE_THEME_TOPIC_ARN        = "${aws_sns_topic.save_theme.arn}"
   }
 }
 
@@ -114,11 +115,13 @@ module "init" {
   environment             = "${var.environment}"
   cloudwatch_trigger_name = "${aws_cloudwatch_event_rule.init.name}"
   cloudwatch_trigger_arn  = "${aws_cloudwatch_event_rule.init.arn}"
-  sqs_send_arns           = ["${aws_sqs_queue.scrape_themes.arn}"]
+
+  sqs_send_arns = ["${aws_sqs_queue.scrape_extensions.arn}"]
 
   environment_variables {
-    JOB                     = "init"
-    NODE_ENV                = "production"
-    SCRAPE_THEMES_QUEUE_URL = "${aws_sqs_queue.scrape_themes.id}"
+    JOB      = "init"
+    NODE_ENV = "production"
+
+    SCRAPE_EXTENSIONS_QUEUE_URL = "${aws_sqs_queue.scrape_extensions.id}"
   }
 }

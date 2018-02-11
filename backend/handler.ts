@@ -4,7 +4,7 @@ import extractThemes from './jobs/extractThemes'
 import init from './jobs/init'
 import runAll from './jobs/runAll'
 import saveTheme from './jobs/saveTheme'
-import scrapeThemes from './jobs/scrapeThemes'
+import scrapeExtensions from './jobs/scrapeExtensions'
 import createServices from './services'
 
 const jobName = process.env.JOB
@@ -12,7 +12,7 @@ const jobName = process.env.JOB
 const jobs: JobHandlers = {
   init,
   runAll,
-  scrapeThemes,
+  scrapeExtensions,
   extractThemes,
   extractColors,
   saveTheme,

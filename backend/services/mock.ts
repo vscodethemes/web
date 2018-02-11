@@ -5,7 +5,7 @@ import {
   ExtractThemesPayload,
   Job,
   SaveThemePayload,
-  ScrapeThemesPayload,
+  ScrapeExtensionsPayload,
   Services,
 } from '../../types/static'
 
@@ -30,7 +30,7 @@ export default function createServices(): Services {
     index: {
       addObject: () => Promise.resolve(),
     },
-    scrapeThemes: createJob<ScrapeThemesPayload>(),
+    scrapeExtensions: createJob<ScrapeExtensionsPayload>(),
     extractThemes: createJob<ExtractThemesPayload>(),
     extractColors: createJob<ExtractColorsPayload>(),
     saveTheme: createJob<SaveThemePayload>(),

@@ -10,14 +10,16 @@ import {
   PropertyRuntime,
   PublisherRuntime,
   SaveThemePayloadRuntime,
-  ScrapeThemesPayloadRuntime,
+  ScrapeExtensionsPayloadRuntime,
   ThemeTypeRuntime,
   VersionRuntime,
 } from './runtime'
 
 export type ExtensionQueryResults = Static<typeof ExtensionQueryResultsRuntime>
 export type Extension = Static<typeof ExtensionRuntime>
-export type ScrapeThemesPayload = Static<typeof ScrapeThemesPayloadRuntime>
+export type ScrapeExtensionsPayload = Static<
+  typeof ScrapeExtensionsPayloadRuntime
+>
 export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
@@ -83,7 +85,7 @@ export interface Services {
   index: {
     addObject: (object: IndexObject) => Promise<any>
   }
-  scrapeThemes: Job<ScrapeThemesPayload>
+  scrapeExtensions: Job<ScrapeExtensionsPayload>
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>

@@ -6,7 +6,7 @@ import {
   Job,
   JobMessage,
   SaveThemePayload,
-  ScrapeThemesPayload,
+  ScrapeExtensionsPayload,
   Services,
 } from '../../types/static'
 import * as themeVariables from '../themeVariables'
@@ -75,7 +75,7 @@ export default function createServices(): Services {
       },
     },
     // TODO: Allow receive mocks to be passed in via CLI.
-    scrapeThemes: createJob<ScrapeThemesPayload>('scrapeThemes', {
+    scrapeExtensions: createJob<ScrapeExtensionsPayload>('scrapeExtensions', {
       receiptHandle: '',
       payload: { page: 1 },
     }),

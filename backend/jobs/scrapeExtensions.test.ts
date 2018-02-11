@@ -1,7 +1,7 @@
 import * as fetch from 'jest-fetch-mock'
 import { Extension } from '../../types/static'
 import createServices from '../services/mock'
-import scrapeThemes, { GITHUB_PROPERTY_NAME } from './scrapeThemes'
+import scrapeExtensions, { GITHUB_PROPERTY_NAME } from './scrapeExtensions'
 
 const date = new Date()
 
@@ -74,13 +74,13 @@ afterEach(() => fetch.resetMocks())
 test('should not process empty job', async () => {
   const services = createServices()
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve(null))
 
   const fetchSpy = jest.spyOn(services, 'fetch')
-  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
-  const succeedSpy = jest.spyOn(services.scrapeThemes, 'succeed')
-  await scrapeThemes(services)
+  const notifySpy = jest.spyOn(services.scrapeExtensions, 'notify')
+  const succeedSpy = jest.spyOn(services.scrapeExtensions, 'succeed')
+  await scrapeExtensions(services)
   expect(fetchSpy).toHaveBeenCalledTimes(0)
   expect(notifySpy).toHaveBeenCalledTimes(0)
   expect(succeedSpy).toHaveBeenCalledTimes(0)
@@ -89,22 +89,22 @@ test('should not process empty job', async () => {
 test('should notify extract themes when no more jobs', async () => {
   const services = createServices()
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve(null))
 
   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
-  await scrapeThemes(services)
+  await scrapeExtensions(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
 test('should fail job if it has an invalid payload', async () => {
   const services = createServices()
   jest
-    .spyOn(services.scrapeThemes, 'fail')
+    .spyOn(services.scrapeExtensions, 'fail')
     .mockImplementation(() => Promise.resolve({}))
 
-  const failSpy = jest.spyOn(services.scrapeThemes, 'fail')
-  await scrapeThemes(services)
+  const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
+  await scrapeExtensions(services)
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
@@ -112,11 +112,11 @@ test('should retry job if fetch returns bad response', async () => {
   const services = createServices()
   fetch.mockResponseOnce('', { status: 400 })
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const retrySpy = jest.spyOn(services.scrapeThemes, 'retry')
-  await scrapeThemes(services)
+  const retrySpy = jest.spyOn(services.scrapeExtensions, 'retry')
+  await scrapeExtensions(services)
   expect(retrySpy).toHaveBeenCalledTimes(1)
 })
 
@@ -124,11 +124,11 @@ test('should fail job if fetch returns invalid response data', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: null }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const failSpy = jest.spyOn(services.scrapeThemes, 'fail')
-  await scrapeThemes(services)
+  const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
+  await scrapeExtensions(services)
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
@@ -136,11 +136,11 @@ test('should fail job if fetch returns invalid extensions', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: null }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const failSpy = jest.spyOn(services.scrapeThemes, 'fail')
-  await scrapeThemes(services)
+  const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
+  await scrapeExtensions(services)
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
@@ -148,11 +148,11 @@ test('should not create job for next page when current page is empty', async () 
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const createSpy = jest.spyOn(services.scrapeThemes, 'create')
-  await scrapeThemes(services)
+  const createSpy = jest.spyOn(services.scrapeExtensions, 'create')
+  await scrapeExtensions(services)
   expect(createSpy).toHaveBeenCalledTimes(0)
 })
 
@@ -161,11 +161,11 @@ test('should not create job for invalid repositories', async () => {
   const themes = createInvalidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
   const createSpy = jest.spyOn(services.extractThemes, 'create')
-  await scrapeThemes(services)
+  await scrapeExtensions(services)
   expect(createSpy).toHaveBeenCalledTimes(0)
 })
 
@@ -174,13 +174,13 @@ test('should throw on unexpected error', async () => {
   // Simulate unexpected error by forcing fetch to reject.
   fetch.mockRejectOnce(new Error())
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const failSpy = jest.spyOn(services.scrapeThemes, 'fail')
+  const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
   let error
   try {
-    await scrapeThemes(services)
+    await scrapeExtensions(services)
   } catch {
     error = true
   }
@@ -194,11 +194,11 @@ test('should succeed job for valid input', async () => {
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const succeedSpy = jest.spyOn(services.scrapeThemes, 'succeed')
-  await scrapeThemes(services)
+  const succeedSpy = jest.spyOn(services.scrapeExtensions, 'succeed')
+  await scrapeExtensions(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
 })
 
@@ -206,11 +206,11 @@ test('should succeed job for empty page', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const succeedSpy = jest.spyOn(services.scrapeThemes, 'succeed')
-  await scrapeThemes(services)
+  const succeedSpy = jest.spyOn(services.scrapeExtensions, 'succeed')
+  await scrapeExtensions(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
 })
 
@@ -219,11 +219,11 @@ test('should create job for next page', async () => {
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const createSpy = jest.spyOn(services.scrapeThemes, 'create')
-  await scrapeThemes(services)
+  const createSpy = jest.spyOn(services.scrapeExtensions, 'create')
+  await scrapeExtensions(services)
   expect(createSpy).toHaveBeenCalledWith({ page: 2 })
 })
 
@@ -232,11 +232,11 @@ test('should create job for repositories', async () => {
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
   const createSpy = jest.spyOn(services.extractThemes, 'create')
-  await scrapeThemes(services)
+  await scrapeExtensions(services)
   expect(createSpy).toHaveBeenCalledTimes(themes.length)
   expect(createSpy.mock.calls[0][0]).toEqual({
     extensionId: 'extensionId',
@@ -262,11 +262,11 @@ test('should notify self for valid input', async () => {
   const themes = createValidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
-  await scrapeThemes(services)
+  const notifySpy = jest.spyOn(services.scrapeExtensions, 'notify')
+  await scrapeExtensions(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
@@ -274,11 +274,11 @@ test('should notify self for empty page', async () => {
   const services = createServices()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
-  await scrapeThemes(services)
+  const notifySpy = jest.spyOn(services.scrapeExtensions, 'notify')
+  await scrapeExtensions(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
@@ -287,10 +287,10 @@ test('should notify self for invalid input', async () => {
   const themes = createInvalidThemes()
   fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
   jest
-    .spyOn(services.scrapeThemes, 'receive')
+    .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const notifySpy = jest.spyOn(services.scrapeThemes, 'notify')
-  await scrapeThemes(services)
+  const notifySpy = jest.spyOn(services.scrapeExtensions, 'notify')
+  await scrapeExtensions(services)
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })

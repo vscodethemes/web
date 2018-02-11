@@ -44,7 +44,7 @@ export const ExtensionQueryResultsRuntime = Record({
   results: Tuple(Record({ extensions: Array(ExtensionRuntime) })),
 })
 
-export const ScrapeThemesPayloadRuntime = Record({
+export const ScrapeExtensionsPayloadRuntime = Record({
   page: Number,
 })
 

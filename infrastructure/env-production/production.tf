@@ -29,16 +29,16 @@ module "backend" {
   algolia_api_key      = "${var.algolia_api_key}"
 }
 
-output "scrape_themes_sns_topic_arn" {
-  value = "${module.backend.scrape_themes_sns_topic_arn}"
+output "scrape_extensions_sns_topic_arn" {
+  value = "${module.backend.scrape_extensions_sns_topic_arn}"
 }
 
-output "scrape_themes_sqs_queue_url" {
-  value = "${module.backend.scrape_themes_sqs_queue_url}"
+output "scrape_extensions_sqs_queue_url" {
+  value = "${module.backend.scrape_extensions_sqs_queue_url}"
 }
 
-output "scrape_themes_sqs_deadletter_queue_url" {
-  value = "${module.backend.scrape_themes_sqs_deadletter_queue_url}"
+output "scrape_extensions_sqs_deadletter_queue_url" {
+  value = "${module.backend.scrape_extensions_sqs_deadletter_queue_url}"
 }
 
 output "extract_themes_sns_topic_arn" {

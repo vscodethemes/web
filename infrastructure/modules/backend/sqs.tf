@@ -1,17 +1,17 @@
 # Scrape themes.
-resource "aws_sqs_queue" "scrape_themes" {
-  name                       = "scrape_themes"
+resource "aws_sqs_queue" "scrape_extensions" {
+  name                       = "scrape_extensions"
   visibility_timeout_seconds = "${var.sqs_visibility_timeout}"
   receive_wait_time_seconds  = "${var.sqs_receive_timeout}"
-  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.scrape_themes_deadletter.arn}\",\"maxReceiveCount\":4}"
+  redrive_policy             = "{\"deadLetterTargetArn\":\"${aws_sqs_queue.scrape_extensions_deadletter.arn}\",\"maxReceiveCount\":4}"
 
   tags {
     environment = "${var.environment}"
   }
 }
 
-resource "aws_sqs_queue" "scrape_themes_deadletter" {
-  name = "scrape_themes_deadletter"
+resource "aws_sqs_queue" "scrape_extensions_deadletter" {
+  name = "scrape_extensions_deadletter"
 
   tags {
     environment = "${var.environment}"
