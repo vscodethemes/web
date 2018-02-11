@@ -1,7 +1,10 @@
 import { GUIVariables, TokenVariables } from '../types/static'
 
-// GUI variable defaults extracted from
-// https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/common/theme.ts
+// GUI variables are extracted from the theme's colors.
+//
+// VSCode color reference: https://code.visualstudio.com/docs/getstarted/theme-color-reference
+// Defaults were pulled from https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/common/theme.ts
+// Example theme json: https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json
 export const gui: GUIVariables = {
   activityBarBackground: {
     key: 'activityBar.background',
@@ -141,7 +144,13 @@ export const gui: GUIVariables = {
   },
 }
 
-// Token scopes are pulled from https://www.sublimetext.com/docs/3/scope_naming.html
+// Token colors are extracted from the theme's tokenColors. The first
+// matching matching scope wins. If a matching scope isn't found we will
+// default to using the the editorForeground GUI color. Each variable
+// extract's the token's color and font style.
+//   ie. comment extracts commentColor and commentFontStyle
+//
+// TextMate scopes reference: https://www.sublimetext.com/docs/3/scope_naming.html
 const keywordScopes = ['keyword', 'keyword.control', 'storage', 'storage.type']
 const tagScopes = ['entity.name.tag', 'meta.tag']
 export const tokens: TokenVariables = {

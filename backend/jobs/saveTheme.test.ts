@@ -12,6 +12,7 @@ function createJob(): JobMessage<SaveThemePayload> {
       lastUpdated: 1,
       publishedDate: 1,
       releaseDate: 1,
+      displayName: 'displayName',
       shortDescription: 'shortDescription',
       name: 'name',
       type: 'dark',

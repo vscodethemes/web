@@ -2,10 +2,6 @@ import { SaveThemePayloadRuntime } from '../../types/runtime'
 import { SaveThemePayload, Services } from '../../types/static'
 import { PermanentJobError, TransientJobError } from '../errors'
 
-export function createObjectId(theme: SaveThemePayload) {
-  return `${theme.repositoryOwner}$${theme.repository}$${theme.repositoryPath}`
-}
-
 export default async function run(services: Services): Promise<any> {
   const { saveTheme, logger } = services
 
@@ -48,16 +44,17 @@ export default async function run(services: Services): Promise<any> {
   }
 }
 
-/**
- * Add theme to Algolia index.
- */
+export function createObjectId(theme: SaveThemePayload) {
+  return `${theme.repositoryOwner}$${theme.repository}$${theme.repositoryPath}`
+}
+
+// Add theme to Algolia index.
 async function addToSearch(
   services: Services,
   theme: SaveThemePayload,
 ): Promise<string> {
   const { index } = services
   const objectID = createObjectId(theme)
-  // Save to algolia index.
   try {
     await index.addObject({ ...theme, objectID })
     return objectID

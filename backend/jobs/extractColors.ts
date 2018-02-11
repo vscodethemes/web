@@ -62,9 +62,7 @@ export default async function run(services: Services): Promise<any> {
   }
 }
 
-/**
- * Fetch the repository's theme definition.
- */
+// Fetch the repository's theme definition.
 async function fetchTheme(
   services: Services,
   repositoryOwner: string,

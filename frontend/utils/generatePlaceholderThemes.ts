@@ -14,6 +14,7 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
     extensionId: '',
     type: null,
     name: '',
+    displayName: '',
     shortDescription: '',
     extensionName: '',
     publisherName: '',

@@ -75,9 +75,7 @@ export default async function run(services: Services): Promise<any> {
   }
 }
 
-/**
- * Fetch the repository's default branch.
- */
+// Fetch the repository's default branch.
 async function fetchDefaultBranch(
   services: Services,
   repositoryOwner: string,

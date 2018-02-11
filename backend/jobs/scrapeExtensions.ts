@@ -178,6 +178,7 @@ function filterThemes(
           lastUpdated: +new Date(theme.lastUpdated),
           publishedDate: +new Date(theme.publishedDate),
           releaseDate: +new Date(theme.releaseDate),
+          displayName: theme.displayName,
           shortDescription: theme.shortDescription,
           installs: extractStatistic(theme, 'install'),
           rating: extractStatistic(theme, 'averagerating'),

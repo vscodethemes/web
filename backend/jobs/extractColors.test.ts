@@ -16,6 +16,7 @@ function createJob(): JobMessage<ExtractColorsPayload> {
       lastUpdated: 1,
       publishedDate: 1,
       releaseDate: 1,
+      displayName: 'displayName',
       shortDescription: 'shortDescription',
       repository: 'repo',
       repositoryOwner: 'owner',

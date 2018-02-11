@@ -21,6 +21,7 @@ const createValidThemes = (): Extension[] => {
       lastUpdated: date.toISOString(),
       publishedDate: date.toISOString(),
       releaseDate: date.toISOString(),
+      displayName: 'displayName',
       shortDescription: 'shortDescription',
       publisher: {
         publisherName: 'publisherName',
@@ -245,6 +246,7 @@ test('should create job for repositories', async () => {
     lastUpdated: +date,
     publishedDate: +date,
     releaseDate: +date,
+    displayName: 'displayName',
     shortDescription: 'shortDescription',
     repository: 'repo',
     repositoryOwner: 'owner',
