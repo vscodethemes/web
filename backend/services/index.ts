@@ -114,10 +114,10 @@ export default function createServices(): Services {
     // Ouputs to CloudWatch.
     logger: {
       log: obj => {
-        console.log(obj)
+        console.log('[INFO]', obj)
       },
       error: error => {
-        console.error(error)
+        console.error('[ERROR]', error)
       },
     },
     index: {
