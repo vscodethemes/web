@@ -16,18 +16,25 @@ export interface DocumentProps {
 }
 
 injectGlobal({
+  '*, *:before, *:after': {
+    boxSizing: 'border-box',
+  },
   html: {
+    height: '100%',
     fontSize: rootFontSize,
   },
   body: {
+    height: '100%',
     fontFamily: theme.fontFamily,
     fontWeight: 'normal',
     letterSpacing: em(0.3),
     margin: 0,
     backgroundColor: theme.colors.background,
   },
-  '*, *:before, *:after': {
-    boxSizing: 'border-box',
+  '#react-root': {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
 })
 

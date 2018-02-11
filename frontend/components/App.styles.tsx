@@ -14,6 +14,7 @@ export const collapseWidth =
   asideWidth + asideGutter + mainMinWidth + containerGutter * 2
 
 export const container = css({
+  flex: 1,
   width: '100%',
   maxWidth: em(containerWidth),
   margin: '0 auto',
