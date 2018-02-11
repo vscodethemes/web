@@ -11,8 +11,7 @@ export interface DocumentProps {
   body: string
   ssr: SSR
   enableDevServer: boolean
-  enableGoogleAnalytics: boolean
-  googleAnalyticsTrackingId: string
+  googleAnalyticsId: string
 }
 
 injectGlobal({
@@ -52,6 +51,27 @@ export default function Document(props: DocumentProps) {
   return (
     <html lang="en">
       <head>
+        {props.googleAnalyticsId && (
+          <script
+            async={true}
+            src={`https://www.googletagmanager.com/gtag/js?id=${
+              props.googleAnalyticsId
+            }`}
+          />
+        )}
+        {props.googleAnalyticsId && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+  
+          gtag('config', '${props.googleAnalyticsId}');
+        `,
+            }}
+          />
+        )}
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -65,6 +85,7 @@ export default function Document(props: DocumentProps) {
         />
       </head>
       <body>
+        <div>{props.googleAnalyticsId}</div>
         <div id="react-root" dangerouslySetInnerHTML={{ __html: props.body }} />
         <script
           dangerouslySetInnerHTML={{
