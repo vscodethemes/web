@@ -20,14 +20,15 @@ interface SearchProps {
   renderTheme: (theme: Theme) => React.ReactNode
   onFacetResults: (totalDark: number, totalLight: number) => any
   onPages: (totalPages: number) => any
+  onClear: () => any
 }
 
 interface SearchState {
   themes: Theme[]
 }
 
-const hitsPerPage = 12
-const placeholders = generatePlaceholderThemes(hitsPerPage)
+const perPage = 12
+const placeholders = generatePlaceholderThemes(perPage)
 
 class Search extends React.PureComponent<SearchProps, SearchState> {
   public state: SearchState = {
@@ -73,8 +74,21 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   }
 
   public render() {
-    const { renderTheme, children } = this.props
+    const { search, renderTheme, onClear, children } = this.props
     const { themes } = this.state
+
+    if (themes.length === 0 && search) {
+      return (
+        <div className={classes.empty}>
+          <p className={classes.emptyMessage}>
+            No themes found for '{search}'.
+          </p>
+          <button className={classes.clear} onClick={onClear}>
+            Clear Search
+          </button>
+        </div>
+      )
+    }
 
     return (
       <div className={classes.container}>
@@ -100,7 +114,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
         query: props.search,
         filters: types.join(' OR '),
         page: props.page - 1,
-        hitsPerPage,
+        hitsPerPage: perPage,
         facets: 'type',
       })
       this.stopPlaceholdersTimer()
@@ -142,9 +156,35 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
 const classes = {
   container: css({
+    flex: 1,
     paddingTop: em(theme.gutters.lg),
     [`@media (max-width: ${mainMaxWidth + containerGutter * 2}px)`]: {
       paddingTop: em(theme.gutters.md),
+    },
+  }),
+
+  empty: css({
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+
+  emptyMessage: css({
+    color: theme.colors.textMuted,
+    marginTop: 0,
+    marginBottom: theme.gutters.sm,
+  }),
+
+  clear: css({
+    fontSize: theme.fontSizes.md,
+    background: 'transparent',
+    border: 0,
+    color: theme.colors.text,
+    cursor: 'pointer',
+    ':hover': {
+      color: theme.colors.palette[0],
     },
   }),
 

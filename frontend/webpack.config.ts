@@ -49,7 +49,7 @@ const config: webpack.Configuration = {
     new FaviconsWebpackPlugin({
       logo: path.resolve(__dirname, './assets/icon.png'),
       title: 'VSCodeThemes',
-      persistentCache: true,
+      persistentCache: false,
       emitStats: false,
       icons: {
         android: false,
@@ -68,6 +68,7 @@ const config: webpack.Configuration = {
       paths: ['/', '/trending', '/new'],
       locals: {
         enableDevServer: isDevelopment,
+        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
       },
     }),
   ],

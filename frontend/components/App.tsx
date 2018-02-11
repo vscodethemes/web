@@ -119,6 +119,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               {...params}
               onFacetResults={this.setFacetResults}
               onPages={this.setTotalPages}
+              onClear={() => this.setQueryParams({ ...params, search: '' })}
               renderTheme={(t: Theme) => (
                 <ThemePreview
                   key={t.objectID}

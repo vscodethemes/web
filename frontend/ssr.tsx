@@ -8,8 +8,7 @@ import Document, { DocumentProps } from './components/Document'
 export interface SSROptions {
   path: string
   enableDevServer: boolean
-  enableGoogleAnalytics: boolean
-  googleAnalyticsTrackingId: string
+  googleAnalyticsId: string
   webpackStats: any
 }
 
@@ -37,8 +36,7 @@ export default function ssr(options: SSROptions) {
     body,
     ssr: { cssIds },
     enableDevServer: options.enableDevServer,
-    enableGoogleAnalytics: options.enableGoogleAnalytics,
-    googleAnalyticsTrackingId: options.googleAnalyticsTrackingId,
+    googleAnalyticsId: options.googleAnalyticsId,
   }
 
   const html = `

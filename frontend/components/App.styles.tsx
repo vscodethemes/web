@@ -14,6 +14,7 @@ export const collapseWidth =
   asideWidth + asideGutter + mainMinWidth + containerGutter * 2
 
 export const container = css({
+  flex: 1,
   width: '100%',
   maxWidth: em(containerWidth),
   margin: '0 auto',
@@ -100,6 +101,7 @@ export const facets = css({
 export const main = css({
   flex: 1,
   maxWidth: em(mainMaxWidth),
+  display: 'flex',
 
   [`@media (max-width: ${containerWidth}px)`]: {
     marginLeft: em(asideWidth + asideGutter),
