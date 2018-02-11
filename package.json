@@ -15,7 +15,7 @@
     "build":
       "rm -rf build && tsc && rm -rf build/frontend && yarn build-frontend",
     "build-frontend":
-      "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id && webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
+      "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
     "install-production-dependencies":
       "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
     "package":
