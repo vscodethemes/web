@@ -5,6 +5,7 @@ variable "github_client_id" {}
 variable "github_client_secret" {}
 variable "algolia_app_id" {}
 variable "algolia_api_key" {}
+variable "sentry_dsn" {}
 
 terraform {
   backend "s3" {
@@ -27,6 +28,7 @@ module "backend" {
   github_client_secret = "${var.github_client_secret}"
   algolia_app_id       = "${var.algolia_app_id}"
   algolia_api_key      = "${var.algolia_api_key}"
+  sentry_dsn           = "${var.sentry_dsn}"
 }
 
 output "scrape_extensions_sns_topic_arn" {

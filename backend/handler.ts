@@ -1,3 +1,5 @@
+import * as Raven from 'raven'
+import * as promisify from 'util.promisify'
 import { JobHandlers } from '../types/static'
 import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
@@ -8,7 +10,6 @@ import scrapeExtensions from './jobs/scrapeExtensions'
 import createServices from './services'
 
 const jobName = process.env.JOB
-
 const jobs: JobHandlers = {
   init,
   runAll,
@@ -17,6 +18,16 @@ const jobs: JobHandlers = {
   extractColors,
   saveTheme,
 }
+
+const ravenConfig: Raven.ConstructorOptions = {
+  environment: process.env.NODE_ENV,
+  tags: {
+    subject: jobName,
+    commit: process.env.TRAVIS_COMMIT,
+  },
+}
+const raven = Raven.config(process.env.SENTRY_DSN, ravenConfig).install()
+const captureException = promisify(raven.captureException.bind(raven))
 
 export default async function handler(event: any, context: AWSLambda.Context) {
   const services = createServices()
@@ -30,6 +41,7 @@ export default async function handler(event: any, context: AWSLambda.Context) {
     const result = await job(services)
     context.succeed(result)
   } catch (err) {
+    await captureException(err)
     context.fail(err)
   }
 }

@@ -11,6 +11,7 @@ module "scrape_extensions" {
   environment_variables {
     JOB                              = "scrapeExtensions"
     NODE_ENV                         = "production"
+    SENTRY_DSN                       = "${var.sentry_dsn}"
     SCRAPE_EXTENSIONS_TOPIC_ARN      = "${aws_sns_topic.scrape_extensions.arn}"
     SCRAPE_EXTENSIONS_QUEUE_URL      = "${aws_sqs_queue.scrape_extensions.id}"
     SCRAPE_EXTENSIONS_DEADLETTER_URL = "${aws_sqs_queue.scrape_extensions_deadletter.id}"
@@ -32,6 +33,7 @@ module "extract_themes" {
   environment_variables {
     JOB                           = "extractThemes"
     NODE_ENV                      = "production"
+    SENTRY_DSN                    = "${var.sentry_dsn}"
     EXTRACT_THEMES_TOPIC_ARN      = "${aws_sns_topic.extract_themes.arn}"
     EXTRACT_THEMES_QUEUE_URL      = "${aws_sqs_queue.extract_themes.id}"
     EXTRACT_THEMES_DEADLETTER_URL = "${aws_sqs_queue.extract_themes_deadletter.id}"
@@ -55,6 +57,7 @@ module "extract_colors" {
   environment_variables {
     JOB                           = "extractColors"
     NODE_ENV                      = "production"
+    SENTRY_DSN                    = "${var.sentry_dsn}"
     EXTRACT_COLORS_TOPIC_ARN      = "${aws_sns_topic.extract_colors.arn}"
     EXTRACT_COLORS_QUEUE_URL      = "${aws_sqs_queue.extract_colors.id}"
     EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors_deadletter.id}"
@@ -76,6 +79,7 @@ module "save_theme" {
   environment_variables {
     JOB                       = "saveTheme"
     NODE_ENV                  = "production"
+    SENTRY_DSN                = "${var.sentry_dsn}"
     ALGOLIA_APP_ID            = "${var.algolia_app_id}"
     ALGOLIA_API_KEY           = "${var.algolia_api_key}"
     SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
@@ -99,9 +103,9 @@ module "run_all" {
   ]
 
   environment_variables {
-    JOB      = "runAll"
-    NODE_ENV = "production"
-
+    JOB                         = "runAll"
+    NODE_ENV                    = "production"
+    SENTRY_DSN                  = "${var.sentry_dsn}"
     SCRAPE_EXTENSIONS_TOPIC_ARN = "${aws_sns_topic.scrape_extensions.arn}"
     EXTRACT_THEMES_TOPIC_ARN    = "${aws_sns_topic.extract_themes.arn}"
     EXTRACT_COLORS_TOPIC_ARN    = "${aws_sns_topic.extract_colors.arn}"
@@ -119,9 +123,9 @@ module "init" {
   sqs_send_arns = ["${aws_sqs_queue.scrape_extensions.arn}"]
 
   environment_variables {
-    JOB      = "init"
-    NODE_ENV = "production"
-
+    JOB                         = "init"
+    NODE_ENV                    = "production"
+    SENTRY_DSN                  = "${var.sentry_dsn}"
     SCRAPE_EXTENSIONS_QUEUE_URL = "${aws_sqs_queue.scrape_extensions.id}"
   }
 }

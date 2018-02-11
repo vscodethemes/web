@@ -1,6 +1,7 @@
 declare module 'jest-fetch-mock'
 declare module 'static-site-generator-webpack-plugin'
 declare module 'favicons-webpack-plugin'
+declare module 'webpack-bundle-analyzer'
 declare module 'emotion'
 declare module 'emotion-server'
 declare module 'express-useragent'

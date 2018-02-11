@@ -44,6 +44,8 @@ const config: webpack.Configuration = {
         NODE_ENV: JSON.stringify(nodeEnv),
         ALGOLIA_APP_ID: JSON.stringify(process.env.ALGOLIA_APP_ID),
         ALGOLIA_SEARCH_KEY: JSON.stringify(process.env.ALGOLIA_SEARCH_KEY),
+        SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN),
+        TRAVIS_COMMIT: JSON.stringify(process.env.TRAVIS_COMMIT),
       },
     }),
     new FaviconsWebpackPlugin({

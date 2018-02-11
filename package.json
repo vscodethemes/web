@@ -10,10 +10,12 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "tslint --project .",
+    "bundle-analyzer":
+      "yarn build-frontend && webpack-bundle-analyzer build/frontend-bundle-stats.json",
     "build":
       "rm -rf build && tsc && rm -rf build/frontend && yarn build-frontend",
     "build-frontend":
-      "NODE_ENV=production ALGOLIA_APP_ID=$TF_VAR_algolia_app_id yarn webpack --config ./frontend/webpack.config.ts",
+      "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id && webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
     "install-production-dependencies":
       "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
     "package":
@@ -41,29 +43,34 @@
     "netlify-cli": "^1.2.2",
     "node-fetch": "^1.7.3",
     "query-string": "^5.0.1",
+    "raven": "^2.4.1",
+    "raven-js": "^3.22.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-helmet": "^5.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-syntax-highlighter": "^7.0.0",
-    "runtypes": "^0.13.1"
+    "runtypes": "^0.13.1",
+    "util.promisify": "^1.0.0"
   },
   "devDependencies": {
     "@types/algoliasearch": "^3.24.7",
     "@types/aws-lambda": "^0.0.24",
     "@types/aws-sdk": "^2.7.0",
-    "@types/bluebird": "^3.5.19",
     "@types/jest": "^21.1.8",
     "@types/minimist": "^1.2.0",
     "@types/node": "^8.0.54",
     "@types/node-fetch": "^1.6.7",
     "@types/query-string": "^5.0.1",
+    "@types/raven": "^2.1.4",
+    "@types/raven-js": "^3.10.0",
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.3",
     "@types/react-helmet": "^5.0.3",
     "@types/react-router": "^4.0.20",
     "@types/react-router-dom": "^4.2.3",
+    "@types/util.promisify": "^1.0.0",
     "@types/webpack": "^3.8.1",
     "awesome-typescript-loader": "^3.4.1",
     "aws-sdk": "^2.175.0",
@@ -93,6 +100,7 @@
     "typescript": "^2.6.1",
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.10.0",
     "webpack-dev-server": "^2.9.7"
   },
   "prettier": {

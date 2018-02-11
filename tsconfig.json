@@ -11,5 +11,8 @@
     "skipLibCheck": true
   },
   "types": ["node", "aws-lambda"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "awesomeTypescriptLoaderOptions": {
+    "silent": true
+  }
 }
