@@ -88,7 +88,7 @@ async function fetchTheme(
 
   if (!response.ok) {
     throw new TransientJobError(
-      `fetchTheme error: Bad response '${response.statusText}'`,
+      `fetchTheme error: Bad response '${response.statusText}' for '${url}'`,
     )
   }
 
@@ -108,16 +108,19 @@ async function fetchTheme(
     }
   } catch (err) {
     logger.error(err)
-    throw new PermanentJobError('fetchTheme error: Invalid response data')
+    throw new PermanentJobError(
+      `fetchTheme error: Invalid response data for '${url}'`,
+    )
   }
 
   if (!name) {
-    throw new PermanentJobError(`fetchTheme error: Missing name.`)
+    throw new PermanentJobError(`fetchTheme error: Missing name for '${url}'`)
   }
 
   if (!ThemeTypeRuntime.guard(type)) {
     throw new PermanentJobError(
       `fetchTheme error: Invalid type: ${JSON.stringify(type)}
+        URL: ${url}
         Theme: ${JSON.stringify(data)}`,
     )
   }
@@ -125,11 +128,15 @@ async function fetchTheme(
   if (!ColorsRuntime.guard(colors)) {
     throw new PermanentJobError(
       `fetchTheme error: Invalid colors: ${JSON.stringify(colors)}
+        URL: ${url}
         Theme: ${JSON.stringify(data)}`,
     )
   }
 
-  logger.log(`fetchTheme success: ${JSON.stringify(data)}`)
+  logger.log(`fetchTheme success: 
+    URL: ${url}
+    Theme: ${JSON.stringify(data)}
+  `)
 
   return { name, type, colors }
 }
