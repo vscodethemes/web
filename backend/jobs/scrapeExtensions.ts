@@ -55,7 +55,8 @@ export default async function run(services: Services): Promise<any> {
       return
     }
 
-    logger.log(themesWithRepos)
+    // Log each valid theme.
+    themesWithRepos.forEach(logger.log)
 
     // Create a job to extract the themes of each repository.
     await Promise.all(themesWithRepos.map(extractThemes.create))
