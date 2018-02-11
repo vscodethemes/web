@@ -1,3 +1,4 @@
+import * as stripComments from 'strip-json-comments'
 import {
   ColorsRuntime,
   ExtractColorsPayloadRuntime,
@@ -109,7 +110,8 @@ async function fetchTheme(
   let data: any
   try {
     logger.log(`Fetching theme...`)
-    data = await response.json()
+    const responseText = await response.text()
+    data = JSON.parse(stripComments(responseText))
     name = data.name
     type = data.type
     if (data.colors && data.tokenColors) {
