@@ -5,21 +5,33 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_ENV=development ALGOLIA_SEARCH_KEY=85aca99848c42e1c5770fa79705c0b18 ALGOLIA_APP_ID=4DSENNCE1V webpack-dev-server --config ./frontend/webpack.config.ts --inline false --history-api-fallback",
+    "start":
+      "NODE_ENV=development ALGOLIA_SEARCH_KEY=85aca99848c42e1c5770fa79705c0b18 ALGOLIA_APP_ID=4DSENNCE1V webpack-dev-server --config ./frontend/webpack.config.ts --inline false --history-api-fallback",
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "tslint --project .",
-    "bundle-analyzer": "yarn build-frontend && webpack-bundle-analyzer build/frontend-bundle-stats.json",
-    "build": "rm -rf build && tsc && rm -rf build/frontend && yarn build-frontend",
-    "build-frontend": "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
-    "install-production-dependencies": "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
-    "package": "bestzip build/lambda.zip build/backend build/types build/node_modules",
-    "terraform-init": "cd infrastructure/env-production && terraform init -input=false -backend-config \"region=$TF_VAR_region\" -backend-config \"access_key=$TF_VAR_aws_access_key\" -backend-config \"secret_key=$TF_VAR_aws_secret_key\"",
-    "terraform-plan": "cd infrastructure/env-production && terraform get && terraform plan -input=false -out=terraform.plan",
-    "terraform-apply": "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
-    "invoke-scrapeExtensions": "ts-node scripts/invoke ../backend/jobs/scrapeExtensions.ts",
-    "invoke-extractThemes": "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
-    "invoke-extractColors": "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
+    "bundle-analyzer":
+      "yarn build-frontend && webpack-bundle-analyzer build/frontend-bundle-stats.json",
+    "build":
+      "rm -rf build && tsc && rm -rf build/frontend && yarn build-frontend",
+    "build-frontend":
+      "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
+    "install-production-dependencies":
+      "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
+    "package":
+      "bestzip build/lambda.zip build/backend build/types build/node_modules",
+    "terraform-init":
+      "cd infrastructure/env-production && terraform init -input=false -backend-config \"region=$TF_VAR_region\" -backend-config \"access_key=$TF_VAR_aws_access_key\" -backend-config \"secret_key=$TF_VAR_aws_secret_key\"",
+    "terraform-plan":
+      "cd infrastructure/env-production && terraform get && terraform plan -input=false -out=terraform.plan",
+    "terraform-apply":
+      "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
+    "invoke-scrapeExtensions":
+      "ts-node scripts/invoke ../backend/jobs/scrapeExtensions.ts",
+    "invoke-extractThemes":
+      "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
+    "invoke-extractColors":
+      "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
     "invoke-saveTheme": "ts-node scripts/invoke ../backend/jobs/saveTheme.ts",
     "upload-frontend": "ts-node scripts/uploadFrontend",
     "deploy": "yarn terraform-apply && yarn upload-frontend"
@@ -29,7 +41,7 @@
     "express-useragent": "^1.0.12",
     "global": "^4.3.2",
     "netlify-cli": "^1.2.2",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "^2.0.0",
     "query-string": "^5.0.1",
     "raven": "^2.4.1",
     "raven-js": "^3.22.2",
@@ -39,7 +51,7 @@
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-syntax-highlighter": "^7.0.0",
-    "runtypes": "^0.13.1",
+    "runtypes": "^2.0.0",
     "strip-json-comments": "^2.0.1",
     "util.promisify": "^1.0.0"
   },
@@ -103,17 +115,8 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "mapCoverage": true,
-    "collectCoverageFrom": [
-      "backend/**",
-      "frontend/**"
-    ],
+    "collectCoverageFrom": ["backend/**", "frontend/**"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
   }
 }
