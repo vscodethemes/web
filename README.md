@@ -74,8 +74,8 @@ for how to build your own theme. In order for your themes to show up on on
   [must be JSON](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_create-a-new-color-theme)
   (not TextMate) and define `colors` and `tokenColors` ‒
   [Example](https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json)
-* See [theme variables](backend/themeVariables) for which GUI and token colors
-  are used
+* See [theme variables](backend/themeVariables.ts) for which GUI and token
+  colors are used
 
 If you're not sure why a theme isn't showing up, feel free to
 [open an issue](https://github.com/jschr/vscodethemes/issues/new).
