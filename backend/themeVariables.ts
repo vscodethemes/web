@@ -145,9 +145,9 @@ export const gui: GUIVariables = {
 }
 
 // Token colors are extracted from the theme's tokenColors. The first
-// matching matching scope wins. If a matching scope isn't found we will
-// default to using the the editorForeground GUI color. Each variable
-// extract's the token's color and font style.
+// matching scope wins. If a matching scope isn't found we will default
+// to using the the editorForeground GUI color. Each variable extract's
+// the token's color and font style.
 //   ie. comment extracts commentColor and commentFontStyle
 //
 // TextMate scopes reference: https://www.sublimetext.com/docs/3/scope_naming.html

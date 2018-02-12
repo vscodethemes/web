@@ -24,11 +24,11 @@ Preview themes from the VSCode marketplace.
 
 [TODO]
 
-### Recursive Lambdas
+### Draining the SQS queues
 
 [TODO]
 
-### Draining the SQS queues
+### Error handling and retries
 
 [TODO]
 
@@ -40,7 +40,7 @@ Preview themes from the VSCode marketplace.
 
 [TODO]
 
-### Infrastructure
+### Continuous deployment with Terraform
 
 [TODO]
 
@@ -52,8 +52,8 @@ for our lambdas. Since
 [count cannot be a computed value](https://github.com/hashicorp/terraform/issues/12570),
 this creates a scenario where when we create (or rename) a lambda we need to
 deploy twice. Once to create the required sns topics, sqs queues and cloudwatch
-events to create the resource ids to state and than finally a second time to
-create the lambda function.
+events to create the dependent resources and than a second time to create the
+lambda function.
 
 ## How do I get my theme on _vscodethemes_?
 
