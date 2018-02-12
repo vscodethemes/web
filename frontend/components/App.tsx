@@ -70,13 +70,13 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
                 </Tab>
                 <Tab
                   color={theme.colors.palette[2]}
-                  to={{ pathname: '/trending', search: location.search }}
+                  to={{ pathname: '/trending/', search: location.search }}
                 >
                   Trending
                 </Tab>
                 <Tab
                   color={theme.colors.palette[3]}
-                  to={{ pathname: '/new', search: location.search }}
+                  to={{ pathname: '/new/', search: location.search }}
                 >
                   New
                 </Tab>
