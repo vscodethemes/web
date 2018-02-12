@@ -86,7 +86,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               <Input
                 type="search"
                 icon="search"
-                placeholder="Search VSCode Themes"
+                placeholder="Search themes (i.e. monokai)"
                 value={params.search}
                 onChange={search =>
                   this.setQueryParams({ ...params, search, page: 1 })

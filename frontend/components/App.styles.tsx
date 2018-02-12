@@ -3,7 +3,7 @@ import theme, { em } from '../theme'
 
 const headerHeight = 34
 const headerHeightCollapsed = 40
-const asideWidth = 250
+const asideWidth = 270
 const asideGutter = theme.gutters.lg
 export const mainMinWidth = 320
 export const mainMaxWidth = 430
