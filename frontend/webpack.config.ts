@@ -67,10 +67,10 @@ const config: webpack.Configuration = {
       },
     }),
     new StaticSiteGeneratorPlugin({
-      paths: ['/', '/trending', '/new'],
+      paths: ['/', '/trending/', '/new/'],
       locals: {
         enableDevServer: isDevelopment,
-        googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+        gtmId: process.env.GTM_ID,
       },
     }),
   ],

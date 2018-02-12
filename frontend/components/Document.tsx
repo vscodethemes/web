@@ -11,7 +11,7 @@ export interface DocumentProps {
   body: string
   ssr: SSR
   enableDevServer: boolean
-  googleAnalyticsId: string
+  gtmId: string
 }
 
 injectGlobal({
@@ -51,24 +51,14 @@ export default function Document(props: DocumentProps) {
   return (
     <html lang="en">
       <head>
-        {props.googleAnalyticsId && (
-          <script
-            async={true}
-            src={`https://www.googletagmanager.com/gtag/js?id=${
-              props.googleAnalyticsId
-            }`}
-          />
-        )}
-        {props.googleAnalyticsId && (
+        {props.gtmId && (
           <script
             dangerouslySetInnerHTML={{
-              __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-  
-          gtag('config', '${props.googleAnalyticsId}');
-        `,
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','${props.gtmId}');`,
             }}
           />
         )}
@@ -104,6 +94,16 @@ export default function Document(props: DocumentProps) {
         />
       </head>
       <body>
+        {props.gtmId && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${props.gtmId}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
+        )}
         <div id="react-root" dangerouslySetInnerHTML={{ __html: props.body }} />
         <script
           dangerouslySetInnerHTML={{
