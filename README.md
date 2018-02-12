@@ -57,10 +57,8 @@ lambda function.
 
 ## How do I get my theme on _vscodethemes_?
 
-Consult the
-[VSCode docs](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers)
-for how to build your own theme. In order for your themes to show up on on
-[vscodethemes](https://vscodethemes.com), they must:
+In order for your themes to show up on on
+[vscodethemes](https://vscodethemes.com) they must:
 
 * Be published to the
   [VSCode Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Downloads)
@@ -79,3 +77,7 @@ for how to build your own theme. In order for your themes to show up on on
 
 If you're not sure why a theme isn't showing up, feel free to
 [open an issue](https://github.com/jschr/vscodethemes/issues/new).
+
+Consult the
+[VSCode docs](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers)
+for how to build your own theme.
