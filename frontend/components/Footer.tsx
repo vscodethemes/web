@@ -7,7 +7,7 @@ import Icon from './Icon'
 
 const githubLink = 'https://github.com/jschr/vscodethemes'
 const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-  'Search VSCode themes with inline previews',
+  'Preview themes from the VSCode marketplace',
 )}&via=_jschr&url=${encodeURIComponent(
   'https://vscodethemes.com',
 )}&hashtags=vscode`
