@@ -13,16 +13,34 @@ Preview themes from the VSCode marketplace.
   [SQS](https://aws.amazon.com/sqs/) and [SNS](https://aws.amazon.com/sns/)
 * [Terraform](https://www.terraform.io/)
 * [Algolia](https://www.algolia.com/)
-* [React](https://reactjs.org/) and
-  [Syntax Highlighter](https://github.com/conorhastings/react-syntax-highlighter)
+* [React](https://reactjs.org/),
+  [React Syntax Highlighter](https://github.com/conorhastings/react-syntax-highlighter)
+  and [Emotion](https://emotion.sh/)
 * [Webpack](https://webpack.js.org/) and
   [Static Site Generator Plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin)
+* [Netlify](https://www.netlify.com/)
 
 [How do I get my theme on _vscodethemes_?](#how-do-i-get-my-theme-on-vscodethemes)
 
 ## How it works
 
-[TODO]
+The backend is a series of job queues built on Lambda and SQS:
+
+* [Scrapes the VSCode marketplace](backend/jobs/scrapeExtensions.ts)
+* [Finds all themes in an extension's Github repository](backend/jobs/extractThemes.ts)
+* [Extracts colors from a theme](backend/jobs/extractColors.ts)
+* [Saves the theme to Algolia](backend/jobs/saveTheme.ts)
+
+The frontend is a static site built with React:
+
+* [Pre-renders the popluar, trending and new pages](frontend/webpack.config.ts#L69)
+* [Extracts critical css using Emotion](frontend/ssr.tsx#L24)
+* [Stores application state in the URL](frontend/components/App.tsx#L50)
+
+The infrastructure is created with Terraform:
+
+* [Uses a single, reusable module for the backend](infrastructure/modules/backend)
+* [Deployed automatically via TravisCI](.travis.yml#L28)
 
 ### Draining the SQS queues
 
@@ -46,7 +64,7 @@ Preview themes from the VSCode marketplace.
 
 #### Gotchas
 
-We're using Terraform's count parameter to
+I'm using Terraform's count parameter to
 [conditionally create policies, sns triggers and cloudwatch subscriptions](infrastructure/modules/backend/lambda/lambda.tf#L42)
 for our lambdas. Since
 [count cannot be a computed value](https://github.com/hashicorp/terraform/issues/12570),
