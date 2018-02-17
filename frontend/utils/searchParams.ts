@@ -14,9 +14,9 @@ export function fromLocation(location: Location) {
   const params = qs.parse(location.search)
 
   let sortBy: SortByOptions = 'installs'
-  if (location.pathname === '/trending') {
+  if (location.pathname === '/trending/') {
     sortBy = 'trending'
-  } else if (location.pathname === '/new') {
+  } else if (location.pathname === '/new/') {
     sortBy = 'new'
   }
 

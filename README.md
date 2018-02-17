@@ -24,23 +24,23 @@ Preview themes from the VSCode marketplace.
 
 ## How it works
 
-The backend is a series of job queues built on Lambda and SQS:
+The backend
 
 * [Scrapes the VSCode marketplace](backend/jobs/scrapeExtensions.ts)
 * [Finds all themes in an extension's Github repository](backend/jobs/extractThemes.ts)
 * [Extracts colors from a theme](backend/jobs/extractColors.ts)
 * [Saves the theme to Algolia](backend/jobs/saveTheme.ts)
 
-The frontend is a static site built with React:
+The frontend
 
-* [Pre-renders the popluar, trending and new pages](frontend/webpack.config.ts#L69)
-* [Extracts critical css using Emotion](frontend/ssr.tsx#L24)
+* [Pre-renders the popular, trending and new pages](frontend/webpack.config.ts#L69)
+* [Extracts critical css](frontend/ssr.tsx#L24)
 * [Stores application state in the URL](frontend/components/App.tsx#L50)
 
-The infrastructure is created with Terraform:
+The infrastructure
 
-* [Uses a single, reusable module for the backend](infrastructure/modules/backend)
-* [Deployed automatically via TravisCI](.travis.yml#L28)
+* [Uses a single, reusable Terraform module](infrastructure/modules/backend)
+* [Is deployed automatically via TravisCI](.travis.yml#L28)
 
 ### Draining the SQS queues
 
