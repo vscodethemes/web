@@ -60,7 +60,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
 
   public componentWillReceiveProps(nextProps: SearchProps) {
     if (this.props.search !== nextProps.search) {
-      window.scroll({ top: 0, left: 0 })
+      window.scrollTo(0, 0)
       Promise.all([this.search(nextProps), this.searchFacets(nextProps)])
     } else if (
       this.props.sortBy !== nextProps.sortBy ||
@@ -68,7 +68,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
       this.props.light !== nextProps.light ||
       this.props.page !== nextProps.page
     ) {
-      window.scroll({ top: 0, left: 0 })
+      window.scrollTo(0, 0)
       this.search(nextProps)
     }
   }
