@@ -44,7 +44,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
     }
   }
 
-  public render(): React.ReactNode {
+  public render() {
     const { location } = this.props
     const { totalDark, totalLight, totalPages } = this.state
     const params = searchParams.fromLocation(location)
