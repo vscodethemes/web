@@ -20,8 +20,6 @@ Preview themes from the VSCode marketplace.
   [Static Site Generator Plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin)
 * [Netlify](https://www.netlify.com/)
 
-[How do I get my theme on _vscodethemes_?](#how-do-i-get-my-theme-on-vscodethemes)
-
 ## How it works
 
 The backend
@@ -42,37 +40,6 @@ The infrastructure
 * [Uses a single, reusable Terraform module](infrastructure/modules/backend)
 * [Is deployed automatically via TravisCI](.travis.yml#L28)
 
-### Draining the SQS queues
-
-[TODO]
-
-### Error handling and retries
-
-[TODO]
-
-### Pre-rendering the frontend
-
-[TODO]
-
-### Sharing runtime and static types
-
-[TODO]
-
-### Continuous deployment with Terraform
-
-[TODO]
-
-#### Gotchas
-
-I'm using Terraform's count parameter to
-[conditionally create policies, sns triggers and cloudwatch subscriptions](infrastructure/modules/backend/lambda/lambda.tf#L42)
-for our lambdas. Since
-[count cannot be a computed value](https://github.com/hashicorp/terraform/issues/12570),
-this creates a scenario where when we create (or rename) a lambda we need to
-deploy twice. Once to create the required sns topics, sqs queues and cloudwatch
-events to create the dependent resources and than a second time to create the
-lambda function.
-
 ## How do I get my theme on _vscodethemes_?
 
 In order for your themes to show up on on
@@ -88,7 +55,7 @@ In order for your themes to show up on on
   of your extension's package.json
 * Theme definitions
   [must be JSON](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_create-a-new-color-theme)
-  (not TextMate) and define `colors` and `tokenColors` ‒
+  (not .tmTheme) and define `colors` and `tokenColors` ‒
   [Example](https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json)
 * See [theme variables](backend/themeVariables.ts) for which GUI and token
   colors are used
