@@ -1,9 +1,5 @@
 import * as qs from 'query-string'
-import {
-  LanguageOptions,
-  SearchParams,
-  SortByOptions,
-} from '../../types/static'
+import { SearchParams, SortByOptions } from '../../types/static'
 
 interface Location {
   pathname: string
@@ -21,7 +17,7 @@ export function fromLocation(location: Location) {
   }
 
   const languages = ['javascript', 'css', 'html']
-  let lang: LanguageOptions = 'javascript'
+  let lang
   if (languages.indexOf(params.lang) >= 0) {
     lang = params.lang
   }
