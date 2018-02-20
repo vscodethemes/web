@@ -15,13 +15,13 @@ import TopBar from './TopBar'
 
 interface ThemePreviewProps {
   theme: Theme
-  language: LanguageOptions
+  language?: LanguageOptions
   onLanguage: (language: LanguageOptions) => void
 }
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   theme: themeProps,
-  language,
+  language = 'javascript',
   onLanguage,
 }) => {
   return (
