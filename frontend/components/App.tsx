@@ -48,6 +48,7 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
     const { location } = this.props
     const { totalDark, totalLight, totalPages } = this.state
     const params = searchParams.fromLocation(location)
+    const querystring = searchParams.toQueryString({ ...params, page: null })
 
     return (
       <React.Fragment>
@@ -63,20 +64,20 @@ class App extends React.Component<RouteComponentProps<{}>, AppState> {
               <Tabs>
                 <Tab
                   color={theme.colors.palette[1]}
-                  to={{ pathname: '/', search: location.search }}
+                  to={{ pathname: '/', search: querystring }}
                   exact={true}
                 >
                   Popular
                 </Tab>
                 <Tab
                   color={theme.colors.palette[2]}
-                  to={{ pathname: '/trending/', search: location.search }}
+                  to={{ pathname: '/trending/', search: querystring }}
                 >
                   Trending
                 </Tab>
                 <Tab
                   color={theme.colors.palette[3]}
-                  to={{ pathname: '/new/', search: location.search }}
+                  to={{ pathname: '/new/', search: querystring }}
                 >
                   New
                 </Tab>
