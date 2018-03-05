@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import theme, { em } from '../theme'
-import { collapseWidth } from './App.styles'
+import { collapseWidth } from './AppStyles'
 
 const Logo: React.SFC<{}> = () => (
   <Link to="/" className={classes.link}>

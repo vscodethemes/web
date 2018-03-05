@@ -25,7 +25,7 @@ const Pagination: React.SFC<PaginationProps> = ({
         // Show skip backward icon if second page is not adjacent to the third page.
         const isSkipBackward =
           totalPages > 3 && index === 1 && pages[1] !== pages[2] - 1
-        // Show skip forward icon if the seoncd last page is not adjacent to the last page.
+        // Show skip forward icon if the second last page is not adjacent to the last page.
         const isSkipForward =
           totalPages > 3 &&
           index === maxVisiblePages - 2 &&

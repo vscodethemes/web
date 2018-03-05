@@ -1,7 +1,7 @@
 import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
-import { collapseWidth } from './App.styles'
+import { collapseWidth } from './AppStyles'
 
 interface CheckboxProps {
   checked: boolean

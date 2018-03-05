@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
 import AlgoliaLogo from './AlgoliaLogo'
-import { collapseWidth, containerGutter } from './App.styles'
+import { collapseWidth, containerGutter } from './AppStyles'
 import Icon from './Icon'
 
 const githubLink = 'https://github.com/jschr/vscodethemes'

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import generatePlaceholderThemes from '../utils/generatePlaceholderThemes'
-import { containerGutter, mainMaxWidth } from './App.styles'
+import { containerGutter, mainMaxWidth } from './AppStyles'
 
 interface FacetHit {
   value: string
