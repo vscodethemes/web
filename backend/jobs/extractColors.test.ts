@@ -1,5 +1,5 @@
+import { ExtractColorsPayload, JobMessage } from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
-import { ExtractColorsPayload, JobMessage } from '../../types/static'
 import createServices from '../services/mock'
 import * as themeVariables from '../themeVariables'
 import extractColors from './extractColors'

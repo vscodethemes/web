@@ -1,4 +1,4 @@
-import { Theme } from '../../types/static'
+import { Theme } from '@vscodethemes/types'
 import theme from '../theme'
 
 const sym = Symbol()

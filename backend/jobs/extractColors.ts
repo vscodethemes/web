@@ -1,10 +1,12 @@
-import * as stripComments from 'strip-json-comments'
 import {
+  Colors,
   ColorsRuntime,
   ExtractColorsPayloadRuntime,
+  Services,
+  ThemeType,
   ThemeTypeRuntime,
-} from '../../types/runtime'
-import { Colors, Services, ThemeType } from '../../types/static'
+} from '@vscodethemes/types'
+import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
 import extractGUIColors from '../utils/extractGUIColors'
 import extractTokenColors from '../utils/extractTokenColors'

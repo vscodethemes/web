@@ -1,9 +1,9 @@
-import * as fetch from 'jest-fetch-mock'
 import {
   ExtractThemesPayload,
   JobMessage,
   PackageJSON,
-} from '../../types/static'
+} from '@vscodethemes/types'
+import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
 import extractThemes from './extractThemes'
 

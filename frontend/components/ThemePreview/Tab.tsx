@@ -1,6 +1,6 @@
+import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
-import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 interface TabProps {

@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build",
+    "typeRoots": ["./typings"]
+  },
+  "exclude": ["build", "**/*.test.ts"],
+  "types": ["node", "@types/aws-lambda"]
+}

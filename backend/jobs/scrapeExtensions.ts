@@ -1,14 +1,12 @@
 import {
-  ExtensionRuntime,
-  ScrapeExtensionsPayloadRuntime,
-} from '../../types/runtime'
-import {
   Extension,
   ExtensionQueryResults,
+  ExtensionRuntime,
   ExtractThemesPayload,
   RepositoryInfo,
+  ScrapeExtensionsPayloadRuntime,
   Services,
-} from '../../types/static'
+} from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export const GITHUB_PROPERTY_NAME =
@@ -162,12 +160,12 @@ function filterThemes(
   themes.forEach(theme => {
     if (ExtensionRuntime.guard(theme)) {
       // Sort by the lastUpdatedAt (ISO string) to get the latest version.
-      const latestVersion = theme.versions.sort((a, b) =>
+      const latestVersion = theme.versions.sort((a: any, b: any) =>
         b.lastUpdated.localeCompare(a.lastUpdated),
       )[0]
       // Find the property the contains theme's repository url.
       const repoUrlProp = latestVersion.properties.find(
-        prop => prop.key === GITHUB_PROPERTY_NAME,
+        (prop: any) => prop.key === GITHUB_PROPERTY_NAME,
       )
 
       if (repoUrlProp) {
@@ -216,7 +214,7 @@ function extractRepositoryInfo(url: string): RepositoryInfo {
 }
 
 function extractStatistic(theme: Extension, name: string): number {
-  const stat = theme.statistics.find(s => s.statisticName === name)
+  const stat = theme.statistics.find((s: any) => s.statisticName === name)
   if (!stat) {
     return 0
   }

@@ -1,13 +1,11 @@
 import {
-  ExtractThemesPayloadRuntime,
-  PackageJSONRuntime,
-} from '../../types/runtime'
-import {
   ExtractColorsPayload,
+  ExtractThemesPayloadRuntime,
   PackageJSON,
+  PackageJSONRuntime,
   Services,
   ThemeType,
-} from '../../types/static'
+} from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
@@ -51,7 +49,7 @@ export default async function run(services: Services): Promise<any> {
 
     // A package.json definition can contain multiple theme sources.
     const themes: ExtractColorsPayload[] = packageJson.contributes.themes.map(
-      theme => {
+      (theme: any) => {
         let type
         if (theme.uiTheme === 'vs-dark') {
           type = 'dark'
@@ -100,9 +98,7 @@ async function fetchDefaultBranch(
   let branch = ''
   const { fetch } = services
   const baseUrl = 'https://api.github.com/repos'
-  const auth = `client_id=${GITHUB_CLIENT_ID}&client_secret=${
-    GITHUB_CLIENT_SECRET
-  }`
+  const auth = `client_id=${GITHUB_CLIENT_ID}&client_secret=${GITHUB_CLIENT_SECRET}`
   const url = `${baseUrl}/${repositoryOwner}/${repository}?${auth}`
 
   const response = await fetch(url, {
@@ -148,9 +144,7 @@ async function fetchPackageJson(
 ): Promise<PackageJSON> {
   let packageJson: PackageJSON
   const { fetch, logger } = services
-  const url = `https://raw.githubusercontent.com/${repositoryOwner}/${
-    repository
-  }/${branch}/package.json`
+  const url = `https://raw.githubusercontent.com/${repositoryOwner}/${repository}/${branch}/package.json`
 
   const response = await fetch(url, {
     method: 'GET',

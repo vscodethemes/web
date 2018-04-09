@@ -1,5 +1,5 @@
+import { Extension } from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
-import { Extension } from '../../types/static'
 import createServices from '../services/mock'
 import scrapeExtensions, { GITHUB_PROPERTY_NAME } from './scrapeExtensions'
 

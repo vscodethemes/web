@@ -1,6 +1,6 @@
+import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import { LanguageOptions, Theme } from '../../../types/static'
 import theme, { em } from '../../theme'
 import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
 import ActivityBar from './ActivityBar'

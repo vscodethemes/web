@@ -1,5 +1,5 @@
+import { SearchParams, SortByOptions } from '@vscodethemes/types'
 import * as qs from 'query-string'
-import { SearchParams, SortByOptions } from '../../types/static'
 
 interface Location {
   pathname: string

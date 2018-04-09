@@ -1,6 +1,6 @@
+import { Colors } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import { Colors } from '../../../types/static'
 import { activityBarWidth } from './ActivityBar'
 
 interface TabBarProps {

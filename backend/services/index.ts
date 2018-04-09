@@ -1,7 +1,4 @@
 // tslint:disable no-console
-import * as algoliasearch from 'algoliasearch'
-import * as AWS from 'aws-sdk'
-import fetch from 'node-fetch'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
@@ -11,7 +8,10 @@ import {
   SaveThemePayload,
   ScrapeExtensionsPayload,
   Services,
-} from '../../types/static'
+} from '@vscodethemes/types'
+import * as algoliasearch from 'algoliasearch'
+import * as AWS from 'aws-sdk'
+import fetch from 'node-fetch'
 
 const {
   ALGOLIA_APP_ID,

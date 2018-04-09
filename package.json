@@ -1,122 +1,24 @@
 {
   "name": "vscodethemes",
   "version": "0.1.0",
-  "main": "index.js",
+  "private": true,
+  "workspaces": ["backend", "frontend", "types"],
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "start":
-      "NODE_ENV=development ALGOLIA_SEARCH_KEY=85aca99848c42e1c5770fa79705c0b18 ALGOLIA_APP_ID=4DSENNCE1V webpack-dev-server --config ./frontend/webpack.config.ts --inline false --history-api-fallback",
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "lint": "tslint --project .",
-    "bundle-analyzer":
-      "yarn build-frontend && webpack-bundle-analyzer build/frontend-bundle-stats.json",
-    "build":
-      "rm -rf build && tsc && rm -rf build/frontend && yarn build-frontend",
-    "build-frontend":
-      "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=$TF_VAR_algolia_app_id webpack --config ./frontend/webpack.config.ts --profile --json > build/frontend-bundle-stats.json",
-    "install-production-dependencies":
-      "cp package.json build/package.json && cp yarn.lock build/yarn.lock && cd build && yarn install --production  --frozen-lockfile",
-    "package":
-      "bestzip build/lambda.zip build/backend build/types build/node_modules",
-    "terraform-init":
-      "cd infrastructure/env-production && terraform init -input=false -backend-config \"region=$TF_VAR_region\" -backend-config \"access_key=$TF_VAR_aws_access_key\" -backend-config \"secret_key=$TF_VAR_aws_secret_key\"",
-    "terraform-plan":
-      "cd infrastructure/env-production && terraform get && terraform plan -input=false -out=terraform.plan",
-    "terraform-apply":
-      "cd infrastructure/env-production && terraform apply -auto-approve terraform.plan",
-    "invoke-scrapeExtensions":
-      "ts-node scripts/invoke ../backend/jobs/scrapeExtensions.ts",
-    "invoke-extractThemes":
-      "ts-node scripts/invoke ../backend/jobs/extractThemes.ts",
-    "invoke-extractColors":
-      "ts-node scripts/invoke ../backend/jobs/extractColors.ts",
-    "invoke-saveTheme": "ts-node scripts/invoke ../backend/jobs/saveTheme.ts",
-    "upload-frontend": "ts-node scripts/uploadFrontend",
-    "deploy": "yarn terraform-apply && yarn upload-frontend"
-  },
-  "dependencies": {
-    "algoliasearch": "^3.24.9",
-    "express-useragent": "^1.0.12",
-    "global": "^4.3.2",
-    "netlify-cli": "^1.2.2",
-    "node-fetch": "^2.0.0",
-    "query-string": "^5.0.1",
-    "raven": "^2.4.1",
-    "raven-js": "^3.22.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-helmet": "^5.2.0",
-    "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2",
-    "react-syntax-highlighter": "^7.0.0",
-    "runtypes": "^2.0.0",
-    "strip-json-comments": "^2.0.1",
-    "util.promisify": "^1.0.0"
+    "build": "wsrun build",
+    "lint": "wsrun lint",
+    "test": "wsrun test --exclude-missing"
   },
   "devDependencies": {
-    "@types/algoliasearch": "^3.24.7",
-    "@types/aws-lambda": "^0.0.24",
-    "@types/aws-sdk": "^2.7.0",
-    "@types/jest": "^21.1.8",
-    "@types/minimist": "^1.2.0",
-    "@types/node": "^8.0.54",
-    "@types/node-fetch": "^1.6.7",
-    "@types/query-string": "^5.0.1",
-    "@types/raven": "^2.1.4",
-    "@types/raven-js": "^3.10.0",
-    "@types/react": "^16.0.31",
-    "@types/react-dom": "^16.0.3",
-    "@types/react-helmet": "^5.0.3",
-    "@types/react-router": "^4.0.20",
-    "@types/react-router-dom": "^4.2.3",
-    "@types/util.promisify": "^1.0.0",
-    "@types/webpack": "^3.8.1",
-    "awesome-typescript-loader": "^3.4.1",
-    "aws-sdk": "^2.175.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-emotion": "^8.0.12",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-latest": "^6.24.1",
-    "bestzip": "^1.1.4",
-    "emotion": "^8.0.12",
-    "emotion-server": "^8.0.12",
-    "favicons-webpack-plugin": "^0.0.7",
-    "file-loader": "^1.1.6",
-    "jest": "^21.2.1",
-    "jest-fetch-mock": "^1.3.3",
-    "minify-css-string": "^1.0.0",
-    "minimist": "^1.2.0",
-    "netlify": "^1.2.0",
-    "prettier": "^1.8.2",
-    "raw-loader": "^0.5.1",
-    "static-site-generator-webpack-plugin": "^3.4.1",
-    "ts-jest": "^21.2.4",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.8.0",
+    "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0",
     "tslint-eslint-rules": "^4.1.1",
     "tslint-react": "^3.2.0",
-    "typescript": "^2.6.1",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
-    "webpack-bundle-analyzer": "^2.10.0",
-    "webpack-dev-server": "^2.9.7"
+    "typescript": "^2.8.1",
+    "wsrun": "^3.0.0"
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "printWidth": 80
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "mapCoverage": true,
-    "collectCoverageFrom": ["backend/**", "frontend/**"],
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+  "dependencies": {
+    "ts-node": "^5.0.1"
   }
 }
