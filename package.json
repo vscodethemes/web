@@ -6,6 +6,7 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
+    "start": "wsrun start --exclude-missing",
     "build": "wsrun build",
     "lint": "wsrun lint",
     "test": "wsrun test --exclude-missing"

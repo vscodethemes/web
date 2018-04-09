@@ -1,3 +1,4 @@
+import '@babel/polyfill'
 import * as Emotion from 'emotion'
 import * as Raven from 'raven-js'
 import * as React from 'react'
