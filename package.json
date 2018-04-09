@@ -12,14 +12,12 @@
     "test": "wsrun test --exclude-missing"
   },
   "devDependencies": {
+    "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0",
     "tslint-eslint-rules": "^4.1.1",
     "tslint-react": "^3.2.0",
     "typescript": "^2.8.1",
     "wsrun": "^3.0.0"
-  },
-  "dependencies": {
-    "ts-node": "^5.0.1"
   }
 }
