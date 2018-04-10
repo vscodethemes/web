@@ -5,7 +5,7 @@ resource "aws_lambda_function" "lambda" {
   role             = "${aws_iam_role.lambda.arn}"
   memory_size      = 256
   handler          = "handler.default"
-  runtime          = "nodejs6.10"
+  runtime          = "nodejs8.10"
 
   # This should be a value greater than the SQS receive timeouts.
   timeout = 30

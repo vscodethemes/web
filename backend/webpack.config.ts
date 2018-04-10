@@ -2,7 +2,16 @@ import * as path from 'path'
 import * as webpack from 'webpack'
 
 const babelOptions = {
-  presets: ['env'],
+  presets: [
+    [
+      'env',
+      {
+        targets: {
+          node: '8.10',
+        },
+      },
+    ],
+  ],
 }
 
 const config: webpack.Configuration = {

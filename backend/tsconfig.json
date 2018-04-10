@@ -2,7 +2,10 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "./build",
-    "typeRoots": ["./typings"]
+    "target": "es2018",
+    "module": "commonjs",
+    "typeRoots": ["./typings"],
+    "lib": ["es2018"]
   },
   "exclude": ["build", "**/*.test.ts"],
   "types": ["node", "@types/aws-lambda"]
