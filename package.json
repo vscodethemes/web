@@ -2,7 +2,11 @@
   "name": "vscodethemes",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["backend", "frontend", "types"],
+  "workspaces": [
+    "backend",
+    "frontend",
+    "types"
+  ],
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
@@ -16,6 +20,7 @@
     "upload-frontend": "ts-node tasks/uploadFrontend.ts"
   },
   "devDependencies": {
+    "@types/minimist": "^1.2.0",
     "minimist": "^1.2.0",
     "netlify": "^1.2.0",
     "ts-node": "^5.0.1",
