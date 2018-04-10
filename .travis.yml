@@ -17,8 +17,8 @@ cache:
 install:
   - yarn install --frozen-lockfile
 script:
-  # https://github.com/travis-ci/travis-ci/issues/6652
-  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - export BRANCH=$TRAVIS_BRANCH
+  - echo "Running CI from $BRANCH branch."
   - yarn lint
   # We need to run the build before the tests because the types
   # package needs to be compiled first.
