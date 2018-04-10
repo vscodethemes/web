@@ -9,11 +9,11 @@
     "lint": "tslint --project ."
   },
   "dependencies": {
-    "@types/node-fetch": "^1.6.8",
     "node-fetch": "^2.1.2",
     "runtypes": "^2.0.3"
   },
   "devDependencies": {
+    "@types/node-fetch": "^1.6.8",
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"
   }

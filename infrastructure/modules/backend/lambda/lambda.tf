@@ -1,10 +1,10 @@
 resource "aws_lambda_function" "lambda" {
-  filename         = "../../build/lambda.zip"
-  source_code_hash = "${base64sha256(file("../../build/lambda.zip"))}"
+  filename         = "../../backend/build/backend.zip"
+  source_code_hash = "${base64sha256(file("../../backend/build/backend.zip"))}"
   function_name    = "${var.name}"
   role             = "${aws_iam_role.lambda.arn}"
   memory_size      = 256
-  handler          = "build/backend/handler.default"
+  handler          = "handler.default"
   runtime          = "nodejs6.10"
 
   # This should be a value greater than the SQS receive timeouts.

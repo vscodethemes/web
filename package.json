@@ -7,11 +7,17 @@
   "license": "MIT",
   "scripts": {
     "start": "wsrun start --exclude-missing",
-    "build": "wsrun build",
-    "lint": "wsrun lint",
-    "test": "wsrun test --exclude-missing"
+    "build": "wsrun build --exclude-missing",
+    "lint": "wsrun lint --exclude-missing",
+    "test": "wsrun test --exclude-missing",
+    "package": "tasks/package.sh",
+    "plan": "tasks/plan.sh",
+    "deploy": "tasks/deploy.sh",
+    "upload-frontend": "ts-node tasks/uploadFrontend.ts"
   },
   "devDependencies": {
+    "minimist": "^1.2.0",
+    "netlify": "^1.2.0",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.6.0",
