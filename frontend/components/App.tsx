@@ -1,7 +1,7 @@
+import { SearchParams, Theme } from '@vscodethemes/types'
 import * as React from 'react'
 import { Helmet } from 'react-helmet'
 import { RouteComponentProps, withRouter } from 'react-router'
-import { SearchParams, Theme } from '../../types/static'
 import theme from '../theme'
 import * as searchParams from '../utils/searchParams'
 import * as classes from './AppStyles'

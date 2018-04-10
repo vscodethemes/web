@@ -4,31 +4,32 @@ import {
   Null,
   Number,
   Record,
+  Runtype,
   String,
   Tuple,
   Union,
 } from 'runtypes'
 
-export const PublisherRuntime = Record({
+export const PublisherRuntime: Runtype = Record({
   publisherName: String,
 })
 
-export const PropertyRuntime = Record({
+export const PropertyRuntime: Runtype = Record({
   key: String,
   value: String,
 })
 
-export const VersionRuntime = Record({
+export const VersionRuntime: Runtype = Record({
   lastUpdated: String,
   properties: Array(PropertyRuntime),
 })
 
-export const StatisticRuntime = Record({
+export const StatisticRuntime: Runtype = Record({
   statisticName: String,
   value: Number,
 })
 
-export const ExtensionRuntime = Record({
+export const ExtensionRuntime: Runtype = Record({
   extensionId: String,
   extensionName: String,
   lastUpdated: String,
@@ -41,15 +42,15 @@ export const ExtensionRuntime = Record({
   statistics: Array(StatisticRuntime),
 })
 
-export const ExtensionQueryResultsRuntime = Record({
+export const ExtensionQueryResultsRuntime: Runtype = Record({
   results: Tuple(Record({ extensions: Array(ExtensionRuntime) })),
 })
 
-export const ScrapeExtensionsPayloadRuntime = Record({
+export const ScrapeExtensionsPayloadRuntime: Runtype = Record({
   page: Number,
 })
 
-export const ExtractThemesPayloadRuntime = Record({
+export const ExtractThemesPayloadRuntime: Runtype = Record({
   extensionId: String,
   extensionName: String,
   publisherName: String,
@@ -68,7 +69,7 @@ export const ExtractThemesPayloadRuntime = Record({
   trendingMonthly: Number,
 })
 
-export const PackageJSONRuntime = Record({
+export const PackageJSONRuntime: Runtype = Record({
   contributes: Record({
     themes: Array(
       Record({
@@ -80,13 +81,13 @@ export const PackageJSONRuntime = Record({
   }),
 })
 
-export const ThemeTypeRuntime = Union(
+export const ThemeTypeRuntime: Runtype = Union(
   Literal('light'),
   Literal('dark'),
   Literal('hc'),
 )
 
-export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
+export const ExtractColorsPayloadRuntime: Runtype = ExtractThemesPayloadRuntime.And(
   Record({
     name: String.Or(Null),
     type: ThemeTypeRuntime.Or(Null),
@@ -95,7 +96,7 @@ export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   }),
 )
 
-export const ColorsRuntime = Record({
+export const ColorsRuntime: Runtype = Record({
   // VSCode GUI
   activityBarBackground: String,
   activityBarForeground: String,
@@ -149,7 +150,7 @@ export const ColorsRuntime = Record({
   selectorFontStyle: String,
 })
 
-export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
+export const SaveThemePayloadRuntime: Runtype = ExtractColorsPayloadRuntime.And(
   Record({
     name: String,
     type: ThemeTypeRuntime,

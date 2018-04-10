@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "outDir": "./build",
     "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -10,9 +9,5 @@
     "noImplicitAny": true,
     "skipLibCheck": true
   },
-  "types": ["node", "aws-lambda"],
-  "exclude": ["node_modules"],
-  "awesomeTypescriptLoaderOptions": {
-    "silent": true
-  }
+  "exclude": ["node_modules"]
 }

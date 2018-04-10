@@ -1,3 +1,4 @@
+import { Colors, LanguageOptions } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as cssTemplate from 'raw-loader!./templates/css.css' // tslint:disable-line
 import * as jsTemplate from 'raw-loader!./templates/js.js' // tslint:disable-line
@@ -9,7 +10,6 @@ import htmlLanguage from 'react-syntax-highlighter/languages/prism/markup'
 import SyntaxHighlighter, {
   registerLanguage,
 } from 'react-syntax-highlighter/prism-light'
-import { Colors, LanguageOptions } from '../../../types/static'
 import theme, { em } from '../../theme'
 
 registerLanguage('css', cssLanguage)

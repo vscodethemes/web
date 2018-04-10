@@ -1,6 +1,8 @@
+/// <reference types="aws-lambda" />
+import '@babel/polyfill'
+import { JobHandlers } from '@vscodethemes/types'
 import * as Raven from 'raven'
 import * as promisify from 'util.promisify'
-import { JobHandlers } from '../types/static'
 import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
 import init from './jobs/init'

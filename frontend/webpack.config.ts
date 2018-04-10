@@ -1,7 +1,7 @@
-import { CheckerPlugin } from 'awesome-typescript-loader'
 import * as FaviconsWebpackPlugin from 'favicons-webpack-plugin'
 import * as path from 'path'
 import * as StaticSiteGeneratorPlugin from 'static-site-generator-webpack-plugin'
+import * as UglifyJsPlugin from 'uglifyjs-webpack-plugin'
 import * as webpack from 'webpack'
 
 const nodeEnv = process.env.NODE_ENV || 'development'
@@ -10,6 +10,22 @@ const isDevelopment = nodeEnv === 'development'
 
 process.env.BABEL_ENV = nodeEnv
 
+const babelOptions = {
+  presets: [
+    'react',
+    [
+      'env',
+      {
+        targets: {
+          browsers: ['last 2 versions'],
+        },
+        modules: false,
+        useBuiltIns: true,
+      },
+    ],
+  ],
+}
+
 const config: webpack.Configuration = {
   devtool: 'source-map',
   entry: {
@@ -17,7 +33,7 @@ const config: webpack.Configuration = {
   },
   output: {
     filename: `[name]-[hash].js`,
-    path: path.resolve(__dirname, '../build/frontend'),
+    path: path.resolve(__dirname, './build'),
     libraryTarget: 'umd',
   },
   resolve: {
@@ -26,9 +42,32 @@ const config: webpack.Configuration = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: 'awesome-typescript-loader?useBabel=true&useCache=true',
+        test: /\.js(x?)$/,
+        exclude: modulePath =>
+          /node_modules/.test(modulePath) &&
+          // These dependencies use arrow functions and need to be transpiled
+          // in order to run UglifyJS against them.
+          !/node_modules\/query-string/.test(modulePath) &&
+          !/node_modules\/strict-uri-encode/.test(modulePath),
+        use: [
+          {
+            loader: 'babel-loader',
+            options: babelOptions,
+          },
+        ],
+      },
+      {
+        test: /\.ts(x?)$/,
         exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: babelOptions,
+          },
+          {
+            loader: 'ts-loader',
+          },
+        ],
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
@@ -38,7 +77,6 @@ const config: webpack.Configuration = {
     ],
   },
   plugins: [
-    new CheckerPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(nodeEnv),
@@ -77,7 +115,17 @@ const config: webpack.Configuration = {
 }
 
 if (isProduction) {
-  config.plugins = [...config.plugins, new webpack.optimize.UglifyJsPlugin()]
+  config.plugins = [
+    ...config.plugins,
+    new UglifyJsPlugin({
+      sourceMap: true,
+      cache: true,
+      parallel: true,
+      uglifyOptions: {
+        ecma: 8,
+      },
+    }),
+  ]
 }
 
 export default config

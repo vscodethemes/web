@@ -1,4 +1,4 @@
-import { Colors } from '../../types/static'
+import { Colors } from '@vscodethemes/types'
 import * as themeVariables from '../themeVariables'
 
 export default function extractTokenColors(

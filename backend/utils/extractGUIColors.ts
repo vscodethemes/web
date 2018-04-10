@@ -1,4 +1,4 @@
-import { Colors, ThemeType } from '../../types/static'
+import { Colors, ThemeType } from '@vscodethemes/types'
 import * as themeVariables from '../themeVariables'
 
 export default function extractGUIColors(

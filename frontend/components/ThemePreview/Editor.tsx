@@ -1,6 +1,6 @@
+import { Colors } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import { Colors } from '../../../types/static'
 import { containerGutter, mainMinWidth } from '../AppStyles'
 
 interface EditorProps {

@@ -1,5 +1,4 @@
 // tslint:disable no-empty
-import * as fetch from 'jest-fetch-mock'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
@@ -7,7 +6,8 @@ import {
   SaveThemePayload,
   ScrapeExtensionsPayload,
   Services,
-} from '../../types/static'
+} from '@vscodethemes/types'
+import * as fetch from 'jest-fetch-mock'
 
 function createJob<P>(): Job<P> {
   return {

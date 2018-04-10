@@ -1,5 +1,4 @@
 // tslint:disable no-console
-import fetch from 'node-fetch'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
@@ -8,7 +7,8 @@ import {
   SaveThemePayload,
   ScrapeExtensionsPayload,
   Services,
-} from '../../types/static'
+} from '@vscodethemes/types'
+import fetch from 'node-fetch'
 import * as themeVariables from '../themeVariables'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {

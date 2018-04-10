@@ -1,5 +1,8 @@
-import { SaveThemePayloadRuntime } from '../../types/runtime'
-import { SaveThemePayload, Services } from '../../types/static'
+import {
+  SaveThemePayload,
+  SaveThemePayloadRuntime,
+  Services,
+} from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {

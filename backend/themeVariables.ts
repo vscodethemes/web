@@ -1,4 +1,4 @@
-import { GUIVariables, TokenVariables } from '../types/static'
+import { GUIVariables, TokenVariables } from '@vscodethemes/types'
 
 // GUI variables are extracted from the theme's colors.
 //

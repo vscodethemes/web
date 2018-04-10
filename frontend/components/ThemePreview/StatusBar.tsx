@@ -1,7 +1,7 @@
+import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as useragent from 'express-useragent'
 import * as React from 'react'
-import { Colors } from '../../../types/static'
 import theme, { em } from '../../theme'
 import Icon from '../Icon'
 
@@ -47,9 +47,7 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         href={
           isDesktop
             ? `vscode:extension/${publisherName}.${extensionName}`
-            : `https://marketplace.visualstudio.com/items?itemName=${
-                publisherName
-              }.${extensionName}`
+            : `https://marketplace.visualstudio.com/items?itemName=${publisherName}.${extensionName}`
         }
         style={{ color: colors.statusBarForeground }}
       >

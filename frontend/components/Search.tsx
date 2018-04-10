@@ -1,7 +1,7 @@
+import { SortByOptions, Theme } from '@vscodethemes/types'
 import * as algoliasearch from 'algoliasearch'
 import { css } from 'emotion'
 import * as React from 'react'
-import { SortByOptions, Theme } from '../../types/static'
 import theme, { em } from '../theme'
 import generatePlaceholderThemes from '../utils/generatePlaceholderThemes'
 import { containerGutter, mainMaxWidth } from './AppStyles'
@@ -41,7 +41,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
     new: algoliasearch.AlgoliaIndex
   }
 
-  private timeout: NodeJS.Timer
+  private timeout: number
 
   public componentDidMount() {
     const client = algoliasearch(
@@ -144,7 +144,7 @@ class Search extends React.PureComponent<SearchProps, SearchState> {
   }
 
   private startPlaceholdersTimer() {
-    this.timeout = setTimeout(() => {
+    this.timeout = window.setTimeout(() => {
       this.setState({ themes: placeholders })
     }, 100)
   }

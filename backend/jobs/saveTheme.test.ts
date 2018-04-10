@@ -1,4 +1,4 @@
-import { JobMessage, SaveThemePayload } from '../../types/static'
+import { JobMessage, SaveThemePayload } from '@vscodethemes/types'
 import createServices from '../services/mock'
 import saveTheme, { createObjectId } from './saveTheme'
 
