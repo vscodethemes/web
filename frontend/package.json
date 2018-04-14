@@ -7,6 +7,7 @@
       "NODE_ENV=development ALGOLIA_SEARCH_KEY=85aca99848c42e1c5770fa79705c0b18 ALGOLIA_APP_ID=4DSENNCE1V webpack-dev-server --inline false --history-api-fallback",
     "build":
       "NODE_ENV=production SENTRY_DSN=$TF_VAR_sentry_dsn ALGOLIA_APP_ID=4DSENNCE1V webpack",
+    "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
     "test": "jest"
   },

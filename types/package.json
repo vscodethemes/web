@@ -6,6 +6,7 @@
   "typings": "build/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project ."
   },
   "dependencies": {

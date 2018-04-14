@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "NODE_ENV=prodcution webpack",
+    "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
     "test": "jest"
   },
@@ -40,12 +41,6 @@
     },
     "mapCoverage": true,
     "testRegex": ".test.tsx?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
   }
 }
