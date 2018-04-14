@@ -11,6 +11,7 @@
     "no-unused-variable": true,
     "interface-name": false,
     "no-submodule-imports": false,
-    "jsx-no-lambda": false
+    "jsx-no-lambda": false,
+    "member-access": false
   }
 }

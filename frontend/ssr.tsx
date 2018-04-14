@@ -2,7 +2,7 @@ import { extractCritical } from 'emotion-server'
 import * as React from 'react'
 import { renderToStaticMarkup, renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router'
-import App from './components/App'
+// import App from './components/App'
 import Document, { DocumentProps } from './components/Document'
 
 export interface SSROptions {
@@ -24,7 +24,7 @@ export default function ssr(options: SSROptions) {
   const { html: body, css, ids: cssIds } = extractCritical(
     renderToString(
       <StaticRouter location={{ pathname: options.path }}>
-        <App />
+        {/* <App /> */}
       </StaticRouter>,
     ),
   )

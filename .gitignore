@@ -1,11 +1,12 @@
+.DS_STORE
 node_modules/
 build/
 coverage/
-.DS_STORE
+.awcache/
+.next/
 .terraform/
 *.tfstate
 *.tfstate.*
 terraform.plan
-.awcache
 *.env
 *.log

@@ -107,8 +107,16 @@ export interface Theme extends SaveThemePayload {
   colors: Colors
 }
 
-export type SortByOptions = 'installs' | 'trending' | 'new'
-export type LanguageOptions = 'javascript' | 'css' | 'html'
+export enum SortByOptions {
+  installs = 'installs',
+  trending = 'trending',
+  new = 'new',
+}
+export enum LanguageOptions {
+  javascript = 'javascript',
+  css = 'css',
+  html = 'html',
+}
 
 export interface SearchParams {
   sortBy: SortByOptions
@@ -116,6 +124,7 @@ export interface SearchParams {
   dark?: boolean
   light?: boolean
   page?: number
+  perPage?: number
   lang?: LanguageOptions
 }
 
