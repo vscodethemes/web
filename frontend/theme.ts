@@ -4,11 +4,28 @@ export const rootFontSize = 14
 export const em = (px: number) =>
   `${Math.round(px / rootFontSize * 100) / 100}em`
 
+const gutters = {
+  xs: spacingUnit / 2,
+  sm: spacingUnit,
+  md: spacingUnit * 2,
+  lg: spacingUnit * 4,
+  xl: spacingUnit * 7,
+}
+
+const pageSizes = {
+  max: 780,
+  min: 660,
+}
+
 export default {
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif',
-  fontFamilyMono:
-    '"SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace',
+  gutters,
+  pageSizes,
+  fonts: {
+    sansSerif:
+      '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif',
+    monospace:
+      '"SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace',
+  },
   fontSizes: {
     xs: 10,
     sm: 12,
@@ -35,15 +52,19 @@ export default {
     sm: 4,
     md: 6,
   },
-  gutters: {
-    xs: spacingUnit / 2,
-    sm: spacingUnit,
-    md: spacingUnit * 2,
-    lg: spacingUnit * 4,
-    xl: spacingUnit * 7,
-  },
   shadows: {
     sm: '0px 6px 20px rgba(0, 0, 0, 0.2)',
     md: '0px 6px 20px rgba(0, 0, 0, 0.35)',
+  },
+  breakpoints: {
+    pageMax: `@media (max-width: ${pageSizes.max}px)`,
+    pageMin: `@media (max-width: ${pageSizes.min}px)`,
+  },
+  header: {
+    height: 34,
+    heightCollapsed: 40,
+  },
+  container: {
+    gutter: gutters.md,
   },
 }

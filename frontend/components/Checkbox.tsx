@@ -1,7 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
-import { collapseWidth } from './AppStyles'
 
 interface CheckboxProps {
   checked: boolean
@@ -36,7 +35,7 @@ const classes = {
     marginRight: em(theme.gutters.sm),
     cursor: 'pointer',
 
-    [`@media (max-width: ${collapseWidth}px)`]: {
+    [theme.breakpoints.pageMin]: {
       marginBottom: 0,
       marginRight: em(theme.gutters.sm),
       minWidth: em(100),

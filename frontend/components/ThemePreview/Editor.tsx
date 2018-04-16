@@ -1,7 +1,7 @@
 import { Colors } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import { containerGutter, mainMinWidth } from '../AppStyles'
+import { em } from '../../theme'
 
 interface EditorProps {
   colors: Colors
@@ -26,7 +26,7 @@ const classes = {
     // Fixed aspect ratio
     paddingTop: `${100 / (16 / 10)}%`,
 
-    [`@media (max-width: ${mainMinWidth + containerGutter * 2}px)`]: {
+    [`@media (max-width: ${em(320)})`]: {
       fontSize: '0.85rem',
     },
   }),

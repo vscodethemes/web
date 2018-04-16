@@ -1,7 +1,11 @@
-import { SearchParams, Theme } from '@vscodethemes/types'
+import { SearchParams } from '@vscodethemes/types'
 import * as algoliasearch from 'algoliasearch'
-import * as next from 'next'
 import getConfig from 'next/config'
+
+interface FacetHit {
+  value: string
+  count: number
+}
 
 const { publicRuntimeConfig } = getConfig()
 const { algoliaAppId, algoliaSearchKey } = publicRuntimeConfig
@@ -13,7 +17,7 @@ const indicies = {
   new: client.initIndex('themes_by_publishDate_desc'),
 }
 
-export async function search(params: SearchParams): Promise<Theme[]> {
+export async function search(params: SearchParams) {
   const types: string[] = []
 
   if (params.dark) {
@@ -32,8 +36,28 @@ export async function search(params: SearchParams): Promise<Theme[]> {
       facets: 'type',
     })
 
-    return hits
+    return { results: hits, totalPages: nbPages }
   } catch (err) {
     throw new Error(`Error searching: ${err.message}.`)
+  }
+}
+
+export async function searchFacets(props: SearchParams) {
+  try {
+    const { facetHits } = await indicies[props.sortBy].searchForFacetValues({
+      query: props.search,
+      facetName: 'type',
+      facetQuery: '*',
+    })
+
+    const dark = facetHits.find((f: FacetHit) => f.value === 'dark') || {
+      count: 0,
+    }
+    const light = facetHits.find((f: FacetHit) => f.value === 'light') || {
+      count: 0,
+    }
+    return { totalDark: dark.count, totalLight: light.count }
+  } catch (err) {
+    throw new Error(`Error searching facets: ${err.message}.`)
   }
 }
