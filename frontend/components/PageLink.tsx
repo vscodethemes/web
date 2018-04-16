@@ -1,9 +1,8 @@
 import { SearchParams } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
-import Link from 'next/link'
 import * as React from 'react'
+import SearchLink from '../pages/SearchPage/SearchLink'
 import theme, { em } from '../theme'
-import toQuery from '../utils/toQuery'
 import Icon from './Icon'
 
 interface Props {
@@ -33,7 +32,7 @@ const PageLink: React.SFC<Props> = ({
   }
 
   return (
-    <Link href={{ query: toQuery({ ...params, page }) }} prefetch={true}>
+    <SearchLink params={{ ...params, page }}>
       <a className={cx(classes.page, isActive && classes.active)}>
         <div
           className={classes.contents}
@@ -42,7 +41,7 @@ const PageLink: React.SFC<Props> = ({
           {contents}
         </div>
       </a>
-    </Link>
+    </SearchLink>
   )
 }
 

@@ -18,8 +18,9 @@ import {
   TabLink,
   Tabs,
 } from '../../components'
+import { defaultSearchParams } from '../../constants'
 import theme from '../../theme'
-import toQuery from '../../utils/toQuery'
+import getSearchLinkProps from './getSearchLinkProps'
 import { classes } from './SearchPage.styles'
 
 interface SearchPageProps {
@@ -41,12 +42,12 @@ export default class SearchPage extends React.Component<
   static async getInitialProps(ctx: Context): Promise<SearchPageProps> {
     const query = ctx.query
     const params: SearchParams = {
-      sortBy: SortByOptions.installs,
+      sortBy: SortByOptions.installs || defaultSearchParams.sortBy,
       search: query.search,
-      light: 'light' in query,
-      dark: 'dark' in query,
-      page: parseInt(query.page, 10) || 1,
-      perPage: parseInt(query.perPage, 10) || 12,
+      light: Boolean(query.light),
+      dark: Boolean(query.dark),
+      page: parseInt(query.page, 10) || defaultSearchParams.page,
+      perPage: parseInt(query.perPage, 10) || defaultSearchParams.perPage,
       lang: LanguageOptions.javascript,
     }
 
@@ -99,9 +100,9 @@ export default class SearchPage extends React.Component<
   }
 
   setQuery = async (params: any) => {
-    const url = { pathname: '/', query: toQuery(params) }
     this.setParams(params)
-    await Router.push(url)
+    const { href, as } = getSearchLinkProps(params)
+    await Router.push(href, as)
   }
 
   render() {

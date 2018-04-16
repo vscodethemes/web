@@ -1,9 +1,8 @@
 import { SearchParams } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
-import Link from 'next/link'
 import * as React from 'react'
+import SearchLink from '../pages/SearchPage/SearchLink'
 import theme, { em } from '../theme'
-import toQuery from '../utils/toQuery'
 
 interface TabProps {
   active: boolean
@@ -19,7 +18,7 @@ const TabLink: React.SFC<TabProps> = ({
   onClick,
   children,
 }) => (
-  <Link href={{ query: toQuery(params) }} prefetch={true}>
+  <SearchLink params={params}>
     <a
       className={cx(
         classes.link,
@@ -31,7 +30,7 @@ const TabLink: React.SFC<TabProps> = ({
         {children}
       </div>
     </a>
-  </Link>
+  </SearchLink>
 )
 
 const boxWidth = 36
