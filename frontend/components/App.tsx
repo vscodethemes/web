@@ -4,6 +4,7 @@ import theme, { em, rootFontSize } from '../theme'
 import Container from './Container'
 import Footer from './Footer'
 import Header from './Header'
+import { UserProvider } from './UserContext'
 
 injectGlobal({
   '*, *:before, *:after': {
@@ -34,12 +35,18 @@ if (typeof window !== 'undefined') {
   hydrate(serverData.ids)
 }
 
-const App: React.SFC<{}> = ({ children }) => (
-  <React.Fragment>
-    <Header />
-    <Container>{children}</Container>
-    <Footer />
-  </React.Fragment>
+interface AppProps {
+  isDesktop: boolean
+}
+
+const App: React.SFC<AppProps> = ({ children, isDesktop }) => (
+  <UserProvider value={{ isDesktop }}>
+    <React.Fragment>
+      <Header />
+      <Container>{children}</Container>
+      <Footer />
+    </React.Fragment>
+  </UserProvider>
 )
 
 export default App

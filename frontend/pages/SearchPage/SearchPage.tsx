@@ -20,6 +20,7 @@ import {
 } from '../../components'
 import { defaultSearchParams } from '../../constants'
 import theme from '../../theme'
+import * as userAgent from '../../utils/userAgent'
 import getSearchLinkProps from './getSearchLinkProps'
 import { classes } from './SearchPage.styles'
 
@@ -29,6 +30,7 @@ interface SearchPageProps {
   totalPages: number
   totalDark: number
   totalLight: number
+  isDesktop: boolean
 }
 
 interface SerachPageState {
@@ -71,7 +73,14 @@ export default class SearchPage extends React.Component<
       algolia.searchFacets(params),
     ])
 
-    return { results, totalPages, totalDark, totalLight, params }
+    return {
+      results,
+      totalPages,
+      totalDark,
+      totalLight,
+      params,
+      isDesktop: userAgent.isDesktop(ctx.req),
+    }
   }
 
   state = {
@@ -106,10 +115,10 @@ export default class SearchPage extends React.Component<
   }
 
   render() {
-    const { results, totalPages, totalDark, totalLight } = this.props
+    const { results, totalPages, totalDark, totalLight, isDesktop } = this.props
     const { params } = this.state
     return (
-      <App>
+      <App isDesktop={isDesktop}>
         <div className={classes.container}>
           <div className={classes.aside}>
             <div className={classes.sortBy}>
