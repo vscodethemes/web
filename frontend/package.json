@@ -10,6 +10,9 @@
     "lint": "tslint --project .",
     "test": "jest"
   },
+  "browser": {
+    "raven": false
+  },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.44",
     "@vscodethemes/types": "0.1.0",
@@ -20,6 +23,7 @@
     "express-useragent": "^1.0.12",
     "next": "^5.1.0",
     "query-string": "^6.0.0",
+    "raven": "^2.5.0",
     "raven-js": "^3.24.0",
     "react": "^16.3.2",
     "react-dom": "16.3.1",

@@ -23,6 +23,7 @@ declare module 'next' {
     req?: http.IncomingMessage
     res?: http.ServerResponse
     renderPage: () => any
+    err?: Error
   }
 
   export interface URLProps {
