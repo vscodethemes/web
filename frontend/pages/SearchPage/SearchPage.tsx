@@ -45,12 +45,12 @@ export default class SearchPage extends React.Component<
     const query = ctx.query
     const params: SearchParams = {
       sortBy: SortByOptions.installs || defaultSearchParams.sortBy,
-      search: query.search,
+      search: query.search || defaultSearchParams.search,
       light: Boolean(query.light),
       dark: Boolean(query.dark),
       page: parseInt(query.page, 10) || defaultSearchParams.page,
       perPage: parseInt(query.perPage, 10) || defaultSearchParams.perPage,
-      lang: LanguageOptions.javascript,
+      lang: query.lang || defaultSearchParams.lang,
     }
 
     if (query.sortBy === SortByOptions.trending) {
@@ -192,7 +192,7 @@ export default class SearchPage extends React.Component<
               params={params}
               results={results}
               onLanguage={lang => this.setQuery({ ...params, lang })}
-              onClear={() => this.setQuery({ ...params, search: null })}
+              onClear={() => this.setQuery({ ...params, search: '' })}
             />
             {totalPages > 1 && (
               <Pagination

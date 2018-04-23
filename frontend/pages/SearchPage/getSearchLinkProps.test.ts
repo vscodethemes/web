@@ -70,6 +70,20 @@ test('Should return clean url for new', () => {
   })
 })
 
+test('Should return clean url for search', () => {
+  const search = ''
+  expect(getSearchLinkProps({ search })).toEqual({
+    href: {
+      pathname: '/',
+      query: { search },
+    },
+    as: {
+      pathname: '/',
+      query: {},
+    },
+  })
+})
+
 test('Should return clean url for default page', () => {
   const page = defaultSearchParams.page
   expect(getSearchLinkProps({ page })).toEqual({

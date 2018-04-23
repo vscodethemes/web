@@ -10,16 +10,18 @@ export default function getSearchLinkProps(params: any) {
   }
 
   Object.keys(params).forEach(key => {
-    if (key === 'light') {
-      if (params[key]) {
-        as.query.light = 1
-      }
-    } else if (key === 'dark') {
-      if (params[key]) {
-        as.query.dark = 1
-      }
-    } else if (key !== 'sortBy' && params[key] !== defaultSearchParams[key]) {
-      as.query[key] = params[key]
+    if (key === 'light' && params[key]) {
+      as.query.light = 1
+    } else if (key === 'dark' && params[key]) {
+      as.query.dark = 1
+    } else if (key === 'search' && params[key]) {
+      as.query.search = params[key]
+    } else if (key === 'lang' && params[key] !== defaultSearchParams[key]) {
+      as.query.lang = params[key]
+    } else if (key === 'page' && params[key] !== defaultSearchParams[key]) {
+      as.query.page = params[key]
+    } else if (key === 'perPage' && params[key] !== defaultSearchParams[key]) {
+      as.query.perPage = params[key]
     }
 
     // Don't add boolean false to query string because it gets converted
