@@ -4,8 +4,9 @@ module.exports = require('@zeit/next-typescript')({
   distDir: 'build',
   poweredByHeader: false,
   publicRuntimeConfig: {
-    algoliaAppId: '4DSENNCE1V',
-    algoliaSearchKey: 'fb233d35cbb3656ddeab014eb4bf3eb8',
-    sentryDsn: process.env.TF_VAR_sentry_dsn,
+    algoliaAppId: process.env.ALGOLIA_APP_ID,
+    algoliaSearchKey: process.env.ALGOLIA_SEARCH_KEY,
+    sentryDsn: process.env.SENTRY_DSN,
+    GTM_ID: process.env.GTM_ID,
   },
 })
