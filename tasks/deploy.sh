@@ -7,6 +7,7 @@ if [ -d "$dir" ]; then
   echo "Deploying $BRANCH..."
   cd infrastructure/env-$BRANCH
   terraform apply -auto-approve terraform.plan
+  cd ../.. 
 
   echo "Deploying frontend..."
   # Heroku auth
