@@ -1,9 +1,9 @@
 import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
-import * as useragent from 'express-useragent'
 import * as React from 'react'
 import theme, { em } from '../../theme'
 import Icon from '../Icon'
+import { UserConsumer } from '../UserContext'
 
 interface StatusBarProps {
   colors: Colors
@@ -12,9 +12,6 @@ interface StatusBarProps {
   extensionName: string
   publisherName: string
 }
-
-const isBrowser = typeof navigator !== 'undefined'
-const isDesktop = isBrowser && useragent.parse(navigator.userAgent).isDesktop
 
 const StatusBar: React.SFC<StatusBarProps> = ({
   colors,
@@ -40,24 +37,27 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         {repositoryOwner}
       </a>
     )}
-    {/* TODO: Link to market place for non-desktop OSs */}
     {publisherName && (
-      <a
-        className={cx(classes.link, classes.secondary)}
-        href={
-          isDesktop
-            ? `vscode:extension/${publisherName}.${extensionName}`
-            : `https://marketplace.visualstudio.com/items?itemName=${publisherName}.${extensionName}`
-        }
-        style={{ color: colors.statusBarForeground }}
-      >
-        Open in {isDesktop ? 'VSCode' : 'Marketplace'}
-        <Icon
-          className={classes.icon}
-          icon="open"
-          fill={colors.statusBarForeground}
-        />
-      </a>
+      <UserConsumer>
+        {({ isDesktop }) => (
+          <a
+            className={cx(classes.link, classes.secondary)}
+            href={
+              isDesktop
+                ? `vscode:extension/${publisherName}.${extensionName}`
+                : `https://marketplace.visualstudio.com/items?itemName=${publisherName}.${extensionName}`
+            }
+            style={{ color: colors.statusBarForeground }}
+          >
+            Open in {isDesktop ? 'VSCode' : 'Marketplace'}
+            <Icon
+              className={classes.icon}
+              icon="open"
+              fill={colors.statusBarForeground}
+            />
+          </a>
+        )}
+      </UserConsumer>
     )}
   </div>
 )

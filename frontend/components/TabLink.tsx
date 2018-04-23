@@ -1,23 +1,37 @@
+import { SearchParams } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
-import { NavLink, NavLinkProps } from 'react-router-dom'
+import SearchLink from '../pages/SearchPage/SearchLink'
 import theme, { em } from '../theme'
 
-interface TabProps extends NavLinkProps {
+interface TabProps {
+  active: boolean
+  params: SearchParams
   color: string
+  onClick: (params: SearchParams) => any
 }
 
-const Tab: React.SFC<TabProps> = ({ color, children, ...navLinkProps }) => {
-  return (
-    <NavLink
-      {...navLinkProps}
-      className={classes.link}
-      activeClassName={cx(classes.active, classes.highlight(color))}
+const TabLink: React.SFC<TabProps> = ({
+  active,
+  params,
+  color,
+  onClick,
+  children,
+}) => (
+  <SearchLink params={params}>
+    <a
+      className={cx(
+        classes.link,
+        active && classes.active,
+        classes.highlight(color),
+      )}
     >
-      <span className={classes.text}>{children}</span>
-    </NavLink>
-  )
-}
+      <div className={classes.text} onClick={() => onClick(params)}>
+        {children}
+      </div>
+    </a>
+  </SearchLink>
+)
 
 const boxWidth = 36
 const boxHeight = 2
@@ -26,8 +40,7 @@ const classes = {
   link: css({
     height: '100%',
     position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
+
     paddingBottom: em(boxHeight),
     fontWeight: 'bold',
     textDecoration: 'none',
@@ -39,6 +52,9 @@ const classes = {
   }),
 
   text: css({
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
     fontSize: em(theme.fontSizes.md),
   }),
 
@@ -62,4 +78,4 @@ const classes = {
   highlight: (color: string) => css({ '::after': { backgroundColor: color } }),
 }
 
-export default Tab
+export default TabLink

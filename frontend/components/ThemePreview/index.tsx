@@ -2,7 +2,7 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-import { isPlaceholder } from '../../utils/generatePlaceholderThemes'
+import { isPlaceholder } from '../../utils/generatePlaceholders'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
@@ -21,7 +21,7 @@ interface ThemePreviewProps {
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   theme: themeProps,
-  language = 'javascript',
+  language = LanguageOptions.javascript,
   onLanguage,
 }) => {
   return (
@@ -33,21 +33,21 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           <Tab
             colors={themeProps.colors}
             active={language === 'javascript'}
-            onClick={() => onLanguage('javascript')}
+            onClick={() => onLanguage(LanguageOptions.javascript)}
           >
             main.js
           </Tab>
           <Tab
             colors={themeProps.colors}
             active={language === 'css'}
-            onClick={() => onLanguage('css')}
+            onClick={() => onLanguage(LanguageOptions.css)}
           >
             styles.css
           </Tab>
           <Tab
             colors={themeProps.colors}
             active={language === 'html'}
-            onClick={() => onLanguage('html')}
+            onClick={() => onLanguage(LanguageOptions.html)}
           >
             index.html
           </Tab>
@@ -72,6 +72,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
 
 const classes = {
   container: css({
+    width: '100%',
     position: 'relative',
     marginBottom: em(theme.gutters.lg),
     boxShadow: theme.shadows.md,

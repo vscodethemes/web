@@ -23,7 +23,7 @@ const classes = {
   text: css({
     color: theme.colors.textMuted,
     fontSize: theme.fontSizes.xs,
-    fontFamily: theme.fontFamilyMono,
+    fontFamily: theme.fonts.monospace,
   }),
 }
 

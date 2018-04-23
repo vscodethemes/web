@@ -1,4 +1,4 @@
-<html lang="en">
+export default `<html lang="en">
 
 <head>
   <title>HTML Template</title>
@@ -11,4 +11,4 @@
   </main>
 </body>
 
-</html>
+</html>`

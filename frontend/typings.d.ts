@@ -1,9 +1,6 @@
-declare module '*.png'
-declare module '*.svg'
 declare module 'emotion-server'
 declare module 'express-useragent'
-declare module 'favicons-webpack-plugin'
-declare module 'raw-loader!*'
+declare module 'raw-loader!./*'
 declare module 'react-syntax-highlighter/*'
-declare module 'static-site-generator-webpack-plugin'
-declare module 'uglifyjs-webpack-plugin'
+
+declare module 'next/app'

@@ -1,4 +1,4 @@
-const btn = document.getElementById('btn')
+export default `const btn = document.getElementById('btn')
 let count = 0
 
 function render() {
@@ -11,4 +11,4 @@ btn.addEventListener('click', () => {
     count += 1
     render()
   }
-})
+})`

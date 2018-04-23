@@ -1,8 +1,5 @@
 import { Colors, LanguageOptions } from '@vscodethemes/types'
 import { css } from 'emotion'
-import * as cssTemplate from 'raw-loader!./templates/css.css' // tslint:disable-line
-import * as jsTemplate from 'raw-loader!./templates/js.js' // tslint:disable-line
-import * as htmlTemplate from 'raw-loader!./templates/html.html' // tslint:disable-line
 import * as React from 'react'
 import cssLanguage from 'react-syntax-highlighter/languages/prism/css'
 import jsLanguage from 'react-syntax-highlighter/languages/prism/javascript'
@@ -11,6 +8,9 @@ import SyntaxHighlighter, {
   registerLanguage,
 } from 'react-syntax-highlighter/prism-light'
 import theme, { em } from '../../theme'
+import cssTemplate from './templates/css'
+import htmlTemplate from './templates/html'
+import jsTemplate from './templates/js'
 
 registerLanguage('css', cssLanguage)
 registerLanguage('html', htmlLanguage)
@@ -43,7 +43,7 @@ const classes = {
       padding: '1%',
     },
     '& code': {
-      fontFamily: theme.fontFamilyMono,
+      fontFamily: theme.fonts.monospace,
       fontSize: em(theme.fontSizes.xs),
       lineHeight: em(theme.fontSizes.xs),
     },
@@ -54,7 +54,7 @@ function createStyles(colors: Colors) {
   return {
     // Base
     'pre[class*="language-"]': {
-      fontFamily: theme.fontFamilyMono,
+      fontFamily: theme.fonts.monospace,
       lineHeight: '1',
       color: colors.editorForeground,
     },

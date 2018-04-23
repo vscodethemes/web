@@ -1,11 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./build",
-    "typeRoots": ["./typings"]
+    "jsx": "react",
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "./build"
   },
-  "exclude": ["build", "**/*.test.ts"],
-  "awesomeTypescriptLoaderOptions": {
-    "silent": true
-  }
+  "exclude": ["build", "**/*.test.ts"]
 }

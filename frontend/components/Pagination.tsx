@@ -1,23 +1,24 @@
-import { css, cx } from 'emotion'
+import { SearchParams } from '@vscodethemes/types'
+import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../theme'
 import generatePages from '../utils/generatePages'
-import Icon from './Icon'
+import PageLink from './PageLink'
 
 interface PaginationProps {
   totalPages: number
-  page: number
-  onPage: (page: number) => any
+  params: SearchParams
+  onClick: (params: SearchParams) => any
 }
 
 const maxVisiblePages = 7
 
 const Pagination: React.SFC<PaginationProps> = ({
   totalPages,
-  page: activePage,
-  onPage,
+  params,
+  onClick,
 }) => {
-  const pages = generatePages(totalPages, activePage, maxVisiblePages)
+  const pages = generatePages(totalPages, params.page, maxVisiblePages)
 
   return (
     <div className={classes.pagination}>
@@ -31,40 +32,16 @@ const Pagination: React.SFC<PaginationProps> = ({
           index === maxVisiblePages - 2 &&
           pages[maxVisiblePages - 2] !== pages[maxVisiblePages - 3] + 1
 
-        if (isSkipBackward) {
-          return (
-            <button
-              key={page}
-              className={classes.page}
-              onClick={() => onPage(page)}
-            >
-              <Icon className={classes.icon} icon="chevronDoubleLeft" />
-            </button>
-          )
-        } else if (isSkipForward) {
-          return (
-            <button
-              key={page}
-              className={classes.page}
-              onClick={() => onPage(page)}
-            >
-              <Icon className={classes.icon} icon="chevronDoubleRight" />
-            </button>
-          )
-        } else {
-          return (
-            <button
-              key={page}
-              className={cx(
-                classes.page,
-                page === activePage && classes.active,
-              )}
-              onClick={() => onPage(page)}
-            >
-              {page}
-            </button>
-          )
-        }
+        return (
+          <PageLink
+            key={page}
+            page={page}
+            params={params}
+            skipBackward={isSkipBackward}
+            skipForward={isSkipForward}
+            onClick={onClick}
+          />
+        )
       })}
     </div>
   )
