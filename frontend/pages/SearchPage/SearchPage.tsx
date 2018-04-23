@@ -130,7 +130,6 @@ export default class SearchPage extends React.Component<
   // setParams is used to immediately update control components
   // before fetching data for the next route.
   setParams = (params: any) => {
-    console.log(params)
     this.setState({ params })
   }
 
@@ -147,9 +146,7 @@ export default class SearchPage extends React.Component<
     return (
       <App
         isDesktop={isDesktop}
-        onLogoClick={() =>
-          console.log('??') || this.setParams(defaultSearchParams)
-        }
+        onLogoClick={() => this.setParams(defaultSearchParams)}
       >
         <div className={classes.container}>
           <div className={classes.aside}>

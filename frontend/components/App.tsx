@@ -37,12 +37,13 @@ if (typeof window !== 'undefined') {
 
 interface AppProps {
   isDesktop: boolean
+  onLogoClick?: () => any
 }
 
-const App: React.SFC<AppProps> = ({ children, isDesktop }) => (
+const App: React.SFC<AppProps> = ({ children, isDesktop, onLogoClick }) => (
   <UserProvider value={{ isDesktop }}>
     <React.Fragment>
-      <Header />
+      <Header onLogoClick={onLogoClick} />
       <Container>{children}</Container>
       <Footer />
     </React.Fragment>

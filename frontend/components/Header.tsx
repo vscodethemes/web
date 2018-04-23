@@ -3,9 +3,13 @@ import * as React from 'react'
 import theme, { em } from '../theme'
 import Logo from './Logo'
 
-const Header: React.SFC<{}> = () => (
+interface HeaderProps {
+  onLogoClick?: () => any
+}
+
+const Header: React.SFC<HeaderProps> = ({ onLogoClick }) => (
   <div className={classes.header}>
-    <Logo />
+    <Logo onClick={onLogoClick} />
   </div>
 )
 
