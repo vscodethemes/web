@@ -29,7 +29,7 @@ The frontend
 
 * [Renders search results server-side with NextJS](frontend/pages/SearchPage/SearchPage.tsx)
 * [Extracts critical css with EmotionJS](frontend/pages/_document.tsx#11)
-* [Implements universal error tracking](frontend/pages/_error.js)
+* [Implements universal error tracking](frontend/pages/_error.tsx)
 
 The infrastructure
 
