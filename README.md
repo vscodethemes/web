@@ -12,12 +12,9 @@ Preview themes from the VSCode marketplace.
   [SQS](https://aws.amazon.com/sqs/) and [SNS](https://aws.amazon.com/sns/)
 * [Terraform](https://www.terraform.io/)
 * [Algolia](https://www.algolia.com/)
-* [React](https://reactjs.org/),
-  [React Syntax Highlighter](https://github.com/conorhastings/react-syntax-highlighter)
-  and [Emotion](https://emotion.sh/)
-* [Webpack](https://webpack.js.org/) and
-  [Static Site Generator Plugin](https://github.com/markdalgleish/static-site-generator-webpack-plugin)
-* [Netlify](https://www.netlify.com/)
+* [NextJS](https://github.com/zeit/next.js/)
+* [Emotion](https://emotion.sh/)
+* [React Syntax Highlighter](https://github.com/conorhastings/react-syntax-highlighter)
 
 ## How it works
 
@@ -30,9 +27,9 @@ The backend
 
 The frontend
 
-* [Pre-renders the popular, trending and new pages](frontend/webpack.config.ts#L69)
-* [Extracts critical css](frontend/ssr.tsx#L24)
-* [Stores application state in the URL](frontend/components/App.tsx#L50)
+* [Renders search results server-side with NextJS](frontend/pages/SearchPage/SearchPage.tsx)
+* [Extracts critical css with EmotionJS](frontend/pages/_document.tsx#11)
+* [Implements universal error tracking](frontend/pages/_error.js)
 
 The infrastructure
 
