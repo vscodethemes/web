@@ -5,6 +5,7 @@ import {
   Theme,
 } from '@vscodethemes/types'
 import { Context } from 'next'
+import Head from 'next/head'
 import Router from 'next/router'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
@@ -37,6 +38,12 @@ interface SearchPageProps {
 interface SerachPageState {
   params: SearchParams
   isLoading: boolean
+}
+
+const titles = {
+  installs: 'VSCode Themes | Popular',
+  trending: 'VSCode Themes | Trending',
+  new: 'VSCode Themes | New',
 }
 
 export default class SearchPage extends React.Component<
@@ -112,21 +119,6 @@ export default class SearchPage extends React.Component<
     Router.onRouteChangeComplete = null
   }
 
-  // componentDidUpdate(prevProps: SearchPageProps, prevState: SerachPageState) {
-  //   const { params } = this.state
-  //   // Reset the scroll position when we start a new search.
-  //   if (
-  //     prevState.params.sortBy !== params.sortBy ||
-  //     prevState.params.search !== params.search ||
-  //     prevState.params.dark !== params.dark ||
-  //     prevState.params.light !== params.light ||
-  //     prevState.params.page !== params.page ||
-  //     prevState.params.perPage !== params.perPage
-  //   ) {
-  //     window.scrollTo(0, 0)
-  //   }
-  // }
-
   // setParams is used to immediately update control components
   // before fetching data for the next route.
   setParams = (params: any) => {
@@ -148,6 +140,9 @@ export default class SearchPage extends React.Component<
         isDesktop={isDesktop}
         onLogoClick={() => this.setParams(defaultSearchParams)}
       >
+        <Head>
+          <title>{titles[params.sortBy]}</title>
+        </Head>
         <div className={classes.container}>
           <div className={classes.aside}>
             <div className={classes.sortBy}>
