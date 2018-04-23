@@ -4,7 +4,7 @@ import sentry from '../clients/sentry'
 
 class MyError extends NextError {
   static async getInitialProps(ctx: Context) {
-    if (ctx.err) {
+    if (ctx.err && sentry) {
       sentry.captureException(ctx.err)
     }
     // @types/next is broken and uses default export so we can't
