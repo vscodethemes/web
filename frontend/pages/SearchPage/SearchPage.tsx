@@ -20,6 +20,7 @@ import {
 } from '../../components'
 import { defaultSearchParams } from '../../constants'
 import theme from '../../theme'
+import generatePlaceholders from '../../utils/generatePlaceholders'
 import * as userAgent from '../../utils/userAgent'
 import getSearchLinkProps from './getSearchLinkProps'
 import { classes } from './SearchPage.styles'
@@ -35,6 +36,7 @@ interface SearchPageProps {
 
 interface SerachPageState {
   params: SearchParams
+  isLoading: boolean
 }
 
 export default class SearchPage extends React.Component<
@@ -85,26 +87,50 @@ export default class SearchPage extends React.Component<
 
   state = {
     params: this.props.params,
+    isLoading: false,
   }
 
-  componentDidUpdate(prevProps: SearchPageProps, prevState: SerachPageState) {
-    const { params } = this.state
-    // Reset the scroll position when we start a new search.
-    if (
-      prevState.params.sortBy !== params.sortBy ||
-      prevState.params.search !== params.search ||
-      prevState.params.dark !== params.dark ||
-      prevState.params.light !== params.light ||
-      prevState.params.page !== params.page ||
-      prevState.params.perPage !== params.perPage
-    ) {
+  loadingTimeout: number
+
+  componentDidMount() {
+    Router.onRouteChangeStart = () => {
+      // Reset the scroll position when we start a new search.
       window.scrollTo(0, 0)
+      window.clearTimeout(this.loadingTimeout)
+      this.loadingTimeout = window.setTimeout(() => {
+        this.setState({ isLoading: true })
+      }, 150)
+    }
+    Router.onRouteChangeComplete = () => {
+      window.clearTimeout(this.loadingTimeout)
+      this.setState({ isLoading: false })
     }
   }
+
+  componentWillUnmount() {
+    Router.onRouteChangeStart = null
+    Router.onRouteChangeComplete = null
+  }
+
+  // componentDidUpdate(prevProps: SearchPageProps, prevState: SerachPageState) {
+  //   const { params } = this.state
+  //   // Reset the scroll position when we start a new search.
+  //   if (
+  //     prevState.params.sortBy !== params.sortBy ||
+  //     prevState.params.search !== params.search ||
+  //     prevState.params.dark !== params.dark ||
+  //     prevState.params.light !== params.light ||
+  //     prevState.params.page !== params.page ||
+  //     prevState.params.perPage !== params.perPage
+  //   ) {
+  //     window.scrollTo(0, 0)
+  //   }
+  // }
 
   // setParams is used to immediately update control components
   // before fetching data for the next route.
   setParams = (params: any) => {
+    console.log(params)
     this.setState({ params })
   }
 
@@ -116,9 +142,15 @@ export default class SearchPage extends React.Component<
 
   render() {
     const { results, totalPages, totalDark, totalLight, isDesktop } = this.props
-    const { params } = this.state
+    const { params, isLoading } = this.state
+    const themes = isLoading ? generatePlaceholders(params.perPage) : results
     return (
-      <App isDesktop={isDesktop}>
+      <App
+        isDesktop={isDesktop}
+        onLogoClick={() =>
+          console.log('??') || this.setParams(defaultSearchParams)
+        }
+      >
         <div className={classes.container}>
           <div className={classes.aside}>
             <div className={classes.sortBy}>
@@ -190,7 +222,7 @@ export default class SearchPage extends React.Component<
           <div className={classes.main}>
             <SearchResults
               params={params}
-              results={results}
+              themes={themes}
               onLanguage={lang => this.setQuery({ ...params, lang })}
               onClear={() => this.setQuery({ ...params, search: '' })}
             />

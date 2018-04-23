@@ -6,18 +6,18 @@ import ThemePreview from './ThemePreview'
 
 interface Props {
   params: SearchParams
-  results: Theme[]
+  themes: Theme[]
   onLanguage: (language: string) => any
   onClear: () => any
 }
 
 const SearchResults: React.SFC<Props> = ({
   params,
-  results,
+  themes,
   onLanguage,
   onClear,
 }) => {
-  if (results.length === 0 && params.search) {
+  if (themes.length === 0 && params.search) {
     return (
       <div className={classes.empty}>
         <p className={classes.emptyMessage}>
@@ -32,7 +32,7 @@ const SearchResults: React.SFC<Props> = ({
 
   return (
     <React.Fragment>
-      {results.map(t => (
+      {themes.map(t => (
         <ThemePreview
           key={t.objectID}
           theme={t}
