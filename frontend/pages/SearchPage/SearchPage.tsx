@@ -119,12 +119,14 @@ export default class SearchPage extends React.Component<
     Router.onRouteChangeComplete = null
   }
 
-  // setParams is used to immediately update control components
-  // before fetching data for the next route.
+  // setParams is used to immediately update controlled components
+  // (ie. search input) before fetching data for the next route.
   setParams = (params: any) => {
     this.setState({ params })
   }
 
+  // Pushes new search parameters onto the query string. The
+  // URL isn't updated until after getInitialProps resolves.
   setQuery = async (params: any) => {
     this.setParams(params)
     const { href, as } = getSearchLinkProps(params)
