@@ -98,11 +98,12 @@ export default class SearchPage extends React.Component<
   }
 
   loadingTimeout: number
+  resetScrollPosition = false
 
   componentDidMount() {
     Router.onRouteChangeStart = () => {
-      // Reset the scroll position when we start a new search.
-      window.scrollTo(0, 0)
+      // Show loading state if fetching initial props takes
+      // longer than 150ms
       window.clearTimeout(this.loadingTimeout)
       this.loadingTimeout = window.setTimeout(() => {
         this.setState({ isLoading: true })
@@ -127,10 +128,13 @@ export default class SearchPage extends React.Component<
 
   // Pushes new search parameters onto the query string. The
   // URL isn't updated until after getInitialProps resolves.
-  setQuery = async (params: any) => {
+  setQuery = async (params: any, preventSearch: boolean = false) => {
     this.setParams(params)
     const { href, as } = getSearchLinkProps(params)
-    await Router.push(href, as)
+    if (!preventSearch) {
+      window.scrollTo(0, 0)
+    }
+    await Router.push(href, as, { shallow: preventSearch })
   }
 
   render() {
@@ -217,7 +221,7 @@ export default class SearchPage extends React.Component<
             <SearchResults
               params={params}
               themes={themes}
-              onLanguage={lang => this.setQuery({ ...params, lang })}
+              onLanguage={lang => this.setQuery({ ...params, lang }, true)}
               onClear={() => this.setQuery({ ...params, search: '' })}
             />
             {totalPages > 1 && (
