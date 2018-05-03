@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "node-fetch": "^2.1.2",
-    "runtypes": "^2.0.3"
+    "runtypes": "^2.0.4"
   },
   "devDependencies": {
     "@types/node-fetch": "^1.6.8",
