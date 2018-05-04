@@ -46,17 +46,6 @@ function createVSCodeGUIColors(): any {
   }, {})
 }
 
-function createTokenColors(): any {
-  return Object.keys(themeVariables.tokens).reduce(
-    (tokens: any, key: string) => {
-      tokens[`${key}Foreground`] = 'color'
-      tokens[`${key}FontStyle`] = 'fontStyle'
-      return tokens
-    },
-    {},
-  )
-}
-
 export default function createServices(): Services {
   return {
     fetch,
@@ -150,10 +139,7 @@ export default function createServices(): Services {
         trendingDaily: 0,
         trendingWeekly: 0,
         trendingMonthly: 0,
-        colors: {
-          ...createVSCodeGUIColors(),
-          ...createTokenColors(),
-        },
+        colors: createVSCodeGUIColors(),
       },
     }),
   }
