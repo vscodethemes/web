@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "NODE_ENV=prodcution webpack",
+    "build": "NODE_ENV=production webpack",
     "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
     "test": "jest"
