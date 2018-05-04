@@ -103,6 +103,7 @@ export default function createServices(): Services {
     extractColors: createJob<ExtractColorsPayload>('extractColors', {
       receiptHandle: '',
       payload: {
+        themeId: 'test',
         name: 'name',
         type: 'dark',
         extensionId: 'extensionId',
@@ -115,8 +116,8 @@ export default function createServices(): Services {
         shortDescription: 'shortDescription',
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
-        repositoryPath: './themes/OneDark-Pro.json',
-        repositoryBranch: 'master',
+        url:
+          'https://raw.githubusercontent.com/Binaryify/OneDark-Pro/master/themes/OneDark-Pro.json',
         installs: 0,
         rating: 0,
         ratingCount: 0,
@@ -128,6 +129,7 @@ export default function createServices(): Services {
     saveTheme: createJob<SaveThemePayload>('saveTheme', {
       receiptHandle: '',
       payload: {
+        themeId: 'test',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
         publisherName: 'publisherName',
@@ -140,8 +142,8 @@ export default function createServices(): Services {
         type: 'dark',
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',
-        repositoryPath: './themes/OneDark-Pro.json',
-        repositoryBranch: 'master',
+        url:
+          'https://raw.githubusercontent.com/Binaryify/OneDark-Pro/master/themes/OneDark-Pro.json',
         installs: 0,
         rating: 0,
         ratingCount: 0,

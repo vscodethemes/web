@@ -6,6 +6,7 @@ import {
   Services,
   ThemeType,
 } from '@vscodethemes/types'
+import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
 import createThemeId from './utils/createThemeId'
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
@@ -34,7 +35,7 @@ export default async function run(services: Services): Promise<any> {
     const { payload } = job
     const { repositoryOwner, repository } = payload
     // Find the default branch of the repository.
-    const branch = await fetchDefaultBranch(
+    const repositoryBranch = await fetchDefaultBranch(
       services,
       repositoryOwner,
       repository,
@@ -45,7 +46,7 @@ export default async function run(services: Services): Promise<any> {
       services,
       repositoryOwner,
       repository,
-      branch,
+      repositoryBranch,
     )
 
     // A package.json definition can contain multiple theme sources.
@@ -68,12 +69,17 @@ export default async function run(services: Services): Promise<any> {
           logger.log(`Unkown uiTheme: ${theme.uiTheme}, theme: ${themeId}`)
         }
 
+        const baseUrl = 'https://raw.githubusercontent.com'
+        const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
+        const branchUrl = `${repoUrl}/${repositoryBranch}`
+        const url = `${branchUrl}/${repositoryPath}`
+
         return {
           ...payload,
+          themeId,
+          url,
           type: type as ThemeType,
           name: theme.label,
-          repositoryBranch: branch,
-          repositoryPath,
         }
       },
     )
@@ -143,9 +149,7 @@ async function fetchDefaultBranch(
   return branch
 }
 
-/**
- * Fetch the repository's package.json.
- */
+// Fetch the repository's package.json.
 async function fetchPackageJson(
   services: Services,
   repositoryOwner: string,

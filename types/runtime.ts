@@ -104,6 +104,7 @@ export const ThemeTypeRuntime = Union(
 export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
     themeId: String,
+    url: String,
     repositoryBranch: String,
     repositoryPath: String,
   }).And(
