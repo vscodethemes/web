@@ -1,11 +1,13 @@
 import { JobMessage, SaveThemePayload } from '@vscodethemes/types'
+import createThemeId from './utils/createThemeId'
 import createServices from '../services/mock'
-import saveTheme, { createObjectId } from './saveTheme'
+import saveTheme from './saveTheme'
 
 function createJob(): JobMessage<SaveThemePayload> {
   return {
     receiptHandle: '',
     payload: {
+      themeId: 'themeId',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',
@@ -19,7 +21,7 @@ function createJob(): JobMessage<SaveThemePayload> {
       repository: 'repo',
       repositoryOwner: 'owner',
       repositoryBranch: 'master',
-      repositoryPath: './themes/theme.json',
+      repositoryPath: 'themes/theme.json',
       installs: 1,
       rating: 1,
       ratingCount: 1,
@@ -136,6 +138,7 @@ test('should succeed job for valid input', async () => {
 test('should add to index for valid input', async () => {
   const services = createServices()
   const job = createJob()
+  const { repositoryOwner, repository, repositoryPath } = job.payload
   jest
     .spyOn(services.saveTheme, 'receive')
     .mockImplementation(() => Promise.resolve(job))
@@ -145,7 +148,7 @@ test('should add to index for valid input', async () => {
   expect(addObjectSpy).toHaveBeenCalledTimes(1)
   expect(addObjectSpy.mock.calls[0][0]).toEqual({
     ...job.payload,
-    objectID: createObjectId(job.payload),
+    objectID: createThemeId(repositoryOwner, repository, repositoryPath),
   })
 })
 

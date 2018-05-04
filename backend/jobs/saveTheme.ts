@@ -4,6 +4,7 @@ import {
   Services,
 } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
+import createThemeId from './utils/createThemeId'
 
 export default async function run(services: Services): Promise<any> {
   const { saveTheme, logger } = services
@@ -27,8 +28,13 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
+    const themeId = createThemeId(
+      payload.repositoryOwner,
+      payload.repository,
+      payload.repositoryPath,
+    )
     // Save the theme to Algolia search.
-    await addToSearch(services, payload)
+    await addToSearch(services, payload, themeId)
     // Job succeeded.
     await saveTheme.succeed(job)
   } catch (err) {
@@ -47,17 +53,13 @@ export default async function run(services: Services): Promise<any> {
   }
 }
 
-export function createObjectId(theme: SaveThemePayload) {
-  return `${theme.repositoryOwner}$${theme.repository}$${theme.repositoryPath}`
-}
-
 // Add theme to Algolia index.
 async function addToSearch(
   services: Services,
   theme: SaveThemePayload,
+  objectID: string,
 ): Promise<string> {
   const { index } = services
-  const objectID = createObjectId(theme)
   try {
     await index.addObject({ ...theme, objectID })
     return objectID
