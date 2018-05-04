@@ -28,13 +28,8 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
-    const themeId = createThemeId(
-      payload.repositoryOwner,
-      payload.repository,
-      payload.repositoryPath,
-    )
     // Save the theme to Algolia search.
-    await addToSearch(services, payload, themeId)
+    await addToSearch(services, payload, payload.themeId)
     // Job succeeded.
     await saveTheme.succeed(job)
   } catch (err) {

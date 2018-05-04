@@ -10,8 +10,10 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   return {
     receiptHandle: '',
     payload: {
+      themeId: 'themeId',
       name: 'name',
       type: 'dark',
+      url: 'themes/theme.json',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',
@@ -22,8 +24,6 @@ function createJob(): JobMessage<ExtractColorsPayload> {
       shortDescription: 'shortDescription',
       repository: 'repo',
       repositoryOwner: 'owner',
-      repositoryBranch: 'master',
-      repositoryPath: './themes/theme.json',
       installs: 1,
       rating: 1,
       ratingCount: 1,
