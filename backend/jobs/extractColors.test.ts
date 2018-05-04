@@ -54,25 +54,6 @@ function createColors(removeOptional: boolean): any {
   return payloadColors
 }
 
-// Creates a valid tokenColors payload.
-function createTokenColors(): any {
-  const tokenPayload: any[] = []
-
-  Object.keys(themeVariables.tokens).forEach(key => {
-    const tokenVar = themeVariables.tokens[key]
-
-    tokenPayload.push({
-      scope: [tokenVar.scope[0]],
-      settings: {
-        foreground: 'color',
-        fontStyle: 'fontStyle',
-      },
-    })
-  }, [])
-
-  return tokenPayload
-}
-
 test('should not process empty job', async () => {
   const services = createServices()
   jest
@@ -130,7 +111,6 @@ test('should fail job if fetching the theme returns invalid name', async () => {
       name: null,
       type: 'dark',
       colors: createColors(false),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -149,7 +129,6 @@ test('should fail job if fetching the theme returns invalid type', async () => {
       name: null,
       type: 'invalid',
       colors: createColors(false),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -168,26 +147,6 @@ test('should fail job if fetching the theme returns invalid colors', async () =>
       name: 'name',
       type: 'dark',
       colors: null,
-      tokenColors: createTokenColors(),
-    }),
-  )
-  jest
-    .spyOn(services.extractColors, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
-  const failSpy = jest.spyOn(services.extractColors, 'fail')
-  await extractColors(services)
-  expect(failSpy).toHaveBeenCalledTimes(1)
-})
-
-test('should fail job if fetching the theme returns invalid colors', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(
-    JSON.stringify({
-      name: 'name',
-      type: 'dark',
-      colors: createColors(false),
-      tokenColors: null,
     }),
   )
   jest
@@ -206,7 +165,6 @@ test('should succeed job for valid input with all fields', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(false),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -225,7 +183,6 @@ test('should succeed job for valid input without optional fields', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(true),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -244,7 +201,6 @@ test('should notify self', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(false),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
@@ -263,7 +219,6 @@ test('should create save theme jobs for valid input', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(false),
-      tokenColors: createTokenColors(),
     }),
   )
   jest
