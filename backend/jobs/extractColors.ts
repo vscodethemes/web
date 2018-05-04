@@ -8,8 +8,7 @@ import {
 } from '@vscodethemes/types'
 import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
-import extractGUIColors from '../utils/extractGUIColors'
-import extractTokenColors from '../utils/extractTokenColors'
+import extractGUIColors from './utils/extractGUIColors'
 
 export default async function run(services: Services): Promise<any> {
   const { extractColors, saveTheme, logger } = services
@@ -103,13 +102,8 @@ async function fetchTheme(
     data = JSON.parse(stripComments(responseText))
     name = data.name
     type = data.type
-    if (data.colors && data.tokenColors) {
-      const guiColors = extractGUIColors(type, data.colors)
-      const tokenColors = extractTokenColors(
-        guiColors.editorForeground,
-        data.tokenColors,
-      )
-      colors = { ...guiColors, ...tokenColors }
+    if (data.colors) {
+      colors = extractGUIColors(type, data.colors)
     }
   } catch (err) {
     logger.error(err)
