@@ -6,7 +6,14 @@
     "build": "NODE_ENV=production webpack",
     "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
-    "test": "jest"
+    "test": "jest",
+    "invoke-scrapeExtensions":
+      "ts-node scripts/invoke.ts ../jobs/scrapeExtensions.ts",
+    "invoke-extractThemes":
+      "ts-node scripts/invoke.ts ../jobs/extractThemes.ts",
+    "invoke-extractColors":
+      "ts-node scripts/invoke.ts ../jobs/extractColors.ts",
+    "invoke-saveTheme": "ts-node scripts/invoke.ts ../jobs/saveTheme.ts"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.44",
