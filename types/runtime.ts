@@ -98,6 +98,7 @@ export const ThemeTypeRuntime: Runtype = Union(
 
 export const ExtractColorsPayloadRuntime: Runtype = ExtractThemesPayloadRuntime.And(
   Record({
+    themeId: String,
     repositoryBranch: String,
     repositoryPath: String,
   }).And(
@@ -170,6 +171,7 @@ export const ColorsRuntime: Runtype = Record({
 
 export const SaveThemePayloadRuntime: Runtype = ExtractColorsPayloadRuntime.And(
   Record({
+    themeId: String,
     name: String,
     type: ThemeTypeRuntime,
     colors: ColorsRuntime,
