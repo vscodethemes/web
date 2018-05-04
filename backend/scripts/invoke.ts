@@ -1,5 +1,5 @@
 import * as minimist from 'minimist'
-import createServices from '../backend/services/local'
+import createServices from '../services/local'
 import { run } from './shared'
 
 const args = minimist(process.argv.slice(2))
