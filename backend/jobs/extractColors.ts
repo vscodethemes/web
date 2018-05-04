@@ -34,13 +34,7 @@ export default async function run(services: Services): Promise<any> {
 
     const { payload } = job
     // Fetch the theme's colors from it's repository.
-    const theme = await fetchTheme(
-      services,
-      payload.repositoryOwner,
-      payload.repository,
-      payload.repositoryBranch,
-      payload.repositoryPath,
-    )
+    const theme = await fetchTheme(services, payload.url)
 
     theme.name = theme.name || payload.name
     if (!theme.name) {
@@ -82,19 +76,12 @@ export default async function run(services: Services): Promise<any> {
 // Fetch the repository's theme definition.
 async function fetchTheme(
   services: Services,
-  repositoryOwner: string,
-  repository: string,
-  repositoryBranch: string,
-  repositoryPath: string,
+  url: string,
 ): Promise<{ name: string; type: ThemeType; colors: Colors }> {
   let name: string
   let type: ThemeType
   let colors: Partial<Colors>
   const { fetch, logger } = services
-  const baseUrl = 'https://raw.githubusercontent.com'
-  const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
-  const branchUrl = `${repoUrl}/${repositoryBranch}`
-  const url = `${branchUrl}/${repositoryPath.replace(/^\.\//, '')}`
 
   const response = await fetch(url, {
     method: 'GET',
