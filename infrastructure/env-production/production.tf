@@ -5,6 +5,7 @@ variable "github_client_id" {}
 variable "github_client_secret" {}
 variable "algolia_app_id" {}
 variable "algolia_api_key" {}
+variable "algolia_index" {}
 variable "sentry_dsn" {}
 
 terraform {
@@ -28,6 +29,7 @@ module "backend" {
   github_client_secret = "${var.github_client_secret}"
   algolia_app_id       = "${var.algolia_app_id}"
   algolia_api_key      = "${var.algolia_api_key}"
+  algolia_index        = "${var.algolia_index}"
   sentry_dsn           = "${var.sentry_dsn}"
 }
 

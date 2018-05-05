@@ -3,7 +3,7 @@ set -e
 
 # Deploy the current branch's backend and infrastructure.
 dir=infrastructure/env-$BRANCH
-if [ -d "$dir" ]; then  
+if [ -d "$dir" ]; then
   echo "Deploying $BRANCH..."
   cd infrastructure/env-$BRANCH
   terraform apply -auto-approve terraform.plan
@@ -12,7 +12,7 @@ if [ -d "$dir" ]; then
   echo "Deploying frontend..."
   # Heroku auth
   touch ~/.netrc
-  echo "machine api.heroku.com" >> ~/.netrc
+  echo "machine api.heroku.com" >> ~/.netrc 
   echo "  login $HEROKU_EMAIL" >> ~/.netrc
   echo "  password $HEROKU_TOKEN" >> ~/.netrc
   echo "machine git.heroku.com" >> ~/.netrc
@@ -25,6 +25,7 @@ if [ -d "$dir" ]; then
   docker build . -f frontend/Dockerfile -t vscodethemes/frontend \
     --build-arg ALGOLIA_APP_ID=$TF_VAR_algolia_app_id \
     --build-arg ALGOLIA_SEARCH_KEY=$ALGOLIA_SEARCH_KEY \
+    --build-arg ALGOLIA_INDEX=$TF_VAR_algolia_index \
     --build-arg GTM_ID=$GTM_ID \
     --build-arg SENTRY_DSN=$TF_VAR_sentry_dsn
 

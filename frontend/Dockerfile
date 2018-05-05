@@ -2,6 +2,7 @@ FROM node:carbon
 # Build variables
 ARG ALGOLIA_SEARCH_KEY
 ARG ALGOLIA_APP_ID
+ARG ALGOLIA_INDEX
 ARG GTM_ID
 ARG SENTRY_DSN
 # Create app directories
@@ -31,6 +32,7 @@ ADD ./frontend/run-server.sh frontend
 ENV NODE_ENV=production
 ENV ALGOLIA_SEARCH_KEY=${ALGOLIA_SEARCH_KEY}
 ENV ALGOLIA_APP_ID=${ALGOLIA_APP_ID}
+ENV ALGOLIA_INDEX=${ALGOLIA_INDEX}
 ENV GTM_ID=${GTM_ID}
 ENV SENTRY_DSN=${SENTRY_DSN}
 # Install dependencies and link workspaces

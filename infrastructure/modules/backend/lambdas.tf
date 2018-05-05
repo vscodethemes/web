@@ -82,6 +82,7 @@ module "save_theme" {
     SENTRY_DSN                = "${var.sentry_dsn}"
     ALGOLIA_APP_ID            = "${var.algolia_app_id}"
     ALGOLIA_API_KEY           = "${var.algolia_api_key}"
+    ALGOLIA_INDEX             = "${var.algolia_index}"
     SAVE_THEME_TOPIC_ARN      = "${aws_sns_topic.save_theme.arn}"
     SAVE_THEME_QUEUE_URL      = "${aws_sqs_queue.save_theme.id}"
     SAVE_THEME_DEADLETTER_URL = "${aws_sqs_queue.save_theme_deadletter.id}"

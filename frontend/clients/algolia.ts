@@ -8,13 +8,13 @@ interface FacetHit {
 }
 
 const { publicRuntimeConfig } = getConfig()
-const { algoliaAppId, algoliaSearchKey } = publicRuntimeConfig
+const { algoliaAppId, algoliaSearchKey, algoliaIndex } = publicRuntimeConfig
 const client = algoliasearch(algoliaAppId, algoliaSearchKey)
 
 const indicies = {
-  installs: client.initIndex('themes_by_installs_desc'),
-  trending: client.initIndex('themes_by_trending_desc'),
-  new: client.initIndex('themes_by_publishDate_desc'),
+  installs: client.initIndex(`${algoliaIndex}_by_installs_desc`),
+  trending: client.initIndex(`${algoliaIndex}_by_trending_desc`),
+  new: client.initIndex(`${algoliaIndex}_by_publishDate_desc`),
 }
 
 export async function search(params: SearchParams) {

@@ -6,6 +6,7 @@ module.exports = require('@zeit/next-typescript')({
   publicRuntimeConfig: {
     algoliaAppId: process.env.ALGOLIA_APP_ID,
     algoliaSearchKey: process.env.ALGOLIA_SEARCH_KEY,
+    algoliaIndex: process.env.ALGOLIA_INDEX,
     sentryDsn: process.env.SENTRY_DSN,
     GTM_ID: process.env.GTM_ID,
   },

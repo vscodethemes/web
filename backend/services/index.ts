@@ -16,6 +16,7 @@ import fetch from 'node-fetch'
 const {
   ALGOLIA_APP_ID,
   ALGOLIA_API_KEY,
+  ALGOLIA_INDEX,
   SCRAPE_EXTENSIONS_QUEUE_URL,
   SCRAPE_EXTENSIONS_DEADLETTER_URL,
   SCRAPE_EXTENSIONS_TOPIC_ARN,
@@ -123,7 +124,7 @@ export default function createServices(): Services {
     index: {
       addObject: async (object: IndexObject) => {
         const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
-        const index = search.initIndex('VSCodeThemes')
+        const index = search.initIndex(ALGOLIA_INDEX)
         const result = await index.addObject(object)
         return result
       },
