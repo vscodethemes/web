@@ -6,7 +6,6 @@ import {
   Services,
   ThemeType,
 } from '@vscodethemes/types'
-import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
 import createThemeId from './utils/createThemeId'
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
