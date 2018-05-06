@@ -2,6 +2,7 @@ import { ExtractColorsPayload, JobMessage } from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
 import * as themeVariables from '../themeVariables'
+import createThemeId from './utils/createThemeId'
 import extractColors from './extractColors'
 
 afterEach(() => fetch.resetMocks())
@@ -10,8 +11,7 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   return {
     receiptHandle: '',
     payload: {
-      themeId: 'themeId',
-      name: 'name',
+      themeName: 'themeName',
       type: 'dark',
       url: 'themes/theme.json',
       extensionId: 'extensionId',
@@ -216,7 +216,7 @@ test('should create save theme jobs for valid input', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
     JSON.stringify({
-      name: 'name',
+      name: 'Theme Name',
       type: 'dark',
       colors: createColors(false),
     }),
@@ -228,4 +228,8 @@ test('should create save theme jobs for valid input', async () => {
   const createSpy = jest.spyOn(services.saveTheme, 'create')
   await extractColors(services)
   expect(createSpy).toHaveBeenCalledTimes(1)
+  const payload = createSpy.mock.calls[0][0]
+  expect(payload.themeId).toEqual(
+    createThemeId(payload.repositoryOwner, payload.repository, 'Theme Name'),
+  )
 })

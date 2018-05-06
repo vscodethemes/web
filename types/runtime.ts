@@ -87,10 +87,13 @@ export const PackageJSONRuntime = Record({
   contributes: Record({
     themes: Array(
       Record({
-        label: String,
-        uiTheme: String,
         path: String,
-      }),
+      }).And(
+        Partial({
+          label: String,
+          uiTheme: String,
+        }),
+      ),
     ),
   }),
 })
@@ -103,12 +106,10 @@ export const ThemeTypeRuntime = Union(
 
 export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
-    themeId: String,
     url: String,
   }).And(
     Partial({
-      // Optional properties.
-      name: String,
+      themeName: String,
       type: ThemeTypeRuntime,
     }),
   ),
@@ -142,7 +143,8 @@ export const ColorsRuntime = Record({
 
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
   Record({
-    name: String,
+    themeId: String,
+    themeName: String,
     type: ThemeTypeRuntime,
     colors: ColorsRuntime,
   }),
