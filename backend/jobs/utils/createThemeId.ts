@@ -3,7 +3,13 @@
 export default function createThemeId(
   repositoryOwner: string,
   repository: string,
-  repositoryPath: string,
+  themeName: string,
 ): string {
-  return `${repositoryOwner}$${repository}$${repositoryPath}`
+  const localThemeId = themeName
+    // Remove special characters.
+    .replace(/[^a-zA-Z0-9\s]/g, '')
+    // Replace spaces with '-'.
+    .replace(/\s/g, '-')
+
+  return `${repositoryOwner}$${repository}$${localThemeId}`.toLowerCase()
 }

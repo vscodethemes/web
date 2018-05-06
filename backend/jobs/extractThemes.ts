@@ -7,7 +7,6 @@ import {
   ThemeType,
 } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
-import createThemeId from './utils/createThemeId'
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
 
 export default async function run(services: Services): Promise<any> {
@@ -48,40 +47,31 @@ export default async function run(services: Services): Promise<any> {
       repositoryBranch,
     )
 
+    const themes: ExtractColorsPayload[] = []
     // A package.json definition can contain multiple theme sources.
-    const themes: ExtractColorsPayload[] = packageJson.contributes.themes.map(
-      (theme: any) => {
-        // Remove './' from './path'.
-        const repositoryPath = theme.path.replace(/^\.\//, '')
-        const themeId = createThemeId(
-          repositoryOwner,
-          repository,
-          repositoryPath,
-        )
+    packageJson.contributes.themes.forEach((theme: any) => {
+      let type
+      if (theme.uiTheme === 'vs-dark') {
+        type = 'dark'
+      } else if (theme.uiTheme === 'vs-light') {
+        type = 'light'
+      } else {
+        logger.log(`Unkown uiTheme: ${theme.uiTheme}, theme: ${theme}`)
+      }
 
-        let type
-        if (theme.uiTheme === 'vs-dark') {
-          type = 'dark'
-        } else if (theme.uiTheme === 'vs-light') {
-          type = 'light'
-        } else {
-          logger.log(`Unkown uiTheme: ${theme.uiTheme}, theme: ${themeId}`)
-        }
+      const baseUrl = 'https://raw.githubusercontent.com'
+      const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
+      const branchUrl = `${repoUrl}/${repositoryBranch}`
+      // Remove './' from './path'.
+      const url = `${branchUrl}/${theme.path.replace(/^\.\//, '')}`
 
-        const baseUrl = 'https://raw.githubusercontent.com'
-        const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
-        const branchUrl = `${repoUrl}/${repositoryBranch}`
-        const url = `${branchUrl}/${repositoryPath}`
-
-        return {
-          ...payload,
-          themeId,
-          url,
-          type: type as ThemeType,
-          name: theme.label,
-        }
-      },
-    )
+      themes.push({
+        ...payload,
+        url,
+        type: type as ThemeType,
+        themeName: theme.label,
+      })
+    })
 
     // For each theme source, create a job to extract the colors.
     await Promise.all(themes.map(extractColors.create))

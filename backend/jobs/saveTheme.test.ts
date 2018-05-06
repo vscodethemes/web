@@ -1,5 +1,4 @@
 import { JobMessage, SaveThemePayload } from '@vscodethemes/types'
-import createThemeId from './utils/createThemeId'
 import createServices from '../services/mock'
 import saveTheme from './saveTheme'
 
@@ -7,6 +6,7 @@ function createJob(): JobMessage<SaveThemePayload> {
   return {
     receiptHandle: '',
     payload: {
+      themeName: 'themeName',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',
