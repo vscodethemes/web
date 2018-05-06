@@ -6,15 +6,16 @@
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
-    "dev": "wsrun dev --exclude-missing",
-    "build": "wsrun build --exclude-missing",
+    "dev": "tasks/dev.sh",
     "tsc": "wsrun tsc --exclude-missing",
     "lint": "wsrun lint --exclude-missing",
     "test": "wsrun test --exclude-missing",
+    "build": "tasks/build.sh",
     "package": "tasks/package.sh",
     "plan": "tasks/plan.sh",
-    "deploy": "tasks/deploy.sh",
-    "upload-frontend": "ts-node tasks/uploadFrontend.ts"
+    "get-env": "tasks/remote-env-get.sh",
+    "update-env": "tasks/remote-env-update.sh",
+    "deploy": "tasks/deploy.sh"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.0",

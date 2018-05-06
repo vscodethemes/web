@@ -1,15 +1,25 @@
 #! /bin/bash
 set -e
 
+# Set env vars from .env
+set -o allexport; source .env; set +o allexport
+
+
 # Deploy the current branch's backend and infrastructure.
 dir=infrastructure/env-$BRANCH
-if [ -d "$dir" ]; then
-  echo "Deploying $BRANCH..."
+if [[ -d "$dir" ]]; then
+  echo "Deploying $BRANCH backend..."
   cd infrastructure/env-$BRANCH
   terraform apply -auto-approve terraform.plan
   cd ../.. 
 
-  echo "Deploying frontend..."
+  echo "Done."
+else 
+  echo "Skipping backend because $dir does not exist."
+fi
+
+if [[ $DOCKER_TAG != "" ]] || [[ $DOCKER_REGISTRY != "" ]]; then
+  echo "Deploying $BRANCH frontend..."
   # Heroku auth
   touch ~/.netrc
   echo "machine api.heroku.com" >> ~/.netrc 
@@ -22,19 +32,17 @@ if [ -d "$dir" ]; then
 
   # Build the frontend docker image.
   echo "Building image..."
-  docker build . -f frontend/Dockerfile -t vscodethemes/frontend \
-    --build-arg ALGOLIA_APP_ID=$TF_VAR_algolia_app_id \
+  docker build . -f frontend/Dockerfile -t $DOCKER_TAG \
+    --build-arg TF_VAR_sentry_dsn=$TF_VAR_sentry_dsn \
+    --build-arg TF_VAR_algolia_app_id=$TF_VAR_algolia_app_id \
+    --build-arg TF_VAR_algolia_index=$TF_VAR_algolia_index \
     --build-arg ALGOLIA_SEARCH_KEY=$ALGOLIA_SEARCH_KEY \
-    --build-arg ALGOLIA_INDEX=$TF_VAR_algolia_index \
-    --build-arg GTM_ID=$GTM_ID \
-    --build-arg SENTRY_DSN=$TF_VAR_sentry_dsn
+    --build-arg GTM_ID=$GTM_ID
 
   # Push image to heroku.
   echo "Pushing image..."
-  docker tag vscodethemes/frontend registry.heroku.com/vscodethemes/web
-  docker push registry.heroku.com/vscodethemes/web
-
-  echo "Done."
+  docker tag $DOCKER_TAG $DOCKER_REGISTRY
+  docker push $DOCKER_REGISTRY
 else 
-  echo "Skipping deploy because $dir does not exist."
+  echo "Skipping frontend because \$DOCKER_TAG or \$DOCKER_REGISTRY is not set."
 fi
