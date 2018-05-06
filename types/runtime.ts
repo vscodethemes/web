@@ -3,6 +3,7 @@ import {
   Literal,
   Null,
   Number,
+  Partial,
   Record,
   Runtype,
   String,
@@ -35,12 +36,16 @@ export const ExtensionRuntime: Runtype = Record({
   lastUpdated: String,
   publishedDate: String,
   releaseDate: String,
-  displayName: String.Or(Null),
-  shortDescription: String.Or(Null),
   publisher: PublisherRuntime,
   versions: Array(VersionRuntime),
   statistics: Array(StatisticRuntime),
-})
+}).And(
+  // Optional properties.
+  Partial({
+    displayName: String,
+    shortDescription: String,
+  }),
+)
 
 export const ExtensionQueryResultsRuntime: Runtype = Record({
   results: Tuple(Record({ extensions: Array(ExtensionRuntime) })),
@@ -57,8 +62,6 @@ export const ExtractThemesPayloadRuntime: Runtype = Record({
   lastUpdated: Number,
   publishedDate: Number,
   releaseDate: Number,
-  displayName: String.Or(Null),
-  shortDescription: String.Or(Null),
   repository: String,
   repositoryOwner: String,
   installs: Number,
@@ -67,7 +70,13 @@ export const ExtractThemesPayloadRuntime: Runtype = Record({
   trendingDaily: Number,
   trendingWeekly: Number,
   trendingMonthly: Number,
-})
+}).And(
+  // Optional properties.
+  Partial({
+    displayName: String,
+    shortDescription: String,
+  }),
+)
 
 export const PackageJSONRuntime: Runtype = Record({
   contributes: Record({
@@ -89,11 +98,15 @@ export const ThemeTypeRuntime: Runtype = Union(
 
 export const ExtractColorsPayloadRuntime: Runtype = ExtractThemesPayloadRuntime.And(
   Record({
-    name: String.Or(Null),
-    type: ThemeTypeRuntime.Or(Null),
     repositoryBranch: String,
     repositoryPath: String,
-  }),
+  }).And(
+    Partial({
+      // Optional properties.
+      name: String,
+      type: ThemeTypeRuntime,
+    }),
+  ),
 )
 
 export const ColorsRuntime: Runtype = Record({
@@ -110,11 +123,6 @@ export const ColorsRuntime: Runtype = Record({
   tabActiveForeground: String,
   tabInactiveBackground: String,
   tabInactiveForeground: String,
-  editorGroupHeaderTabsBorder: String.Or(Null),
-  tabActiveBorder: String.Or(Null),
-  tabBorder: String.Or(Null),
-  contrastActiveBorder: String.Or(Null),
-  contrastBorder: String.Or(Null),
   // Syntax Tokens
   commentForeground: String,
   commentFontStyle: String,
@@ -148,7 +156,17 @@ export const ColorsRuntime: Runtype = Record({
   propertyFontStyle: String,
   selectorForeground: String,
   selectorFontStyle: String,
-})
+}).And(
+  Partial({
+    // Optional properties.
+    // These colors may not exist in the object but also may be null.
+    editorGroupHeaderTabsBorder: String.Or(Null),
+    tabActiveBorder: String.Or(Null),
+    tabBorder: String.Or(Null),
+    contrastActiveBorder: String.Or(Null),
+    contrastBorder: String.Or(Null),
+  }),
+)
 
 export const SaveThemePayloadRuntime: Runtype = ExtractColorsPayloadRuntime.And(
   Record({
