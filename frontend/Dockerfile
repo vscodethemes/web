@@ -1,10 +1,10 @@
 FROM node:carbon
 # Build variables
+ARG TF_VAR_sentry_dsn
+ARG TF_VAR_algolia_app_id
+ARG TF_VAR_algolia_index
 ARG ALGOLIA_SEARCH_KEY
-ARG ALGOLIA_APP_ID
-ARG ALGOLIA_INDEX
 ARG GTM_ID
-ARG SENTRY_DSN
 # Create app directories
 RUN mkdir -p /usr/src/app
 RUN mkdir -p /usr/src/app/frontend
@@ -30,11 +30,11 @@ ADD ./frontend/server.ts frontend
 ADD ./frontend/run-server.sh frontend
 # Environment variables
 ENV NODE_ENV=production
+ENV TF_VAR_sentry_dsn=${TF_VAR_sentry_dsn}
+ENV TF_VAR_algolia_app_id=${TF_VAR_algolia_app_id}
+ENV TF_VAR_algolia_index=${TF_VAR_algolia_index}
 ENV ALGOLIA_SEARCH_KEY=${ALGOLIA_SEARCH_KEY}
-ENV ALGOLIA_APP_ID=${ALGOLIA_APP_ID}
-ENV ALGOLIA_INDEX=${ALGOLIA_INDEX}
 ENV GTM_ID=${GTM_ID}
-ENV SENTRY_DSN=${SENTRY_DSN}
 # Install dependencies and link workspaces
 RUN yarn --frozen-lockfile --production
 # Move to frontend directory
