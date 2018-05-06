@@ -42,12 +42,6 @@ export interface GUIVariables {
   }
 }
 
-export interface TokenVariables {
-  [key: string]: {
-    scope: string[]
-  }
-}
-
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
   // A new receipt handle is returned every time you receive a message.
