@@ -92,8 +92,6 @@ export default function createServices(): Services {
     extractColors: createJob<ExtractColorsPayload>('extractColors', {
       receiptHandle: '',
       payload: {
-        themeId: 'test',
-        name: 'name',
         type: 'dark',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
@@ -127,7 +125,7 @@ export default function createServices(): Services {
         releaseDate: 1,
         displayName: 'displayName',
         shortDescription: 'shortDescription',
-        name: 'One Dark',
+        themeName: 'One Dark',
         type: 'dark',
         repository: 'OneDark-Pro',
         repositoryOwner: 'Binaryify',

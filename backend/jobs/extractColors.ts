@@ -8,6 +8,7 @@ import {
 } from '@vscodethemes/types'
 import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
+import createThemeId from './utils/createThemeId'
 import extractGUIColors from './utils/extractGUIColors'
 
 export default async function run(services: Services): Promise<any> {
@@ -33,14 +34,21 @@ export default async function run(services: Services): Promise<any> {
 
     const { payload } = job
     // Fetch the theme's colors from it's repository.
-    const theme = await fetchTheme(services, payload.url)
-
-    theme.name = theme.name || payload.name
-    if (!theme.name) {
+    const { name, ...theme } = await fetchTheme(services, payload.url)
+    // The name in the theme json is used to generate the id.
+    // The uiTheme key in the repo's package.json is used for the display name
+    // unless it doesn't exist, then use the name in the theme json.
+    if (!name) {
       throw new PermanentJobError(
         `Missing name for theme: '${JSON.stringify(theme)}'`,
       )
     }
+
+    const themeId = createThemeId(
+      payload.repositoryOwner,
+      payload.repository,
+      name,
+    )
 
     theme.type = theme.type || payload.type
     if (!ThemeTypeRuntime.guard(theme.type)) {
@@ -52,7 +60,13 @@ export default async function run(services: Services): Promise<any> {
     logger.log(`Theme: ${JSON.stringify(theme)}`)
 
     // Create a job to save the theme.
-    await saveTheme.create({ ...payload, ...theme })
+    await saveTheme.create({
+      ...payload,
+      themeId,
+      themeName: payload.themeName || name,
+      type: theme.type,
+      colors: theme.colors,
+    })
 
     // Job succeeded.
     await extractColors.succeed(job)
