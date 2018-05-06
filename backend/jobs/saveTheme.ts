@@ -4,7 +4,6 @@ import {
   Services,
 } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
-import createThemeId from './utils/createThemeId'
 
 export default async function run(services: Services): Promise<any> {
   const { saveTheme, logger } = services

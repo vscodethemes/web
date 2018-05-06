@@ -1,17 +1,17 @@
 import {
   Array,
   Literal,
-  Intersect2,
-  Null,
+  Intersect2, // tslint:disable-line
+  Null, // tslint:disable-line
   Number,
   Partial,
   Record,
   String,
   Tuple,
-  Tuple1,
+  Tuple1, // tslint:disable-line
   Union,
-  Union2,
-  Union3,
+  Union2, // tslint:disable-line
+  Union3, // tslint:disable-line
 } from 'runtypes'
 
 export * from 'runtypes'
@@ -105,8 +105,6 @@ export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
     themeId: String,
     url: String,
-    repositoryBranch: String,
-    repositoryPath: String,
   }).And(
     Partial({
       // Optional properties.
