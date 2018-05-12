@@ -1,12 +1,10 @@
+// tslint:disable no-console
 import { Handler } from '@vscodethemes/types'
 import * as express from 'express'
 import * as minimist from 'minimist'
-import * as qs from 'querystring'
 import * as util from 'util'
-import createServices from '../services/local'
 import tokenize from '../api/tokenize'
-import { AnyLengthString } from 'aws-sdk/clients/comprehend'
-import { EWOULDBLOCK } from 'constants'
+import createServices from '../services/local'
 import createCFEvent from '../utils/createCFEvent'
 
 const args = minimist(process.argv.slice(2))
@@ -39,7 +37,7 @@ app.use('/:handler', async (req: Request, res) => {
     }
     res.send(body)
   } catch (err) {
-    console.error(`/tokenize errored with:`, err) // tslint:disable-line no-console
+    console.error(`/tokenize errored with:`, err)
     res.status(500).send(err)
   }
 })
