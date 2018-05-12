@@ -1,4 +1,4 @@
-export function run(fn: () => Promise<any>) {
+export default function runAsyncScript(fn: () => Promise<any>) {
   fn()
     .then(() => process.exit(0))
     .catch((error: Error) => {

@@ -3,7 +3,6 @@ import Tokenizer from '@vscodethemes/tokenizer'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
-  IndexObject,
   Job,
   JobMessage,
   SaveThemePayload,
