@@ -12,9 +12,9 @@ const supportLanguages = ['javascript', 'css', 'html']
 
 function addCorsHeaders(response: any) {
   response.headers = response.headers || {}
-  response.headers['access-control-allow-origin'] = '*'
-  response.headers['access-control-allow-methods'] = 'GET'
-  response.headers['access-control-allow-headers'] = 'content-type'
+  response.headers['Access-Control-Allow-Origin'] = '*'
+  response.headers['Access-Control-Allow-Methods'] = 'GET'
+  response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
 }
 
 export default async function run(
@@ -91,8 +91,8 @@ export default async function run(
 
     response.status = 200
     response.body = html
-    response.headers['content-type'] = 'text/html'
-    response.headers['cache-control'] = `max-age=${cacheAge}`
+    response.headers['Content-Type'] = 'text/html'
+    response.headers['Cache-Control'] = `max-age=${cacheAge}`
   } catch (err) {
     if (HttpError.is(err)) {
       const httpError = err as HttpError
