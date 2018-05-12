@@ -1,4 +1,5 @@
 // tslint:disable no-console
+import Tokenizer from '@vscodethemes/tokenizer'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
@@ -57,10 +58,19 @@ export default function createServices(): Services {
         console.error(error)
       },
     },
+    reportError: async error => console.error(error),
     index: {
       addObject: obj => {
         console.log('Added object to index', obj)
         return Promise.resolve()
+      },
+    },
+    tokenizer: {
+      create: (themeSettings, language) => {
+        const tokenizer = new Tokenizer(themeSettings, language)
+        return {
+          line: line => tokenizer.tokenizeLine(line),
+        }
       },
     },
     // TODO: Allow receive mocks to be passed in via CLI.
