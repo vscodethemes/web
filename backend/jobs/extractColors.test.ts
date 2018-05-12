@@ -1,8 +1,8 @@
 import { ExtractColorsPayload, JobMessage } from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
-import * as themeVariables from './utils/themeVariables'
-import createThemeId from './utils/createThemeId'
+import * as themeVariables from '../utils/themeVariables'
+import createThemeId from '../utils/createThemeId'
 import extractColors from './extractColors'
 
 afterEach(() => fetch.resetMocks())
