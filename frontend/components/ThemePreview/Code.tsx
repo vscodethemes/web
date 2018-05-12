@@ -1,20 +1,11 @@
-import { Colors, LanguageOptions } from '@vscodethemes/types'
+import { LanguageOptions } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import cssLanguage from 'react-syntax-highlighter/languages/prism/css'
-import jsLanguage from 'react-syntax-highlighter/languages/prism/javascript'
-import htmlLanguage from 'react-syntax-highlighter/languages/prism/markup'
-import SyntaxHighlighter, {
-  registerLanguage,
-} from 'react-syntax-highlighter/prism-light'
+import * as tokenizer from '../../clients/tokenizer'
 import theme, { em } from '../../theme'
 import cssTemplate from './templates/css'
 import htmlTemplate from './templates/html'
 import jsTemplate from './templates/js'
-
-registerLanguage('css', cssLanguage)
-registerLanguage('html', htmlLanguage)
-registerLanguage('javascript', jsLanguage)
 
 const templates = {
   javascript: jsTemplate,
@@ -24,115 +15,90 @@ const templates = {
 
 interface CodeProps {
   language: LanguageOptions
-  colors: Colors
+  editorForegroundColor: string
+  themeUrl: string
 }
 
-const Code: React.SFC<CodeProps> = ({ language, colors }) => (
-  <div className={classes.code}>
-    <SyntaxHighlighter language={language} style={createStyles(colors)}>
-      {templates[language]}
-    </SyntaxHighlighter>
-  </div>
-)
+interface CodeState {
+  html: string
+  error: boolean
+}
+
+class Code extends React.Component<CodeProps, CodeState> {
+  state = {
+    html: '',
+    error: false,
+  }
+
+  async componentDidMount() {
+    const { language, themeUrl } = this.props
+    const code = templates[language]
+    if (themeUrl && code) {
+      try {
+        const html = await tokenizer.tokenize(themeUrl, language, code)
+        if (!html) throw new Error('Empty HTML.')
+        this.setState({ html })
+      } catch (err) {
+        console.error(`Failed to tokenize: ${err.message}`) // tslint:disable-line no-console
+        this.setState({ error: true })
+      }
+    }
+  }
+
+  render() {
+    const { editorForegroundColor } = this.props
+    const { html, error } = this.state
+    const isLoading = !error && (!theme || !html)
+
+    if (isLoading) {
+      return (
+        <div className={classes.code} style={{ color: editorForegroundColor }}>
+          <div className={classes.loading}>Loading...</div>
+        </div>
+      )
+    }
+
+    if (error) {
+      return (
+        <div
+          className={classes.code}
+          style={{ color: editorForegroundColor }}
+        />
+      )
+    }
+
+    return (
+      <div
+        className={classes.code}
+        style={{ color: editorForegroundColor }}
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
+    )
+  }
+}
 
 const classes = {
   code: css({
+    position: 'relative',
+    height: '100%',
     padding: em(theme.gutters.xs),
-    '& pre': {
-      margin: 0,
-      padding: '1%',
-    },
-    '& code': {
-      fontFamily: theme.fonts.monospace,
-      fontSize: em(theme.fontSizes.xs),
-      lineHeight: em(theme.fontSizes.xs),
+    fontFamily: theme.fonts.monospace,
+    fontSize: em(theme.fontSizes.xs),
+    lineHeight: em(theme.fontSizes.xs),
+    '> div': {
+      lineHeight: 1.5,
     },
   }),
-}
-
-function createStyles(colors: Colors) {
-  return {
-    // Base
-    'pre[class*="language-"]': {
-      fontFamily: theme.fonts.monospace,
-      lineHeight: '1',
-      color: colors.editorForeground,
-    },
-    comment: {
-      color: colors.commentForeground,
-      fontStyle: colors.commentFontStyle,
-    },
-    'block-comment': {
-      color: colors.commentForeground,
-      fontStyle: colors.commentFontStyle,
-    },
-    punctuation: {
-      color: colors.punctuationForeground,
-      fontStyle: colors.punctuationFontStyle,
-    },
-    keyword: {
-      color: colors.keywordForeground,
-      fontStyle: colors.keywordFontStyle,
-    },
-    'class-name': {
-      color: colors.classForeground,
-      fontStyle: colors.classFontStyle,
-    },
-    boolean: {
-      color: colors.literalForeground,
-      fontStyle: colors.literalFontStyle,
-    },
-    constant: {
-      color: colors.literalForeground,
-      fontStyle: colors.literalFontStyle,
-    },
-    symbol: {
-      color: colors.literalForeground,
-      fontStyle: colors.literalFontStyle,
-    },
-    number: {
-      color: colors.numberForeground,
-      fontStyle: colors.numberFontStyle,
-    },
-    string: {
-      color: colors.stringForeground,
-      fontStyle: colors.stringFontStyle,
-    },
-    variable: {
-      color: colors.variableForeground,
-      fontStyle: colors.variableFontStyle,
-    },
-    operator: {
-      color: colors.operatorForeground,
-      fontStyle: colors.operatorFontStyle,
-    },
-    function: {
-      color: colors.functionForeground,
-      fontStyle: colors.functionFontStyle,
-    },
-    // html
-    tag: {
-      color: colors.tagForeground,
-      fontStyle: colors.tagFontStyle,
-    },
-    'attr-name': {
-      color: colors.attributeForeground,
-      fontStyle: colors.attributeFontStyle,
-    },
-    'attr-value': {
-      color: colors.attributeValueForeground,
-      fontStyle: colors.attributeValueFontStyle,
-    },
-    // css
-    property: {
-      color: colors.propertyForeground,
-      fontStyle: colors.propertyFontStyle,
-    },
-    selector: {
-      color: colors.selectorForeground,
-      fontStyle: colors.selectorFontStyle,
-    },
-  }
+  loading: css({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
 }
 
 export default Code

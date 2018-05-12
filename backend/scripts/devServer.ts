@@ -3,7 +3,6 @@ import { Handler } from '@vscodethemes/types'
 import * as express from 'express'
 import * as minimist from 'minimist'
 import * as morgan from 'morgan'
-import * as util from 'util'
 import tokenize from '../api/tokenize'
 import createServices from '../services/local'
 import createCFEvent from '../utils/createCFEvent'
@@ -40,7 +39,6 @@ app.use('/:handler', async (req: Request, res) => {
     }
     res.send(body)
   } catch (err) {
-    console.error(`/tokenize errored with:`, err)
     res.status(500).send(err)
   }
 })
@@ -48,3 +46,7 @@ app.use('/:handler', async (req: Request, res) => {
 app.listen(port, host, () => {
   console.log(`> API ready on http://${host}:${port}`)
 })
+
+// Nodemon sometimes doesn't close the port, this ensures that it does.
+// https://github.com/remy/nodemon/issues/1025
+process.on('SIGINT', () => process.exit())
