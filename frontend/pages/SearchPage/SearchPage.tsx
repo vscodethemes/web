@@ -98,7 +98,6 @@ export default class SearchPage extends React.Component<
   }
 
   loadingTimeout: number
-  resetScrollPosition = false
 
   componentDidMount() {
     Router.onRouteChangeStart = () => {
@@ -122,18 +121,18 @@ export default class SearchPage extends React.Component<
 
   // setParams is used to immediately update controlled components
   // (ie. search input) before fetching data for the next route.
-  setParams = (params: any) => {
+  setParams = (params: any, resetScroll: boolean = true) => {
+    if (resetScroll) {
+      window.scrollTo(0, 0)
+    }
     this.setState({ params })
   }
 
   // Pushes new search parameters onto the query string. The
   // URL isn't updated until after getInitialProps resolves.
   setQuery = async (params: any, preventSearch: boolean = false) => {
-    this.setParams(params)
+    this.setParams(params, !preventSearch)
     const { href, as } = getSearchLinkProps(params)
-    if (!preventSearch) {
-      window.scrollTo(0, 0)
-    }
     await Router.push(href, as, { shallow: preventSearch })
   }
 
