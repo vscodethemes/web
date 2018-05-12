@@ -1,5 +1,7 @@
 import { LanguageOptions } from '@vscodethemes/types'
 import { css } from 'emotion'
+import { Html5Entities } from 'html-entities'
+import * as memoize from 'mem'
 import * as React from 'react'
 import * as tokenizer from '../../clients/tokenizer'
 import theme, { em } from '../../theme'
@@ -13,6 +15,23 @@ const templates = {
   html: htmlTemplate,
 }
 
+const entities = new Html5Entities()
+
+function createPlaceholderHtml(code: string = '') {
+  let html = ''
+  const lines = code.split('\n')
+  for (const line of lines) {
+    if (line) {
+      html += `<div>${entities.encode(line).replace(/\s/g, '&nbsp;')}</div>`
+    } else {
+      html += '<div><br /></div>'
+    }
+  }
+  return html
+}
+
+const createPlaceholderHtmlMemoized = memoize(createPlaceholderHtml)
+
 interface CodeProps {
   language: LanguageOptions
   editorForegroundColor: string
@@ -21,57 +40,62 @@ interface CodeProps {
 
 interface CodeState {
   html: string
-  error: boolean
 }
 
 class Code extends React.Component<CodeProps, CodeState> {
   state = {
     html: '',
-    error: false,
   }
+
+  abortController?: AbortController
 
   async componentDidMount() {
     const { language, themeUrl } = this.props
     const code = templates[language]
     if (themeUrl && code) {
       try {
-        const html = await tokenizer.tokenize(themeUrl, language, code)
+        let abortSignal
+        if (typeof AbortController !== 'undefined') {
+          this.abortController = new AbortController()
+          abortSignal = this.abortController.signal
+        }
+        const html = await tokenizer.tokenize(
+          themeUrl,
+          language,
+          code,
+          abortSignal,
+        )
         if (!html) throw new Error('Empty HTML.')
         this.setState({ html })
       } catch (err) {
-        console.error(`Failed to tokenize: ${err.message}`) // tslint:disable-line no-console
-        this.setState({ error: true })
+        console.error(`Failed to tokenize '${themeUrl}': ${err.message}`) // tslint:disable-line no-console
       }
     }
   }
 
+  componentWillUnmount() {
+    if (this.abortController) {
+      this.abortController.abort()
+    }
+  }
+
   render() {
-    const { editorForegroundColor } = this.props
-    const { html, error } = this.state
-    const isLoading = !error && (!theme || !html)
-
-    if (isLoading) {
-      return (
-        <div className={classes.code} style={{ color: editorForegroundColor }}>
-          <div className={classes.loading}>Loading...</div>
-        </div>
-      )
-    }
-
-    if (error) {
-      return (
-        <div
-          className={classes.code}
-          style={{ color: editorForegroundColor }}
-        />
-      )
-    }
+    const { editorForegroundColor, language } = this.props
+    const { html } = this.state
+    const didTokenize = !!html
 
     return (
       <div
         className={classes.code}
-        style={{ color: editorForegroundColor }}
-        dangerouslySetInnerHTML={{ __html: html }}
+        style={{
+          color: editorForegroundColor,
+          opacity: didTokenize ? 1 : 0.25,
+        }}
+        dangerouslySetInnerHTML={{
+          __html: didTokenize
+            ? html
+            : createPlaceholderHtmlMemoized(templates[language]),
+        }}
       />
     )
   }
@@ -81,7 +105,7 @@ const classes = {
   code: css({
     position: 'relative',
     height: '100%',
-    padding: em(theme.gutters.xs),
+    padding: em(theme.gutters.sm),
     fontFamily: theme.fonts.monospace,
     fontSize: em(theme.fontSizes.xs),
     lineHeight: em(theme.fontSizes.xs),
