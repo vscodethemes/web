@@ -9,6 +9,14 @@ function mockThemeResponse(tokenColors: any[] = []) {
   return JSON.stringify({ tokenColors })
 }
 
+function hasCorsHeaders(response: any) {
+  return (
+    response.headers['access-control-allow-origin'] &&
+    response.headers['access-control-allow-methods'] &&
+    response.headers['access-control-allow-headers']
+  )
+}
+
 function mockTokenizer(tokens: any[][] = []) {
   let lineIndex = 0
   return {
