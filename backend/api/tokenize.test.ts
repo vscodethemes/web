@@ -11,9 +11,9 @@ function mockThemeResponse(tokenColors: any[] = []) {
 
 function hasCorsHeaders(response: any) {
   return (
-    response.headers['access-control-allow-origin'] &&
-    response.headers['access-control-allow-methods'] &&
-    response.headers['access-control-allow-headers']
+    response.headers['Access-Control-Allow-Origin'] &&
+    response.headers['Access-Control-Allow-Methods'] &&
+    response.headers['Access-Control-Allow-Headers']
   )
 }
 
@@ -62,8 +62,8 @@ test('Should return tokenized html', async () => {
 
   const res = await tokenize(services, event)
   expect(res.status).toEqual(200)
-  expect(res.headers['content-type']).toEqual('text/html')
-  expect(res.headers['cache-control']).toEqual(`max-age=${cacheAge}`)
+  expect(res.headers['Content-Type']).toEqual('text/html')
+  expect(res.headers['Cache-Control']).toEqual(`max-age=${cacheAge}`)
   expect(res.body).toEqual(
     [
       [
