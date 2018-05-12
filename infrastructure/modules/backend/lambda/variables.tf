@@ -1,5 +1,12 @@
 variable "name" {}
 variable "environment" {}
+variable "package" {}
+variable "handler" {}
+variable "concurrency" {}
+
+variable "memory" {
+  default = 256
+}
 
 variable "sns_trigger_arn" {
   default = ""

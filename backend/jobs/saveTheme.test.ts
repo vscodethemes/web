@@ -16,7 +16,6 @@ function createJob(): JobMessage<SaveThemePayload> {
       displayName: 'displayName',
       shortDescription: 'shortDescription',
       themeId: 'themeId',
-      name: 'name',
       type: 'dark',
       url: 'themes/theme.json',
       repository: 'repo',

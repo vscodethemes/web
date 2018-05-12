@@ -8,8 +8,8 @@ import {
 } from '@vscodethemes/types'
 import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
-import createThemeId from './utils/createThemeId'
-import extractGUIColors from './utils/extractGUIColors'
+import createThemeId from '../utils/createThemeId'
+import extractGUIColors from '../utils/extractGUIColors'
 
 export default async function run(services: Services): Promise<any> {
   const { extractColors, saveTheme, logger } = services

@@ -1,7 +1,7 @@
 import { ExtractColorsPayload, JobMessage } from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
-import * as themeVariables from '../themeVariables'
+import * as themeVariables from './utils/themeVariables'
 import createThemeId from './utils/createThemeId'
 import extractColors from './extractColors'
 
@@ -105,7 +105,7 @@ test('should fail job if fetching the theme returns invalid response data', asyn
 test('should fail job if fetching the theme returns invalid name', async () => {
   const services = createServices()
   const job = createJob()
-  delete job.payload.name
+  delete job.payload.themeName
   fetch.mockResponseOnce(
     JSON.stringify({
       name: null,
