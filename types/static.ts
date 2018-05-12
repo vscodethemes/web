@@ -85,11 +85,7 @@ export interface Services {
   saveTheme: Job<SaveThemePayload>
 }
 
-export type JobHandler = (services: Services) => Promise<any>
-
-export interface JobHandlers {
-  [key: string]: JobHandler
-}
+export type Handler = (services: Services, event?: any) => Promise<any>
 
 export interface RepositoryInfo {
   repository: string
