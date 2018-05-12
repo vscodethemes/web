@@ -1,0 +1,33 @@
+{
+  "name": "@vscodethemes/tokenizer",
+  "version": "0.1.0",
+  "private": true,
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json && cp languages/*.xml build/languages/",
+    "tsc": "tsc -p ./tsconfig.json",
+    "lint": "tslint --project .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "vscode-textmate": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.8",
+    "@types/node": "^9.6.2",
+    "jest": "^21.2.1",
+    "ts-jest": "^21.2.4",
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1",
+    "ts-node": "^6.0.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "mapCoverage": true,
+    "testRegex": ".test.tsx?$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+  }
+}
