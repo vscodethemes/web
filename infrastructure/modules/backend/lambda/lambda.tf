@@ -1,22 +1,19 @@
 resource "aws_lambda_function" "lambda" {
-  filename         = "../../backend/build/backend.zip"
-  source_code_hash = "${base64sha256(file("../../backend/build/backend.zip"))}"
+  filename         = "${var.package}"
+  source_code_hash = "${base64sha256(file("${var.package}"))}"
   function_name    = "${var.name}"
   role             = "${aws_iam_role.lambda.arn}"
-  memory_size      = 256
-  handler          = "handler.default"
+  memory_size      = "${var.memory}"
   runtime          = "nodejs8.10"
+
+  # The path to the webpack build of the job handler. 
+  # See backend/webpack.config.ts.
+  handler = "${var.handler}"
 
   # This should be a value greater than the SQS receive timeouts.
   timeout = 30
 
-  # Limits our lambda function to only process one job at a time. 
-  # For a recursive job, notifying itself before the execution of the current
-  # function invocation completes will cause a 2nd concurrent job to created.
-  # This isn't a bad thing, but we don't really need concurrency and makes 
-  # the logs in CloudWatch harder to read because they are split up in a 
-  # log stream for each invocation.
-  reserved_concurrent_executions = 1
+  reserved_concurrent_executions = "${var.concurrency}"
 
   environment {
     variables = "${var.environment_variables}"

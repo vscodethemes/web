@@ -9,7 +9,7 @@ import {
   Services,
 } from '@vscodethemes/types'
 import fetch from 'node-fetch'
-import * as themeVariables from '../themeVariables'
+import * as themeVariables from '../utils/themeVariables'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
