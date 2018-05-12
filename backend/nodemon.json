@@ -1,0 +1,6 @@
+{
+  "watch": ["./"],
+  "ext": "ts",
+  "ignore": ["build", "**/*.spec.ts", "node_modules"],
+  "exec": "ts-node scripts/devServer.ts"
+}

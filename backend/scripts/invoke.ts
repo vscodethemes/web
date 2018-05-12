@@ -3,14 +3,16 @@ import createServices from '../services/local'
 import { run } from './shared'
 
 const args = minimist(process.argv.slice(2))
-const jobPath = args._[0]
+const handlerPath = args._[0]
+const { default: event } = args.event ? require(args.event) : null // tslint:disable-line
 
 run(async () => {
-  const { default: job } = await import(jobPath)
+  const { default: handler } = await import(handlerPath)
   try {
-    await job(createServices())
+    const data = await handler(createServices(), event)
+    console.log(`\nResult\n---------`) // tslint:disable-line no-console
+    console.log(data) // tslint:disable-line no-console
   } catch (err) {
-    // tslint:disable-next-line no-console
-    console.error(`${jobPath} errored with:`, err)
+    console.error(`${handlerPath} errored with:`, err) // tslint:disable-line no-console
   }
 })

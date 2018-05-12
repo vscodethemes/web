@@ -27,6 +27,12 @@ export default function createServices(): Services {
       log: () => {},
       error: () => {},
     },
+    reportError: async () => {},
+    tokenizer: {
+      create: (themeSettings, language) => ({
+        line: () => [],
+      }),
+    },
     index: {
       addObject: () => Promise.resolve(),
     },

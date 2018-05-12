@@ -76,6 +76,15 @@ export interface Services {
     log: (obj: any) => void
     error: (error: Error) => void
   }
+  reportError: (err: Error) => Promise<any>
+  tokenizer: {
+    create: (
+      themeSettings: any,
+      language: string,
+    ) => {
+      line: (line: string) => any
+    }
+  }
   index: {
     addObject: (object: IndexObject) => Promise<any>
   }

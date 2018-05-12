@@ -12,6 +12,7 @@
     "interface-name": false,
     "no-submodule-imports": false,
     "jsx-no-lambda": false,
-    "member-access": false
+    "member-access": false,
+    "curly": [true, "ignore-same-line"]
   }
 }

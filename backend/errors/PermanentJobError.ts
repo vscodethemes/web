@@ -12,7 +12,6 @@ export default class PermanentJobError extends Error {
     )
   }
 
-  public messageId: string
   public parmanentJobError: symbol
 
   constructor(message: string) {
