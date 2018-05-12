@@ -2,6 +2,7 @@
 import { Handler } from '@vscodethemes/types'
 import * as express from 'express'
 import * as minimist from 'minimist'
+import * as morgan from 'morgan'
 import * as util from 'util'
 import tokenize from '../api/tokenize'
 import createServices from '../services/local'
@@ -22,13 +23,15 @@ interface Request extends express.Request {
   event: any
 }
 
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] :res[cache-control] - :response-time ms',
+  ),
+)
 app.use('/:handler', async (req: Request, res) => {
   try {
     const handler = handlers[req.params.handler] as Handler
     const event = createCFEvent(req.query, req.headers)
-
-    console.log(`\nCalling ${req.params.handler} with event:`)
-    console.log(util.inspect(event, false, 6))
     const { status, headers, body } = await handler(services, event)
 
     res.status(status)
