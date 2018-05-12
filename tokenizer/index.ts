@@ -1,11 +1,11 @@
-import * as languagePaths from './languages'
 import {
-  Registry,
-  IRawThemeSetting,
   IGrammar,
+  IRawThemeSetting,
+  Registry,
   StackElement,
 } from 'vscode-textmate'
 import TokenMetadata, { Style } from './core/TokenMetadata'
+import * as languagePaths from './languages'
 
 export interface LineToken {
   token: string
@@ -35,12 +35,12 @@ export default class Tokenizer {
     this.colorMap = registry.getColorMap()
   }
 
-  public tokenizeText(text: string): LineToken[][] {
+  tokenizeText(text: string): LineToken[][] {
     this.ruleStack = null
     return text.split('\n').map(line => this.tokenizeLine(line))
   }
 
-  private tokenizeLine(line: string): LineToken[] {
+  tokenizeLine(line: string): LineToken[] {
     const r = this.grammar.tokenizeLine2(line, this.ruleStack)
     const tokensCount = r.tokens.length / 2
     const charCount = line.length

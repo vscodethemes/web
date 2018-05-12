@@ -82,7 +82,7 @@ export default class TokenMetadata {
     const foreground = TokenMetadata.getForeground(metadata)
     const fontStyle = TokenMetadata.getFontStyle(metadata)
 
-    let style: Style = {
+    const style: Style = {
       color: colorMap[foreground],
     }
     if (fontStyle & FontStyle.Italic) {
