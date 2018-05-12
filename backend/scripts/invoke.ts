@@ -1,12 +1,12 @@
 import * as minimist from 'minimist'
 import createServices from '../services/local'
-import { run } from './shared'
+import runAsyncScript from '../utils/runAsyncScript'
 
 const args = minimist(process.argv.slice(2))
 const handlerPath = args._[0]
 const { default: event } = args.event ? require(args.event) : null // tslint:disable-line
 
-run(async () => {
+runAsyncScript(async () => {
   const { default: handler } = await import(handlerPath)
   try {
     const data = await handler(createServices(), event)
