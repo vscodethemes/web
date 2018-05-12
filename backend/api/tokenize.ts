@@ -10,6 +10,13 @@ export const cacheAge = 60 * 60 * 24
 const entities = new Html5Entities()
 const supportLanguages = ['javascript', 'css', 'html']
 
+function addCorsHeaders(response: any) {
+  response.headers = response.headers || {}
+  response.headers['access-control-allow-origin'] = '*'
+  response.headers['access-control-allow-methods'] = 'GET'
+  response.headers['access-control-allow-headers'] = 'content-type'
+}
+
 export default async function run(
   services: Services,
   event: any,
@@ -18,6 +25,8 @@ export default async function run(
   const request = event.Records[0].cf.request
   const response = event.Records[0].cf.response
   const params = qs.parse(request.querystring)
+
+  addCorsHeaders(response)
 
   try {
     if (!params.theme) {
