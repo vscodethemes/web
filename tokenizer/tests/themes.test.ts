@@ -3,8 +3,8 @@ import Tokenizer from '../'
 import { readJSON, templates } from './paths'
 
 // These tests cannot be in a separate file because of an internal lib
-// that uses Object.defineProperty. If executed a second time, calling
-// Object.defineProperty will cause and error.
+// that uses Object.defineProperty. If Tokenizer is imported a second time,
+// calling Object.defineProperty will cause an error.
 
 const themes = ['palenight', 'nord', 'hopscotch']
 const languages = ['javascript']
