@@ -17,9 +17,11 @@ const babelOptions = {
 const config: webpack.Configuration = {
   target: 'node',
   devtool: 'source-map',
-  entry: path.resolve(__dirname, './handler.ts'),
+  entry: {
+    'job-handler': path.resolve(__dirname, './index.ts'),
+  },
   output: {
-    filename: `handler.js`,
+    filename: `[name].js`,
     path: path.resolve(__dirname, './build'),
     libraryTarget: 'umd',
   },
