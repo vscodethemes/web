@@ -27,10 +27,14 @@ app
       if (err) {
         throw err
       }
-      console.log(`> Ready on http://localhost:${port}`) // tslint:disable-line
+      console.log(`> Frontend ready on http://localhost:${port}`) // tslint:disable-line
     })
   })
   .catch(ex => {
     console.error(ex.stack) // tslint:disable-line
     process.exit(1)
   })
+
+// Nodemon sometimes doesn't close the port, this ensures that it does.
+// https://github.com/remy/nodemon/issues/1025
+process.on('SIGINT', () => process.exit())
