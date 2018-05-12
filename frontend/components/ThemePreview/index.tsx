@@ -2,11 +2,9 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-import { isPlaceholder } from '../../utils/generatePlaceholders'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
-import Loading from './Loading'
 import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
@@ -53,11 +51,12 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           </Tab>
         </TabBar>
         <TabContent>
-          {!isPlaceholder(themeProps) && (
-            <Code colors={themeProps.colors} language={language} />
-          )}
+          <Code
+            language={language}
+            editorForegroundColor={themeProps.colors.editorForeground}
+            themeUrl={themeProps.url}
+          />
         </TabContent>
-        {isPlaceholder(themeProps) && <Loading />}
       </Editor>
       <StatusBar
         colors={themeProps.colors}
