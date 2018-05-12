@@ -1,4 +1,5 @@
 // tslint:disable no-console
+import Tokenizer from '@vscodethemes/tokenizer'
 import {
   ExtractColorsPayload,
   ExtractThemesPayload,
@@ -12,6 +13,8 @@ import {
 import * as algoliasearch from 'algoliasearch'
 import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
+import * as Raven from 'raven'
+import * as promisify from 'util.promisify'
 
 const {
   ALGOLIA_APP_ID,
@@ -109,7 +112,9 @@ function createJob<P>(
   }
 }
 
-export default function createServices(): Services {
+export default function createServices(raven: Raven.Client): Services {
+  const captureException = promisify(raven.captureException.bind(raven))
+
   return {
     fetch,
     // Ouputs to CloudWatch.
@@ -121,8 +126,20 @@ export default function createServices(): Services {
         console.error('[ERROR]', error)
       },
     },
+    reportError: async err => {
+      const result = await captureException(err)
+      return result
+    },
+    tokenizer: {
+      create: (themeSettings, language) => {
+        const tokenizer = new Tokenizer(themeSettings, language)
+        return {
+          line: line => tokenizer.tokenizeLine(line),
+        }
+      },
+    },
     index: {
-      addObject: async (object: IndexObject) => {
+      addObject: async object => {
         const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
         const index = search.initIndex(ALGOLIA_INDEX)
         const result = await index.addObject(object)

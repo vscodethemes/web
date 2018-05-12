@@ -2,14 +2,14 @@
 import '@babel/polyfill'
 import { Handler } from '@vscodethemes/types'
 import * as Raven from 'raven'
-import * as promisify from 'util.promisify'
-import createServices from './services'
-import init from './jobs/init'
-import runAll from './jobs/runAll'
+import tokenize from './api/tokenize'
 import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
+import init from './jobs/init'
+import runAll from './jobs/runAll'
 import saveTheme from './jobs/saveTheme'
 import scrapeExtensions from './jobs/scrapeExtensions'
+import createServices from './services'
 
 const handlerName = process.env.HANDLER
 const handlers: { [key: string]: Handler } = {
@@ -19,6 +19,7 @@ const handlers: { [key: string]: Handler } = {
   extractThemes,
   extractColors,
   saveTheme,
+  tokenize,
 }
 
 const ravenConfig: Raven.ConstructorOptions = {
@@ -29,21 +30,18 @@ const ravenConfig: Raven.ConstructorOptions = {
   },
 }
 const raven = Raven.config(process.env.SENTRY_DSN, ravenConfig).install()
-const captureException = promisify(raven.captureException.bind(raven))
 
-export default async function handler(event: any, context: AWSLambda.Context) {
-  const services = createServices()
+export default async function(event: any, context: AWSLambda.Context) {
+  const services = createServices(raven)
 
   try {
     const handler = handlers[handlerName] as Handler
-    if (!handler) {
-      throw new Error(`Invalid handler '${handlerName}'.`)
-    }
+    if (!handler) throw new Error(`Invalid handler '${handlerName}'.`)
 
-    const result = await handler(services)
+    const result = await handler(services, event)
     context.succeed(result)
   } catch (err) {
-    await captureException(err)
+    await services.reportError(err)
     context.fail(err)
   }
 }
