@@ -66,8 +66,8 @@ export default function createServices(): Services {
       },
     },
     tokenizer: {
-      create: (themeSettings, language) => {
-        const tokenizer = new Tokenizer(themeSettings, language)
+      create: (theme, language) => {
+        const tokenizer = new Tokenizer(theme, language)
         return {
           line: line => tokenizer.tokenizeLine(line),
         }

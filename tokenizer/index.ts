@@ -12,15 +12,22 @@ export interface LineToken {
   style: Style
 }
 
+export interface Theme {
+  colors: {
+    [key: string]: string
+  }
+  tokenColors: IRawThemeSetting[]
+}
+
 export default class Tokenizer {
   private grammar: IGrammar
   private colorMap: string[]
   private ruleStack: StackElement
 
-  constructor(themeSettings: IRawThemeSetting[], language: string) {
+  constructor(theme: Theme, language: string) {
     const registry = new Registry({
       theme: {
-        settings: themeSettings,
+        settings: this.getThemeSettings(theme),
       },
       getFilePath: scopeName => null,
       getInjections: scopeName => null,
@@ -33,6 +40,21 @@ export default class Tokenizer {
 
     this.grammar = registry.loadGrammarFromPathSync(lanugagePath)
     this.colorMap = registry.getColorMap()
+  }
+
+  getThemeSettings(theme: Theme): IRawThemeSetting[] {
+    // Add the default foreground setting using the editor foreground
+    // color. This prevents #000000 being used as the default and
+    // has the least specificity of any rule.
+    const themeSettings = [
+      {
+        settings: {
+          foreground: theme.colors['editor.foreground'],
+        },
+      },
+      ...theme.tokenColors,
+    ]
+    return themeSettings
   }
 
   tokenizeText(text: string): LineToken[][] {
