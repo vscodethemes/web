@@ -24,7 +24,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
 }) => {
   return (
     <div className={classes.container}>
-      <TopBar name={themeProps.themeName} type={themeProps.type} />
+      <TopBar name={themeProps.themeName} />
       <Editor colors={themeProps.colors}>
         <ActivityBar colors={themeProps.colors} />
         <TabBar colors={themeProps.colors}>
