@@ -29,7 +29,7 @@ export default function createServices(): Services {
     },
     reportError: async () => {},
     tokenizer: {
-      create: (themeSettings, language) => ({
+      create: (theme, language) => ({
         line: () => [],
       }),
     },
