@@ -43,6 +43,8 @@ interface CodeState {
 }
 
 class Code extends React.Component<CodeProps, CodeState> {
+  static cache: { [key: string]: string } = {}
+
   state = {
     html: '',
   }
@@ -52,23 +54,31 @@ class Code extends React.Component<CodeProps, CodeState> {
   async componentDidMount() {
     const { language, themeUrl } = this.props
     const code = templates[language]
+
     if (themeUrl && code) {
-      try {
-        let abortSignal
-        if (typeof AbortController !== 'undefined') {
-          this.abortController = new AbortController()
-          abortSignal = this.abortController.signal
+      const cacheKey = [themeUrl, language, code].join('$$')
+      const cacheHit = Code.cache[cacheKey]
+      if (cacheHit) {
+        this.setState({ html: cacheHit })
+      } else {
+        try {
+          let abortSignal
+          if (typeof AbortController !== 'undefined') {
+            this.abortController = new AbortController()
+            abortSignal = this.abortController.signal
+          }
+          const html = await tokenizer.tokenize(
+            themeUrl,
+            language,
+            code,
+            abortSignal,
+          )
+          if (!html) throw new Error('Empty HTML.')
+          this.setState({ html })
+          Code.cache[cacheKey] = html
+        } catch (err) {
+          console.error(`Failed to tokenize '${themeUrl}': ${err.message}`) // tslint:disable-line no-console
         }
-        const html = await tokenizer.tokenize(
-          themeUrl,
-          language,
-          code,
-          abortSignal,
-        )
-        if (!html) throw new Error('Empty HTML.')
-        this.setState({ html })
-      } catch (err) {
-        console.error(`Failed to tokenize '${themeUrl}': ${err.message}`) // tslint:disable-line no-console
       }
     }
   }
