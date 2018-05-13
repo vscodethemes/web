@@ -35,7 +35,7 @@ export enum ColorId {
 }
 
 export interface Style {
-  color: string
+  color?: string
   fontWeight?: string
   fontStyle?: string
   textDecoration?: string
@@ -82,8 +82,10 @@ export default class TokenMetadata {
     const foreground = TokenMetadata.getForeground(metadata)
     const fontStyle = TokenMetadata.getFontStyle(metadata)
 
-    const style: Style = {
-      color: colorMap[foreground],
+    const style: Style = {}
+
+    if (colorMap[foreground]) {
+      style.color = colorMap[foreground]
     }
     if (fontStyle & FontStyle.Italic) {
       style.fontStyle = 'italic'
@@ -94,6 +96,7 @@ export default class TokenMetadata {
     if (fontStyle & FontStyle.Underline) {
       style.textDecoration = 'underline'
     }
+
     return style
   }
 }

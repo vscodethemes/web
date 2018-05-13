@@ -52,18 +52,18 @@ export default async function run(
       throw new BadRequestError(`Failed to fetch theme: ${res.statusText}.`)
     }
 
-    let themeSettings
+    let theme
     try {
-      themeSettings = JSON.parse(stripComments(await res.text())).tokenColors
+      theme = JSON.parse(stripComments(await res.text()))
     } catch (err) {
       throw new BadRequestError(`Failed to parse theme: ${err.message}.`)
     }
 
-    if (!themeSettings || !Array.isArray(themeSettings)) {
-      throw new BadRequestError('Failed to parse theme: Invalid themeSettings.')
+    if (!theme || !theme.tokenColors || !Array.isArray(theme.tokenColors)) {
+      throw new BadRequestError('Failed to parse theme: Invalid tokenColors.')
     }
 
-    const tokenize = tokenizer.create(themeSettings, language)
+    const tokenize = tokenizer.create(theme, language)
     const lines = code.split('\n')
     let html = ''
 
