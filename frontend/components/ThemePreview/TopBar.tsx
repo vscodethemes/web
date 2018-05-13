@@ -4,24 +4,11 @@ import theme, { em } from '../../theme'
 
 export interface TopBarProps {
   name: string
-  type: string
 }
 
-const TopBar: React.SFC<TopBarProps> = ({ name, type }) => (
-  <div
-    className={classes.topBar}
-    style={{
-      background: type === 'light' ? '#e8e8e8' : '#303030',
-    }}
-  >
-    <h1
-      className={classes.name}
-      style={{
-        color: type === 'light' ? '#303030' : '#e8e8e8',
-      }}
-    >
-      {name}
-    </h1>
+const TopBar: React.SFC<TopBarProps> = ({ name }) => (
+  <div className={classes.topBar}>
+    <h1 className={classes.name}>{name}</h1>
   </div>
 )
 
@@ -32,6 +19,7 @@ const classes = {
     borderTopRightRadius: em(theme.borderRadius.md),
     boxShadow: '0px 1px 1px rgba(0,0,0,0.1)',
     zIndex: 10,
+    backgroundColor: '#262626',
   }),
 
   name: css({
@@ -40,8 +28,9 @@ const classes = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: em(theme.fontSizes.xs),
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     margin: 0,
+    color: 'rgba(255, 255, 255, 0.7)',
   }),
 }
 
