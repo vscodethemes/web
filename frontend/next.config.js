@@ -8,7 +8,5 @@ module.exports = require('@zeit/next-typescript')({
     algoliaAppId: process.env.TF_VAR_algolia_app_id,
     algoliaIndex: process.env.TF_VAR_algolia_index,
     algoliaSearchKey: process.env.ALGOLIA_SEARCH_KEY,
-    tokenizeEndpoint:
-      process.env.TOKENIZE_ENDPOINT || 'http://localhost:5000/tokenize',
   },
 })
