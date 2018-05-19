@@ -54,5 +54,6 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
       contrastActiveBorder: null,
       contrastBorder: null,
     },
+    jsTokens: [],
   }))
 }

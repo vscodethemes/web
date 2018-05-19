@@ -54,7 +54,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           <Code
             language={language}
             editorForegroundColor={themeProps.colors.editorForeground}
-            themeUrl={themeProps.url}
+            themeId={themeProps.themeId}
           />
         </TabContent>
       </Editor>

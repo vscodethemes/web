@@ -2,7 +2,6 @@
 import '@babel/polyfill'
 import { Handler } from '@vscodethemes/types'
 import * as Raven from 'raven'
-import tokenize from './api/tokenize'
 import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
 import init from './jobs/init'
@@ -19,7 +18,6 @@ const handlers: { [key: string]: Handler } = {
   extractThemes,
   extractColors,
   saveTheme,
-  tokenize,
 }
 
 const ravenConfig: Raven.ConstructorOptions = {

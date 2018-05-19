@@ -18,9 +18,6 @@ const config: webpack.Configuration = {
   target: 'node',
   devtool: 'source-map',
   entry: {
-    // Creating two bundles, one for the api handler and one for the job handler.
-    // They point to the same entry file but will probably split up later.
-    'api-handler': path.resolve(__dirname, './index.ts'),
     'job-handler': path.resolve(__dirname, './index.ts'),
   },
   output: {
