@@ -31,6 +31,7 @@ export default function createServices(): Services {
     tokenizer: {
       create: (theme, language) => ({
         line: () => [],
+        text: () => [],
       }),
     },
     index: {

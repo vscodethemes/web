@@ -134,6 +134,7 @@ export default function createServices(raven: Raven.Client): Services {
         const tokenizer = new Tokenizer(theme, language)
         return {
           line: line => tokenizer.tokenizeLine(line),
+          text: text => tokenizer.tokenizeText(text),
         }
       },
     },
