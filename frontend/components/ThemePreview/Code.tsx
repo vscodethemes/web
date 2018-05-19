@@ -3,7 +3,6 @@ import { css } from 'emotion'
 import { Html5Entities } from 'html-entities'
 import * as memoize from 'mem'
 import * as React from 'react'
-import * as tokenizer from '../../clients/tokenizer'
 import theme, { em } from '../../theme'
 import cssTemplate from './templates/css'
 import htmlTemplate from './templates/html'
@@ -35,7 +34,7 @@ const createPlaceholderHtmlMemoized = memoize(createPlaceholderHtml)
 interface CodeProps {
   language: LanguageOptions
   editorForegroundColor: string
-  themeUrl: string
+  themeId: string
 }
 
 interface CodeState {
@@ -52,32 +51,27 @@ class Code extends React.Component<CodeProps, CodeState> {
   abortController?: AbortController
 
   async componentDidMount() {
-    const { language, themeUrl } = this.props
-    const code = templates[language]
+    const { language, themeId } = this.props
 
-    if (themeUrl && code) {
-      const cacheKey = [themeUrl, language, code].join('$$')
+    if (themeId) {
+      const cacheKey = [themeId, language].join('|')
       const cacheHit = Code.cache[cacheKey]
       if (cacheHit) {
         this.setState({ html: cacheHit })
       } else {
         try {
-          let abortSignal
-          if (typeof AbortController !== 'undefined') {
-            this.abortController = new AbortController()
-            abortSignal = this.abortController.signal
-          }
-          const html = await tokenizer.tokenize(
-            themeUrl,
-            language,
-            code,
-            abortSignal,
-          )
-          if (!html) throw new Error('Empty HTML.')
-          this.setState({ html })
-          Code.cache[cacheKey] = html
+          // let abortSignal
+          // if (typeof AbortController !== 'undefined') {
+          //   this.abortController = new AbortController()
+          //   abortSignal = this.abortController.signal
+          // }
+          // TODO: fetch tokens for theme and language and generate an SVG:
+          // const tokens = await getTokens(themeId, language)
+          // const html = createSVG(tokens)
+          // this.setState({ html })
+          // Code.cache[cacheKey] = html
         } catch (err) {
-          console.error(`Failed to tokenize '${themeUrl}': ${err.message}`) // tslint:disable-line no-console
+          console.error(`Failed to fetch tokens for ${themeId}: ${err.message}`) // tslint:disable-line no-console
         }
       }
     }
