@@ -2,7 +2,7 @@
   "name": "vscodethemes",
   "version": "0.1.0",
   "private": true,
-  "workspaces": ["backend", "frontend", "tokenizer", "types"],
+  "workspaces": ["backend", "frontend", "templates", "tokenizer", "types"],
   "author": "Jordan Schroter <hello@jschr.io>",
   "license": "MIT",
   "scripts": {
