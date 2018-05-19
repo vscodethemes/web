@@ -102,7 +102,7 @@ test('should fail job if fetching the theme returns invalid response data', asyn
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should fail job if fetching the theme returns invalid name', async () => {
+test('should fail job if fetching the theme returns missing name', async () => {
   const services = createServices()
   const job = createJob()
   delete job.payload.themeName
@@ -140,13 +140,51 @@ test('should fail job if fetching the theme returns invalid type', async () => {
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should fail job if fetching the theme returns invalid colors', async () => {
+test('should fail job if fetching the theme returns missing colors', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
     JSON.stringify({
       name: 'name',
       type: 'dark',
       colors: null,
+    }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const failSpy = jest.spyOn(services.extractColors, 'fail')
+  await extractColors(services)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should fail job if fetching the theme returns missing tokenColors', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: null,
+    }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const failSpy = jest.spyOn(services.extractColors, 'fail')
+  await extractColors(services)
+  expect(failSpy).toHaveBeenCalledTimes(1)
+})
+
+test('should fail job if fetching the theme returns textmate tokenColors', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      name: 'name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: './tmTheme',
     }),
   )
   jest
@@ -165,6 +203,7 @@ test('should succeed job for valid input with all fields', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(false),
+      tokenColors: [],
     }),
   )
   jest
@@ -183,6 +222,7 @@ test('should succeed job for valid input without optional fields', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(true),
+      tokenColors: [],
     }),
   )
   jest
@@ -201,6 +241,7 @@ test('should notify self', async () => {
       name: 'name',
       type: 'dark',
       colors: createColors(false),
+      tokenColors: [],
     }),
   )
   jest
@@ -219,6 +260,7 @@ test('should create save theme jobs for valid input', async () => {
       name: 'Theme Name',
       type: 'dark',
       colors: createColors(false),
+      tokenColors: [],
     }),
   )
   jest

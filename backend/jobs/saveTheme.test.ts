@@ -79,6 +79,7 @@ function createJob(): JobMessage<SaveThemePayload> {
         selectorForeground: 'color',
         selectorFontStyle: 'fontStyle',
       },
+      jsTokens: [],
     },
   }
 }
