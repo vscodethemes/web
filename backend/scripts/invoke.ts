@@ -4,7 +4,7 @@ import runAsyncScript from '../utils/runAsyncScript'
 
 const args = minimist(process.argv.slice(2))
 const handlerPath = args._[0]
-const { default: event } = args.event ? require(args.event) : null // tslint:disable-line
+const event = args.event ? require(args.event).default : null // tslint:disable-line
 
 runAsyncScript(async () => {
   const { default: handler } = await import(handlerPath)

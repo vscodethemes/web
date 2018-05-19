@@ -70,6 +70,7 @@ export default function createServices(): Services {
         const tokenizer = new Tokenizer(theme, language)
         return {
           line: line => tokenizer.tokenizeLine(line),
+          text: text => tokenizer.tokenizeText(text),
         }
       },
     },
@@ -148,6 +149,7 @@ export default function createServices(): Services {
         trendingWeekly: 0,
         trendingMonthly: 0,
         colors: createVSCodeGUIColors(),
+        jsTokens: [],
       },
     }),
   }

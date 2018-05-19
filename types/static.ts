@@ -1,3 +1,4 @@
+import { LineToken } from '@vscodethemes/tokenizer'
 import { Request, RequestInit, Response } from 'node-fetch'
 import { Static } from 'runtypes'
 import {
@@ -82,7 +83,8 @@ export interface Services {
       themeSettings: any,
       language: string,
     ) => {
-      line: (line: string) => any
+      line: (line: string) => LineToken[]
+      text: (text: string) => LineToken[][]
     }
   }
   index: {
@@ -104,6 +106,9 @@ export interface RepositoryInfo {
 export interface Theme extends SaveThemePayload {
   objectID: string
   colors: Colors
+  jsTokens: LineToken[][]
+  // cssTokens: LineToken[][],
+  // htmlTokens: LineToken[][],
 }
 
 export enum SortByOptions {
