@@ -1,9 +1,9 @@
+import templates from '@vscodethemes/templates'
 import {
-  Colors,
   ColorsRuntime,
   ExtractColorsPayloadRuntime,
+  LanguageOptions,
   Services,
-  ThemeType,
   ThemeTypeRuntime,
 } from '@vscodethemes/types'
 import * as stripComments from 'strip-json-comments'
@@ -33,40 +33,70 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
+    const themeUrl = payload.url
     // Fetch the theme's colors from it's repository.
-    const { name, ...theme } = await fetchTheme(services, payload.url)
-    // The name in the theme json is used to generate the id.
-    // The uiTheme key in the repo's package.json is used for the display name
-    // unless it doesn't exist, then use the name in the theme json.
-    if (!name) {
-      throw new PermanentJobError(
-        `Missing name for theme: '${JSON.stringify(theme)}'`,
-      )
-    }
+    const themeSource = await fetchTheme(services, themeUrl)
 
     const themeId = createThemeId(
       payload.repositoryOwner,
       payload.repository,
-      name,
+      themeSource.name,
     )
 
-    theme.type = theme.type || payload.type
-    if (!ThemeTypeRuntime.guard(theme.type)) {
+    // The label key in the repo's package.json is used for the display name.
+    // If it doesn't exist use the name in the theme json.
+    const themeName = payload.themeName || themeSource.name
+
+    // The uiTheme key in the repo's package.json is used for the theme type.
+    // If it doesn't exist use the type in the theme json.
+    const themeType = payload.type || themeSource.type
+    if (!ThemeTypeRuntime.guard(themeType)) {
+      throw new PermanentJobError(`Invalid type at ${themeUrl}: ${themeType}`)
+    }
+
+    const colors = extractGUIColors(themeType, themeSource.colors)
+    if (!ColorsRuntime.guard(colors)) {
       throw new PermanentJobError(
-        `Invalid type for theme: ${JSON.stringify(theme)}`,
+        `Invalid colors at ${themeUrl}: ${JSON.stringify(colors)}`,
       )
     }
 
-    logger.log(`Theme: ${JSON.stringify(theme)}`)
+    const jsTokens = tokenizeTheme(
+      services,
+      themeSource,
+      LanguageOptions.javascript,
+      themeUrl,
+    )
 
-    // Create a job to save the theme.
-    await saveTheme.create({
+    // const cssTokens = tokenizeTheme(
+    //   services,
+    //   themeSource,
+    //   LanguageOptions.css,
+    //   themeUrl,
+    // )
+
+    // const htmlTokens = tokenizeTheme(
+    //   services,
+    //   themeSource,
+    //   LanguageOptions.html,
+    //   themeUrl,
+    // )
+
+    const theme = {
       ...payload,
       themeId,
-      themeName: payload.themeName || name,
-      type: theme.type,
-      colors: theme.colors,
-    })
+      themeName,
+      type: themeType,
+      colors,
+      jsTokens,
+      // cssTokens,
+      // htmlTokens,
+    }
+
+    logger.log(`Theme ${themeUrl}: ${JSON.stringify(theme)}`)
+
+    // Create a job to save the theme.
+    await saveTheme.create(theme)
 
     // Job succeeded.
     await extractColors.succeed(job)
@@ -86,58 +116,66 @@ export default async function run(services: Services): Promise<any> {
   }
 }
 
-// Fetch the repository's theme definition.
+interface FetchThemeResponse {
+  name?: string
+  type?: string
+  colors: {}
+  tokenColors: any[]
+}
+
 async function fetchTheme(
   services: Services,
-  url: string,
-): Promise<{ name: string; type: ThemeType; colors: Colors }> {
-  let name: string
-  let type: ThemeType
-  let colors: Partial<Colors>
-  const { fetch, logger } = services
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
+  themeUrl: string,
+): Promise<FetchThemeResponse> {
+  const res = await services.fetch(themeUrl, { method: 'GET' })
+  if (!res.ok) {
     throw new TransientJobError(
-      `fetchTheme error: Bad response '${response.statusText}' for '${url}'`,
+      `Failed to fetch ${themeUrl}: ${res.statusText}.`,
     )
   }
 
-  let data: any
+  let theme
   try {
-    logger.log(`Fetching theme...`)
-    const responseText = await response.text()
-    data = JSON.parse(stripComments(responseText))
-    name = data.name
-    type = data.type
-    if (data.colors) {
-      colors = extractGUIColors(type, data.colors)
-    }
+    theme = JSON.parse(stripComments(await res.text()))
   } catch (err) {
-    logger.error(err)
+    throw new PermanentJobError(`Failed to parse ${themeUrl}: ${err.message}.`)
+  }
+
+  if (!theme) {
+    throw new PermanentJobError(`Failed to parse ${themeUrl}: Invalid theme.`)
+  }
+
+  // The name in the theme json is used to generate the id.
+  if (!theme.name) {
+    throw new PermanentJobError(`Failed to parse ${themeUrl}: Missing name.'`)
+  }
+
+  if (!theme.colors) {
+    throw new PermanentJobError(`Failed to parse ${themeUrl}: Invalid colors.`)
+  }
+
+  if (!theme.tokenColors || !Array.isArray(theme.tokenColors)) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid response data for '${url}'`,
+      `Failed to parse ${themeUrl}: Invalid tokenColors.`,
     )
   }
 
-  if (!ColorsRuntime.guard(colors)) {
+  return theme
+}
+
+function tokenizeTheme(
+  services: Services,
+  themeSettings: any,
+  language: LanguageOptions,
+  themeUrl: string,
+) {
+  try {
+    const code = templates[language]
+    const tokenize = services.tokenizer.create(themeSettings, language)
+    return tokenize.text(code)
+  } catch (err) {
     throw new PermanentJobError(
-      `fetchTheme error: Invalid colors: ${JSON.stringify(colors)}
-        URL: ${url}
-        Theme: ${JSON.stringify(data)}`,
+      `Failed to tokenize ${language} at ${themeUrl} : ${err.message}.`,
     )
   }
-
-  logger.log(`fetchTheme success: 
-    URL: ${url}
-    Theme: ${JSON.stringify(data)}
-  `)
-
-  return { name, type, colors }
 }

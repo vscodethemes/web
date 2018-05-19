@@ -141,11 +141,24 @@ export const ColorsRuntime = Record({
   }),
 )
 
+export const LineTokenRuntime = Record({
+  token: String,
+  style: Partial({
+    color: String,
+    fontStyle: String,
+    fontWeight: String,
+    textDecoration: String,
+  }),
+})
+
+export const LineTokensRuntime = Array(LineTokenRuntime)
+
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
   Record({
     themeId: String,
     themeName: String,
     type: ThemeTypeRuntime,
     colors: ColorsRuntime,
+    jsTokens: Array(LineTokensRuntime),
   }),
 )
