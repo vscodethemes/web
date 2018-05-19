@@ -10,6 +10,7 @@
     "lint": "tslint --project ."
   },
   "dependencies": {
+    "@vscodethemes/tokenizer": "0.1.0",
     "node-fetch": "^2.1.2",
     "runtypes": "^2.0.4"
   },
