@@ -13,9 +13,9 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
     objectID: `placeholder-${index}`,
     themeId: '',
     themeName: '',
-    url: '',
+    themeUrl: '',
     extensionId: '',
-    type: null,
+    themeType: null,
     name: '',
     displayName: '',
     shortDescription: '',
@@ -54,6 +54,10 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
       contrastActiveBorder: null,
       contrastBorder: null,
     },
-    jsTokens: [],
+    languages: {
+      javascript: '',
+      css: '',
+      html: '',
+    },
   }))
 }

@@ -43,3 +43,7 @@ variable "sqs_delete_arns" {
 variable "environment_variables" {
   type = "map"
 }
+
+variable "storage_bucket" {
+  default = ""
+}

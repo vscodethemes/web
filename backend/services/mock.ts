@@ -28,6 +28,7 @@ export default function createServices(): Services {
       error: () => {},
     },
     reportError: async () => {},
+    uploadFile: async () => '',
     tokenizer: {
       create: (theme, language) => ({
         line: () => [],

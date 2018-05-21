@@ -33,7 +33,7 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
-    const themeUrl = payload.url
+    const themeUrl = payload.themeUrl
     // Fetch the theme's colors from it's repository.
     const themeSource = await fetchTheme(services, themeUrl)
 
@@ -49,51 +49,38 @@ export default async function run(services: Services): Promise<any> {
 
     // The uiTheme key in the repo's package.json is used for the theme type.
     // If it doesn't exist use the type in the theme json.
-    const themeType = payload.type || themeSource.type
+    const themeType = payload.themeType || themeSource.type
     if (!ThemeTypeRuntime.guard(themeType)) {
-      throw new PermanentJobError(`Invalid type at ${themeUrl}: ${themeType}`)
+      throw new PermanentJobError(`Invalid type at ${themeId}: ${themeType}`)
     }
 
+    // Extract the VSCode GUI colors used in the theme preview.
     const colors = extractGUIColors(themeType, themeSource.colors)
     if (!ColorsRuntime.guard(colors)) {
       throw new PermanentJobError(
-        `Invalid colors at ${themeUrl}: ${JSON.stringify(colors)}`,
+        `Invalid colors at ${themeId}: ${JSON.stringify(colors)}`,
       )
     }
 
-    const jsTokens = tokenizeTheme(
-      services,
-      themeSource,
-      LanguageOptions.javascript,
-      themeUrl,
-    )
+    // Tokenize and upload supported languages.
+    const [jsTokensUrl] = await Promise.all([
+      tokenizeTheme(services, themeId, themeSource, LanguageOptions.javascript),
+    ])
 
-    // const cssTokens = tokenizeTheme(
-    //   services,
-    //   themeSource,
-    //   LanguageOptions.css,
-    //   themeUrl,
-    // )
-
-    // const htmlTokens = tokenizeTheme(
-    //   services,
-    //   themeSource,
-    //   LanguageOptions.html,
-    //   themeUrl,
-    // )
+    const languages = {
+      [LanguageOptions.javascript]: jsTokensUrl,
+    }
 
     const theme = {
       ...payload,
       themeId,
       themeName,
-      type: themeType,
+      themeType,
       colors,
-      jsTokens,
-      // cssTokens,
-      // htmlTokens,
+      languages,
     }
 
-    logger.log(`Theme ${themeUrl}: ${JSON.stringify(theme)}`)
+    logger.log(`Theme: ${JSON.stringify(theme)}`)
 
     // Create a job to save the theme.
     await saveTheme.create(theme)
@@ -163,19 +150,37 @@ async function fetchTheme(
   return theme
 }
 
-function tokenizeTheme(
+async function tokenizeTheme(
   services: Services,
+  themeId: string,
   themeSettings: any,
   language: LanguageOptions,
-  themeUrl: string,
 ) {
+  const { tokenizer, uploadFile } = services
+
+  let tokens
   try {
     const code = templates[language]
-    const tokenize = services.tokenizer.create(themeSettings, language)
-    return tokenize.text(code)
+    const tokenize = tokenizer.create(themeSettings, language)
+    tokens = tokenize.text(code)
   } catch (err) {
     throw new PermanentJobError(
-      `Failed to tokenize ${language} at ${themeUrl} : ${err.message}.`,
+      `Failed to tokenize ${language} for ${themeId}: ${err.message}.`,
+    )
+  }
+
+  try {
+    const tokenUrl = await uploadFile({
+      key: `themes/${themeId}/languages/${language}.json`,
+      contents: JSON.stringify(tokens),
+      contentType: 'application/json',
+      expiresIn: 60 * 60 * 8, // 8 hours.
+    })
+
+    return tokenUrl
+  } catch (err) {
+    throw new PermanentJobError(
+      `Failed to upload ${language} tokens for ${themeId}: ${err.message}.`,
     )
   }
 }

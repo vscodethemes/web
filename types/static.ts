@@ -71,6 +71,13 @@ export interface IndexObject {
   [key: string]: any
 }
 
+export interface FileUploadOptions {
+  key: string
+  contents: string | Buffer
+  contentType: string
+  expiresIn: number
+}
+
 export interface Services {
   fetch: Fetch
   logger: {
@@ -94,6 +101,7 @@ export interface Services {
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>
+  uploadFile: (opts: FileUploadOptions) => Promise<string>
 }
 
 export type Handler = (services: Services, event?: any) => Promise<any>
@@ -106,9 +114,7 @@ export interface RepositoryInfo {
 export interface Theme extends SaveThemePayload {
   objectID: string
   colors: Colors
-  jsTokens: LineToken[][]
-  // cssTokens: LineToken[][],
-  // htmlTokens: LineToken[][],
+  languages: { [key in keyof typeof LanguageOptions]: string }
 }
 
 export enum SortByOptions {

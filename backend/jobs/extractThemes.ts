@@ -67,8 +67,8 @@ export default async function run(services: Services): Promise<any> {
 
       themes.push({
         ...payload,
-        url,
-        type: type as ThemeType,
+        themeUrl: url,
+        themeType: type as ThemeType,
         themeName: theme.label,
       })
     })
