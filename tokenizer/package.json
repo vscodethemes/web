@@ -5,13 +5,14 @@
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "scripts": {
-    "build": "tsc -p ./tsconfig.json && cp languages/*.xml build/languages/",
+    "build":
+      "tsc -p ./tsconfig.json && mkdir -p build/languages && cp languages/* build/languages/",
     "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
     "test": "jest"
   },
   "dependencies": {
-    "vscode-textmate": "^3.3.3"
+    "vscode-textmate-webpack": "^3.3.3"
   },
   "devDependencies": {
     "@types/jest": "^21.1.8",

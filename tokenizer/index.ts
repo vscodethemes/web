@@ -3,9 +3,9 @@ import {
   IRawThemeSetting,
   Registry,
   StackElement,
-} from 'vscode-textmate'
+} from 'vscode-textmate-webpack'
 import TokenMetadata, { Style } from './core/TokenMetadata'
-import * as languagePaths from './languages'
+import * as languagePaths from './languagePaths'
 
 export interface LineToken {
   token: string
