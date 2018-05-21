@@ -1,4 +1,8 @@
-import { ExtractColorsPayload, JobMessage } from '@vscodethemes/types'
+import {
+  ExtractColorsPayload,
+  JobMessage,
+  SaveThemePayloadRuntime,
+} from '@vscodethemes/types'
 import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
 import * as themeVariables from '../utils/themeVariables'
@@ -12,8 +16,8 @@ function createJob(): JobMessage<ExtractColorsPayload> {
     receiptHandle: '',
     payload: {
       themeName: 'themeName',
-      type: 'dark',
-      url: 'themes/theme.json',
+      themeType: 'dark',
+      themeUrl: 'themes/theme.json',
       extensionId: 'extensionId',
       extensionName: 'extensionName',
       publisherName: 'publisherName',
@@ -253,7 +257,7 @@ test('should notify self', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should create save theme jobs for valid input', async () => {
+test('should create save theme job for valid input', async () => {
   const services = createServices()
   fetch.mockResponseOnce(
     JSON.stringify({
@@ -271,7 +275,30 @@ test('should create save theme jobs for valid input', async () => {
   await extractColors(services)
   expect(createSpy).toHaveBeenCalledTimes(1)
   const payload = createSpy.mock.calls[0][0]
-  expect(payload.themeId).toEqual(
-    createThemeId(payload.repositoryOwner, payload.repository, 'Theme Name'),
+  expect(payload.themeId).toEqual(createThemeId('owner', 'repo', 'Theme Name'))
+  expect(SaveThemePayloadRuntime.guard(payload)).toEqual(true)
+})
+
+test('should upload file for each language', async () => {
+  const services = createServices()
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      name: 'Theme Name',
+      type: 'dark',
+      colors: createColors(false),
+      tokenColors: [],
+    }),
+  )
+  jest
+    .spyOn(services.extractColors, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const uploadSpy = jest.spyOn(services, 'uploadFile')
+  await extractColors(services)
+  // TODO: Add CSS and HTML tests.
+  const themeId = createThemeId('owner', 'repo', 'Theme Name')
+  expect(uploadSpy).toHaveBeenCalledTimes(1)
+  expect(uploadSpy.mock.calls[0][0].key).toEqual(
+    `themes/${themeId}/languages/javascript.json`,
   )
 })

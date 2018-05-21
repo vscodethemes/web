@@ -1,0 +1,10 @@
+.DS_STORE
+node_modules
+build
+coverage
+.awcache
+.terraform
+**/*.tfstate
+**/*.tfstate.*
+**/terraform.plan
+**/*.log

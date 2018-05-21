@@ -1,4 +1,8 @@
 /// <reference types="aws-lambda" />
+// Show correct line numbers in stack traces.
+// Needs to be first import.
+require('source-map-support').install({ environment: 'node' }) // tslint:disable-line
+
 import '@babel/polyfill'
 import { Handler } from '@vscodethemes/types'
 import * as Raven from 'raven'
