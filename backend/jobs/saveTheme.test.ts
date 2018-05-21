@@ -16,8 +16,8 @@ function createJob(): JobMessage<SaveThemePayload> {
       displayName: 'displayName',
       shortDescription: 'shortDescription',
       themeId: 'themeId',
-      type: 'dark',
-      url: 'themes/theme.json',
+      themeType: 'dark',
+      themeUrl: 'themes/theme.json',
       repository: 'repo',
       repositoryOwner: 'owner',
       installs: 1,
@@ -79,7 +79,9 @@ function createJob(): JobMessage<SaveThemePayload> {
         selectorForeground: 'color',
         selectorFontStyle: 'fontStyle',
       },
-      jsTokens: [],
+      languages: {
+        javascript: 'javascript.json',
+      },
     },
   }
 }
@@ -137,7 +139,6 @@ test('should succeed job for valid input', async () => {
 test('should add to index for valid input', async () => {
   const services = createServices()
   const job = createJob()
-  const { repositoryOwner, repository, url } = job.payload
   jest
     .spyOn(services.saveTheme, 'receive')
     .mockImplementation(() => Promise.resolve(job))

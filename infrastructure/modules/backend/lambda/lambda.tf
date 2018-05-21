@@ -63,6 +63,13 @@ resource "aws_iam_role_policy" "sqs_delete_policy" {
   policy = "${data.aws_iam_policy_document.sqs_delete_policy.json}"
 }
 
+resource "aws_iam_role_policy" "storage_bucket_policy" {
+  count  = "${length(var.storage_bucket) == 0 ? 0 : 1}"
+  name   = "website_generator_policy"
+  role   = "${aws_iam_role.lambda.id}"
+  policy = "${data.aws_iam_policy_document.storage_bucket_policy.json}"
+}
+
 resource "aws_sns_topic_subscription" "subscription" {
   count     = "${var.sns_trigger_arn != "" ? 1 : 0}"
   topic_arn = "${var.sns_trigger_arn}"

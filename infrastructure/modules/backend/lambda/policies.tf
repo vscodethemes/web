@@ -49,3 +49,17 @@ data "aws_iam_policy_document" "sqs_delete_policy" {
     resources = ["${var.sqs_delete_arns}"]
   }
 }
+
+data "aws_iam_policy_document" "storage_bucket_policy" {
+  # gives permission to the lambda function to access the s3 bucket
+  statement {
+    actions   = ["s3:*"]
+    resources = ["arn:aws:s3:::${var.storage_bucket}/*"]
+  }
+
+  # gives permission to the lambda function to invalidate the cloudfront distribution
+  statement {
+    actions   = ["cloudfront:CreateInvalidation"]
+    resources = ["*"]
+  }
+}
