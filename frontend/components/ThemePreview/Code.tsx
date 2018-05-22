@@ -1,108 +1,54 @@
-import { LanguageOptions } from '@vscodethemes/types'
+import { LineToken } from '@vscodethemes/tokenizer'
 import { css } from 'emotion'
-// import { Html5Entities } from 'html-entities'
-// import * as memoize from 'mem'
+import { Html5Entities } from 'html-entities'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-// import cssTemplate from './templates/css'
-// import htmlTemplate from './templates/html'
-// import jsTemplate from './templates/js'
-
-// const templates = {
-//   javascript: jsTemplate,
-//   css: cssTemplate,
-//   html: htmlTemplate,
-// }
-
-// const entities = new Html5Entities()
-
-// function createPlaceholderHtml(code: string = '') {
-//   let html = ''
-//   const lines = code.split('\n')
-//   for (const line of lines) {
-//     if (line) {
-//       html += `<div>${entities.encode(line).replace(/\s/g, '&nbsp;')}</div>`
-//     } else {
-//       html += '<div><br /></div>'
-//     }
-//   }
-//   return html
-// }
-
-// const createPlaceholderHtmlMemoized = memoize(createPlaceholderHtml)
 
 interface CodeProps {
-  language: LanguageOptions
-  editorForegroundColor: string
-  themeId: string
+  tokens: LineToken[][]
+  editorForeground: string
 }
 
-interface CodeState {
-  html: string
-}
+const entities = new Html5Entities()
 
-class Code extends React.Component<CodeProps, CodeState> {
-  static cache: { [key: string]: string } = {}
+const Code: React.SFC<CodeProps> = ({ tokens, editorForeground }) => (
+  <div className={classes.code}>
+    {tokens.map((lineTokens, i) => (
+      <div key={i}>
+        {lineTokens.map((styleToken, j) => {
+          if (!styleToken.token) {
+            return <br key={j} />
+          }
 
-  state = {
-    html: '',
-  }
+          // This is a hack to fix #000000 set as the default color by vscode-textmate
+          // when a theme doesn't provide a value. Since #000000 is unlikely to be
+          // explicitly used, switch it to the editor foreground color.
+          const color =
+            styleToken.style.color === '#000000'
+              ? editorForeground
+              : styleToken.style.color
 
-  abortController?: AbortController
+          const style: any = {
+            ...styleToken.style,
+            color,
+          }
 
-  async componentDidMount() {
-    const { language, themeId } = this.props
-
-    if (themeId) {
-      const cacheKey = [themeId, language].join('|')
-      const cacheHit = Code.cache[cacheKey]
-      if (cacheHit) {
-        this.setState({ html: cacheHit })
-      } else {
-        try {
-          // let abortSignal
-          // if (typeof AbortController !== 'undefined') {
-          //   this.abortController = new AbortController()
-          //   abortSignal = this.abortController.signal
-          // }
-          // TODO: fetch tokens for theme and language and generate an SVG:
-          // const tokens = await getTokens(themeId, language)
-          // const html = createSVG(tokens)
-          // this.setState({ html })
-          // Code.cache[cacheKey] = html
-        } catch (err) {
-          console.error(`Failed to fetch tokens for ${themeId}: ${err.message}`) // tslint:disable-line no-console
-        }
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.abortController) {
-      this.abortController.abort()
-    }
-  }
-
-  render() {
-    const { editorForegroundColor } = this.props
-    const { html } = this.state
-    const didTokenize = !!html
-
-    return (
-      <div
-        className={classes.code}
-        style={{
-          color: editorForegroundColor,
-          opacity: didTokenize ? 1 : 0.25,
-        }}
-        dangerouslySetInnerHTML={{
-          __html: didTokenize ? html : '',
-          // : createPlaceholderHtmlMemoized(templates[language]),
-        }}
-      />
-    )
-  }
-}
+          return (
+            <span
+              key={j}
+              style={style}
+              dangerouslySetInnerHTML={{
+                __html: entities
+                  .encode(styleToken.token)
+                  .replace(/\s/g, '&nbsp;'),
+              }}
+            />
+          )
+        })}
+      </div>
+    ))}
+  </div>
+)
 
 const classes = {
   code: css({
@@ -111,20 +57,7 @@ const classes = {
     padding: em(theme.gutters.sm),
     fontFamily: theme.fonts.monospace,
     fontSize: em(theme.fontSizes.xs),
-    lineHeight: em(theme.fontSizes.xs),
-    '> div': {
-      lineHeight: 1.5,
-    },
-  }),
-  loading: css({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: 1.5,
   }),
 }
 
