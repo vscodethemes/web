@@ -1,8 +1,4 @@
-import {
-  SaveThemePayload,
-  SaveThemePayloadRuntime,
-  Services,
-} from '@vscodethemes/types'
+import { SaveThemePayloadRuntime, Services, Theme } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -29,7 +25,16 @@ export default async function run(services: Services): Promise<any> {
     const { payload } = job
 
     // Save the theme to Algolia search.
-    await addToSearch(services, payload, payload.themeId)
+    const { languageTokens, ...theme } = payload
+    const themes = [
+      {
+        ...theme,
+        objectID: theme.themeId,
+        language: 'javascript',
+        tokens: languageTokens.javascript,
+      },
+    ]
+    await addToSearch(services, themes, payload.themeId)
     // Job succeeded.
     await saveTheme.succeed(job)
   } catch (err) {
@@ -51,12 +56,12 @@ export default async function run(services: Services): Promise<any> {
 // Add theme to Algolia index.
 async function addToSearch(
   services: Services,
-  theme: SaveThemePayload,
+  themes: Theme[],
   objectID: string,
 ): Promise<string> {
   const { index } = services
   try {
-    await index.addObject({ ...theme, objectID })
+    await index.addObjects(themes)
     return objectID
   } catch (err) {
     throw new TransientJobError(err.message)

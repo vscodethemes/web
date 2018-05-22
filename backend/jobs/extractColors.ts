@@ -62,22 +62,33 @@ export default async function run(services: Services): Promise<any> {
       )
     }
 
-    // Tokenize and upload supported languages.
-    const [jsTokensUrl] = await Promise.all([
-      tokenizeTheme(services, themeId, themeSource, LanguageOptions.javascript),
-    ])
-
-    const languages = {
-      [LanguageOptions.javascript]: jsTokensUrl,
-    }
-
     const theme = {
       ...payload,
       themeId,
       themeName,
       themeType,
       colors,
-      languages,
+      languageTokens: {
+        [LanguageOptions.javascript]: tokenizeTheme(
+          services,
+          themeId,
+          themeSource,
+          LanguageOptions.javascript,
+        ),
+        // TODO: Add CSS and HTML grammars
+        // [LanguageOptions.css]: tokenizeTheme(
+        //   services,
+        //   themeId,
+        //   themeSource,
+        //   LanguageOptions.css,
+        // ),
+        // [LanguageOptions.html]: tokenizeTheme(
+        //   services,
+        //   themeId,
+        //   themeSource,
+        //   LanguageOptions.html,
+        // ),
+      },
     }
 
     logger.log(`Theme: ${JSON.stringify(theme)}`)
@@ -150,13 +161,13 @@ async function fetchTheme(
   return theme
 }
 
-async function tokenizeTheme(
+function tokenizeTheme(
   services: Services,
   themeId: string,
   themeSettings: any,
   language: LanguageOptions,
 ) {
-  const { tokenizer, uploadFile } = services
+  const { tokenizer } = services
 
   let tokens
   try {
@@ -169,18 +180,5 @@ async function tokenizeTheme(
     )
   }
 
-  try {
-    const tokenUrl = await uploadFile({
-      key: `themes/${themeId}/languages/${language}.json`,
-      contents: JSON.stringify(tokens),
-      contentType: 'application/json',
-      expiresIn: 60 * 60 * 8, // 8 hours.
-    })
-
-    return tokenUrl
-  } catch (err) {
-    throw new PermanentJobError(
-      `Failed to upload ${language} tokens for ${themeId}: ${err.message}.`,
-    )
-  }
+  return tokens
 }

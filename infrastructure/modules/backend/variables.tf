@@ -5,7 +5,6 @@ variable "algolia_app_id" {}
 variable "algolia_api_key" {}
 variable "algolia_index" {}
 variable "sentry_dsn" {}
-variable "storage_bucket" {}
 variable "init_job_rate" {}
 
 variable "sqs_visibility_timeout" {

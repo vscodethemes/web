@@ -9,16 +9,8 @@ import {
   ScrapeExtensionsPayload,
   Services,
 } from '@vscodethemes/types'
-// import * as AWS from 'aws-sdk'
 import fetch from 'node-fetch'
 import * as themeVariables from '../utils/themeVariables'
-
-// const s3 = new AWS.S3({
-//   credentials: new AWS.Credentials({
-//     accessKeyId: process.env.AWS_ACCESS_KEY,
-//     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-//   }),
-// })
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
@@ -67,24 +59,9 @@ export default function createServices(): Services {
       },
     },
     reportError: async error => console.error(error),
-    uploadFile: async opts => {
-      return opts.key
-      // const params: AWS.S3.PutObjectRequest = {
-      //   Bucket: process.env.THEMES_BUCKET,
-      //   Key: opts.key,
-      //   ContentType: opts.contentType,
-      //   CacheControl: `max-age=${opts.expiresIn}`,
-      //   Body: opts.contents,
-      // }
-      // console.log(params)
-      // // Upload file to S3.
-      // await s3.putObject(params).promise()
-      // // Return the file's CDN URL.
-      // return `${process.env.THEMES_CDN}/${opts.key}`
-    },
     index: {
-      addObject: obj => {
-        console.log('Added object to index', obj)
+      addObjects: objects => {
+        console.log('Added objects to index', objects)
         return Promise.resolve()
       },
     },
@@ -172,8 +149,8 @@ export default function createServices(): Services {
         trendingWeekly: 0,
         trendingMonthly: 0,
         colors: createVSCodeGUIColors(),
-        languages: {
-          javascript: 'jsTokensUrl',
+        languageTokens: {
+          javascript: [],
         },
       },
     }),

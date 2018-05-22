@@ -222,7 +222,6 @@ module "extract_colors" {
   handler          = "job-handler.default"
   environment      = "${var.environment}"
   concurrency      = "${var.job_concurrency}"
-  storage_bucket   = "${var.storage_bucket}"
   sns_trigger_arn  = "${aws_sns_topic.extract_colors.arn}"
   sqs_receive_arns = ["${aws_sqs_queue.extract_colors.arn}"]
   sqs_send_arns    = ["${aws_sqs_queue.extract_colors.arn}", "${aws_sqs_queue.extract_colors_deadletter.arn}", "${aws_sqs_queue.save_theme.arn}"]
@@ -238,8 +237,6 @@ module "extract_colors" {
     EXTRACT_COLORS_DEADLETTER_URL = "${aws_sqs_queue.extract_colors_deadletter.id}"
     SAVE_THEME_TOPIC_ARN          = "${aws_sns_topic.save_theme.arn}"
     SAVE_THEME_QUEUE_URL          = "${aws_sqs_queue.save_theme.id}"
-    STORAGE_BUCKET                = "${aws_s3_bucket.storage.id}"
-    STORAGE_CDN                   = "https://${aws_cloudfront_distribution.storage.domain_name}"
   }
 }
 
