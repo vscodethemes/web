@@ -79,8 +79,8 @@ function createJob(): JobMessage<SaveThemePayload> {
         selectorForeground: 'color',
         selectorFontStyle: 'fontStyle',
       },
-      languages: {
-        javascript: 'javascript.json',
+      languageTokens: {
+        javascript: [],
       },
     },
   }
@@ -116,7 +116,7 @@ test('should retry job if add to index fails', async () => {
     .spyOn(services.saveTheme, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  jest.spyOn(services.index, 'addObject').mockImplementation(() => {
+  jest.spyOn(services.index, 'addObjects').mockImplementation(() => {
     throw new Error()
   })
 
@@ -143,13 +143,18 @@ test('should add to index for valid input', async () => {
     .spyOn(services.saveTheme, 'receive')
     .mockImplementation(() => Promise.resolve(job))
 
-  const addObjectSpy = jest.spyOn(services.index, 'addObject')
+  const { languageTokens, ...theme } = job.payload
+  const addObjectSpy = jest.spyOn(services.index, 'addObjects')
   await saveTheme(services)
   expect(addObjectSpy).toHaveBeenCalledTimes(1)
-  expect(addObjectSpy.mock.calls[0][0]).toEqual({
-    ...job.payload,
-    objectID: job.payload.themeId,
-  })
+  expect(addObjectSpy.mock.calls[0][0]).toEqual([
+    {
+      ...theme,
+      objectID: job.payload.themeId,
+      language: 'javascript',
+      tokens: [],
+    },
+  ])
 })
 
 test('should notify self for valid input', async () => {

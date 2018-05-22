@@ -141,8 +141,20 @@ export const ColorsRuntime = Record({
   }),
 )
 
-export const LanguagesRuntime = Record({
-  javascript: String,
+export const LineTokenRuntime = Record({
+  token: String,
+  style: Partial({
+    color: String,
+    fontWeight: String,
+    fontStyle: String,
+    textDecoration: String,
+  }),
+})
+
+export const LineTokensRuntime = Array(LineTokenRuntime)
+
+export const LanguageTokensRuntime = Record({
+  javascript: Array(LineTokensRuntime),
 })
 
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
@@ -151,6 +163,6 @@ export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
     themeName: String,
     themeType: ThemeTypeRuntime,
     colors: ColorsRuntime,
-    languages: LanguagesRuntime,
+    languageTokens: LanguageTokensRuntime,
   }),
 )

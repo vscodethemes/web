@@ -21,7 +21,6 @@ provider "aws" {
 module "backend" {
   source               = "../modules/backend"
   environment          = "development"
-  storage_bucket       = "vscodethemes-dev-storage"
   init_job_rate        = "24 hours"
   github_client_id     = "${var.github_client_id}"
   github_client_secret = "${var.github_client_secret}"
@@ -29,14 +28,6 @@ module "backend" {
   algolia_api_key      = "${var.algolia_api_key}"
   algolia_index        = "${var.algolia_index}"
   sentry_dsn           = "${var.sentry_dsn}"
-}
-
-output "storage_s3_bucket" {
-  value = "${module.backend.storage_s3_bucket}"
-}
-
-output "storage_cf_domain_name" {
-  value = "${module.backend.storage_cf_domain_name}"
 }
 
 output "scrape_extensions_sns_topic_arn" {
