@@ -31,13 +31,10 @@ const {
   SAVE_THEME_QUEUE_URL,
   SAVE_THEME_DEADLETTER_URL,
   SAVE_THEME_TOPIC_ARN,
-  STORAGE_BUCKET,
-  STORAGE_CDN,
 } = process.env
 
 const sqs = new AWS.SQS()
 const sns = new AWS.SNS()
-const s3 = new AWS.S3()
 
 function createJob<P>(
   jobName: string,
@@ -132,19 +129,6 @@ export default function createServices(raven: Raven.Client): Services {
       const result = await captureException(err)
       return result
     },
-    uploadFile: async opts => {
-      const params: AWS.S3.PutObjectRequest = {
-        Bucket: STORAGE_BUCKET,
-        Key: opts.key,
-        ContentType: opts.contentType,
-        CacheControl: `max-age=${opts.expiresIn}`,
-        Body: opts.contents,
-      }
-      // Upload file to S3.
-      await s3.putObject(params).promise()
-      // Return the file's CDN URL.
-      return `${STORAGE_CDN}/${opts.key}`
-    },
     tokenizer: {
       create: (theme, language) => {
         const tokenizer = new Tokenizer(theme, language)
@@ -155,10 +139,10 @@ export default function createServices(raven: Raven.Client): Services {
       },
     },
     index: {
-      addObject: async object => {
+      addObjects: async objects => {
         const search = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY)
         const index = search.initIndex(ALGOLIA_INDEX)
-        const result = await index.addObject(object)
+        const result = await index.addObjects(objects)
         return result
       },
     },
