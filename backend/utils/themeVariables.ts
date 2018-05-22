@@ -1,9 +1,19 @@
-import { GUIVariables } from '@vscodethemes/types'
-
 // GUI variables are extracted from the theme's colors.
 // VSCode color reference: https://code.visualstudio.com/docs/getstarted/theme-color-reference
 // Defaults were pulled from https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/common/theme.ts
 // Example theme json: https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json
+
+export interface GUIVariables {
+  [key: string]: {
+    key: string
+    defaults: {
+      light: string | null
+      dark: string | null
+      hc: string | null
+    }
+  }
+}
+
 export const gui: GUIVariables = {
   activityBarBackground: {
     key: 'activityBar.background',

@@ -278,27 +278,3 @@ test('should create save theme job for valid input', async () => {
   expect(payload.themeId).toEqual(createThemeId('owner', 'repo', 'Theme Name'))
   expect(SaveThemePayloadRuntime.guard(payload)).toEqual(true)
 })
-
-test('should upload file for each language', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(
-    JSON.stringify({
-      name: 'Theme Name',
-      type: 'dark',
-      colors: createColors(false),
-      tokenColors: [],
-    }),
-  )
-  jest
-    .spyOn(services.extractColors, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
-  const uploadSpy = jest.spyOn(services, 'uploadFile')
-  await extractColors(services)
-  // TODO: Add CSS and HTML tests.
-  const themeId = createThemeId('owner', 'repo', 'Theme Name')
-  expect(uploadSpy).toHaveBeenCalledTimes(1)
-  expect(uploadSpy.mock.calls[0][0].key).toEqual(
-    `themes/${themeId}/languages/javascript.json`,
-  )
-})

@@ -31,18 +31,6 @@ export type PackageJSON = Static<typeof PackageJSONRuntime>
 export type SaveThemePayload = Static<typeof SaveThemePayloadRuntime>
 export type ThemeType = Static<typeof ThemeTypeRuntime>
 
-export interface GUIVariables {
-  [key: string]: {
-    key: string
-    defaults: {
-      light: string | null
-      dark: string | null
-      hc: string | null
-      [key: string]: string
-    }
-  }
-}
-
 export interface JobMessage<P> {
   // An identifier associated with the act of receiving the message.
   // A new receipt handle is returned every time you receive a message.
@@ -71,13 +59,6 @@ export interface IndexObject {
   [key: string]: any
 }
 
-export interface FileUploadOptions {
-  key: string
-  contents: string | Buffer
-  contentType: string
-  expiresIn: number
-}
-
 export interface Services {
   fetch: Fetch
   logger: {
@@ -95,13 +76,12 @@ export interface Services {
     }
   }
   index: {
-    addObject: (object: IndexObject) => Promise<any>
+    addObjects: (objects: IndexObject[]) => Promise<any>
   }
   scrapeExtensions: Job<ScrapeExtensionsPayload>
   extractThemes: Job<ExtractThemesPayload>
   extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>
-  uploadFile: (opts: FileUploadOptions) => Promise<string>
 }
 
 export type Handler = (services: Services, event?: any) => Promise<any>
@@ -111,10 +91,14 @@ export interface RepositoryInfo {
   repositoryOwner: string
 }
 
-export interface Theme extends SaveThemePayload {
+export interface Theme extends ExtractColorsPayload {
   objectID: string
+  themeId: string
+  themeName: string
+  themeType: ThemeType
   colors: Colors
-  languages: { [key in keyof typeof LanguageOptions]: string }
+  language: string
+  tokens: LineToken[][]
 }
 
 export enum SortByOptions {

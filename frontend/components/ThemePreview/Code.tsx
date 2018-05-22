@@ -1,35 +1,35 @@
 import { LanguageOptions } from '@vscodethemes/types'
 import { css } from 'emotion'
-import { Html5Entities } from 'html-entities'
-import * as memoize from 'mem'
+// import { Html5Entities } from 'html-entities'
+// import * as memoize from 'mem'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-import cssTemplate from './templates/css'
-import htmlTemplate from './templates/html'
-import jsTemplate from './templates/js'
+// import cssTemplate from './templates/css'
+// import htmlTemplate from './templates/html'
+// import jsTemplate from './templates/js'
 
-const templates = {
-  javascript: jsTemplate,
-  css: cssTemplate,
-  html: htmlTemplate,
-}
+// const templates = {
+//   javascript: jsTemplate,
+//   css: cssTemplate,
+//   html: htmlTemplate,
+// }
 
-const entities = new Html5Entities()
+// const entities = new Html5Entities()
 
-function createPlaceholderHtml(code: string = '') {
-  let html = ''
-  const lines = code.split('\n')
-  for (const line of lines) {
-    if (line) {
-      html += `<div>${entities.encode(line).replace(/\s/g, '&nbsp;')}</div>`
-    } else {
-      html += '<div><br /></div>'
-    }
-  }
-  return html
-}
+// function createPlaceholderHtml(code: string = '') {
+//   let html = ''
+//   const lines = code.split('\n')
+//   for (const line of lines) {
+//     if (line) {
+//       html += `<div>${entities.encode(line).replace(/\s/g, '&nbsp;')}</div>`
+//     } else {
+//       html += '<div><br /></div>'
+//     }
+//   }
+//   return html
+// }
 
-const createPlaceholderHtmlMemoized = memoize(createPlaceholderHtml)
+// const createPlaceholderHtmlMemoized = memoize(createPlaceholderHtml)
 
 interface CodeProps {
   language: LanguageOptions
@@ -84,7 +84,7 @@ class Code extends React.Component<CodeProps, CodeState> {
   }
 
   render() {
-    const { editorForegroundColor, language } = this.props
+    const { editorForegroundColor } = this.props
     const { html } = this.state
     const didTokenize = !!html
 
@@ -96,9 +96,8 @@ class Code extends React.Component<CodeProps, CodeState> {
           opacity: didTokenize ? 1 : 0.25,
         }}
         dangerouslySetInnerHTML={{
-          __html: didTokenize
-            ? html
-            : createPlaceholderHtmlMemoized(templates[language]),
+          __html: didTokenize ? html : '',
+          // : createPlaceholderHtmlMemoized(templates[language]),
         }}
       />
     )

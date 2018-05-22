@@ -11,6 +11,7 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
   return Array.from(new Array(count), (_, index) => ({
     __placeholder: sym,
     objectID: `placeholder-${index}`,
+    language: '',
     themeId: '',
     themeName: '',
     themeUrl: '',
@@ -54,10 +55,6 @@ export default function generatePlaceholderThemes(count: number): Theme[] {
       contrastActiveBorder: null,
       contrastBorder: null,
     },
-    languages: {
-      javascript: '',
-      css: '',
-      html: '',
-    },
+    tokens: [],
   }))
 }
