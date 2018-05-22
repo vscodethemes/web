@@ -12,41 +12,40 @@ const { algoliaAppId, algoliaSearchKey, algoliaIndex } = publicRuntimeConfig
 const client = algoliasearch(algoliaAppId, algoliaSearchKey)
 
 const indicies = {
-  installs: client.initIndex(`${algoliaIndex}_by_installs_desc`),
-  trending: client.initIndex(`${algoliaIndex}_by_trending_desc`),
-  new: client.initIndex(`${algoliaIndex}_by_publishDate_desc`),
+  installs: client.initIndex(`${algoliaIndex}`),
+  trending: client.initIndex(`${algoliaIndex}`),
+  new: client.initIndex(`${algoliaIndex}`),
 }
 
 export async function search(params: SearchParams) {
-  const types: string[] = []
+  const themeTypes: string[] = []
+  if (params.dark) themeTypes.push('themeType:dark')
+  if (params.light) themeTypes.push('themeType:light')
 
-  if (params.dark) {
-    types.push('type:dark')
-  }
-  if (params.light) {
-    types.push('type:light')
-  }
+  let filters = ''
+  if (themeTypes.length > 0) filters += `(${themeTypes.join(' OR ')}) AND `
+  filters += `language:${params.lang}`
 
   try {
     const { hits, nbPages } = await indicies[params.sortBy].search({
       query: params.search,
-      filters: types.join(' OR '),
+      filters,
       page: params.page - 1,
       hitsPerPage: params.perPage,
-      facets: 'type',
+      facets: 'themeType',
     })
-
     return { results: hits, totalPages: nbPages }
   } catch (err) {
     throw new Error(`Error searching: ${err.message}.`)
   }
 }
 
-export async function searchFacets(props: SearchParams) {
+export async function searchFacets(params: SearchParams) {
   try {
-    const { facetHits } = await indicies[props.sortBy].searchForFacetValues({
-      query: props.search,
-      facetName: 'type',
+    const { facetHits } = await indicies[params.sortBy].searchForFacetValues({
+      query: params.search,
+      filters: `language:${params.lang}`,
+      facetName: 'themeType',
       facetQuery: '*',
     })
 
