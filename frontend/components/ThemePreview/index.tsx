@@ -52,9 +52,8 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         </TabBar>
         <TabContent>
           <Code
-            language={language}
-            editorForegroundColor={themeProps.colors.editorForeground}
-            themeId={themeProps.themeId}
+            tokens={themeProps.tokens}
+            editorForeground={themeProps.colors.editorForeground}
           />
         </TabContent>
       </Editor>
