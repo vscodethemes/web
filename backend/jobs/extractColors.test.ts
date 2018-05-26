@@ -15,6 +15,7 @@ function createJob(): JobMessage<ExtractColorsPayload> {
   return {
     receiptHandle: '',
     payload: {
+      themeId: 'themeId',
       themeName: 'themeName',
       themeType: 'dark',
       themeUrl: 'themes/theme.json',
@@ -275,6 +276,5 @@ test('should create save theme job for valid input', async () => {
   await extractColors(services)
   expect(createSpy).toHaveBeenCalledTimes(1)
   const payload = createSpy.mock.calls[0][0]
-  expect(payload.themeId).toEqual(createThemeId('owner', 'repo', 'Theme Name'))
   expect(SaveThemePayloadRuntime.guard(payload)).toEqual(true)
 })

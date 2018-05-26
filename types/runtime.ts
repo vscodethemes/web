@@ -106,6 +106,7 @@ export const ThemeTypeRuntime = Union(
 
 export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
+    themeId: String,
     themeUrl: String,
   }).And(
     Partial({
@@ -159,7 +160,6 @@ export const LanguageTokensRuntime = Record({
 
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
   Record({
-    themeId: String,
     themeName: String,
     themeType: ThemeTypeRuntime,
     colors: ColorsRuntime,
