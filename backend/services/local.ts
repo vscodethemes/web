@@ -103,6 +103,7 @@ export default function createServices(): Services {
     extractColors: createJob<ExtractColorsPayload>('extractColors', {
       receiptHandle: '',
       payload: {
+        themeId: 'themeId',
         themeType: 'dark',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
@@ -127,7 +128,7 @@ export default function createServices(): Services {
     saveTheme: createJob<SaveThemePayload>('saveTheme', {
       receiptHandle: '',
       payload: {
-        themeId: 'test',
+        themeId: 'themeId',
         extensionId: 'extensionId',
         extensionName: 'extensionName',
         publisherName: 'publisherName',
