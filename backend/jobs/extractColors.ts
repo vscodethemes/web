@@ -66,19 +66,18 @@ export default async function run(services: Services): Promise<any> {
           themeSource,
           LanguageOptions.javascript,
         ),
-        // TODO: Add CSS and HTML grammars
-        // [LanguageOptions.css]: tokenizeTheme(
-        //   services,
-        //   themeId,
-        //   themeSource,
-        //   LanguageOptions.css,
-        // ),
-        // [LanguageOptions.html]: tokenizeTheme(
-        //   services,
-        //   themeId,
-        //   themeSource,
-        //   LanguageOptions.html,
-        // ),
+        [LanguageOptions.css]: tokenizeTheme(
+          services,
+          themeId,
+          themeSource,
+          LanguageOptions.css,
+        ),
+        [LanguageOptions.html]: tokenizeTheme(
+          services,
+          themeId,
+          themeSource,
+          LanguageOptions.html,
+        ),
       },
     }
 
