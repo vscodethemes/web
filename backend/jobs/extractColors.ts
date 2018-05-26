@@ -8,7 +8,6 @@ import {
 } from '@vscodethemes/types'
 import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
-import createThemeId from '../utils/createThemeId'
 import extractGUIColors from '../utils/extractGUIColors'
 
 export default async function run(services: Services): Promise<any> {
@@ -33,16 +32,9 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
-    const themeUrl = payload.themeUrl
+    const { themeId, themeUrl } = payload
     // Fetch the theme's colors from it's repository.
     const themeSource = await fetchTheme(services, themeUrl)
-
-    const themeId = createThemeId(
-      payload.repositoryOwner,
-      payload.repository,
-      themeSource.name,
-    )
-
     // The label key in the repo's package.json is used for the display name.
     // If it doesn't exist use the name in the theme json.
     const themeName = payload.themeName || themeSource.name
@@ -64,7 +56,6 @@ export default async function run(services: Services): Promise<any> {
 
     const theme = {
       ...payload,
-      themeId,
       themeName,
       themeType,
       colors,
