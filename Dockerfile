@@ -37,6 +37,8 @@ COPY ./ .
 
 # Why isn't .dockerignore working?
 RUN rm -rf node_modules && \
+    rm -rf backend/build && \
+    rm -rf backend/frontend && \
     rm -rf infrastructure/env-dev/.terraform && \
     rm -rf infrastructure/env-production/.terraform
     
