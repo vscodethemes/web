@@ -156,6 +156,8 @@ export const LineTokensRuntime = Array(LineTokenRuntime)
 
 export const LanguageTokensRuntime = Record({
   javascript: Array(LineTokensRuntime),
+  html: Array(LineTokensRuntime),
+  css: Array(LineTokensRuntime),
 })
 
 export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(

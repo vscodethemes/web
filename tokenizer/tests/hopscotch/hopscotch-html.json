@@ -1,0 +1,324 @@
+[
+  [
+    {
+      "token": "<",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "html",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": " ",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "lang",
+      "style": {
+        "color": "#FD8B19"
+      }
+    },
+    {
+      "token": "=",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "\"",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "en",
+      "style": {
+        "color": "#8FC13E"
+      }
+    },
+    {
+      "token": "\"",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "<",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "head",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  <",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "title",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">HTML Template</",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "title",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "</",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "head",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "<",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "body",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  <",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "main",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "    ",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "<!-- Page contents -->",
+      "style": {
+        "color": "#797379"
+      }
+    }
+  ],
+  [
+    {
+      "token": "    <",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "button",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": " ",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "id",
+      "style": {
+        "color": "#1290BF"
+      }
+    },
+    {
+      "token": "=",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "\"",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "btn",
+      "style": {
+        "color": "#8FC13E"
+      }
+    },
+    {
+      "token": "\"",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": " />",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  </",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "main",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "</",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "body",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ],
+  [
+    {
+      "token": "</",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    },
+    {
+      "token": "html",
+      "style": {
+        "color": "#DD464C"
+      }
+    },
+    {
+      "token": ">",
+      "style": {
+        "color": "#B9B5B8"
+      }
+    }
+  ]
+]

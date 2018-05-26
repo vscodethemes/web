@@ -9,4 +9,6 @@ export const readJSON = (relPath: string) =>
 
 export const templates = {
   javascript: readText('./templates/javascript.js'),
+  css: readText('./templates/css.css'),
+  html: readText('./templates/html.html'),
 }

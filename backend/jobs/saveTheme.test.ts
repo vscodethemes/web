@@ -1,4 +1,8 @@
-import { JobMessage, SaveThemePayload } from '@vscodethemes/types'
+import {
+  JobMessage,
+  LanguageOptions,
+  SaveThemePayload,
+} from '@vscodethemes/types'
 import createServices from '../services/mock'
 import saveTheme from './saveTheme'
 
@@ -81,6 +85,8 @@ function createJob(): JobMessage<SaveThemePayload> {
       },
       languageTokens: {
         javascript: [],
+        html: [],
+        css: [],
       },
     },
   }
@@ -150,8 +156,20 @@ test('should add to index for valid input', async () => {
   expect(addObjectSpy.mock.calls[0][0]).toEqual([
     {
       ...theme,
-      objectID: job.payload.themeId,
-      language: 'javascript',
+      objectID: `${job.payload.themeId}/${LanguageOptions.javascript}`,
+      language: LanguageOptions.javascript,
+      tokens: [],
+    },
+    {
+      ...theme,
+      objectID: `${job.payload.themeId}/${LanguageOptions.css}`,
+      language: LanguageOptions.css,
+      tokens: [],
+    },
+    {
+      ...theme,
+      objectID: `${job.payload.themeId}/${LanguageOptions.html}`,
+      language: LanguageOptions.html,
       tokens: [],
     },
   ])
