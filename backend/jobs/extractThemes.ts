@@ -8,6 +8,7 @@ import {
 } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
+import createThemeId from '../utils/createThemeId'
 
 export default async function run(services: Services): Promise<any> {
   const { extractThemes, extractColors, logger } = services
@@ -63,10 +64,13 @@ export default async function run(services: Services): Promise<any> {
       const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
       const branchUrl = `${repoUrl}/${repositoryBranch}`
       // Remove './' from './path'.
-      const url = `${branchUrl}/${theme.path.replace(/^\.\//, '')}`
+      const themePath = theme.path.replace(/^\.\//, '')
+      const url = `${branchUrl}/${themePath}`
+      const themeId = createThemeId(repositoryOwner, repository, themePath)
 
       themes.push({
         ...payload,
+        themeId,
         themeUrl: url,
         themeType: type as ThemeType,
         themeName: theme.label,
