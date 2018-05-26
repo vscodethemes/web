@@ -1,4 +1,9 @@
-import { SaveThemePayloadRuntime, Services, Theme } from '@vscodethemes/types'
+import {
+  LanguageOptions,
+  SaveThemePayloadRuntime,
+  Services,
+  Theme,
+} from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
 export default async function run(services: Services): Promise<any> {
@@ -29,9 +34,21 @@ export default async function run(services: Services): Promise<any> {
     const themes = [
       {
         ...theme,
-        objectID: theme.themeId,
-        language: 'javascript',
+        objectID: `${theme.themeId}/${LanguageOptions.javascript}`,
+        language: LanguageOptions.javascript,
         tokens: languageTokens.javascript,
+      },
+      {
+        ...theme,
+        objectID: `${theme.themeId}/${LanguageOptions.css}`,
+        language: LanguageOptions.css,
+        tokens: languageTokens.css,
+      },
+      {
+        ...theme,
+        objectID: `${theme.themeId}/${LanguageOptions.html}`,
+        language: LanguageOptions.html,
+        tokens: languageTokens.html,
       },
     ]
     await addToSearch(services, themes, payload.themeId)

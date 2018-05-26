@@ -152,6 +152,8 @@ export default function createServices(): Services {
         colors: createVSCodeGUIColors(),
         languageTokens: {
           javascript: [],
+          css: [],
+          html: [],
         },
       },
     }),

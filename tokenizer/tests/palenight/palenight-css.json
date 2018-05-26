@@ -1,0 +1,290 @@
+[
+  [
+    {
+      "token": "html",
+      "style": {
+        "color": "#FF5572"
+      }
+    },
+    {
+      "token": " {",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "font-size",
+      "style": {
+        "color": "#80CBC4"
+      }
+    },
+    {
+      "token": ": ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "16",
+      "style": {
+        "color": "#F78C6C"
+      }
+    },
+    {
+      "token": "px",
+      "style": {
+        "color": "#FFEB95"
+      }
+    },
+    {
+      "token": ";",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "font-family",
+      "style": {
+        "color": "#80CBC4"
+      }
+    },
+    {
+      "token": ": ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "'",
+      "style": {
+        "color": "#D9F5DD"
+      }
+    },
+    {
+      "token": "sans-serif",
+      "style": {
+        "color": "#C3E88D"
+      }
+    },
+    {
+      "token": "'",
+      "style": {
+        "color": "#D9F5DD"
+      }
+    },
+    {
+      "token": ";",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "}",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "body",
+      "style": {
+        "color": "#FF5572"
+      }
+    },
+    {
+      "token": " {",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "margin",
+      "style": {
+        "color": "#80CBC4"
+      }
+    },
+    {
+      "token": ": ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "0",
+      "style": {
+        "color": "#F78C6C"
+      }
+    },
+    {
+      "token": ";",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "}",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "*",
+      "style": {
+        "color": "#FF5572"
+      }
+    },
+    {
+      "token": ",",
+      "style": {
+        "color": "#C792EA"
+      }
+    }
+  ],
+  [
+    {
+      "token": "*",
+      "style": {
+        "color": "#FF5572"
+      }
+    },
+    {
+      "token": ":before",
+      "style": {
+        "color": "#FFCB6B"
+      }
+    },
+    {
+      "token": ",",
+      "style": {
+        "color": "#C792EA"
+      }
+    }
+  ],
+  [
+    {
+      "token": "*",
+      "style": {
+        "color": "#FF5572"
+      }
+    },
+    {
+      "token": ":after",
+      "style": {
+        "color": "#FFCB6B"
+      }
+    },
+    {
+      "token": " {",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "  ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "box-sizing",
+      "style": {
+        "color": "#80CBC4"
+      }
+    },
+    {
+      "token": ": ",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    },
+    {
+      "token": "'",
+      "style": {
+        "color": "#D9F5DD"
+      }
+    },
+    {
+      "token": "border-box",
+      "style": {
+        "color": "#C3E88D"
+      }
+    },
+    {
+      "token": "'",
+      "style": {
+        "color": "#D9F5DD"
+      }
+    },
+    {
+      "token": ";",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "}",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ],
+  [
+    {
+      "token": "",
+      "style": {
+        "color": "#BFC7D5"
+      }
+    }
+  ]
+]
