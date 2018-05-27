@@ -11,6 +11,8 @@ RUN mkdir -p /usr/src/app/frontend
 RUN mkdir -p /usr/src/app/frontend/build
 RUN mkdir -p /usr/src/app/types
 RUN mkdir -p /usr/src/app/types/build
+RUN mkdir -p /usr/src/app/tokenizer
+RUN mkdir -p /usr/src/app/tokenizer/build
 WORKDIR /usr/src/app
 # Add root workspace files
 ADD ./yarn.lock . 
@@ -19,6 +21,9 @@ ADD ./tsconfig.json .
 # Add types
 ADD ./types/package.json types
 ADD ./types/build types/build
+# Add tokenizer
+ADD ./tokenizer/package.json tokenizer
+ADD ./tokenizer/build tokenizer/build
 # Add frontend
 ADD ./frontend/package.json frontend
 ADD ./frontend/tsconfig.json frontend
