@@ -35,7 +35,7 @@ interface SearchPageProps {
   isDesktop: boolean
 }
 
-interface SerachPageState {
+interface SearchPageState {
   params: SearchParams
   isLoading: boolean
 }
@@ -48,7 +48,7 @@ const titles = {
 
 export default class SearchPage extends React.Component<
   SearchPageProps,
-  SerachPageState
+  SearchPageState
 > {
   static async getInitialProps(ctx: Context): Promise<SearchPageProps> {
     const query = ctx.query

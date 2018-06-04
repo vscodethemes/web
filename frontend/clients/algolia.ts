@@ -13,28 +13,33 @@ const client = algoliasearch(algoliaAppId, algoliaSearchKey)
 
 const indicies = {
   installs: client.initIndex(`${algoliaIndex}`),
-  trending: client.initIndex(`${algoliaIndex}`),
-  new: client.initIndex(`${algoliaIndex}`),
+  trending: client.initIndex(`${algoliaIndex}_trending`),
+  new: client.initIndex(`${algoliaIndex}_new`),
 }
 
-export async function search(params: SearchParams) {
+interface SearchOptions extends SearchParams {
+  distinct?: number
+}
+
+export async function search(opts: SearchOptions) {
   const themeTypes: string[] = []
-  if (params.dark) themeTypes.push('themeType:dark')
-  if (params.light) themeTypes.push('themeType:light')
+  if (opts.dark) themeTypes.push('themeType:dark')
+  if (opts.light) themeTypes.push('themeType:light')
 
   let filters = ''
   if (themeTypes.length > 0) filters += `(${themeTypes.join(' OR ')}) AND `
-  filters += `language:${params.lang}`
+  filters += `language:${opts.lang}`
 
   try {
-    const { hits, nbPages } = await indicies[params.sortBy].search({
-      query: params.search,
+    const results = await indicies[opts.sortBy].search({
+      query: opts.search,
       filters,
-      page: params.page - 1,
-      hitsPerPage: params.perPage,
+      page: opts.page,
+      hitsPerPage: opts.perPage,
       facets: 'themeType',
+      distinct: opts.distinct || 0,
     })
-    return { results: hits, totalPages: nbPages }
+    return results
   } catch (err) {
     throw new Error(`Error searching: ${err.message}.`)
   }

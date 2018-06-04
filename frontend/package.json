@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon",
+    "dev": "./run-server.sh",
     "build": "next build",
     "start": "NODE_ENV=production ./run-server.sh",
     "tsc": "tsc -p ./tsconfig.json",

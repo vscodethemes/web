@@ -12,10 +12,7 @@ const classes = {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: `0 ${em(theme.container.gutter)}`,
     paddingTop: em(theme.header.height),
-    maxWidth: em(theme.pageSizes.max),
-    margin: '0 auto',
 
     [theme.breakpoints.pageMin]: {
       paddingTop: em(theme.header.heightCollapsed),

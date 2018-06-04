@@ -11,13 +11,13 @@ app
   .then(() => {
     const server = express()
 
-    server.get('/trending', (req, res) => {
-      app.render(req, res, '/', { ...req.query, sortBy: 'trending' })
-    })
+    // server.get('/trending', (req, res) => {
+    //   app.render(req, res, '/', { ...req.query, sortBy: 'trending' })
+    // })
 
-    server.get('/new', (req, res) => {
-      app.render(req, res, '/', { ...req.query, sortBy: 'new' })
-    })
+    // server.get('/new', (req, res) => {
+    //   app.render(req, res, '/', { ...req.query, sortBy: 'new' })
+    // })
 
     server.get('*', (req, res) => {
       return handle(req, res)

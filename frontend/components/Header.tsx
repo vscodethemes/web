@@ -21,13 +21,12 @@ const classes = {
     width: '100%',
     height: em(theme.header.height),
     padding: `0 ${em(theme.container.gutter)}`,
-    borderBottom: `1px solid ${theme.colors.inputBorder}`,
-    backgroundColor: `${theme.colors.background}F5`, // FA = 96% transparency for 8-digit hex value.
+    backgroundColor: `${theme.header.backgroundColor}F5`, // FA = 96% transparency for 8-digit hex value.
+    zIndex: 100,
 
     [theme.breakpoints.pageMin]: {
-      zIndex: 100,
       height: em(theme.header.heightCollapsed),
-      backgroundColor: `${theme.colors.inputBorder}F5`,
+      backgroundColor: `${theme.header.backgroundColor}F5`,
     },
   }),
 }
