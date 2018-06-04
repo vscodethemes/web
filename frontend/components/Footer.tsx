@@ -29,7 +29,8 @@ const classes = {
   footer: css({
     width: '100%',
     borderTop: `1px solid ${theme.colors.inputBorder}`,
-    padding: em(theme.container.gutter),
+    marginTop: em(theme.gutters.lg),
+    padding: `${em(theme.gutters.md)} ${em(theme.container.gutter)}`,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',

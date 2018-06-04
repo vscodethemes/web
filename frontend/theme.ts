@@ -17,7 +17,18 @@ const pageSizes = {
   min: 660,
 }
 
+const colors = {
+  palette: ['#00A8FF', '#B8E63B', '#E70258', '#880055', '#FAF100'],
+  background: '#202026',
+  backgroundDark: '#18181F',
+  inputBackground: '#28282F',
+  inputBorder: '#18181F',
+  text: '#D4D4D4',
+  textMuted: '#606066',
+}
+
 export default {
+  colors,
   gutters,
   pageSizes,
   fonts: {
@@ -30,23 +41,7 @@ export default {
     xs: 10,
     sm: 12,
     md: 14,
-  },
-  colors: {
-    palette: ['#00A8FF', '#B8E63B', '#E70258', '#880055', '#FAF100'],
-
-    // Light theme.
-    // background: '#FFFFFF',
-    // inputBackground: '#F5F5F5',
-    // inputBorder: '#D4D4D4',
-    // text: '#8C8C8C',
-    // textMuted: '#CACACA',
-
-    // Dark theme.
-    background: '#202026',
-    inputBackground: '#28282F',
-    inputBorder: '#18181F',
-    text: '#D4D4D4',
-    textMuted: '#606066',
+    xl: 28,
   },
   borderRadius: {
     sm: 4,
@@ -61,10 +56,11 @@ export default {
     pageMin: `@media (max-width: ${pageSizes.min}px)`,
   },
   header: {
-    height: 34,
+    height: 35,
     heightCollapsed: 40,
+    backgroundColor: colors.inputBorder,
   },
   container: {
-    gutter: gutters.md,
+    gutter: gutters.lg,
   },
 }
