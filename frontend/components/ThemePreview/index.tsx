@@ -13,7 +13,7 @@ import TopBar from './TopBar'
 
 interface ThemePreviewProps {
   theme: Theme
-  language?: LanguageOptions
+  language: LanguageOptions
   onLanguage: (language: LanguageOptions) => void
 }
 
@@ -71,9 +71,8 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
 const classes = {
   container: css({
     width: '100%',
-    position: 'relative',
-    marginBottom: em(theme.gutters.lg),
     boxShadow: theme.shadows.md,
+    borderRadius: em(theme.borderRadius.md),
   }),
 }
 

@@ -1,2 +1,2 @@
 #! /bin/bash
-ts-node -O '{"module": "commonjs"}' server.ts
+yarn ts-node -O '{"module": "commonjs"}' server.ts
