@@ -1,45 +1,8 @@
-import { css, cx } from 'emotion'
-import * as React from 'react'
-import theme, { em } from '../theme'
-import Icon, { classes as iconClasses, Icons } from './Icon'
+import { css } from 'emotion'
+import theme, { em } from '../../theme'
+import iconStyles from '../Icon/Icon.styles'
 
-interface InputProps {
-  type: 'text' | 'search' | 'email' | 'password'
-  value: string
-  placeholder?: string
-  icon?: Icons
-  onChange: (value: string) => any
-}
-
-const Input: React.SFC<InputProps> = ({
-  type,
-  value,
-  placeholder,
-  icon,
-  onChange,
-}) => (
-  <div className={classes.container}>
-    {icon && (
-      <div className={classes.icon}>
-        <Icon icon="search" />
-      </div>
-    )}
-    <input
-      type={type}
-      value={value}
-      placeholder={placeholder}
-      onChange={evt => onChange(evt.target.value)}
-      className={cx(classes.input, icon && classes.inputIcon)}
-    />
-  </div>
-)
-
-Input.defaultProps = {
-  type: 'text',
-  value: '',
-}
-
-const classes = {
+export default {
   container: css({
     position: 'relative',
   }),
@@ -80,10 +43,8 @@ const classes = {
     display: 'flex',
     alignItems: 'center',
     paddingLeft: em(theme.fontSizes.md),
-    [`.${iconClasses.svg}`]: {
+    [`.${iconStyles.svg}`]: {
       fill: theme.colors.textMuted,
     },
   }),
 }
-
-export default Input

@@ -1,8 +1,8 @@
-import { css } from 'emotion'
 import * as React from 'react'
-import { defaultSearchParams } from '../constants'
-import SearchLink from '../pages/SearchPage/SearchLink'
-import theme, { em } from '../theme'
+import { defaultSearchParams } from '../../constants'
+import SearchLink from '../../pages/SearchPage/SearchLink'
+import theme from '../../theme'
+import styles from './Logo.styles'
 
 interface LogoProps {
   onClick?: () => any
@@ -10,9 +10,9 @@ interface LogoProps {
 
 const Logo: React.SFC<LogoProps> = ({ onClick }) => (
   <SearchLink params={defaultSearchParams}>
-    <a className={classes.link}>
-      <div className={classes.linkInner} onClick={onClick}>
-        <svg className={classes.icon} viewBox="0 0 57 57">
+    <a className={styles.link}>
+      <div className={styles.linkInner} onClick={onClick}>
+        <svg className={styles.icon} viewBox="0 0 57 57">
           <g
             stroke="none"
             strokeWidth="1"
@@ -104,53 +104,13 @@ const Logo: React.SFC<LogoProps> = ({ onClick }) => (
             </g>
           </g>
         </svg>
-        <h1 className={classes.text}>
-          <span className={classes.primary}>vscode</span>
+        <h1 className={styles.text}>
+          <span className={styles.primary}>vscode</span>
           themes
         </h1>
       </div>
     </a>
   </SearchLink>
 )
-
-const classes = {
-  link: css({
-    height: '100%',
-    textDecoration: 'none',
-  }),
-
-  linkInner: css({
-    height: '100%',
-    display: 'inline-flex',
-    alignItems: 'center',
-    color: theme.colors.palette[0],
-    ':hover': {
-      textDecoration: 'underline wavy',
-    },
-  }),
-
-  icon: css({
-    marginTop: em(1.5),
-    marginRight: em(theme.gutters.xs),
-    height: em(theme.fontSizes.md * 0.9),
-  }),
-
-  text: css({
-    fontSize: theme.fontSizes.md,
-    fontWeight: 'bold',
-    color: theme.colors.text,
-    letterSpacing: em(-0.3),
-
-    [theme.breakpoints.pageMin]: {
-      display: 'none',
-    },
-  }),
-
-  primary: css({
-    fontWeight: 'normal',
-    color: theme.colors.palette[0],
-    letterSpacing: em(0.3),
-  }),
-}
 
 export default Logo

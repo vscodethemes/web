@@ -1,42 +1,10 @@
-import { SearchParams } from '@vscodethemes/types'
-import { css, cx } from 'emotion'
-import * as React from 'react'
-import SearchLink from '../pages/SearchPage/SearchLink'
-import theme, { em } from '../theme'
-
-interface TabProps {
-  active: boolean
-  params: SearchParams
-  color: string
-  onClick: (params: SearchParams) => any
-}
-
-const TabLink: React.SFC<TabProps> = ({
-  active,
-  params,
-  color,
-  onClick,
-  children,
-}) => (
-  <SearchLink params={params}>
-    <a
-      className={cx(
-        classes.link,
-        active && classes.active,
-        classes.highlight(color),
-      )}
-    >
-      <div className={classes.text} onClick={() => onClick(params)}>
-        {children}
-      </div>
-    </a>
-  </SearchLink>
-)
+import { css } from 'emotion'
+import theme, { em } from '../../theme'
 
 const boxWidth = 36
 const boxHeight = 2
 
-const classes = {
+export default {
   link: css({
     height: '100%',
     position: 'relative',
@@ -77,5 +45,3 @@ const classes = {
 
   highlight: (color: string) => css({ '::after': { backgroundColor: color } }),
 }
-
-export default TabLink
