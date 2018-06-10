@@ -1,19 +1,7 @@
 import { css } from 'emotion'
-import * as React from 'react'
-import theme, { em } from '../theme'
-import Logo from './Logo'
+import theme, { em } from '../../theme'
 
-interface HeaderProps {
-  onLogoClick?: () => any
-}
-
-const Header: React.SFC<HeaderProps> = ({ onLogoClick }) => (
-  <div className={classes.header}>
-    <Logo onClick={onLogoClick} />
-  </div>
-)
-
-const classes = {
+export default {
   header: css({
     position: 'fixed',
     top: 0,
@@ -30,5 +18,3 @@ const classes = {
     },
   }),
 }
-
-export default Header

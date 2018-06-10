@@ -1,12 +1,7 @@
 import { css } from 'emotion'
-import * as React from 'react'
-import { em } from '../theme'
+import { em } from '../../theme'
 
-const Tabs: React.SFC<{}> = ({ children }) => (
-  <div className={classes.tabs}>{children}</div>
-)
-
-const classes = {
+export default {
   tabs: css({
     height: '100%',
     width: '100%',
@@ -17,5 +12,3 @@ const classes = {
     maxWidth: em(210),
   }),
 }
-
-export default Tabs

@@ -1,31 +1,7 @@
 import { css } from 'emotion'
-import * as React from 'react'
-import theme, { em } from '../theme'
-import AlgoliaLogo from './AlgoliaLogo'
-import Icon from './Icon'
+import theme, { em } from '../../theme'
 
-const githubLink = 'https://github.com/jschr/vscodethemes'
-const twitterLink = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-  'Preview themes from the VSCode marketplace',
-)}&via=_jschr&url=${encodeURIComponent(
-  'https://vscodethemes.com',
-)}&hashtags=vscode`
-
-const Footer: React.SFC<{}> = () => (
-  <div className={classes.footer}>
-    <div className={classes.links}>
-      <a className={classes.link} href={githubLink}>
-        <Icon className={classes.icon} icon="github" />View on Github
-      </a>
-      <a className={classes.link} href={twitterLink} target="_blank">
-        <Icon className={classes.icon} icon="twitter" /> Share on Twitter
-      </a>
-    </div>
-    <AlgoliaLogo />
-  </div>
-)
-
-const classes = {
+export default {
   footer: css({
     width: '100%',
     borderTop: `1px solid ${theme.colors.inputBorder}`,
@@ -42,6 +18,7 @@ const classes = {
       backgroundColor: theme.colors.inputBorder,
     },
   }),
+
   links: css({
     order: 0,
     display: 'flex',
@@ -50,9 +27,11 @@ const classes = {
       marginTop: em(theme.gutters.md),
     },
   }),
+
   icon: css({
     marginRight: em(theme.gutters.xs),
   }),
+
   link: css({
     fontSize: em(theme.fontSizes.sm),
     display: 'flex',
@@ -69,5 +48,3 @@ const classes = {
     },
   }),
 }
-
-export default Footer

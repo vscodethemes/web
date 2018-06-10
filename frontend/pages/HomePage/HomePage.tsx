@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Heading, ThemeSlider } from '../../components'
+import { App, ThemeSlider } from '../../components'
 import * as userAgent from '../../utils/userAgent'
 import { classes } from './HomePage.styles'
 
@@ -15,7 +15,7 @@ enum ThemeCategories {
 
 interface CategoryResults {
   pages: {
-    [key: number]: Theme[]
+    [key: string]: Theme[]
   }
   totalPages: number
   totalThemes: number
@@ -42,6 +42,12 @@ export default class HomePage extends React.Component<
   HomePageState
 > {
   static perPage = 20
+
+  static getCategoryThemes = {
+    [ThemeCategories.trending]: HomePage.getTrendingThemes,
+    [ThemeCategories.dark]: HomePage.getDarkThemes,
+    [ThemeCategories.light]: HomePage.getLightThemes,
+  }
 
   static async getTrendingThemes(page: number, lang: LanguageOptions) {
     return algolia.search({
@@ -89,15 +95,8 @@ export default class HomePage extends React.Component<
     })
   }
 
-  static getCategoryThemes = {
-    [ThemeCategories.trending]: HomePage.getTrendingThemes,
-    [ThemeCategories.dark]: HomePage.getDarkThemes,
-    [ThemeCategories.light]: HomePage.getLightThemes,
-  }
-
   static async getInitialProps(ctx: Context): Promise<HomePageProps> {
     const page = 0
-    const perPage = 20
     const language = LanguageOptions.javascript
     const isDesktop = userAgent.isDesktop(ctx.req)
 
@@ -181,26 +180,22 @@ export default class HomePage extends React.Component<
   }
 
   handleLanguage = async (language: LanguageOptions) => {
-    const { categories } = this.state
-
+    // const { categories } = this.state
     // const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
     //   HomePage.getTrendingThemes(categories.trending.page, language),
     //   HomePage.getDarkThemes(categories.dark.page, language),
     //   HomePage.getLightThemes(categories.light.page, language),
     // ])
-
     // this.setCategory(ThemeCategories.trending, {
     //   themes: trendingThemes.hits,
     //   total: trendingThemes.nbHits,
     //   language,
     // })
-
     // this.setCategory(ThemeCategories.dark, {
     //   themes: darkThemes.hits,
     //   total: darkThemes.nbHits,
     //   language,
     // })
-
     // this.setCategory(ThemeCategories.light, {
     //   themes: lightThemes.hits,
     //   total: lightThemes.nbHits,
@@ -221,16 +216,15 @@ export default class HomePage extends React.Component<
     // Themes is a sparse array that represents all themes in a category.
     // Only themes from fetched pages are added to the array.
     const themes: Array<Theme | undefined> = new Array(category.totalThemes)
-    const fetchedPages = Object.keys(category.pages)
 
-    for (const page in category.pages) {
+    Object.keys(category.pages).forEach(page => {
       const pageThemes = category.pages[page] || []
       const pageThemesCount = pageThemes.length
       for (let index = 0; index < pageThemesCount; index += 1) {
         const pageStartIndex = parseInt(page, 10) * HomePage.perPage
         themes[pageStartIndex + index] = pageThemes[index]
       }
-    }
+    })
 
     return themes
   }
