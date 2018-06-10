@@ -1,9 +1,16 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import theme from '../theme'
+import theme from '../../theme'
+
+const styles = {
+  link: css({
+    display: 'inline-block',
+    textDecoration: 'none',
+  }),
+}
 
 const AlgoliaLogo: React.SFC<{}> = () => (
-  <a className={classes.link} href="https://www.algolia.com">
+  <a className={styles.link} href="https://www.algolia.com">
     <svg
       width="130"
       height="18"
@@ -43,12 +50,5 @@ const AlgoliaLogo: React.SFC<{}> = () => (
     </svg>
   </a>
 )
-
-const classes = {
-  link: css({
-    display: 'inline-block',
-    textDecoration: 'none',
-  }),
-}
 
 export default AlgoliaLogo
