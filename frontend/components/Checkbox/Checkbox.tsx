@@ -7,7 +7,7 @@ interface CheckboxProps {
 }
 
 const Checkbox: React.SFC<CheckboxProps> = ({
-  checked,
+  checked = false,
   onChange,
   children,
 }) => (
@@ -21,9 +21,5 @@ const Checkbox: React.SFC<CheckboxProps> = ({
     <div className={styles.text}>{children}</div>
   </label>
 )
-
-Checkbox.defaultProps = {
-  checked: false,
-}
 
 export default Checkbox
