@@ -14,11 +14,7 @@ enum ThemeCategories {
 }
 
 interface CategoryResults {
-  pages: {
-    [key: string]: Theme[]
-  }
-  totalPages: number
-  totalThemes: number
+  themes: Theme[]
   language: LanguageOptions
 }
 
@@ -41,7 +37,7 @@ export default class HomePage extends React.Component<
   HomePageProps,
   HomePageState
 > {
-  static perPage = 20
+  static perPage = 30
 
   static getCategoryThemes = {
     [ThemeCategories.trending]: HomePage.getTrendingThemes,
@@ -49,87 +45,74 @@ export default class HomePage extends React.Component<
     [ThemeCategories.light]: HomePage.getLightThemes,
   }
 
-  static async getTrendingThemes(page: number, lang: LanguageOptions) {
+  static async getTrendingThemes(lang: LanguageOptions) {
     return algolia.search({
       dark: true,
       light: true,
       sortBy: SortByOptions.trending,
-      page,
       lang,
-      distinct: 1,
+      page: 0,
       perPage: HomePage.perPage,
+      distinct: 1,
     })
   }
 
-  static async getDarkThemes(page: number, lang: LanguageOptions) {
+  static async getDarkThemes(lang: LanguageOptions) {
     return algolia.search({
       dark: true,
       sortBy: SortByOptions.installs,
-      page,
       lang,
-      distinct: 1,
+      page: 0,
       perPage: HomePage.perPage,
+      distinct: 1,
     })
   }
 
-  static async getLightThemes(page: number, lang: LanguageOptions) {
+  static async getLightThemes(lang: LanguageOptions) {
     return algolia.search({
       light: true,
       sortBy: SortByOptions.installs,
-      page,
       lang,
-      distinct: 1,
+      page: 0,
       perPage: HomePage.perPage,
+      distinct: 1,
     })
   }
 
-  static async getNewThemes(page: number, lang: LanguageOptions) {
+  static async getNewThemes(lang: LanguageOptions) {
     return algolia.search({
       dark: true,
       light: true,
       sortBy: SortByOptions.new,
-      page,
       lang,
-      distinct: 1,
+      page: 0,
       perPage: HomePage.perPage,
+      distinct: 1,
     })
   }
 
   static async getInitialProps(ctx: Context): Promise<HomePageProps> {
-    const page = 0
     const language = LanguageOptions.javascript
     const isDesktop = userAgent.isDesktop(ctx.req)
 
     const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
-      HomePage.getTrendingThemes(page, language),
-      HomePage.getDarkThemes(page, language),
-      HomePage.getLightThemes(page, language),
+      HomePage.getTrendingThemes(language),
+      HomePage.getDarkThemes(language),
+      HomePage.getLightThemes(language),
     ])
 
     return {
       categories: {
         [ThemeCategories.trending]: {
-          pages: {
-            [page]: trendingThemes.hits,
-          },
-          totalPages: trendingThemes.nbPages,
-          totalThemes: trendingThemes.nbHits,
+          themes: trendingThemes.hits,
           language,
         },
         [ThemeCategories.dark]: {
-          pages: {
-            [page]: darkThemes.hits,
-          },
-          totalPages: darkThemes.nbPages,
-          totalThemes: darkThemes.nbHits,
+          themes: darkThemes.hits,
           language,
         },
         [ThemeCategories.light]: {
-          pages: {
-            [page]: lightThemes.hits,
-          },
-          totalPages: lightThemes.nbPages,
-          totalThemes: lightThemes.nbHits,
+          themes: lightThemes.hits,
           language,
         },
       },
@@ -145,88 +128,32 @@ export default class HomePage extends React.Component<
     },
   }
 
-  handleSlide = (categoryName: ThemeCategories) => async (
-    index: number,
-    numOfVisibleItems: number,
-  ) => {
-    const { categories } = this.state
-    const category = categories[categoryName]
-    const currentPage = Math.ceil(index / HomePage.perPage) - 1
-    const pageIndex = index % HomePage.perPage
-    const hasMorePages = currentPage < category.totalPages
-    const nextPage = currentPage + 1
-    const isNextPageEmpty = !category.pages[nextPage]
-    const isApproachingNextPage =
-      pageIndex + numOfVisibleItems * 2 + 1 > HomePage.perPage
-    const shouldFetchNextPage =
-      isApproachingNextPage && isNextPageEmpty && hasMorePages
-
-    if (shouldFetchNextPage) {
-      const results = await HomePage.getCategoryThemes[categoryName](
-        nextPage,
-        category.language,
-      )
-
-      this.setCategory(categoryName, {
-        pages: {
-          ...category.pages,
-          [nextPage]: results.hits,
-        },
-        totalPages: results.nbPages,
-        totalThemes: results.nbHits,
-        language: category.language,
-      })
-    }
-  }
-
   handleLanguage = async (language: LanguageOptions) => {
-    // const { categories } = this.state
-    // const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
-    //   HomePage.getTrendingThemes(categories.trending.page, language),
-    //   HomePage.getDarkThemes(categories.dark.page, language),
-    //   HomePage.getLightThemes(categories.light.page, language),
-    // ])
-    // this.setCategory(ThemeCategories.trending, {
-    //   themes: trendingThemes.hits,
-    //   total: trendingThemes.nbHits,
-    //   language,
-    // })
-    // this.setCategory(ThemeCategories.dark, {
-    //   themes: darkThemes.hits,
-    //   total: darkThemes.nbHits,
-    //   language,
-    // })
-    // this.setCategory(ThemeCategories.light, {
-    //   themes: lightThemes.hits,
-    //   total: lightThemes.nbHits,
-    //   language,
-    // })
-  }
+    const { categories } = this.state
+    const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
+      HomePage.getTrendingThemes(language),
+      HomePage.getDarkThemes(language),
+      HomePage.getLightThemes(language),
+    ])
 
-  setCategory(categoryName: ThemeCategories, category: CategoryResults) {
+    console.log(language)
+
     this.setState({
       categories: {
-        ...this.state.categories,
-        [categoryName]: category,
+        [ThemeCategories.trending]: {
+          themes: trendingThemes.hits,
+          language,
+        },
+        [ThemeCategories.dark]: {
+          themes: darkThemes.hits,
+          language,
+        },
+        [ThemeCategories.light]: {
+          themes: lightThemes.hits,
+          language,
+        },
       },
     })
-  }
-
-  getThemesForCategory(category: CategoryResults) {
-    // Themes is a sparse array that represents all themes in a category.
-    // Only themes from fetched pages are added to the array.
-    const themes: Array<Theme | undefined> = new Array(category.totalThemes)
-
-    Object.keys(category.pages).forEach(page => {
-      const pageThemes = category.pages[page] || []
-      const pageThemesCount = pageThemes.length
-      for (let index = 0; index < pageThemesCount; index += 1) {
-        const pageStartIndex = parseInt(page, 10) * HomePage.perPage
-        themes[pageStartIndex + index] = pageThemes[index]
-      }
-    })
-
-    return themes
   }
 
   render() {
@@ -251,8 +178,7 @@ export default class HomePage extends React.Component<
           <ThemeSlider
             title="What's Trending"
             language={categories.trending.language}
-            themes={this.getThemesForCategory(categories.trending)}
-            onSlide={this.handleSlide(ThemeCategories.trending)}
+            themes={categories.trending.themes}
             onLanguage={this.handleLanguage}
           />
           {/* <div className={classes.rowFooter}>More Trending Themes</div> */}
@@ -261,8 +187,7 @@ export default class HomePage extends React.Component<
           <ThemeSlider
             title="Dark Themes"
             language={categories.dark.language}
-            themes={this.getThemesForCategory(categories.dark)}
-            onSlide={this.handleSlide(ThemeCategories.dark)}
+            themes={categories.dark.themes}
             onLanguage={this.handleLanguage}
           />
           {/* <div className={classes.rowFooter}>More Dark Themes</div> */}
@@ -271,8 +196,7 @@ export default class HomePage extends React.Component<
           <ThemeSlider
             title="Light Themes"
             language={categories.light.language}
-            themes={this.getThemesForCategory(categories.light)}
-            onSlide={this.handleSlide(ThemeCategories.light)}
+            themes={categories.light.themes}
             onLanguage={this.handleLanguage}
           />
           {/* <div className={classes.rowFooter}>More Light Themes</div> */}

@@ -2,14 +2,15 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
 import { Heading, Icon, ThemePreview } from '../'
+import NextButton from './NextButton'
 import styles from './ThemeSlider.styles'
 
 interface ThemeSliderProps {
   title: string
   themes: Array<Theme | undefined>
   language: LanguageOptions
-  onSlide: (index: number, numOfVisibleItems: number) => any
   onLanguage: (language: LanguageOptions) => any
+  onSlide?: (index: number, numOfVisibleItems: number) => any
 }
 
 interface ThemeSliderState {
@@ -45,6 +46,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
     nextState: ThemeSliderState,
   ) {
     return (
+      nextProps.language !== this.props.language ||
       nextState.index !== this.state.index ||
       nextState.previousIndex !== this.state.previousIndex
     )
@@ -90,13 +92,10 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
     } = this.state
 
     // Ensure we stop sliding at a number that's a factor of numOfVisibleItems
-    // so we don't over-slide. Also cap it at an arbitrary value to direct the
-    // user view all themes in the category.
-    const maxIndex = Math.min(
-      Math.ceil(themes.length / numOfVisibleItems) * numOfVisibleItems -
-        numOfVisibleItems,
-      numOfVisibleItems * 20,
-    )
+    // so we don't over-slide.
+    const maxIndex =
+      Math.floor(themes.length / numOfVisibleItems) * numOfVisibleItems -
+      numOfVisibleItems
 
     // The themes to render in the slider are bound by numOfVisibleItems where
     // we buffer the next page and previous page for the slide transition.
@@ -110,9 +109,10 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
       }
     }
 
-    // const isAtMaxIndex = themeIndex >= maxIndex
     const shouldSlide = previousIndex === index
     const isInitialSlide = shouldSlide && index === 0
+    const isLastSlide =
+      previousIndex + numOfVisibleItems >= maxIndex - numOfVisibleItems
     const shouldReset = !shouldSlide && index > 0
     const delta = 3
 
@@ -128,6 +128,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
       slideDistance = -delta * itemWidthPercent
       shouldTransition = false
     }
+
     const rowStyles = {
       transform: `translateX(${slideDistance}%)`,
       transition: shouldTransition ? `transform 0.35s ease-in-out` : '',
@@ -159,9 +160,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
               </div>
             ))}
           </div>
-          <button className={cx('button', styles.button)} onClick={this.next}>
-            <Icon icon="chevronRight" className={cx('icon', styles.icon)} />
-          </button>
+          <NextButton onClick={this.next} hide={isLastSlide} />
         </div>
       </div>
     )
