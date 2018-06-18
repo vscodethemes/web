@@ -129,14 +129,11 @@ export default class HomePage extends React.Component<
   }
 
   handleLanguage = async (language: LanguageOptions) => {
-    const { categories } = this.state
     const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
       HomePage.getTrendingThemes(language),
       HomePage.getDarkThemes(language),
       HomePage.getLightThemes(language),
     ])
-
-    console.log(language)
 
     this.setState({
       categories: {
