@@ -2,8 +2,6 @@ import { css } from 'emotion'
 import theme, { em } from '../../theme'
 
 const shadowSize = 30
-const sliderBtnSize = [64, 128]
-const sliderBtnOffset = theme.gutters.md
 
 export default {
   wrapper: css({
@@ -39,5 +37,21 @@ export default {
     flexShrink: 0,
     paddingLeft: em(theme.gutters.md / 2),
     paddingRight: em(theme.gutters.md / 2),
+  }),
+
+  previous: css({
+    position: 'absolute',
+    top: em(shadowSize),
+    bottom: em(shadowSize),
+    left: 0,
+    width: theme.container.gutter,
+
+    [`:hover .previous`]: {
+      opacity: 1,
+    },
+  }),
+
+  previousExpanded: css({
+    width: theme.container.gutter * 4,
   }),
 }

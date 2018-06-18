@@ -2,7 +2,7 @@ import { css } from 'emotion'
 import theme, { em } from '../../theme'
 import createButtonStyles from './createButtonStyles'
 
-const buttonStyles = createButtonStyles(false)
+const buttonStyles = createButtonStyles(true)
 
 export default {
   button: css(buttonStyles.button),
