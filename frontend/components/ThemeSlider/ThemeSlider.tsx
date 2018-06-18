@@ -1,8 +1,9 @@
 import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
-import { Heading, Icon, ThemePreview } from '../'
+import { Heading, ThemePreview } from '../'
 import NextButton from './NextButton'
+import PreviousButton from './PreviousButton'
 import styles from './ThemeSlider.styles'
 
 interface ThemeSliderProps {
@@ -10,27 +11,29 @@ interface ThemeSliderProps {
   themes: Array<Theme | undefined>
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
-  onSlide?: (index: number, numOfVisibleItems: number) => any
 }
 
 interface ThemeSliderState {
-  index: number
-  previousIndex: number
+  currentIndex: number
+  queuedIndex: number | null
   numOfVisibleItems: number
   itemWidthPercent: number
+  shouldPeak: boolean
+  didPeak: boolean
 }
 
 class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
   state = {
-    index: 0,
-    previousIndex: -1,
-    itemWidthPercent: 0,
     // The maximum number of values that can ever be visible at any screen size so
     // we can render items server-side without knowing the container's dimensions.
     numOfVisibleItems: 6,
+    currentIndex: 0,
+    queuedIndex: 0,
+    itemWidthPercent: 0,
+    shouldPeak: false,
+    didPeak: false,
   }
 
-  queuedIndex: number = null
   rowEl: HTMLElement
   itemEl: HTMLElement
 
@@ -47,8 +50,10 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
   ) {
     return (
       nextProps.language !== this.props.language ||
-      nextState.index !== this.state.index ||
-      nextState.previousIndex !== this.state.previousIndex
+      nextState.currentIndex !== this.state.currentIndex ||
+      nextState.queuedIndex !== this.state.queuedIndex ||
+      nextState.shouldPeak !== this.state.shouldPeak ||
+      nextState.didPeak !== this.state.didPeak
     )
   }
 
@@ -69,69 +74,116 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
     this.setState({ numOfVisibleItems, itemWidthPercent })
   }
 
-  next = () => {
-    const { index, numOfVisibleItems } = this.state
-    this.queuedIndex = index + numOfVisibleItems
-    this.setState({ previousIndex: index })
+  nextSlide = () => {
+    const { currentIndex, numOfVisibleItems } = this.state
+    this.setState({
+      queuedIndex: currentIndex + numOfVisibleItems,
+    })
+  }
+
+  previousSlide = () => {
+    const { currentIndex, numOfVisibleItems } = this.state
+    this.setState({
+      queuedIndex: currentIndex - numOfVisibleItems,
+    })
   }
 
   handleSlideEnd = () => {
-    const index = this.queuedIndex
-    this.setState({ index })
-    this.queuedIndex = null
-    this.props.onSlide(index, this.state.numOfVisibleItems)
+    const { currentIndex, queuedIndex, didPeak } = this.state
+    // Update the current index with the queued index.
+    if (queuedIndex !== currentIndex) {
+      this.setState({ currentIndex: queuedIndex })
+    }
+    // The hover reset goes away when sliding to index zero so we need
+    // to also reset peak here.
+    if (currentIndex === 0) {
+      this.setState({ shouldPeak: false })
+    }
+    // Reset peak state.
+    if (didPeak) {
+      this.setState({ didPeak: false })
+    }
+  }
+
+  peak = () => {
+    this.setState({ shouldPeak: true, didPeak: true })
+  }
+
+  unpeak = () => {
+    this.setState({ shouldPeak: false, didPeak: true })
   }
 
   render() {
     const { title, themes, language, onLanguage } = this.props
     const {
-      index,
-      previousIndex,
+      currentIndex,
+      queuedIndex,
       numOfVisibleItems,
       itemWidthPercent,
+      shouldPeak,
+      didPeak,
     } = this.state
 
-    // Ensure we stop sliding at a number that's a factor of numOfVisibleItems
-    // so we don't over-slide.
+    // Ensure we stop sliding at a number that's a factor of numOfVisibleItems to
+    // prevent over-sliding and have remaining space to show the "Browse All" CTA.
     const maxIndex =
       Math.floor(themes.length / numOfVisibleItems) * numOfVisibleItems -
       numOfVisibleItems
-
-    // The themes to render in the slider are bound by numOfVisibleItems where
-    // we buffer the next page and previous page for the slide transition.
+    // The themes to render in the slider is a multiple of numOfVisibleItems and bound
+    // by the max index. Buffer the next page and previous page for the slide transition.
     const themesToRender: Theme[] = []
-    const lowerIndex = index - numOfVisibleItems
-    const upperIndex = index + numOfVisibleItems * 2
+    const lowerIndex = currentIndex - numOfVisibleItems - 1
+    const upperIndex = currentIndex + numOfVisibleItems * 2
+    // The render index of the theme at the current index. This will be zero at index 0
+    // but equal to the # of previous items at index > 0
+    let renderIndex = -1
     let themeIndex = lowerIndex
     for (; themeIndex <= upperIndex; themeIndex += 1) {
+      // Don't render themes before index 0 or after the max themes.
       if (themes[themeIndex] && themeIndex < maxIndex) {
+        // Set the render index.
+        if (currentIndex === themeIndex) {
+          renderIndex = themesToRender.length
+        }
         themesToRender.push(themes[themeIndex])
       }
     }
-
-    const shouldSlide = previousIndex === index
-    const isInitialSlide = shouldSlide && index === 0
-    const isLastSlide =
-      previousIndex + numOfVisibleItems >= maxIndex - numOfVisibleItems
-    const shouldReset = !shouldSlide && index > 0
-    const delta = 3
-
-    let slideDistance = 0
-    let shouldTransition = false
-    if (isInitialSlide) {
-      slideDistance = -delta * itemWidthPercent
-      shouldTransition = true
-    } else if (shouldSlide) {
-      slideDistance = -delta * itemWidthPercent * 2
-      shouldTransition = true
-    } else if (shouldReset) {
-      slideDistance = -delta * itemWidthPercent
-      shouldTransition = false
+    // We are at a resting state when the current index is equal to the queued index.
+    const isAtRest = queuedIndex === currentIndex
+    // The slide delta is the number of items we need to slide. When we aren't sliding
+    // this is zero, otherwise it's the change in queued from current index.
+    const slideDelta = isAtRest ? 0 : queuedIndex - currentIndex
+    // Slide left when sliding towards the next items, slide right when sliding towards
+    // the previous items. Use renderIndex to compensate for the number of previous items.
+    let distance = -itemWidthPercent * (renderIndex + slideDelta)
+    // When duration is zero, we don't animate.
+    let duration = isAtRest ? 0 : 0.5
+    // Hide the previous button when we are on the first slide.
+    const firstIndex = 0
+    const isFirstSlide =
+      currentIndex === firstIndex || queuedIndex === firstIndex
+    // Hide the next buttons when we are on the last slide.
+    const lastIndex = maxIndex - numOfVisibleItems
+    const isLastSlide = currentIndex === lastIndex || queuedIndex === lastIndex
+    // Adjust distance to show more of the previous theme when the previous button
+    // is hovered over.
+    if (!isFirstSlide && shouldPeak) {
+      distance += itemWidthPercent / 4
+    }
+    // Animate the slide back after peaking the previous theme.
+    if (didPeak) {
+      duration = 0.25
     }
 
     const rowStyles = {
-      transform: `translateX(${slideDistance}%)`,
-      transition: shouldTransition ? `transform 0.35s ease-in-out` : '',
+      transform: `translateX(${distance}%)`,
+      // transition: shouldTransition
+      // We should only animate when sliding because we need to offset
+      // previous items with translate at resting state.
+      transition:
+        duration > 0
+          ? `transform ${duration}s cubic-bezier(.63,.01,.44,1)`
+          : '',
     }
 
     return (
@@ -160,7 +212,17 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
               </div>
             ))}
           </div>
-          <NextButton onClick={this.next} hide={isLastSlide} />
+          <div
+            className={cx(
+              styles.previous,
+              shouldPeak && styles.previousExpanded,
+            )}
+            onMouseOver={isFirstSlide ? null : this.peak}
+            onMouseLeave={isFirstSlide ? null : this.unpeak}
+          >
+            <PreviousButton onClick={this.previousSlide} hide={isFirstSlide} />
+          </div>
+          <NextButton onClick={this.nextSlide} hide={isLastSlide} />
         </div>
       </div>
     )

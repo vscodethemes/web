@@ -7,6 +7,7 @@ export type Icons =
   | 'cart'
   | 'chevronDoubleLeft'
   | 'chevronDoubleRight'
+  | 'chevronLeft'
   | 'chevronRight'
   | 'download'
   | 'github'
