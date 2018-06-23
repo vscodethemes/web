@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { Tab } from '../'
+import { DarkLink } from '../../pages/dark'
+import { LightLink } from '../../pages/light'
 import { TrendingLink } from '../../pages/trending'
 import theme from '../../theme'
 import styles from './Header.styles'
@@ -22,9 +24,21 @@ const Header: React.SFC<HeaderProps> = ({ hideCategories = false }) => (
           )}
         </TrendingLink>
         <span className={styles.sep}>·</span>
-        <Tab color={theme.colors.palette[2]}>Dark</Tab>
+        <DarkLink>
+          {linkProps => (
+            <Tab color={theme.colors.palette[2]} {...linkProps}>
+              Dark
+            </Tab>
+          )}
+        </DarkLink>
         <span className={styles.sep}>·</span>
-        <Tab color={theme.colors.palette[3]}>Light</Tab>
+        <LightLink>
+          {linkProps => (
+            <Tab color={theme.colors.palette[3]} {...linkProps}>
+              Light
+            </Tab>
+          )}
+        </LightLink>
       </React.Fragment>
     )}
   </div>
