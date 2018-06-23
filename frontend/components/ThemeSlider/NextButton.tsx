@@ -1,6 +1,6 @@
 import { cx } from 'emotion'
 import * as React from 'react'
-import Icon from '../Icon'
+import Icon, { Icons } from '../Icon'
 import styles from './NextButton.styles'
 
 interface NextButtonProps {
@@ -13,7 +13,7 @@ const NextButton: React.SFC<NextButtonProps> = ({ hide = false, onClick }) => (
     className={cx('next', styles.button, hide && styles.hide)}
     onClick={onClick}
   >
-    <Icon icon="chevronRight" className={cx('icon', styles.icon)} />
+    <Icon icon={Icons.chevronRight} className={cx('icon', styles.icon)} />
   </button>
 )
 

@@ -2,7 +2,7 @@ import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-import Icon from '../Icon'
+import Icon, { Icons } from '../Icon'
 import { UserConsumer } from '../UserContext'
 
 interface StatusBarProps {
@@ -52,7 +52,7 @@ const StatusBar: React.SFC<StatusBarProps> = ({
             Open in {isDesktop ? 'VSCode' : 'Marketplace'}
             <Icon
               className={classes.icon}
-              icon="open"
+              icon={Icons.open}
               fill={colors.statusBarForeground}
             />
           </a>
