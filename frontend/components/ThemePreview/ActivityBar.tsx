@@ -1,7 +1,7 @@
 import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
-import Icon from '../Icon'
+import Icon, { Icons } from '../Icon'
 
 interface ActivityBarProps {
   colors: Colors
@@ -14,27 +14,27 @@ const ActivityBar: React.SFC<ActivityBarProps> = ({ colors }) => (
   >
     <Icon
       className={cx(classes.icon, classes.active)}
-      icon="vscodeExplorer"
+      icon={Icons.vscodeExplorer}
       fill={colors.activityBarForeground}
     />
     <Icon
       className={classes.icon}
-      icon="vscodeSearch"
+      icon={Icons.vscodeSearch}
       fill={colors.activityBarForeground}
     />
     <Icon
       className={classes.icon}
-      icon="vscodeGit"
+      icon={Icons.vscodeGit}
       fill={colors.activityBarForeground}
     />
     <Icon
       className={classes.icon}
-      icon="vscodeDebug"
+      icon={Icons.vscodeDebug}
       fill={colors.activityBarForeground}
     />
     <Icon
       className={classes.icon}
-      icon="vscodeExtensions"
+      icon={Icons.vscodeExtensions}
       fill={colors.activityBarForeground}
     />
   </div>
