@@ -3,13 +3,15 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Heading, ThemeGrid } from '../../components'
+import { App, Heading, Pagination, ThemeGrid } from '../../components'
 import * as userAgent from '../../utils/userAgent'
+import { TrendingLink } from './'
 import styles from './TrendingPage.styles'
 
 interface TrendingPageProps {
   themes: Theme[]
   page: number
+  totalPages: number
   language: LanguageOptions
   isDesktop: boolean
 }
@@ -37,6 +39,7 @@ export default class TrendingPage extends React.Component<
 
     return {
       themes: trendingThemes.hits,
+      totalPages: trendingThemes.nbPages,
       page,
       language,
       isDesktop,
@@ -48,7 +51,7 @@ export default class TrendingPage extends React.Component<
   }
 
   render() {
-    const { themes, language, isDesktop } = this.props
+    const { themes, language, page, totalPages, isDesktop } = this.props
 
     return (
       <App isDesktop={isDesktop}>
@@ -62,6 +65,7 @@ export default class TrendingPage extends React.Component<
             language={language}
             onLanguage={this.handleLanguage}
           />
+          <Pagination page={page} totalPages={totalPages} Link={TrendingLink} />
         </div>
       </App>
     )
