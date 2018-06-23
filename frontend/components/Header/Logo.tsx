@@ -5,8 +5,8 @@ import styles from './Logo.styles'
 
 const Logo: React.SFC<{}> = () => (
   <HomeLink>
-    {linkProps => (
-      <a className={styles.link} {...linkProps}>
+    {({ href, onClick }) => (
+      <a className={styles.link} href={href} onClick={onClick}>
         <svg className={styles.icon} viewBox="0 0 57 57">
           <g
             stroke="none"
