@@ -17,7 +17,7 @@ export default {
     }),
   ),
 
-  browseAll: css({
+  more: css({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -28,6 +28,7 @@ export default {
     paddingRight: em(theme.gutters.xs),
     color: theme.colors.text,
     cursor: 'pointer',
+    textDecoration: 'none',
     opacity: 1,
 
     ':hover': {
