@@ -11,7 +11,11 @@ export default {
 
   page: css({
     width: '100%',
+    maxWidth: em(theme.gutters.md * 2 + theme.fontSizes.md),
     position: 'relative',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: `0 0 ${em(theme.gutters.sm)}`,
     fontSize: em(theme.fontSizes.md),
     lineHeight: em(theme.fontSizes.md),
     background: 'transparent',
@@ -38,11 +42,5 @@ export default {
       borderRadius: em(boxHeight),
       backgroundColor: theme.colors.palette[4],
     },
-  }),
-
-  contents: css({
-    display: 'flex',
-    justifyContent: 'center',
-    padding: `0 0 ${em(theme.gutters.sm)}`,
   }),
 }

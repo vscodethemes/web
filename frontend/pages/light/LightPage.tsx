@@ -3,13 +3,15 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Heading, ThemeGrid } from '../../components'
+import { App, Heading, Pagination, ThemeGrid } from '../../components'
 import * as userAgent from '../../utils/userAgent'
+import { LightLink } from './'
 import styles from './LightPage.styles'
 
 interface LightPageProps {
   themes: Theme[]
   page: number
+  totalPages: number
   language: LanguageOptions
   isDesktop: boolean
 }
@@ -34,6 +36,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
 
     return {
       themes: lightThemes.hits,
+      totalPages: lightThemes.nbPages,
       page,
       language,
       isDesktop,
@@ -45,7 +48,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
   }
 
   render() {
-    const { themes, language, isDesktop } = this.props
+    const { themes, language, page, totalPages, isDesktop } = this.props
 
     return (
       <App isDesktop={isDesktop}>
@@ -59,6 +62,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
             language={language}
             onLanguage={this.handleLanguage}
           />
+          <Pagination page={page} totalPages={totalPages} Link={LightLink} />
         </div>
       </App>
     )

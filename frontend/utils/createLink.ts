@@ -8,23 +8,32 @@ interface LinkCallbackProps {
   onClick: (e: any) => any
 }
 
-interface Link {
+export interface LinkProps {
   page?: number
   router?: SingletonRouter
   children: (linkProps: LinkCallbackProps) => any
 }
 
+const createUrl = (pathname: string, query: any = {}) => {
+  const querystring = qs.stringify(query)
+  return `${pathname}${querystring ? `?${querystring}` : ''}`
+}
+
 export default function createLink(pathname: string) {
-  const LinkComponent: React.SFC<Link> = ({ page, router, children }) => {
-    const active = router.pathname === pathname
+  const LinkComponent: React.SFC<LinkProps> = ({ page, router, children }) => {
     const query: any = {}
+    const routerPathname = router.pathname
+    const routerQuery = router.query
 
     if (page) {
       query.page = page
+      routerQuery.page = routerQuery.page || 1
     }
 
-    const querystring = qs.stringify(query)
-    const href = `${pathname}${querystring ? `?${querystring}` : ''}`
+    const href = createUrl(pathname, query)
+    const active = Object.keys(query).length
+      ? href === createUrl(routerPathname, routerQuery)
+      : href === createUrl(routerPathname)
 
     return children({
       href,

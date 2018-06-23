@@ -5,9 +5,9 @@ import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, ThemeSlider } from '../../components'
 import * as userAgent from '../../utils/userAgent'
-import { TrendingLink } from '../trending'
 import { DarkLink } from '../dark'
 import { LightLink } from '../light'
+import { TrendingLink } from '../trending'
 import styles from './HomePage.styles'
 
 enum Category {
