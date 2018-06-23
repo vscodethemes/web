@@ -11,14 +11,6 @@ app
   .then(() => {
     const server = express()
 
-    // server.get('/trending', (req, res) => {
-    //   app.render(req, res, '/', { ...req.query, sortBy: 'trending' })
-    // })
-
-    // server.get('/new', (req, res) => {
-    //   app.render(req, res, '/', { ...req.query, sortBy: 'new' })
-    // })
-
     server.get('*', (req, res) => {
       return handle(req, res)
     })
@@ -30,8 +22,8 @@ app
       console.log(`> Frontend ready on http://localhost:${port}`) // tslint:disable-line
     })
   })
-  .catch(ex => {
-    console.error(ex.stack) // tslint:disable-line
+  .catch(err => {
+    console.error(err.stack) // tslint:disable-line
     process.exit(1)
   })
 

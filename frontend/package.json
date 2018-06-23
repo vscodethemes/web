@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-beta.44",
+    "@vscodethemes/tokenizer": "0.1.0",
     "@vscodethemes/types": "0.1.0",
     "@zeit/next-typescript": "^0.1.1",
-    "@vscodethemes/tokenizer": "0.1.0",
     "algoliasearch": "^3.26.0",
     "emotion": "^9.1.1",
     "emotion-server": "^9.1.1",
@@ -26,6 +26,7 @@
     "html-entities": "^1.2.1",
     "isomorphic-fetch": "^2.2.1",
     "mem": "^3.0.0",
+    "merge": "^1.2.0",
     "next": "^5.1.0",
     "query-string": "^6.0.0",
     "raven": "^2.5.0",
@@ -62,6 +63,12 @@
     },
     "mapCoverage": true,
     "testRegex": ".test.tsx?$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }

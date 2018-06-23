@@ -1,21 +1,24 @@
 export enum Icons {
-  'cart',
-  'chevronDoubleLeft',
-  'chevronDoubleRight',
-  'chevronLeft',
-  'chevronRight',
-  'download',
-  'github',
-  'grid',
-  'open',
-  'search',
-  'star',
-  'twitter',
-  'vscodeDebug',
-  'vscodeExplorer',
-  'vscodeExtensions',
-  'vscodeGit',
-  'vscodeSearch',
+  'cart' = 'cart',
+  'chevronDoubleLeft' = 'chevronDoubleLeft',
+  'chevronDoubleRight' = 'chevronDoubleRight',
+  'chevronDown' = 'chevronDown',
+  'chevronLeft' = 'chevronLeft',
+  'chevronLeftLarge' = 'chevronLeftLarge',
+  'chevronRight' = 'chevronRight',
+  'chevronRightLarge' = 'chevronRightLarge',
+  'download' = 'download',
+  'github' = 'github',
+  'grid' = 'grid',
+  'open' = 'open',
+  'search' = 'search',
+  'star' = 'star',
+  'twitter' = 'twitter',
+  'vscodeDebug' = 'vscodeDebug',
+  'vscodeExplorer' = 'vscodeExplorer',
+  'vscodeExtensions' = 'vscodeExtensions',
+  'vscodeGit' = 'vscodeGit',
+  'vscodeSearch' = 'vscodeSearch',
 }
 
 export default {
@@ -37,13 +40,28 @@ export default {
       'M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z',
   },
 
+  [Icons.chevronDown]: {
+    viewBox: '0 0 24 24',
+    path: 'M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z',
+  },
+
   [Icons.chevronLeft]: {
+    viewBox: '0 0 24 24',
+    path: 'M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z',
+  },
+
+  [Icons.chevronLeftLarge]: {
     viewBox: '0 0 24 24',
     path:
       'M8.0001354,12 C7.99685612,11.8043487 8.05309651,11.6058992 8.17391687,11.4333498 L15.8925714,0.409968771 C16.1970639,-0.0248916048 16.7964279,-0.130575639 17.2312882,0.173916874 C17.6661486,0.478409388 17.7718326,1.07777333 17.4673401,1.5126337 L10.1240072,12 L17.4673401,22.4873663 C17.7718326,22.9222267 17.6661486,23.5215906 17.2312882,23.8260831 C16.7964279,24.1305756 16.1970639,24.0248916 15.8925714,23.5900312 L8.17391687,12.5666502 C8.05309651,12.3941008 7.99685612,12.1956513 8.0001354,12 Z',
   },
 
   [Icons.chevronRight]: {
+    viewBox: '0 0 24 24',
+    path: 'M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z',
+  },
+
+  [Icons.chevronRightLarge]: {
     viewBox: '0 0 24 24',
     path:
       'M17.6411216,12 C17.6444009,12.1956513 17.5881605,12.3941008 17.4673401,12.5666502 L9.7486856,23.5900312 C9.44419309,24.0248916 8.84482915,24.1305756 8.40996877,23.8260831 C7.9751084,23.5215906 7.86942436,22.9222267 8.17391687,22.4873663 L15.5172498,12 L8.17391687,1.5126337 C7.86942436,1.07777333 7.9751084,0.478409388 8.40996877,0.173916874 C8.84482915,-0.130575639 9.44419309,-0.0248916048 9.7486856,0.409968771 L17.4673401,11.4333498 C17.5881605,11.6058992 17.6444009,11.8043487 17.6411216,12 Z',

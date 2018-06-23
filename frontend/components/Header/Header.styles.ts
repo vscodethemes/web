@@ -11,10 +11,18 @@ export default {
     padding: `0 ${em(theme.container.gutter)}`,
     backgroundColor: `${theme.header.backgroundColor}F5`, // FA = 96% transparency for 8-digit hex value.
     zIndex: 100,
+    display: 'flex',
+    alignItems: 'center',
 
     [theme.breakpoints.pageMin]: {
       height: em(theme.header.heightCollapsed),
       backgroundColor: `${theme.header.backgroundColor}F5`,
     },
+  }),
+
+  sep: css({
+    color: theme.colors.textMuted,
+    marginLeft: theme.gutters.sm,
+    marginRight: theme.gutters.sm,
   }),
 }

@@ -1,9 +1,9 @@
 import { SearchParams } from '@vscodethemes/types'
-import { cx } from 'emotion'
+// import { cx } from 'emotion'
 import * as React from 'react'
-import SearchLink from '../../pages/SearchPage/SearchLink'
-import Icon from '../Icon'
-import styles from './PageLink.styles'
+// import SearchLink from '../../pages/SearchPage/SearchLink'
+// import Icon from '../Icon'
+// import styles from './PageLink.styles'
 
 interface Props {
   page: number
@@ -20,29 +20,30 @@ const PageLink: React.SFC<Props> = ({
   skipForward,
   onClick,
 }) => {
-  const isActive = params.page === page && !skipBackward && !skipForward
-  let contents: React.ReactNode = null
+  return null
+  // const isActive = params.page === page && !skipBackward && !skipForward
+  // let contents: React.ReactNode = null
 
-  if (skipBackward) {
-    contents = <Icon className={styles.icon} icon="chevronDoubleLeft" />
-  } else if (skipForward) {
-    contents = <Icon className={styles.icon} icon="chevronDoubleRight" />
-  } else {
-    contents = page
-  }
+  // if (skipBackward) {
+  //   contents = <Icon className={styles.icon} icon="chevronDoubleLeft" />
+  // } else if (skipForward) {
+  //   contents = <Icon className={styles.icon} icon="chevronDoubleRight" />
+  // } else {
+  //   contents = page
+  // }
 
-  return (
-    <SearchLink params={{ ...params, page }}>
-      <a className={cx(styles.page, isActive && styles.active)}>
-        <div
-          className={styles.contents}
-          onClick={() => onClick({ ...params, page })}
-        >
-          {contents}
-        </div>
-      </a>
-    </SearchLink>
-  )
+  // return (
+  //   <SearchLink params={{ ...params, page }}>
+  //     <a className={cx(styles.page, isActive && styles.active)}>
+  //       <div
+  //         className={styles.contents}
+  //         onClick={() => onClick({ ...params, page })}
+  //       >
+  //         {contents}
+  //       </div>
+  //     </a>
+  //   </SearchLink>
+  // )
 }
 
 export default PageLink

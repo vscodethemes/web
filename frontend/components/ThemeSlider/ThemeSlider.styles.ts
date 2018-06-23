@@ -1,27 +1,53 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { em, withContainer } from '../../theme'
 
 const shadowSize = 30
 
 export default {
   wrapper: css({
-    [`:hover .next`]: {
-      opacity: 1,
-    },
+    marginBottom: em(theme.gutters.lg),
   }),
 
-  title: css({
-    paddingLeft: em(theme.container.gutter),
+  title: css(
+    withContainer({
+      position: 'relative',
+      zIndex: 20,
+      display: 'flex',
+      alignItems: 'flex-end',
+    }),
+  ),
+
+  browseAll: css({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: em(theme.gutters.sm),
+    textAlign: 'center',
+    paddingLeft: em(theme.gutters.xs),
+    paddingRight: em(theme.gutters.xs),
+    color: theme.colors.text,
+    cursor: 'pointer',
+    opacity: 1,
+
+    ':hover': {
+      color: theme.colors.palette[0],
+    },
   }),
 
   clip: css({
     position: 'relative',
+    zIndex: 10,
     overflow: 'hidden',
     // Compensate for overflow: hidden and shadow.
     marginTop: em(-shadowSize),
     marginBottom: em(-shadowSize),
     padding: em(shadowSize),
     paddingLeft: em(theme.container.gutter),
+
+    [`:hover .next`]: {
+      opacity: 1,
+    },
   }),
 
   row: css({

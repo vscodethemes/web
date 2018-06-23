@@ -16,7 +16,7 @@ const PreviousButton: React.SFC<PreviousButtonProps> = ({
     className={cx('previous', styles.button, hide && styles.hide)}
     onClick={onClick}
   >
-    <Icon icon={Icons.chevronLeft} className={cx('icon', styles.icon)} />
+    <Icon icon={Icons.chevronLeftLarge} className={cx('icon', styles.icon)} />
   </button>
 )
 
