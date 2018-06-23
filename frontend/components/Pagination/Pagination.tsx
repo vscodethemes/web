@@ -1,27 +1,23 @@
-import { SearchParams } from '@vscodethemes/types'
 import * as React from 'react'
+import { LinkProps } from '../../utils/createLink'
 import generatePages from './generatePages'
-import PageLink from './PageLink'
+import Page from './Page'
 import styles from './Pagination.styles'
 
 interface PaginationProps {
+  page: number
   totalPages: number
-  params: SearchParams
-  onClick: (params: SearchParams) => any
+  Link: React.ComponentType<LinkProps>
 }
 
 const maxVisiblePages = 7
 
-const Pagination: React.SFC<PaginationProps> = ({
-  totalPages,
-  params,
-  onClick,
-}) => {
-  const pages = generatePages(totalPages, params.page, maxVisiblePages)
+const Pagination: React.SFC<PaginationProps> = ({ page, totalPages, Link }) => {
+  const pages = generatePages(totalPages, page, maxVisiblePages)
 
   return (
     <div className={styles.pagination}>
-      {pages.map((page, index) => {
+      {pages.map((currentPage, index) => {
         // Show skip backward icon if second page is not adjacent to the third page.
         const isSkipBackward =
           totalPages > 3 && index === 1 && pages[1] !== pages[2] - 1
@@ -32,14 +28,16 @@ const Pagination: React.SFC<PaginationProps> = ({
           pages[maxVisiblePages - 2] !== pages[maxVisiblePages - 3] + 1
 
         return (
-          <PageLink
-            key={page}
-            page={page}
-            params={params}
-            skipBackward={isSkipBackward}
-            skipForward={isSkipForward}
-            onClick={onClick}
-          />
+          <Link key={currentPage} page={currentPage}>
+            {linkProps => (
+              <Page
+                page={currentPage}
+                skipBackward={isSkipBackward}
+                skipForward={isSkipForward}
+                {...linkProps}
+              />
+            )}
+          </Link>
         )
       })}
     </div>

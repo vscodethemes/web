@@ -1,17 +1,18 @@
 import { css } from 'emotion'
 import theme, { em } from '../../theme'
-import { boxHeight, boxWidth } from './PageLink.styles'
+import { boxHeight, boxWidth } from './Page.styles'
 
 export default {
   pagination: css({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: em(theme.gutters.lg - theme.gutters.sm),
+    marginLeft: 'auto',
+    marginRight: 'auto',
     color: theme.colors.text,
-    maxWidth: em(320),
   }),
 
   icon: css({
