@@ -17,7 +17,7 @@ const pageSizes = {
 }
 
 const colors = {
-  palette: ['#00A8FF', '#B8E63B', '#E70258', '#880055', '#FAF100'],
+  palette: ['#00A8FF', '#B8E63B', '#880055', '#E70258', '#FAF100'],
   background: '#202026',
   backgroundDark: '#18181F',
   inputBackground: '#28282F',

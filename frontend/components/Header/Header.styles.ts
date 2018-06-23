@@ -21,7 +21,8 @@ export default {
   }),
 
   sep: css({
-    color: theme.colors.textMuted,
+    opacity: 0.25,
+    color: theme.colors.text,
     marginLeft: theme.gutters.sm,
     marginRight: theme.gutters.sm,
   }),

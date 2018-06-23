@@ -29,9 +29,10 @@ export default function createLink(pathname: string) {
     return children({
       href,
       active,
-      onClick: (e: MouseEvent) => {
+      onClick: async (e: MouseEvent) => {
         e.preventDefault()
-        router.push({ pathname, query })
+        await router.push({ pathname, query })
+        window.scrollTo(0, 0)
       },
     })
   }
