@@ -1,7 +1,7 @@
 declare module 'emotion-server'
 declare module 'express-useragent'
 declare module 'html-entities'
+declare module 'next/app'
 declare module 'raw-loader!./*'
 declare module 'react-syntax-highlighter/*'
-
-declare module 'next/app'
+declare module 'merge'

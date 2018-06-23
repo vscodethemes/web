@@ -13,7 +13,7 @@ const NextButton: React.SFC<NextButtonProps> = ({ hide = false, onClick }) => (
     className={cx('next', styles.button, hide && styles.hide)}
     onClick={onClick}
   >
-    <Icon icon={Icons.chevronRight} className={cx('icon', styles.icon)} />
+    <Icon icon={Icons.chevronRightLarge} className={cx('icon', styles.icon)} />
   </button>
 )
 

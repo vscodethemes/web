@@ -8,9 +8,7 @@ export default {
   link: css({
     height: '100%',
     position: 'relative',
-
-    paddingBottom: em(boxHeight),
-    fontWeight: 'bold',
+    // paddingBottom: em(boxHeight),
     textDecoration: 'none',
     color: theme.colors.text,
     outline: 0,
@@ -23,7 +21,8 @@ export default {
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    fontSize: em(theme.fontSizes.md),
+    // fontSize: em(theme.fontSizes.md),
+    fontSize: em(theme.fontSizes.sm),
   }),
 
   active: css({

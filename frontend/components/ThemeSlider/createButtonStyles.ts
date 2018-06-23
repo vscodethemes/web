@@ -14,9 +14,9 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
       marginTop: em(-size[1] / 2),
       width: em(size[0] + offset),
       height: em(size[1]),
-      background: `${theme.colors.backgroundDark}F0`,
+      background: 'rgba(0, 0, 0, 0.8)',
       color: theme.colors.text,
-      border: `1px solid ${theme.colors.backgroundDark}`,
+      border: 0,
       boxShadow: theme.shadows.md,
       cursor: 'pointer',
       transform: `translateX(${em(translateOffset)})`,
@@ -27,15 +27,11 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
             left: 0,
             borderLeft: 'none',
             paddingLeft: em(offset),
-            borderTopRightRadius: em(theme.borderRadius.md),
-            borderBottomRightRadius: em(theme.borderRadius.md),
           }
         : {
             right: 0,
             borderRight: 'none',
             paddingRight: em(offset),
-            borderTopLeftRadius: em(theme.borderRadius.md),
-            borderBottomLeftRadius: em(theme.borderRadius.md),
           }),
 
       ':hover': {
