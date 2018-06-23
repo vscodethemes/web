@@ -5,7 +5,6 @@ export default {
   footer: css({
     width: '100%',
     borderTop: `1px solid ${theme.colors.inputBorder}`,
-    marginTop: em(theme.gutters.lg),
     padding: `${em(theme.gutters.md)} ${em(theme.container.gutter)}`,
     display: 'flex',
     flexDirection: 'row',

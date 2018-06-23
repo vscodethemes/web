@@ -1,17 +1,12 @@
 import * as React from 'react'
-import { defaultSearchParams } from '../../constants'
-import SearchLink from '../../pages/SearchPage/SearchLink'
+import { HomeLink } from '../../pages/home'
 import theme from '../../theme'
 import styles from './Logo.styles'
 
-interface LogoProps {
-  onClick?: () => any
-}
-
-const Logo: React.SFC<LogoProps> = ({ onClick }) => (
-  <SearchLink params={defaultSearchParams}>
-    <a className={styles.link}>
-      <div className={styles.linkInner} onClick={onClick}>
+const Logo: React.SFC<{}> = () => (
+  <HomeLink>
+    {linkProps => (
+      <a className={styles.link} {...linkProps}>
         <svg className={styles.icon} viewBox="0 0 57 57">
           <g
             stroke="none"
@@ -108,9 +103,9 @@ const Logo: React.SFC<LogoProps> = ({ onClick }) => (
           <span className={styles.primary}>vscode</span>
           themes
         </h1>
-      </div>
-    </a>
-  </SearchLink>
+      </a>
+    )}
+  </HomeLink>
 )
 
 export default Logo

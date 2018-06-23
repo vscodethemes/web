@@ -1,8 +1,7 @@
+import * as merge from 'merge'
+
 const spacingUnit = 10
 export const rootFontSize = 14
-
-export const em = (px: number) =>
-  `${Math.round(px / rootFontSize * 100) / 100}em`
 
 const gutters = {
   xs: spacingUnit / 2,
@@ -27,7 +26,7 @@ const colors = {
   textMuted: '#606066',
 }
 
-export default {
+const theme = {
   colors,
   gutters,
   pageSizes,
@@ -63,4 +62,21 @@ export default {
   container: {
     gutter: gutters.lg,
   },
+  animation: {
+    bezier: 'cubic-bezier(.63,.01,.44,1)',
+  },
 }
+
+export default theme
+
+export const em = (px: number) =>
+  `${Math.round((px / rootFontSize) * 100) / 100}em`
+
+export const withContainer = (styles: any) =>
+  merge(
+    {
+      marginLeft: em(theme.container.gutter),
+      marginRight: em(theme.container.gutter),
+    },
+    styles,
+  )

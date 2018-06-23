@@ -2,12 +2,14 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
 import { Heading, ThemePreview } from '../'
+import theme, { em } from '../../theme'
 import NextButton from './NextButton'
 import PreviousButton from './PreviousButton'
 import styles from './ThemeSlider.styles'
 
 interface ThemeSliderProps {
   title: string
+  description: string
   themes: Array<Theme | undefined>
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
@@ -114,7 +116,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
   }
 
   render() {
-    const { title, themes, language, onLanguage } = this.props
+    const { title, description, themes, language, onLanguage } = this.props
     const {
       currentIndex,
       queuedIndex,
@@ -125,7 +127,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
     } = this.state
 
     // Ensure we stop sliding at a number that's a factor of numOfVisibleItems to
-    // prevent over-sliding and have remaining space to show the "Browse All" CTA.
+    // prevent over-sliding and have remaining space to show the "Browse all" CTA.
     const maxIndex =
       Math.floor(themes.length / numOfVisibleItems) * numOfVisibleItems -
       numOfVisibleItems
@@ -181,10 +183,10 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
       // We should only animate when sliding because we need to offset
       // previous items with translate at resting state.
       transition:
-        duration > 0
-          ? `transform ${duration}s cubic-bezier(.63,.01,.44,1)`
-          : '',
+        duration > 0 ? `transform ${duration}s ${theme.animation.bezier}` : '',
     }
+
+    const itemWidthRemainder = 100 - numOfVisibleItems * itemWidthPercent
 
     return (
       <div className={styles.wrapper}>
@@ -211,6 +213,19 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
                 />
               </div>
             ))}
+            {isLastSlide && (
+              <a
+                className={styles.browseAll}
+                style={{
+                  width: `calc(${itemWidthRemainder}% + ${em(
+                    theme.container.gutter,
+                  )})`,
+                }}
+              >
+                View all<br />
+                <span style={{ whiteSpace: 'nowrap' }}>{description}</span>
+              </a>
+            )}
           </div>
           <div
             className={cx(

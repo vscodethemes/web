@@ -1,5 +1,5 @@
-import TabLink from './TabLink'
+import Tab from './Tab'
 import Tabs from './Tabs'
 
 export default Tabs
-export { TabLink }
+export { Tab }

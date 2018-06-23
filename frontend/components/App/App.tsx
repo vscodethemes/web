@@ -12,13 +12,13 @@ if (typeof window !== 'undefined') {
 
 interface AppProps {
   isDesktop: boolean
-  onLogoClick?: () => any
+  hideCategories?: boolean
 }
 
-const App: React.SFC<AppProps> = ({ children, isDesktop, onLogoClick }) => (
+const App: React.SFC<AppProps> = ({ children, isDesktop, hideCategories }) => (
   <UserProvider value={{ isDesktop }}>
     <React.Fragment>
-      <Header onLogoClick={onLogoClick} />
+      <Header hideCategories={hideCategories} />
       <div className={styles.container}>{children}</div>
       <Footer />
     </React.Fragment>

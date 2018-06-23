@@ -5,9 +5,9 @@ import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, ThemeSlider } from '../../components'
 import * as userAgent from '../../utils/userAgent'
-import { classes } from './HomePage.styles'
+import styles from './HomePage.styles'
 
-enum ThemeCategories {
+enum Category {
   dark = 'dark',
   light = 'light',
   trending = 'trending',
@@ -19,9 +19,9 @@ interface CategoryResults {
 }
 
 interface Categories {
-  [ThemeCategories.dark]: CategoryResults
-  [ThemeCategories.light]: CategoryResults
-  [ThemeCategories.trending]: CategoryResults
+  [Category.dark]: CategoryResults
+  [Category.light]: CategoryResults
+  [Category.trending]: CategoryResults
 }
 
 interface HomePageProps {
@@ -38,12 +38,6 @@ export default class HomePage extends React.Component<
   HomePageState
 > {
   static perPage = 30
-
-  static getCategoryThemes = {
-    [ThemeCategories.trending]: HomePage.getTrendingThemes,
-    [ThemeCategories.dark]: HomePage.getDarkThemes,
-    [ThemeCategories.light]: HomePage.getLightThemes,
-  }
 
   static async getTrendingThemes(lang: LanguageOptions) {
     return algolia.search({
@@ -103,15 +97,15 @@ export default class HomePage extends React.Component<
 
     return {
       categories: {
-        [ThemeCategories.trending]: {
+        [Category.trending]: {
           themes: trendingThemes.hits,
           language,
         },
-        [ThemeCategories.dark]: {
+        [Category.dark]: {
           themes: darkThemes.hits,
           language,
         },
-        [ThemeCategories.light]: {
+        [Category.light]: {
           themes: lightThemes.hits,
           language,
         },
@@ -122,9 +116,9 @@ export default class HomePage extends React.Component<
 
   state = {
     categories: {
-      trending: this.props.categories[ThemeCategories.trending],
-      dark: this.props.categories[ThemeCategories.dark],
-      light: this.props.categories[ThemeCategories.light],
+      trending: this.props.categories[Category.trending],
+      dark: this.props.categories[Category.dark],
+      light: this.props.categories[Category.light],
     },
   }
 
@@ -137,15 +131,15 @@ export default class HomePage extends React.Component<
 
     this.setState({
       categories: {
-        [ThemeCategories.trending]: {
+        [Category.trending]: {
           themes: trendingThemes.hits,
           language,
         },
-        [ThemeCategories.dark]: {
+        [Category.dark]: {
           themes: darkThemes.hits,
           language,
         },
-        [ThemeCategories.light]: {
+        [Category.light]: {
           themes: lightThemes.hits,
           language,
         },
@@ -158,45 +152,32 @@ export default class HomePage extends React.Component<
     const { categories } = this.state
 
     return (
-      <App
-        isDesktop={isDesktop}
-        onLogoClick={() => {
-          // TODO
-          console.log('implement this') // tslint:disable-line
-        }}
-      >
+      <App isDesktop={isDesktop}>
         <Head>
-          <title>
-            VSCodeThemes | Preview themes from the Visual Studio Marketplace
-          </title>
+          <title>VSCodeThemes</title>
         </Head>
-
-        <div className={classes.row}>
+        <div className={styles.wrapper}>
           <ThemeSlider
-            title="What's Trending"
+            title="Trending themes"
+            description="trending themes"
             language={categories.trending.language}
             themes={categories.trending.themes}
             onLanguage={this.handleLanguage}
           />
-          {/* <div className={classes.rowFooter}>More Trending Themes</div> */}
-        </div>
-        <div className={classes.row}>
           <ThemeSlider
-            title="Dark Themes"
+            title="Dark themes"
+            description="dark themes"
             language={categories.dark.language}
             themes={categories.dark.themes}
             onLanguage={this.handleLanguage}
           />
-          {/* <div className={classes.rowFooter}>More Dark Themes</div> */}
-        </div>
-        <div className={classes.row}>
           <ThemeSlider
-            title="Light Themes"
+            title="Light themes"
+            description="light themes"
             language={categories.light.language}
             themes={categories.light.themes}
             onLanguage={this.handleLanguage}
           />
-          {/* <div className={classes.rowFooter}>More Light Themes</div> */}
         </div>
       </App>
     )

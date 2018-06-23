@@ -3,18 +3,12 @@ import theme, { em } from '../../theme'
 
 export default {
   link: css({
-    height: '100%',
-    textDecoration: 'none',
-  }),
-
-  linkInner: css({
+    marginRight: em(theme.gutters.lg),
     height: '100%',
     display: 'inline-flex',
     alignItems: 'center',
+    textDecoration: 'none',
     color: theme.colors.palette[0],
-    ':hover': {
-      textDecoration: 'underline wavy',
-    },
   }),
 
   icon: css({

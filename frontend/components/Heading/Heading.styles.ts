@@ -8,6 +8,7 @@ export default {
     marginTop: 0,
     marginBottom: em(theme.gutters.md),
   }),
+
   text: css({
     color: theme.colors.text,
     fontSize: em(theme.fontSizes.xl),

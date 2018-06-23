@@ -30,24 +30,24 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
         <TabBar colors={themeProps.colors}>
           <Tab
             colors={themeProps.colors}
-            active={language === 'javascript'}
+            active={language === LanguageOptions.javascript}
             onClick={() => onLanguage(LanguageOptions.javascript)}
           >
-            main.js
+            {LanguageOptions.javascript}
           </Tab>
           <Tab
             colors={themeProps.colors}
-            active={language === 'css'}
+            active={language === LanguageOptions.css}
             onClick={() => onLanguage(LanguageOptions.css)}
           >
-            styles.css
+            {LanguageOptions.css}
           </Tab>
           <Tab
             colors={themeProps.colors}
-            active={language === 'html'}
+            active={language === LanguageOptions.html}
             onClick={() => onLanguage(LanguageOptions.html)}
           >
-            index.html
+            {LanguageOptions.html}
           </Tab>
         </TabBar>
         <TabContent>
