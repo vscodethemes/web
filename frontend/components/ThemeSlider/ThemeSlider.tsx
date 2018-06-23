@@ -13,6 +13,7 @@ interface ThemeSliderProps {
   themes: Array<Theme | undefined>
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
+  moreProps?: any
 }
 
 interface ThemeSliderState {
@@ -116,7 +117,14 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
   }
 
   render() {
-    const { title, description, themes, language, onLanguage } = this.props
+    const {
+      title,
+      description,
+      themes,
+      language,
+      onLanguage,
+      moreProps,
+    } = this.props
     const {
       currentIndex,
       queuedIndex,
@@ -215,14 +223,15 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
             ))}
             {isLastSlide && (
               <a
-                className={styles.browseAll}
+                {...moreProps}
+                className={styles.more}
                 style={{
                   width: `calc(${itemWidthRemainder}% + ${em(
                     theme.container.gutter,
                   )})`,
                 }}
               >
-                View all<br />
+                View more<br />
                 <span style={{ whiteSpace: 'nowrap' }}>{description}</span>
               </a>
             )}

@@ -5,6 +5,9 @@ import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, ThemeSlider } from '../../components'
 import * as userAgent from '../../utils/userAgent'
+import { TrendingLink } from '../trending'
+import { DarkLink } from '../dark'
+import { LightLink } from '../light'
 import styles from './HomePage.styles'
 
 enum Category {
@@ -157,27 +160,42 @@ export default class HomePage extends React.Component<
           <title>VSCodeThemes</title>
         </Head>
         <div className={styles.wrapper}>
-          <ThemeSlider
-            title="Trending themes"
-            description="trending themes"
-            language={categories.trending.language}
-            themes={categories.trending.themes}
-            onLanguage={this.handleLanguage}
-          />
-          <ThemeSlider
-            title="Dark themes"
-            description="dark themes"
-            language={categories.dark.language}
-            themes={categories.dark.themes}
-            onLanguage={this.handleLanguage}
-          />
-          <ThemeSlider
-            title="Light themes"
-            description="light themes"
-            language={categories.light.language}
-            themes={categories.light.themes}
-            onLanguage={this.handleLanguage}
-          />
+          <TrendingLink page={2}>
+            {({ href, onClick }) => (
+              <ThemeSlider
+                title="Trending themes"
+                description="trending themes"
+                language={categories.trending.language}
+                themes={categories.trending.themes}
+                onLanguage={this.handleLanguage}
+                moreProps={{ href, onClick }}
+              />
+            )}
+          </TrendingLink>
+          <DarkLink page={2}>
+            {({ href, onClick }) => (
+              <ThemeSlider
+                title="Dark themes"
+                description="dark themes"
+                language={categories.dark.language}
+                themes={categories.dark.themes}
+                onLanguage={this.handleLanguage}
+                moreProps={{ href, onClick }}
+              />
+            )}
+          </DarkLink>
+          <LightLink page={2}>
+            {({ href, onClick }) => (
+              <ThemeSlider
+                title="Light themes"
+                description="light themes"
+                language={categories.light.language}
+                themes={categories.light.themes}
+                onLanguage={this.handleLanguage}
+                moreProps={{ href, onClick }}
+              />
+            )}
+          </LightLink>
         </div>
       </App>
     )
