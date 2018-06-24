@@ -26,6 +26,8 @@ const colors = {
   textMuted: '#606066',
 }
 
+const em = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}em`
+
 const theme = {
   colors,
   gutters,
@@ -51,8 +53,8 @@ const theme = {
     md: '0px 6px 20px rgba(0, 0, 0, 0.35)',
   },
   breakpoints: {
-    pageMax: `@media (max-width: ${pageSizes.max}px)`,
-    pageMin: `@media (max-width: ${pageSizes.min}px)`,
+    pageMax: `@media (max-width: ${em(pageSizes.max)})`,
+    pageMin: `@media (max-width: ${em(pageSizes.min)})`,
   },
   header: {
     height: 35,
@@ -67,16 +69,19 @@ const theme = {
   },
 }
 
-export default theme
-
-export const em = (px: number) =>
-  `${Math.round((px / rootFontSize) * 100) / 100}em`
-
-export const withContainer = (styles: any) =>
+const withContainer = (styles: any) =>
   merge(
     {
       marginLeft: em(theme.container.gutter),
       marginRight: em(theme.container.gutter),
+
+      [theme.breakpoints.pageMin]: {
+        marginLeft: em(theme.gutters.md),
+        marginRight: em(theme.gutters.md),
+      },
     },
     styles,
   )
+
+export default theme
+export { em, withContainer }

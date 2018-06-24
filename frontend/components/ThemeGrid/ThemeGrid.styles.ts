@@ -1,6 +1,12 @@
 import { css } from 'emotion'
 import theme, { em } from '../../theme'
 
+const breakpoints = [
+  `@media (max-width: ${em(1440)})`,
+  `@media (max-width: ${em(1150)})`,
+  `@media (max-width: ${em(620)})`,
+]
+
 export default {
   grid: css({
     display: 'flex',
@@ -12,12 +18,20 @@ export default {
   }),
 
   item: css({
-    width: '33.3333%',
-    // width: '50%',
-    // width: '100%',
+    width: '25%',
     maxWidth: 460,
     paddingLeft: em(theme.gutters.lg / 2),
     paddingRight: em(theme.gutters.lg / 2),
     marginBottom: em(theme.gutters.lg),
+
+    [breakpoints[0]]: {
+      width: '33.3333%',
+    },
+    [breakpoints[1]]: {
+      width: '50%',
+    },
+    [breakpoints[2]]: {
+      width: '100%',
+    },
   }),
 }
