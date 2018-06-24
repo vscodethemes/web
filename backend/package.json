@@ -7,12 +7,9 @@
     "tsc": "tsc -p ./tsconfig.json",
     "lint": "tslint --project .",
     "test": "jest",
-    "invoke-scrapeExtensions":
-      "ts-node scripts/invoke.ts ../jobs/scrapeExtensions.ts",
-    "invoke-extractThemes":
-      "ts-node scripts/invoke.ts ../jobs/extractThemes.ts",
-    "invoke-extractColors":
-      "ts-node scripts/invoke.ts ../jobs/extractColors.ts",
+    "invoke-scrapeExtensions": "ts-node scripts/invoke.ts ../jobs/scrapeExtensions.ts",
+    "invoke-extractThemes": "ts-node scripts/invoke.ts ../jobs/extractThemes.ts",
+    "invoke-extractColors": "ts-node scripts/invoke.ts ../jobs/extractColors.ts",
     "invoke-saveTheme": "ts-node scripts/invoke.ts ../jobs/saveTheme.ts"
   },
   "dependencies": {
@@ -40,6 +37,7 @@
     "@types/raven": "^2.1.6",
     "@types/util.promisify": "^1.0.0",
     "@types/webpack": "^3.8.1",
+    "babel-preset-env": "^1.7.0",
     "copy-webpack-plugin": "^4.5.1",
     "jest": "^21.2.1",
     "jest-fetch-mock": "^1.3.3",
@@ -58,6 +56,12 @@
     },
     "mapCoverage": true,
     "testRegex": ".test.tsx?$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   }
 }
