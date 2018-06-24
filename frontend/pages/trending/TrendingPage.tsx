@@ -4,7 +4,6 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, Heading, Pagination, ThemeGrid } from '../../components'
-import * as userAgent from '../../utils/userAgent'
 import { TrendingLink } from './'
 import styles from './TrendingPage.styles'
 
@@ -13,7 +12,6 @@ interface TrendingPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
-  isDesktop: boolean
 }
 
 export default class TrendingPage extends React.Component<
@@ -24,7 +22,6 @@ export default class TrendingPage extends React.Component<
 
   static async getInitialProps(ctx: Context): Promise<TrendingPageProps> {
     const language = LanguageOptions.javascript
-    const isDesktop = userAgent.isDesktop(ctx.req)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const trendingThemes = await algolia.search({
@@ -42,7 +39,6 @@ export default class TrendingPage extends React.Component<
       totalPages: trendingThemes.nbPages,
       page,
       language,
-      isDesktop,
     }
   }
 
@@ -51,15 +47,14 @@ export default class TrendingPage extends React.Component<
   }
 
   render() {
-    const { themes, language, page, totalPages, isDesktop } = this.props
+    const { themes, language, page, totalPages } = this.props
 
     return (
-      <App isDesktop={isDesktop}>
+      <App>
         <Head>
           <title>Trending themes</title>
         </Head>
         <div className={styles.wrapper}>
-          <Heading text="Trending themes" />
           <ThemeGrid
             themes={themes}
             language={language}

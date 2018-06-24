@@ -4,7 +4,6 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, ThemeSlider } from '../../components'
-import * as userAgent from '../../utils/userAgent'
 import { DarkLink } from '../dark'
 import { LightLink } from '../light'
 import { TrendingLink } from '../trending'
@@ -29,7 +28,6 @@ interface Categories {
 
 interface HomePageProps {
   categories: Categories
-  isDesktop: boolean
 }
 
 interface HomePageState {
@@ -90,7 +88,6 @@ export default class HomePage extends React.Component<
 
   static async getInitialProps(ctx: Context): Promise<HomePageProps> {
     const language = LanguageOptions.javascript
-    const isDesktop = userAgent.isDesktop(ctx.req)
 
     const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
       HomePage.getTrendingThemes(language),
@@ -113,7 +110,6 @@ export default class HomePage extends React.Component<
           language,
         },
       },
-      isDesktop,
     }
   }
 
@@ -151,11 +147,10 @@ export default class HomePage extends React.Component<
   }
 
   render() {
-    const { isDesktop } = this.props
     const { categories } = this.state
 
     return (
-      <App isDesktop={isDesktop}>
+      <App>
         <Head>
           <title>VSCodeThemes</title>
         </Head>

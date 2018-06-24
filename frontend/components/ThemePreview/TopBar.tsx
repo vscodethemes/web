@@ -8,7 +8,7 @@ export interface TopBarProps {
 
 const TopBar: React.SFC<TopBarProps> = ({ name }) => (
   <div className={classes.topBar}>
-    <h1 className={classes.name}>{name}</h1>
+    <h3 className={classes.name}>{name}</h3>
   </div>
 )
 

@@ -40,9 +40,6 @@ const classes = {
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
-    ':hover': {
-      textDecoration: 'underline wavy',
-    },
   }),
 
   active: css({
