@@ -1,10 +1,7 @@
 /**
  * Generates a set of pages for the provided total pages. Ensures
  * the active page is centered unless we can't fill the specified number
- * of visible pages. Returns links to the next set of pages when we
- * can skip forward or backwards. Links will either be inserted as the
- * second page or the second-last page. This is a naive implementation and
- * really only works well when the number of visible pages is 7.
+ * of visible pages.
  */
 export default function generatePages(
   totalPages: number,

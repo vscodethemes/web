@@ -4,7 +4,6 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { App, Heading, Pagination, ThemeGrid } from '../../components'
-import * as userAgent from '../../utils/userAgent'
 import { LightLink } from './'
 import styles from './LightPage.styles'
 
@@ -13,7 +12,6 @@ interface LightPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
-  isDesktop: boolean
 }
 
 export default class LightPage extends React.Component<LightPageProps, {}> {
@@ -21,7 +19,6 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
 
   static async getInitialProps(ctx: Context): Promise<LightPageProps> {
     const language = LanguageOptions.javascript
-    const isDesktop = userAgent.isDesktop(ctx.req)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const lightThemes = await algolia.search({
@@ -39,7 +36,6 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
       totalPages: lightThemes.nbPages,
       page,
       language,
-      isDesktop,
     }
   }
 
@@ -48,15 +44,14 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
   }
 
   render() {
-    const { themes, language, page, totalPages, isDesktop } = this.props
+    const { themes, language, page, totalPages } = this.props
 
     return (
-      <App isDesktop={isDesktop}>
+      <App>
         <Head>
           <title>Light themes</title>
         </Head>
         <div className={styles.wrapper}>
-          <Heading text="Light themes" />
           <ThemeGrid
             themes={themes}
             language={language}
