@@ -2,23 +2,17 @@ import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
 import theme, { em } from '../../theme'
-import Icon, { Icons } from '../Icon'
-import { UserConsumer } from '../UserContext'
 
 interface StatusBarProps {
   colors: Colors
   repository: string
   repositoryOwner: string
-  extensionName: string
-  publisherName: string
 }
 
 const StatusBar: React.SFC<StatusBarProps> = ({
   colors,
   repository,
   repositoryOwner,
-  extensionName,
-  publisherName,
 }) => (
   <div
     className={classes.statusBar}
@@ -37,28 +31,6 @@ const StatusBar: React.SFC<StatusBarProps> = ({
         {repositoryOwner}
       </a>
     )}
-    {publisherName && (
-      <UserConsumer>
-        {({ isDesktop }) => (
-          <a
-            className={cx(classes.link, classes.secondary)}
-            href={
-              isDesktop
-                ? `vscode:extension/${publisherName}.${extensionName}`
-                : `https://marketplace.visualstudio.com/items?itemName=${publisherName}.${extensionName}`
-            }
-            style={{ color: colors.statusBarForeground }}
-          >
-            Open in {isDesktop ? 'VSCode' : 'Marketplace'}
-            <Icon
-              className={classes.icon}
-              icon={Icons.open}
-              fill={colors.statusBarForeground}
-            />
-          </a>
-        )}
-      </UserConsumer>
-    )}
   </div>
 )
 
@@ -74,21 +46,18 @@ const classes = {
   }),
 
   link: css({
-    flex: 1,
+    // flex: 1,
     display: 'flex',
     alignItems: 'center',
     textDecoration: 'none',
     fontSize: theme.fontSizes.xs,
     height: '100%',
-    ':hover': {
-      textDecoration: 'underline wavy',
-    },
   }),
 
   pic: css({
     width: em(theme.fontSizes.xs * 2),
     height: em(theme.fontSizes.xs * 2),
-    marginLeft: `${statusBarGutter}%`,
+    marginLeft: em(theme.gutters.sm),
     marginRight: em(theme.gutters.xs),
     objectFit: 'cover',
     borderRadius: '100%',

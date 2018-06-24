@@ -19,54 +19,50 @@ interface ThemePreviewProps {
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   theme: themeProps,
-  language = LanguageOptions.javascript,
+  language,
   onLanguage,
-}) => {
-  return (
-    <div className={classes.container}>
-      <TopBar name={themeProps.themeName} />
-      <Editor colors={themeProps.colors}>
-        <ActivityBar colors={themeProps.colors} />
-        <TabBar colors={themeProps.colors}>
-          <Tab
-            colors={themeProps.colors}
-            active={language === LanguageOptions.javascript}
-            onClick={() => onLanguage(LanguageOptions.javascript)}
-          >
-            {LanguageOptions.javascript}
-          </Tab>
-          <Tab
-            colors={themeProps.colors}
-            active={language === LanguageOptions.css}
-            onClick={() => onLanguage(LanguageOptions.css)}
-          >
-            {LanguageOptions.css}
-          </Tab>
-          <Tab
-            colors={themeProps.colors}
-            active={language === LanguageOptions.html}
-            onClick={() => onLanguage(LanguageOptions.html)}
-          >
-            {LanguageOptions.html}
-          </Tab>
-        </TabBar>
-        <TabContent>
-          <Code
-            tokens={themeProps.tokens}
-            editorForeground={themeProps.colors.editorForeground}
-          />
-        </TabContent>
-      </Editor>
-      <StatusBar
-        colors={themeProps.colors}
-        repository={themeProps.repository}
-        repositoryOwner={themeProps.repositoryOwner}
-        extensionName={themeProps.extensionName}
-        publisherName={themeProps.publisherName}
-      />
-    </div>
-  )
-}
+}) => (
+  <div className={classes.container}>
+    <TopBar name={themeProps.themeName} />
+    <Editor colors={themeProps.colors}>
+      <ActivityBar colors={themeProps.colors} />
+      <TabBar colors={themeProps.colors}>
+        <Tab
+          colors={themeProps.colors}
+          active={language === LanguageOptions.javascript}
+          onClick={() => onLanguage(LanguageOptions.javascript)}
+        >
+          {LanguageOptions.javascript}
+        </Tab>
+        <Tab
+          colors={themeProps.colors}
+          active={language === LanguageOptions.css}
+          onClick={() => onLanguage(LanguageOptions.css)}
+        >
+          {LanguageOptions.css}
+        </Tab>
+        <Tab
+          colors={themeProps.colors}
+          active={language === LanguageOptions.html}
+          onClick={() => onLanguage(LanguageOptions.html)}
+        >
+          {LanguageOptions.html}
+        </Tab>
+      </TabBar>
+      <TabContent>
+        <Code
+          tokens={themeProps.tokens}
+          editorForeground={themeProps.colors.editorForeground}
+        />
+      </TabContent>
+    </Editor>
+    <StatusBar
+      colors={themeProps.colors}
+      repository={themeProps.repository}
+      repositoryOwner={themeProps.repositoryOwner}
+    />
+  </div>
+)
 
 const classes = {
   container: css({

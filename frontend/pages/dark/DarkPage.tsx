@@ -13,7 +13,6 @@ interface DarkPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
-  isDesktop: boolean
 }
 
 export default class DarkPage extends React.Component<DarkPageProps, {}> {
@@ -21,7 +20,6 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
 
   static async getInitialProps(ctx: Context): Promise<DarkPageProps> {
     const language = LanguageOptions.javascript
-    const isDesktop = userAgent.isDesktop(ctx.req)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const darkThemes = await algolia.search({
@@ -39,24 +37,23 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
       totalPages: darkThemes.nbPages,
       page,
       language,
-      isDesktop,
     }
   }
 
   handleLanguage = async (language: LanguageOptions) => {
+    // TODO: Save selected language in cookie and call getInitialProps with current page
     console.log('implement this') // tslint:disable-line
   }
 
   render() {
-    const { themes, language, page, totalPages, isDesktop } = this.props
+    const { themes, language, page, totalPages } = this.props
 
     return (
-      <App isDesktop={isDesktop}>
+      <App>
         <Head>
           <title>Dark themes</title>
         </Head>
         <div className={styles.wrapper}>
-          <Heading text="Dark themes" />
           <ThemeGrid
             themes={themes}
             language={language}
