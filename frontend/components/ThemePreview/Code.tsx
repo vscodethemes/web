@@ -9,56 +9,72 @@ interface CodeProps {
   editorForeground: string
 }
 
-const entities = new Html5Entities()
-
-const Code: React.SFC<CodeProps> = ({ tokens, editorForeground }) => (
-  <div className={classes.code}>
-    {tokens.map((lineTokens, i) => (
-      <div key={i}>
-        {lineTokens.map((styleToken, j) => {
-          if (!styleToken.token) {
-            return <br key={j} />
-          }
-
-          // This is a hack to fix #000000 set as the default color by vscode-textmate
-          // when a theme doesn't provide a value. Since #000000 is unlikely to be
-          // explicitly used, switch it to the editor foreground color.
-          const color =
-            styleToken.style.color === '#000000'
-              ? editorForeground
-              : styleToken.style.color
-
-          const style: any = {
-            ...styleToken.style,
-            color,
-          }
-
-          return (
-            <span
-              key={j}
-              style={style}
-              dangerouslySetInnerHTML={{
-                __html: entities
-                  .encode(styleToken.token)
-                  .replace(/\s/g, '&nbsp;'),
-              }}
-            />
-          )
-        })}
-      </div>
-    ))}
-  </div>
-)
-
-const classes = {
+const styles = {
   code: css({
     position: 'relative',
     height: '100%',
     padding: em(theme.gutters.sm),
     fontFamily: theme.fonts.monospace,
-    fontSize: em(theme.fontSizes.xs),
-    lineHeight: 1.5,
   }),
+}
+
+const entities = new Html5Entities()
+
+const viewbox = [354, 200]
+const fontSize = theme.fontSizes.xs
+const lineHeight = 14.5
+
+const Code: React.SFC<CodeProps> = ({ tokens, editorForeground }) => {
+  const texts: React.ReactNode[] = []
+
+  tokens.forEach((lineTokens, lineIndex) => {
+    let tspans: React.ReactNode[] = []
+
+    lineTokens.forEach((styleToken, tokenIndex) => {
+      if (!styleToken.token) {
+        return
+      }
+
+      const style: any = {
+        ...styleToken.style,
+        fontSize,
+        // This is a hack to fix #000000 set as the default color by vscode-textmate
+        // when a theme doesn't provide a value. Since #000000 is unlikely to be
+        // explicitly used, switch it to the editor foreground color.
+        fill:
+          styleToken.style.color === '#000000'
+            ? editorForeground
+            : styleToken.style.color,
+      }
+
+      tspans.push(
+        <tspan
+          key={tokenIndex}
+          style={style}
+          dangerouslySetInnerHTML={{
+            __html: entities.encode(styleToken.token).replace(/\s/g, '&nbsp;'),
+          }}
+        />,
+      )
+    })
+
+    texts.push(
+      <text
+        key={lineIndex}
+        x={0}
+        y={lineIndex * lineHeight}
+        dominantBaseline="text-before-edge"
+      >
+        {tspans}
+      </text>,
+    )
+  })
+
+  return (
+    <svg className={styles.code} viewBox={`0 0 ${viewbox[0]} ${viewbox[1]}`}>
+      {texts}
+    </svg>
+  )
 }
 
 export default Code
