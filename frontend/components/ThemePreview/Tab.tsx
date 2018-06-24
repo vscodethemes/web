@@ -9,27 +9,7 @@ interface TabProps {
   onClick: () => any
 }
 
-const Tab: React.SFC<TabProps> = ({ colors, active, children, onClick }) => (
-  <button
-    className={cx(classes.tab, active && classes.active)}
-    style={{
-      background: active
-        ? colors.tabActiveBackground
-        : colors.tabInactiveBackground,
-      color: active ? colors.tabActiveForeground : colors.tabInactiveForeground,
-      borderRight: colors.tabBorder ? `1px solid ${colors.tabBorder}` : '',
-      borderBottom:
-        active && colors.tabActiveBorder
-          ? `1px solid ${colors.tabActiveBorder}`
-          : '',
-    }}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-)
-
-const classes = {
+const styles = {
   tab: css({
     height: '100%',
     width: '30%',
@@ -49,5 +29,25 @@ const classes = {
     },
   }),
 }
+
+const Tab: React.SFC<TabProps> = ({ colors, active, children, onClick }) => (
+  <button
+    className={cx(styles.tab, active && styles.active)}
+    style={{
+      background: active
+        ? colors.tabActiveBackground
+        : colors.tabInactiveBackground,
+      color: active ? colors.tabActiveForeground : colors.tabInactiveForeground,
+      borderRight: colors.tabBorder ? `1px solid ${colors.tabBorder}` : '',
+      borderBottom:
+        active && colors.tabActiveBorder
+          ? `1px solid ${colors.tabActiveBorder}`
+          : '',
+    }}
+    onClick={onClick}
+  >
+    {children}
+  </button>
+)
 
 export default Tab

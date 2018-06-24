@@ -6,13 +6,7 @@ export interface TopBarProps {
   name: string
 }
 
-const TopBar: React.SFC<TopBarProps> = ({ name }) => (
-  <div className={classes.topBar}>
-    <h3 className={classes.name}>{name}</h3>
-  </div>
-)
-
-const classes = {
+const styles = {
   topBar: css({
     height: `${em(theme.fontSizes.xs + theme.gutters.xs * 2)}`,
     borderTopLeftRadius: em(theme.borderRadius.md),
@@ -33,5 +27,11 @@ const classes = {
     color: 'rgba(255, 255, 255, 0.7)',
   }),
 }
+
+const TopBar: React.SFC<TopBarProps> = ({ name }) => (
+  <div className={styles.topBar}>
+    <h3 className={styles.name}>{name}</h3>
+  </div>
+)
 
 export default TopBar

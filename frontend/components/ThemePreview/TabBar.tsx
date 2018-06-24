@@ -1,10 +1,22 @@
 import { Colors } from '@vscodethemes/types'
 import { css } from 'emotion'
 import * as React from 'react'
-import { activityBarWidth } from './ActivityBar'
+import { activityBarWidth } from './ActivityBar.styles'
 
 interface TabBarProps {
   colors: Colors
+}
+
+export const tabBarHeight = 10
+
+const classes = {
+  tabBar: css({
+    position: 'absolute',
+    top: 0,
+    left: `${activityBarWidth}%`,
+    width: `${100 - activityBarWidth}%`,
+    height: `${tabBarHeight}%`,
+  }),
 }
 
 const TabBar: React.SFC<TabBarProps> = ({ colors, children }) => (
@@ -20,17 +32,5 @@ const TabBar: React.SFC<TabBarProps> = ({ colors, children }) => (
     {children}
   </div>
 )
-
-export const tabBarHeight = 10
-
-const classes = {
-  tabBar: css({
-    position: 'absolute',
-    top: 0,
-    left: `${activityBarWidth}%`,
-    width: `${100 - activityBarWidth}%`,
-    height: `${tabBarHeight}%`,
-  }),
-}
 
 export default TabBar
