@@ -1,13 +1,9 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import { activityBarWidth } from './ActivityBar'
+import { activityBarWidth } from './ActivityBar.styles'
 import { tabBarHeight } from './TabBar'
 
-const TabContent: React.SFC<{}> = ({ children }) => (
-  <div className={classes.tabContent}>{children}</div>
-)
-
-const classes = {
+const styles = {
   tabContent: css({
     position: 'absolute',
     top: `${tabBarHeight}%`,
@@ -18,5 +14,9 @@ const classes = {
     overflow: 'hidden',
   }),
 }
+
+const TabContent: React.SFC<{}> = ({ children }) => (
+  <div className={styles.tabContent}>{children}</div>
+)
 
 export default TabContent
