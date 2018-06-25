@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Heading, Pagination, ThemeGrid } from '../../components'
+import { App, Pagination, ThemeGrid } from '../../components'
 import { LightLink } from './'
 import styles from './LightPage.styles'
 

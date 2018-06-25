@@ -21,14 +21,14 @@ const styles = {
 const entities = new Html5Entities()
 
 const viewbox = [354, 200]
-const fontSize = theme.fontSizes.xs
+const fontSize = 10
 const lineHeight = 14.5
 
 const Code: React.SFC<CodeProps> = ({ tokens, editorForeground }) => {
   const texts: React.ReactNode[] = []
 
   tokens.forEach((lineTokens, lineIndex) => {
-    let tspans: React.ReactNode[] = []
+    const tspans: React.ReactNode[] = []
 
     lineTokens.forEach((styleToken, tokenIndex) => {
       if (!styleToken.token) {

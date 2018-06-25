@@ -1,5 +1,5 @@
 import { Colors } from '@vscodethemes/types'
-import { css, cx } from 'emotion'
+import { cx } from 'emotion'
 import * as React from 'react'
 import Icon, { Icons } from '../Icon'
 import styles from './ActivityBar.styles'

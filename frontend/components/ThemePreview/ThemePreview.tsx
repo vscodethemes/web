@@ -17,7 +17,7 @@ interface ThemePreviewProps {
   onLanguage: (language: LanguageOptions) => void
 }
 
-const classes = {
+const styles = {
   container: css({
     width: '100%',
     boxShadow: theme.shadows.md,
@@ -30,7 +30,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
   language,
   onLanguage,
 }) => (
-  <div className={classes.container}>
+  <div className={styles.container}>
     <TopBar name={themeProps.themeName} />
     <Editor colors={themeProps.colors}>
       <ActivityBar colors={themeProps.colors} />
