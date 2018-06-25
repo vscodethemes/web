@@ -8,11 +8,17 @@ interface PaginationProps {
   page: number
   totalPages: number
   Link: React.ComponentType<LinkProps>
+  linkProps?: { [key: string]: any }
 }
 
 const maxVisiblePages = 7
 
-const Pagination: React.SFC<PaginationProps> = ({ page, totalPages, Link }) => {
+const Pagination: React.SFC<PaginationProps> = ({
+  page,
+  totalPages,
+  Link,
+  linkProps,
+}) => {
   const pages = generatePages(totalPages, page, maxVisiblePages)
 
   return (
@@ -28,13 +34,13 @@ const Pagination: React.SFC<PaginationProps> = ({ page, totalPages, Link }) => {
           pages[maxVisiblePages - 2] !== pages[maxVisiblePages - 3] + 1
 
         return (
-          <Link key={currentPage} page={currentPage}>
-            {linkProps => (
+          <Link key={currentPage} page={currentPage} {...linkProps}>
+            {pageProps => (
               <Page
                 page={currentPage}
                 skipBackward={isSkipBackward}
                 skipForward={isSkipForward}
-                {...linkProps}
+                {...pageProps}
               />
             )}
           </Link>

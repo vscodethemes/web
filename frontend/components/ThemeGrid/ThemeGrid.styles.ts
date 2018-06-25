@@ -9,29 +9,25 @@ const breakpoints = [
 
 export default {
   grid: css({
-    display: 'flex',
-    justifyContent: 'space-around',
-    flexWrap: 'wrap',
-    marginLeft: em(-theme.gutters.lg / 2),
-    marginRight: em(-theme.gutters.lg / 2),
-    width: `calc(100% + ${em(theme.gutters.lg)})`,
-  }),
-
-  item: css({
-    width: '25%',
-    maxWidth: 460,
-    paddingLeft: em(theme.gutters.lg / 2),
-    paddingRight: em(theme.gutters.lg / 2),
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gridGap: em(theme.gutters.lg),
     marginBottom: em(theme.gutters.lg),
 
     [breakpoints[0]]: {
-      width: '33.3333%',
+      gridTemplateColumns: 'repeat(3, 1fr)',
     },
     [breakpoints[1]]: {
-      width: '50%',
+      gridTemplateColumns: 'repeat(2, 1fr)',
     },
     [breakpoints[2]]: {
-      width: '100%',
+      gridTemplateColumns: 'repeat(1, 1fr)',
     },
+  }),
+
+  item: css({
+    width: '100%',
+    maxWidth: 460,
+    margin: '0 auto',
   }),
 }
