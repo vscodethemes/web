@@ -59,12 +59,7 @@ const Code: React.SFC<CodeProps> = ({ tokens, editorForeground }) => {
     })
 
     texts.push(
-      <text
-        key={lineIndex}
-        x={0}
-        y={lineIndex * lineHeight}
-        dominantBaseline="text-before-edge"
-      >
+      <text key={lineIndex} x={0} y={lineIndex * lineHeight} dy={fontSize}>
         {tspans}
       </text>,
     )
