@@ -1,26 +1,20 @@
 import { css } from 'emotion'
 import theme, { em } from '../../theme'
 
-const breakpoints = [
-  `@media (max-width: ${em(1440)})`,
-  `@media (max-width: ${em(1150)})`,
-  `@media (max-width: ${em(620)})`,
-]
-
 export default {
   grid: css({
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
     gridGap: em(theme.gutters.lg),
     marginBottom: em(theme.gutters.lg),
+    gridTemplateColumns: 'repeat(4, 1fr)',
 
-    [breakpoints[0]]: {
+    [`@media (max-width: ${em(1440)})`]: {
       gridTemplateColumns: 'repeat(3, 1fr)',
     },
-    [breakpoints[1]]: {
+    [`@media (max-width: ${em(1150)})`]: {
       gridTemplateColumns: 'repeat(2, 1fr)',
     },
-    [breakpoints[2]]: {
+    [`@media (max-width: ${em(620)})`]: {
       gridTemplateColumns: 'repeat(1, 1fr)',
     },
   }),
