@@ -26,7 +26,9 @@ const colors = {
   textMuted: '#606066',
 }
 
+// TODO: Replace and remove em for rem
 const em = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}em`
+const rem = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}rem`
 
 const theme = {
   colors,
@@ -45,6 +47,7 @@ const theme = {
     xl: 28,
   },
   borderRadius: {
+    xs: 2,
     sm: 4,
     md: 6,
   },
@@ -57,8 +60,7 @@ const theme = {
     pageMin: `@media (max-width: ${em(pageSizes.min)})`,
   },
   header: {
-    height: 35,
-    heightCollapsed: 40,
+    height: 40,
     backgroundColor: colors.inputBorder,
   },
   container: {
@@ -84,4 +86,4 @@ const withContainer = (styles: any) =>
   )
 
 export default theme
-export { em, withContainer }
+export { em, rem, withContainer }
