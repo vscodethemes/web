@@ -6,6 +6,7 @@ interface LinkCallbackProps {
   href: string
   active: boolean
   onClick: (e: any) => any
+  push: (query: { [key: string]: string | number }) => any
 }
 
 export interface LinkProps {
@@ -52,6 +53,10 @@ export default function createLink(pathname: string) {
       onClick: async (e: MouseEvent) => {
         e.preventDefault()
         await router.push({ pathname, query })
+        window.scrollTo(0, 0)
+      },
+      push: async queryParams => {
+        await router.push({ pathname, query: queryParams })
         window.scrollTo(0, 0)
       },
     })
