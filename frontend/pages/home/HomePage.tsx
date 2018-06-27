@@ -4,6 +4,7 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { ThemeSlider } from '../../components'
+import { getLanguage, setLanguage } from '../../utils/cookies'
 import { DarkLink } from '../dark'
 import { LightLink } from '../light'
 import { TrendingLink } from '../trending'
@@ -28,16 +29,10 @@ interface Categories {
 
 interface HomePageProps {
   categories: Categories
+  refetchInitialProps?: () => any
 }
 
-interface HomePageState {
-  categories: Categories
-}
-
-export default class HomePage extends React.Component<
-  HomePageProps,
-  HomePageState
-> {
+export default class HomePage extends React.Component<HomePageProps, {}> {
   static perPage = 30
 
   static async getTrendingThemes(lang: LanguageOptions) {
@@ -87,7 +82,7 @@ export default class HomePage extends React.Component<
   }
 
   static async getInitialProps(ctx: Context): Promise<HomePageProps> {
-    const language = LanguageOptions.javascript
+    const language = getLanguage(ctx)
 
     const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
       HomePage.getTrendingThemes(language),
@@ -113,41 +108,13 @@ export default class HomePage extends React.Component<
     }
   }
 
-  state = {
-    categories: {
-      trending: this.props.categories[Category.trending],
-      dark: this.props.categories[Category.dark],
-      light: this.props.categories[Category.light],
-    },
-  }
-
   handleLanguage = async (language: LanguageOptions) => {
-    const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
-      HomePage.getTrendingThemes(language),
-      HomePage.getDarkThemes(language),
-      HomePage.getLightThemes(language),
-    ])
-
-    this.setState({
-      categories: {
-        [Category.trending]: {
-          themes: trendingThemes.hits,
-          language,
-        },
-        [Category.dark]: {
-          themes: darkThemes.hits,
-          language,
-        },
-        [Category.light]: {
-          themes: lightThemes.hits,
-          language,
-        },
-      },
-    })
+    setLanguage(language)
+    this.props.refetchInitialProps()
   }
 
   render() {
-    const { categories } = this.state
+    const { categories } = this.props
 
     return (
       <>
