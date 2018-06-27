@@ -50,19 +50,17 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <Head>
           <title>Dark themes</title>
         </Head>
-        <div className={styles.wrapper}>
-          <ThemeGrid
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-          />
-          <Pagination page={page} totalPages={totalPages} Link={DarkLink} />
-        </div>
-      </>
+        <ThemeGrid
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+        />
+        <Pagination page={page} totalPages={totalPages} Link={DarkLink} />
+      </div>
     )
   }
 }

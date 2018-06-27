@@ -54,27 +54,25 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
     const { themes, language, page, totalPages, search } = this.props
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <Head>
           <title>Trending themes</title>
         </Head>
-        <div className={styles.wrapper}>
-          <Heading>
-            Results for <em>'{search}'</em>
-          </Heading>
-          <ThemeGrid
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-          />
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            Link={SearchLink}
-            linkProps={{ q: search }}
-          />
-        </div>
-      </>
+        <Heading>
+          Results for <em>'{search}'</em>
+        </Heading>
+        <ThemeGrid
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+        />
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          Link={SearchLink}
+          linkProps={{ q: search }}
+        />
+      </div>
     )
   }
 }

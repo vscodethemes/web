@@ -9,16 +9,12 @@ if (typeof window !== 'undefined') {
   hydrate(serverData.ids)
 }
 
-interface AppProps {
-  hideCategories?: boolean
-}
-
-const App: React.SFC<AppProps> = ({ children, hideCategories }) => (
-  <React.Fragment>
-    <Header hideCategories={hideCategories} />
+const App: React.SFC = ({ children }) => (
+  <>
+    <Header />
     <div className={styles.container}>{children}</div>
     <Footer />
-  </React.Fragment>
+  </>
 )
 
 export default App

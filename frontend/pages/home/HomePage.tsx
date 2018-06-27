@@ -117,49 +117,47 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
     const { categories } = this.props
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <Head>
           <title>VSCodeThemes</title>
         </Head>
-        <div className={styles.wrapper}>
-          <TrendingLink page={2}>
-            {({ href, onClick }) => (
-              <ThemeSlider
-                title="Trending themes"
-                description="trending themes"
-                language={categories.trending.language}
-                themes={categories.trending.themes}
-                onLanguage={this.handleLanguage}
-                moreProps={{ href, onClick }}
-              />
-            )}
-          </TrendingLink>
-          <DarkLink page={2}>
-            {({ href, onClick }) => (
-              <ThemeSlider
-                title="Dark themes"
-                description="dark themes"
-                language={categories.dark.language}
-                themes={categories.dark.themes}
-                onLanguage={this.handleLanguage}
-                moreProps={{ href, onClick }}
-              />
-            )}
-          </DarkLink>
-          <LightLink page={2}>
-            {({ href, onClick }) => (
-              <ThemeSlider
-                title="Light themes"
-                description="light themes"
-                language={categories.light.language}
-                themes={categories.light.themes}
-                onLanguage={this.handleLanguage}
-                moreProps={{ href, onClick }}
-              />
-            )}
-          </LightLink>
-        </div>
-      </>
+        <TrendingLink page={2}>
+          {({ href, onClick }) => (
+            <ThemeSlider
+              title="Trending themes"
+              description="trending themes"
+              language={categories.trending.language}
+              themes={categories.trending.themes}
+              onLanguage={this.handleLanguage}
+              moreProps={{ href, onClick }}
+            />
+          )}
+        </TrendingLink>
+        <DarkLink page={2}>
+          {({ href, onClick }) => (
+            <ThemeSlider
+              title="Dark themes"
+              description="dark themes"
+              language={categories.dark.language}
+              themes={categories.dark.themes}
+              onLanguage={this.handleLanguage}
+              moreProps={{ href, onClick }}
+            />
+          )}
+        </DarkLink>
+        <LightLink page={2}>
+          {({ href, onClick }) => (
+            <ThemeSlider
+              title="Light themes"
+              description="light themes"
+              language={categories.light.language}
+              themes={categories.light.themes}
+              onLanguage={this.handleLanguage}
+              moreProps={{ href, onClick }}
+            />
+          )}
+        </LightLink>
+      </div>
     )
   }
 }
