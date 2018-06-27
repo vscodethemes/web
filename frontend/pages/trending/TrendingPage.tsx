@@ -53,19 +53,17 @@ export default class TrendingPage extends React.Component<
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <Head>
           <title>Trending themes</title>
         </Head>
-        <div className={styles.wrapper}>
-          <ThemeGrid
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-          />
-          <Pagination page={page} totalPages={totalPages} Link={TrendingLink} />
-        </div>
-      </>
+        <ThemeGrid
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+        />
+        <Pagination page={page} totalPages={totalPages} Link={TrendingLink} />
+      </div>
     )
   }
 }

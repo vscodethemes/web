@@ -50,19 +50,17 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <>
+      <div className={styles.wrapper}>
         <Head>
           <title>Light themes</title>
         </Head>
-        <div className={styles.wrapper}>
-          <ThemeGrid
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-          />
-          <Pagination page={page} totalPages={totalPages} Link={LightLink} />
-        </div>
-      </>
+        <ThemeGrid
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+        />
+        <Pagination page={page} totalPages={totalPages} Link={LightLink} />
+      </div>
     )
   }
 }
