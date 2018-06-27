@@ -18,7 +18,6 @@ const SearchInput: React.SFC<SearchInputProps> = ({
       <Icon icon={Icons.search} />
     </div>
     <input
-      autoFocus={value.length > 0}
       type="search"
       value={value || ''}
       placeholder={placeholder}

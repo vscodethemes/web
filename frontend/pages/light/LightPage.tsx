@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Pagination, ThemeGrid } from '../../components'
+import { Pagination, ThemeGrid } from '../../components'
 import { LightLink } from './'
 import styles from './LightPage.styles'
 
@@ -47,7 +47,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <App>
+      <>
         <Head>
           <title>Light themes</title>
         </Head>
@@ -59,7 +59,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
           />
           <Pagination page={page} totalPages={totalPages} Link={LightLink} />
         </div>
-      </App>
+      </>
     )
   }
 }
