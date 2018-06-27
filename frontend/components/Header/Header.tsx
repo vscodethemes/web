@@ -36,52 +36,50 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     return (
       <div className={styles.header}>
         <Logo />
-        <React.Fragment>
-          <TrendingLink>
-            {linkProps => (
-              <Tab color={theme.colors.palette[1]} {...linkProps}>
-                Trending
-              </Tab>
-            )}
-          </TrendingLink>
-          <span className={styles.sep}>·</span>
-          <DarkLink>
-            {linkProps => (
-              <Tab color={theme.colors.palette[2]} {...linkProps}>
-                Dark
-              </Tab>
-            )}
-          </DarkLink>
-          <span className={styles.sep}>·</span>
-          <LightLink>
-            {linkProps => (
-              <Tab color={theme.colors.palette[3]} {...linkProps}>
-                Light
-              </Tab>
-            )}
-          </LightLink>
-          <SearchLink>
-            {({ push }) => (
-              <form
-                onSubmit={e => {
-                  e.preventDefault()
-                  if (search) {
-                    push({ q: search })
-                  }
-                }}
-              >
-                <SearchInput
-                  value={search}
-                  placeholder="Search... (ie. monokai)"
-                  onChange={value => this.setState({ search: value })}
-                />
-              </form>
-            )}
-          </SearchLink>
-        </React.Fragment>
+        <TrendingLink>
+          {linkProps => (
+            <Tab color={theme.colors.palette[1]} {...linkProps}>
+              Trending
+            </Tab>
+          )}
+        </TrendingLink>
+        <span className={styles.sep}>·</span>
+        <DarkLink>
+          {linkProps => (
+            <Tab color={theme.colors.palette[2]} {...linkProps}>
+              Dark
+            </Tab>
+          )}
+        </DarkLink>
+        <span className={styles.sep}>·</span>
+        <LightLink>
+          {linkProps => (
+            <Tab color={theme.colors.palette[3]} {...linkProps}>
+              Light
+            </Tab>
+          )}
+        </LightLink>
+        <SearchLink>
+          {({ push }) => (
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                if (search) {
+                  push({ q: search })
+                }
+              }}
+            >
+              <SearchInput
+                value={search}
+                placeholder="Search... (ie. monokai)"
+                onChange={value => this.setState({ search: value })}
+              />
+            </form>
+          )}
+        </SearchLink>
       </div>
     )
   }
 }
 
-export default withRouter(Header)
+export default withRouter<{}>(Header)
