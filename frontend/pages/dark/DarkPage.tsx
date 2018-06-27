@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Pagination, ThemeGrid } from '../../components'
+import { Pagination, ThemeGrid } from '../../components'
 import { DarkLink } from './'
 import styles from './DarkPage.styles'
 
@@ -48,7 +48,7 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <App>
+      <>
         <Head>
           <title>Dark themes</title>
         </Head>
@@ -60,7 +60,7 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
           />
           <Pagination page={page} totalPages={totalPages} Link={DarkLink} />
         </div>
-      </App>
+      </>
     )
   }
 }

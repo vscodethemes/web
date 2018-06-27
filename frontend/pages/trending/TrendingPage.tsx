@@ -1,9 +1,11 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import Head from 'next/head'
+import { withRouter, SingletonRouter } from 'next/router'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Pagination, ThemeGrid } from '../../components'
+import { Pagination, ThemeGrid } from '../../components'
+import { getLanguage, setLanguage } from '../../utils/cookies'
 import { TrendingLink } from './'
 import styles from './TrendingPage.styles'
 
@@ -14,14 +16,14 @@ interface TrendingPageProps {
   language: LanguageOptions
 }
 
-export default class TrendingPage extends React.Component<
-  TrendingPageProps,
+class TrendingPage extends React.Component<
+  TrendingPageProps & { router: SingletonRouter },
   {}
 > {
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<TrendingPageProps> {
-    const language = LanguageOptions.javascript
+    const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const trendingThemes = await algolia.search({
@@ -43,14 +45,16 @@ export default class TrendingPage extends React.Component<
   }
 
   handleLanguage = async (language: LanguageOptions) => {
-    console.log('implement this') // tslint:disable-line
+    const { router } = this.props
+    setLanguage(language)
+    router.reload(router.route)
   }
 
   render() {
     const { themes, language, page, totalPages } = this.props
 
     return (
-      <App>
+      <>
         <Head>
           <title>Trending themes</title>
         </Head>
@@ -62,7 +66,9 @@ export default class TrendingPage extends React.Component<
           />
           <Pagination page={page} totalPages={totalPages} Link={TrendingLink} />
         </div>
-      </App>
+      </>
     )
   }
 }
+
+export default withRouter(TrendingPage)

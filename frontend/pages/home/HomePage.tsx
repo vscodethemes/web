@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, ThemeSlider } from '../../components'
+import { ThemeSlider } from '../../components'
 import { DarkLink } from '../dark'
 import { LightLink } from '../light'
 import { TrendingLink } from '../trending'
@@ -150,7 +150,7 @@ export default class HomePage extends React.Component<
     const { categories } = this.state
 
     return (
-      <App>
+      <>
         <Head>
           <title>VSCodeThemes</title>
         </Head>
@@ -192,7 +192,7 @@ export default class HomePage extends React.Component<
             )}
           </LightLink>
         </div>
-      </App>
+      </>
     )
   }
 }

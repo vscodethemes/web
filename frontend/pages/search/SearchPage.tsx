@@ -3,7 +3,7 @@ import { Context } from 'next'
 import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { App, Heading, Pagination, ThemeGrid } from '../../components'
+import { Heading, Pagination, ThemeGrid } from '../../components'
 import { SearchLink } from './'
 import styles from './SearchPage.styles'
 
@@ -51,7 +51,7 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
     const { themes, language, page, totalPages, search } = this.props
 
     return (
-      <App>
+      <>
         <Head>
           <title>Trending themes</title>
         </Head>
@@ -71,7 +71,7 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
             linkProps={{ q: search }}
           />
         </div>
-      </App>
+      </>
     )
   }
 }
