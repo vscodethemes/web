@@ -18,8 +18,14 @@ interface HeaderState {
 }
 
 class Header extends React.Component<HeaderProps, HeaderState> {
+  static getDerivedStateFromProps(props: HeaderProps) {
+    return {
+      search: String(props.router.query.q || ''),
+    }
+  }
+
   state = {
-    search: String(this.props.router.query.q || ''),
+    search: '',
   }
 
   searchInput: HTMLInputElement
