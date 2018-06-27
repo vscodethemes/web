@@ -1,7 +1,6 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import Head from 'next/head'
-import { withRouter, SingletonRouter } from 'next/router'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { Pagination, ThemeGrid } from '../../components'
@@ -14,10 +13,11 @@ interface TrendingPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
+  refetchInitialProps?: () => any
 }
 
-class TrendingPage extends React.Component<
-  TrendingPageProps & { router: SingletonRouter },
+export default class TrendingPage extends React.Component<
+  TrendingPageProps,
   {}
 > {
   static perPage = 24
@@ -44,10 +44,9 @@ class TrendingPage extends React.Component<
     }
   }
 
-  handleLanguage = async (language: LanguageOptions) => {
-    const { router } = this.props
+  handleLanguage = (language: LanguageOptions) => {
     setLanguage(language)
-    router.reload(router.route)
+    this.props.refetchInitialProps()
   }
 
   render() {
@@ -70,5 +69,3 @@ class TrendingPage extends React.Component<
     )
   }
 }
-
-export default withRouter(TrendingPage)

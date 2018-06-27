@@ -4,6 +4,7 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { Pagination, ThemeGrid } from '../../components'
+import { getLanguage, setLanguage } from '../../utils/cookies'
 import { DarkLink } from './'
 import styles from './DarkPage.styles'
 
@@ -12,13 +13,14 @@ interface DarkPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
+  refetchInitialProps?: () => any
 }
 
 export default class DarkPage extends React.Component<DarkPageProps, {}> {
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<DarkPageProps> {
-    const language = LanguageOptions.javascript
+    const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const darkThemes = await algolia.search({
@@ -39,9 +41,9 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
     }
   }
 
-  handleLanguage = async (language: LanguageOptions) => {
-    // TODO: Save selected language in cookie and call getInitialProps with current page
-    console.log('implement this') // tslint:disable-line
+  handleLanguage = (language: LanguageOptions) => {
+    setLanguage(language)
+    this.props.refetchInitialProps()
   }
 
   render() {

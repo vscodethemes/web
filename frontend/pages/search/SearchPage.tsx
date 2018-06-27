@@ -4,6 +4,7 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { Heading, Pagination, ThemeGrid } from '../../components'
+import { getLanguage, setLanguage } from '../../utils/cookies'
 import { SearchLink } from './'
 import styles from './SearchPage.styles'
 
@@ -13,13 +14,14 @@ interface SearchPageProps {
   search: string
   totalPages: number
   language: LanguageOptions
+  refetchInitialProps?: () => any
 }
 
 export default class SearchPage extends React.Component<SearchPageProps, {}> {
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<SearchPageProps> {
-    const language = LanguageOptions.javascript
+    const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
     const search = ctx.query.q || ''
 
@@ -43,8 +45,9 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
     }
   }
 
-  handleLanguage = async (language: LanguageOptions) => {
-    console.log('implement this') // tslint:disable-line
+  handleLanguage = (language: LanguageOptions) => {
+    setLanguage(language)
+    this.props.refetchInitialProps()
   }
 
   render() {

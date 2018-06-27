@@ -21,13 +21,21 @@ export default class MyApp extends App {
     return { pageProps }
   }
 
+  refetchInitialProps = () => {
+    const { router } = this.props
+    // Re-fetch initial props by re-routing to the current path.
+    router.reload(router.route)
+  }
+
   render() {
-    console.log('hi')
     const { Component, pageProps } = this.props
     return (
       <Container>
         <AppWrapper>
-          <Component {...pageProps} />
+          <Component
+            {...pageProps}
+            refetchInitialProps={this.refetchInitialProps}
+          />
         </AppWrapper>
       </Container>
     )

@@ -4,6 +4,7 @@ import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { Pagination, ThemeGrid } from '../../components'
+import { getLanguage, setLanguage } from '../../utils/cookies'
 import { LightLink } from './'
 import styles from './LightPage.styles'
 
@@ -12,13 +13,14 @@ interface LightPageProps {
   page: number
   totalPages: number
   language: LanguageOptions
+  refetchInitialProps?: () => any
 }
 
 export default class LightPage extends React.Component<LightPageProps, {}> {
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<LightPageProps> {
-    const language = LanguageOptions.javascript
+    const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
 
     const lightThemes = await algolia.search({
@@ -39,8 +41,9 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
     }
   }
 
-  handleLanguage = async (language: LanguageOptions) => {
-    console.log('implement this') // tslint:disable-line
+  handleLanguage = (language: LanguageOptions) => {
+    setLanguage(language)
+    this.props.refetchInitialProps()
   }
 
   render() {
