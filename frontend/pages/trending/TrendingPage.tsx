@@ -1,9 +1,8 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
-import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { Pagination, ThemeGrid } from '../../components'
+import { Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { TrendingLink } from './'
 import styles from './TrendingPage.styles'
@@ -54,9 +53,7 @@ export default class TrendingPage extends React.Component<
 
     return (
       <div className={styles.wrapper}>
-        <Head>
-          <title>Trending themes</title>
-        </Head>
+        <Meta title="Trending themes" />
         <ThemeGrid
           themes={themes}
           language={language}

@@ -1,9 +1,8 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
-import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { Heading, Pagination, ThemeGrid } from '../../components'
+import { Heading, Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { SearchLink } from './'
 import styles from './SearchPage.styles'
@@ -55,9 +54,7 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
 
     return (
       <div className={styles.wrapper}>
-        <Head>
-          <title>Trending themes</title>
-        </Head>
+        <Meta title={`Themes matching '${search}'`} />
         <Heading>
           Results for <em>'{search}'</em>
         </Heading>
