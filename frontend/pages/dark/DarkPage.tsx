@@ -1,9 +1,8 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
-import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { Pagination, ThemeGrid } from '../../components'
+import { Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { DarkLink } from './'
 import styles from './DarkPage.styles'
@@ -51,9 +50,7 @@ export default class DarkPage extends React.Component<DarkPageProps, {}> {
 
     return (
       <div className={styles.wrapper}>
-        <Head>
-          <title>Dark themes</title>
-        </Head>
+        <Meta title="Dark themes" />
         <ThemeGrid
           themes={themes}
           language={language}

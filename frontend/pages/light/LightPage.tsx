@@ -1,9 +1,8 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
-import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { Pagination, ThemeGrid } from '../../components'
+import { Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { LightLink } from './'
 import styles from './LightPage.styles'
@@ -51,9 +50,7 @@ export default class LightPage extends React.Component<LightPageProps, {}> {
 
     return (
       <div className={styles.wrapper}>
-        <Head>
-          <title>Light themes</title>
-        </Head>
+        <Meta title="Light themes" />
         <ThemeGrid
           themes={themes}
           language={language}

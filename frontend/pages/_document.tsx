@@ -21,7 +21,7 @@ export default class PageDocument extends Document {
 
   render() {
     return (
-      <html>
+      <html lang="en">
         <Head>
           {GTM_ID && (
             <script
@@ -41,26 +41,11 @@ export default class PageDocument extends Document {
             name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1"
           />
-          <meta
-            name="description"
-            content="Preview themes from the VSCode marketplace."
-          />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:creator" content="@_jschr" />
-          <meta name="twitter:url" content="https://vscodethemes.com" />
-          <meta name="twitter:title" content="VSCodeThemes" />
-          <meta
-            name="twitter:description"
-            content="Preview themes from the VSCode marketplace."
-          />
-          <meta name="twitter:image" content="/static/screenshot.png" />
           <link rel="shortcut icon" href="/static/icon.png" />
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
+        <Main />
+        <NextScript />
       </html>
     )
   }
