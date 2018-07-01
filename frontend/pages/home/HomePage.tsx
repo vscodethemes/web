@@ -1,9 +1,8 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
-import Head from 'next/head'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import { ThemeSlider } from '../../components'
+import { Meta, ThemeSlider } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { DarkLink } from '../dark'
 import { LightLink } from '../light'
@@ -118,9 +117,7 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
 
     return (
       <div className={styles.wrapper}>
-        <Head>
-          <title>VSCodeThemes</title>
-        </Head>
+        <Meta />
         <TrendingLink page={2}>
           {({ href, onClick }) => (
             <ThemeSlider
