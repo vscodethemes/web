@@ -6,9 +6,7 @@ interface HeadingProps {
 }
 
 const Heading: React.SFC<HeadingProps> = ({ text, children }) => (
-  <h1 className={styles.heading}>
-    <span className={styles.text}>{children || text}</span>
-  </h1>
+  <h1 className={styles.heading}>{children || text}</h1>
 )
 
 export default Heading

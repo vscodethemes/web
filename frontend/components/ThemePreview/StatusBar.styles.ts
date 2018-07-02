@@ -1,44 +1,26 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 const statusBarGutter = theme.gutters.xs
 
 export default {
   statusBar: css({
-    height: `${em(theme.fontSizes.xs + statusBarGutter * 2)}`,
-    borderBottomLeftRadius: em(theme.borderRadius.md),
-    borderBottomRightRadius: em(theme.borderRadius.md),
+    height: `${rem(theme.fontSizes.xs + statusBarGutter * 2)}`,
     display: 'flex',
     alignItems: 'center',
+    borderBottomLeftRadius: rem(theme.borderRadius.md),
+    borderBottomRightRadius: rem(theme.borderRadius.md),
   }),
 
-  link: css({
-    // flex: 1,
+  stat: css({
     display: 'flex',
-    alignItems: 'center',
-    textDecoration: 'none',
-    fontSize: theme.fontSizes.xs,
-    height: '100%',
-  }),
+    justifyContent: 'center',
+    fontSize: rem(theme.fontSizes.xs),
+    marginLeft: rem(theme.gutters.xs),
 
-  pic: css({
-    width: em(theme.fontSizes.xs * 2),
-    height: em(theme.fontSizes.xs * 2),
-    marginLeft: em(theme.gutters.sm),
-    marginRight: em(theme.gutters.xs),
-    objectFit: 'cover',
-    borderRadius: '100%',
-  }),
-
-  secondary: css({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  }),
-
-  icon: css({
-    height: em(theme.fontSizes.xs * 1.75),
-    marginLeft: em(theme.gutters.xs),
-    marginRight: `${statusBarGutter}%`,
+    ' svg': {
+      marginRight: rem(theme.gutters.xs / 2),
+      height: rem(theme.fontSizes.xs * 1.25),
+    },
   }),
 }

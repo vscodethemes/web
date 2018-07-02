@@ -1,7 +1,7 @@
 import { LanguageOptions, Theme } from '@vscodethemes/types'
-import { css } from 'emotion'
 import * as React from 'react'
-import theme, { em } from '../../theme'
+import { Button } from '../'
+import { ExtensionLink } from '../../pages/extension'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
@@ -9,26 +9,21 @@ import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
 import TabContent from './TabContent'
+import styles from './ThemePrevies.styles'
 import TopBar from './TopBar'
 
 interface ThemePreviewProps {
   theme: Theme
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => void
-}
-
-const styles = {
-  container: css({
-    width: '100%',
-    boxShadow: theme.shadows.md,
-    borderRadius: em(theme.borderRadius.md),
-  }),
+  hideViewExtension?: boolean
 }
 
 const ThemePreview: React.SFC<ThemePreviewProps> = ({
   theme: themeProps,
   language,
   onLanguage,
+  hideViewExtension,
 }) => (
   <div className={styles.container}>
     <TopBar name={themeProps.themeName} />
@@ -62,13 +57,28 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
           tokens={themeProps.tokens}
           editorForeground={themeProps.colors.editorForeground}
         />
+        <div className={styles.actions}>
+          {!hideViewExtension && (
+            <ExtensionLink
+              publisherName={themeProps.publisherName}
+              extensionName={themeProps.extensionName}
+            >
+              {({ href, onClick }) => (
+                <Button
+                  label="View Extension"
+                  foreground={themeProps.colors.statusBarForeground}
+                  background={themeProps.colors.statusBarBackground}
+                  border={`${themeProps.colors.statusBarForeground}44`}
+                  href={href}
+                  onClick={onClick}
+                />
+              )}
+            </ExtensionLink>
+          )}
+        </div>
       </TabContent>
     </Editor>
-    <StatusBar
-      colors={themeProps.colors}
-      repository={themeProps.repository}
-      repositoryOwner={themeProps.repositoryOwner}
-    />
+    <StatusBar colors={themeProps.colors} installs={themeProps.installs} />
   </div>
 )
 
