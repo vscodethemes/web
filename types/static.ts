@@ -120,6 +120,10 @@ export interface SearchParams {
   page?: number
   perPage?: number
   lang?: LanguageOptions
+  extensionName?: string
+  publisherName?: string
+  repositoryOwner?: string
+  repository?: string
 }
 
 export interface Icons {

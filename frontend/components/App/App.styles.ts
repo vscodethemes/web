@@ -35,9 +35,5 @@ export default {
     display: 'flex',
     flexDirection: 'column',
     paddingTop: em(theme.header.height),
-
-    [theme.breakpoints.pageMin]: {
-      paddingTop: em(theme.header.heightCollapsed),
-    },
   }),
 }

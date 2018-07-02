@@ -1,9 +1,9 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export default {
   link: css({
-    marginRight: em(theme.gutters.lg),
+    marginRight: rem(theme.gutters.lg),
     height: '100%',
     display: 'inline-flex',
     alignItems: 'center',
@@ -12,16 +12,16 @@ export default {
   }),
 
   icon: css({
-    marginTop: em(1.5),
-    marginRight: em(theme.gutters.xs),
-    height: em(theme.fontSizes.md * 0.9),
+    marginTop: rem(1.5),
+    marginRight: rem(theme.gutters.xs),
+    height: rem(theme.fontSizes.sm),
   }),
 
   text: css({
-    fontSize: theme.fontSizes.md,
+    fontSize: rem(theme.fontSizes.sm),
     fontWeight: 'bold',
     color: theme.colors.text,
-    letterSpacing: em(-0.3),
+    letterSpacing: rem(-0.3),
 
     [theme.breakpoints.pageMin]: {
       display: 'none',
@@ -31,6 +31,6 @@ export default {
   primary: css({
     fontWeight: 'normal',
     color: theme.colors.palette[0],
-    letterSpacing: em(0.3),
+    letterSpacing: rem(0.3),
   }),
 }

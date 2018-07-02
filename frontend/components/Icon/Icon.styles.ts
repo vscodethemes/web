@@ -1,9 +1,9 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export default {
   svg: css({
     fill: 'currentColor',
-    height: em(theme.fontSizes.md * 1.5),
+    height: rem(theme.fontSizes.sm * 1.5),
   }),
 }
