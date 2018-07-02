@@ -1,5 +1,5 @@
-import createLink from '../../utils/createLink'
+import SearchLink from './SearchLink'
 import SearchPage from './SearchPage'
 
 export default SearchPage
-export const SearchLink = createLink('/search')
+export { SearchLink }
