@@ -1,5 +1,5 @@
-import createLink from '../../utils/createLink'
+import DarkLink from './DarkLink'
 import DarkPage from './DarkPage'
 
 export default DarkPage
-export const DarkLink = createLink('/dark')
+export { DarkLink }

@@ -1,5 +1,5 @@
-import createLink from '../../utils/createLink'
+import TrendingLink from './TrendingLink'
 import TrendingPage from './TrendingPage'
 
 export default TrendingPage
-export const TrendingLink = createLink('/trending')
+export { TrendingLink }
