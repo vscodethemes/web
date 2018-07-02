@@ -39,6 +39,7 @@ export default {
     color: theme.colors.textMuted,
     cursor: 'pointer',
     textDecoration: 'none',
+
     ':first-child': {
       marginRight: em(theme.gutters.md),
     },

@@ -59,16 +59,9 @@ class Header extends React.Component<HeaderProps, HeaderState> {
             </Tab>
           )}
         </LightLink>
-        <SearchLink>
-          {({ push }) => (
-            <form
-              onSubmit={e => {
-                e.preventDefault()
-                if (search) {
-                  push({ q: search })
-                }
-              }}
-            >
+        <SearchLink q={search}>
+          {({ onClick }) => (
+            <form onSubmit={onClick}>
               <SearchInput
                 value={search}
                 placeholder="Search... (ie. monokai)"

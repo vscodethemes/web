@@ -11,6 +11,35 @@ app
   .then(() => {
     const server = express()
 
+    server.get('/', (req, res) => {
+      app.render(req, res, '/home', req.query)
+    })
+
+    server.get('/trending', (req, res) => {
+      app.render(req, res, '/trending', req.query)
+    })
+
+    server.get('/light', (req, res) => {
+      app.render(req, res, '/light', req.query)
+    })
+
+    server.get('/dark', (req, res) => {
+      app.render(req, res, '/dark', req.query)
+    })
+
+    server.get('/search', (req, res) => {
+      app.render(req, res, '/search', req.query)
+    })
+
+    server.get('/e/:id*', (req, res) => {
+      const [publisherName, extensionName] = req.params.id.split('.')
+      app.render(req, res, '/extension', {
+        ...req.query,
+        publisherName,
+        extensionName,
+      })
+    })
+
     server.get('*', (req, res) => {
       return handle(req, res)
     })

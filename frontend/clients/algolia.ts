@@ -27,8 +27,10 @@ export async function search(opts: SearchOptions) {
   if (opts.light) themeTypes.push('themeType:light')
 
   let filters = ''
-  if (themeTypes.length > 0) filters += `(${themeTypes.join(' OR ')}) AND `
-  filters += `language:${opts.lang}`
+  if (themeTypes.length > 0) filters += `(${themeTypes.join(' OR ')})`
+  if (opts.publisherName) filters += ` AND publisherName:${opts.publisherName}`
+  if (opts.extensionName) filters += ` AND extensionName:${opts.extensionName}`
+  if (opts.lang) filters += ` AND language:${opts.lang}`
 
   try {
     const results = await indicies[opts.sortBy].search({

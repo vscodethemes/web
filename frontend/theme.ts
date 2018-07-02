@@ -24,6 +24,7 @@ const colors = {
   inputBorder: '#18181F',
   text: '#D4D4D4',
   textMuted: '#606066',
+  textInverse: '#fff',
 }
 
 // TODO: Replace and remove em for rem
@@ -43,13 +44,14 @@ const theme = {
   fontSizes: {
     xs: 10,
     sm: 12,
-    md: 14,
+    md: 16,
     xl: 28,
   },
   borderRadius: {
     xs: 2,
     sm: 4,
     md: 6,
+    round: 100,
   },
   shadows: {
     sm: '0px 6px 20px rgba(0, 0, 0, 0.2)',
