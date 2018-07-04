@@ -68,7 +68,6 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
                   label="View Extension"
                   foreground={themeProps.colors.statusBarForeground}
                   background={themeProps.colors.statusBarBackground}
-                  border={`${themeProps.colors.statusBarForeground}44`}
                   href={href}
                   onClick={onClick}
                 />
