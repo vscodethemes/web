@@ -20,6 +20,7 @@ const styles = {
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
+    outline: 0,
   }),
 
   active: css({
