@@ -36,7 +36,7 @@ Preview themes from the VSCode marketplace.
 
 **Infrastructure**
 
-* Delaractive infrastructure using Terraform
+* Declarative infrastructure using Terraform
 * Uses a single, reusable module for the backend
 
 **CI / CD**
