@@ -2,7 +2,7 @@ import { LineToken } from '@vscodethemes/tokenizer'
 import { css } from 'emotion'
 import { Html5Entities } from 'html-entities'
 import * as React from 'react'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 interface CodeProps {
   tokens: LineToken[][]
@@ -13,7 +13,7 @@ const styles = {
   code: css({
     position: 'relative',
     height: '100%',
-    padding: em(theme.gutters.sm),
+    padding: rem(theme.gutters.sm),
     fontFamily: theme.fonts.monospace,
   }),
 }

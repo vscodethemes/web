@@ -1,10 +1,10 @@
 import { css } from 'emotion'
-import theme, { em, withContainer } from '../../theme'
+import theme, { rem, withContainer } from '../../theme'
 
 export default {
   wrapper: css(
     withContainer({
-      marginTop: em(theme.gutters.lg),
+      marginTop: rem(theme.gutters.lg),
     }),
   ),
 }

@@ -1,7 +1,7 @@
 import { Colors } from '@vscodethemes/types'
 import { css, cx } from 'emotion'
 import * as React from 'react'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 interface TabProps {
   colors: Colors
@@ -16,7 +16,7 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: em(theme.fontSizes.xs),
+    fontSize: rem(theme.fontSizes.xs),
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
