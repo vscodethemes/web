@@ -9,7 +9,7 @@ import {
   Icons,
   Meta,
   Paragraph,
-  ThemePreview,
+  ThemeRotator,
 } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import styles from './ExtensionPage.styles'
@@ -58,7 +58,7 @@ export default class ExtensionPage extends React.Component<
   }
 
   render() {
-    const { primary, language } = this.props
+    const { primary, themes, language } = this.props
     const {
       displayName,
       repositoryOwner,
@@ -76,11 +76,10 @@ export default class ExtensionPage extends React.Component<
       <div className={styles.wrapper}>
         <Meta title={title} description={description} />
         <div className={styles.preview}>
-          <ThemePreview
-            theme={primary}
+          <ThemeRotator
+            themes={themes}
             language={language}
-            onLanguage={console.log}
-            hideViewExtension={true}
+            onLanguage={this.handleLanguage}
           />
         </div>
         <div className={styles.info}>

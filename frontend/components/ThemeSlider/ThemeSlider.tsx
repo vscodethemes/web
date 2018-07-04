@@ -18,7 +18,7 @@ interface ThemeSliderProps {
 
 interface ThemeSliderState {
   currentIndex: number
-  queuedIndex: number | null
+  queuedIndex: number
   numOfVisibleItems: number
   itemWidthPercent: number
   shouldPeak: boolean

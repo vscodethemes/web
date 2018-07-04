@@ -14,7 +14,7 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
       marginTop: em(-size[1] / 2),
       width: em(size[0] + offset),
       height: em(size[1]),
-      background: 'rgba(0, 0, 0, 0.8)',
+      background: theme.colors.backgroundInverse,
       color: theme.colors.text,
       border: 0,
       boxShadow: theme.shadows.md,
