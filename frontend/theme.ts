@@ -20,6 +20,7 @@ const colors = {
   palette: ['#00A8FF', '#B8E63B', '#880055', '#E70258', '#FAF100'],
   background: '#202026',
   backgroundDark: '#18181F',
+  backgroundInverse: 'rgba(0, 0, 0, 0.8)',
   inputBackground: '#28282F',
   inputBorder: '#18181F',
   text: '#D4D4D4',
