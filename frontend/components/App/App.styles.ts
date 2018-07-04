@@ -1,5 +1,5 @@
 import { css, injectGlobal } from 'emotion'
-import theme, { em, rootFontSize } from '../../theme'
+import theme, { rem, rootFontSize } from '../../theme'
 
 injectGlobal({
   '*, *:before, *:after': {
@@ -15,7 +15,7 @@ injectGlobal({
     height: '100%',
     fontFamily: theme.fonts.sansSerif,
     fontWeight: 'normal',
-    letterSpacing: em(0.3),
+    letterSpacing: rem(0.3),
     margin: 0,
     backgroundColor: theme.colors.background,
     color: theme.colors.text,
@@ -34,6 +34,6 @@ export default {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: em(theme.header.height),
+    paddingTop: rem(theme.header.height),
   }),
 }

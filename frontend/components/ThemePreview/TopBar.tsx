@@ -1,6 +1,6 @@
 import { css } from 'emotion'
 import * as React from 'react'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export interface TopBarProps {
   name: string
@@ -8,9 +8,9 @@ export interface TopBarProps {
 
 const styles = {
   topBar: css({
-    height: `${em(theme.fontSizes.xs + theme.gutters.xs * 2)}`,
-    borderTopLeftRadius: em(theme.borderRadius.md),
-    borderTopRightRadius: em(theme.borderRadius.md),
+    height: `${rem(theme.fontSizes.xs + theme.gutters.xs * 2)}`,
+    borderTopLeftRadius: rem(theme.borderRadius.md),
+    borderTopRightRadius: rem(theme.borderRadius.md),
     boxShadow: '0px 1px 1px rgba(0,0,0,0.1)',
     zIndex: 10,
     backgroundColor: '#262626',
@@ -21,7 +21,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: em(theme.fontSizes.xs),
+    fontSize: rem(theme.fontSizes.xs),
     fontWeight: 'normal',
     margin: 0,
     color: 'rgba(255, 255, 255, 0.7)',

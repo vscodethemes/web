@@ -1,23 +1,23 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export const boxWidth = 20
 export const boxHeight = 2
 
 export default {
   icon: css({
-    height: em(theme.fontSizes.md),
+    height: rem(theme.fontSizes.md),
   }),
 
   page: css({
     width: '100%',
-    maxWidth: em(theme.gutters.md * 2 + theme.fontSizes.md),
+    maxWidth: rem(theme.gutters.md * 2 + theme.fontSizes.md),
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    padding: `0 0 ${em(theme.gutters.sm)}`,
-    fontSize: em(theme.fontSizes.md),
-    lineHeight: em(theme.fontSizes.md),
+    padding: `0 0 ${rem(theme.gutters.sm)}`,
+    fontSize: rem(theme.fontSizes.md),
+    lineHeight: rem(theme.fontSizes.md),
     background: 'transparent',
     border: 'none',
     color: theme.colors.text,
@@ -36,10 +36,10 @@ export default {
       position: 'absolute',
       bottom: 0,
       left: '50%',
-      marginLeft: em(-boxWidth / 2),
-      height: em(boxHeight),
-      width: em(boxWidth),
-      borderRadius: em(boxHeight),
+      marginLeft: rem(-boxWidth / 2),
+      height: rem(boxHeight),
+      width: rem(boxWidth),
+      borderRadius: rem(boxHeight),
       backgroundColor: theme.colors.palette[4],
     },
   }),
