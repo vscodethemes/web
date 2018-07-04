@@ -1,5 +1,5 @@
 import { css } from 'emotion'
-import { em } from '../../theme'
+import { rem } from '../../theme'
 
 export default {
   tabs: css({
@@ -9,6 +9,6 @@ export default {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    maxWidth: em(210),
+    maxWidth: rem(210),
   }),
 }

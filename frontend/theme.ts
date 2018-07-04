@@ -28,8 +28,6 @@ const colors = {
   textInverse: '#fff',
 }
 
-// TODO: Replace and remove em for rem
-const em = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}em`
 const rem = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}rem`
 
 const theme = {
@@ -59,8 +57,8 @@ const theme = {
     md: '0px 6px 20px rgba(0, 0, 0, 0.35)',
   },
   breakpoints: {
-    pageMax: `@media (max-width: ${em(pageSizes.max)})`,
-    pageMin: `@media (max-width: ${em(pageSizes.min)})`,
+    pageMax: `@media (max-width: ${rem(pageSizes.max)})`,
+    pageMin: `@media (max-width: ${rem(pageSizes.min)})`,
   },
   header: {
     height: 40,
@@ -77,16 +75,16 @@ const theme = {
 const withContainer = (styles: any) =>
   merge(
     {
-      marginLeft: em(theme.container.gutter),
-      marginRight: em(theme.container.gutter),
+      marginLeft: rem(theme.container.gutter),
+      marginRight: rem(theme.container.gutter),
 
       [theme.breakpoints.pageMin]: {
-        marginLeft: em(theme.gutters.md),
-        marginRight: em(theme.gutters.md),
+        marginLeft: rem(theme.gutters.md),
+        marginRight: rem(theme.gutters.md),
       },
     },
     styles,
   )
 
 export default theme
-export { em, rem, withContainer }
+export { rem, withContainer }

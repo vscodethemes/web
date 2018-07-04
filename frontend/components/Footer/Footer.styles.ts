@@ -1,11 +1,11 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export default {
   footer: css({
     width: '100%',
     borderTop: `1px solid ${theme.colors.inputBorder}`,
-    padding: `${em(theme.gutters.md)} ${em(theme.container.gutter)}`,
+    padding: `${rem(theme.gutters.md)} ${rem(theme.container.gutter)}`,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -23,16 +23,16 @@ export default {
     display: 'flex',
     [theme.breakpoints.pageMin]: {
       order: 1,
-      marginTop: em(theme.gutters.md),
+      marginTop: rem(theme.gutters.md),
     },
   }),
 
   icon: css({
-    marginRight: em(theme.gutters.xs),
+    marginRight: rem(theme.gutters.xs),
   }),
 
   link: css({
-    fontSize: em(theme.fontSizes.sm),
+    fontSize: rem(theme.fontSizes.sm),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -41,7 +41,7 @@ export default {
     textDecoration: 'none',
 
     ':first-child': {
-      marginRight: em(theme.gutters.md),
+      marginRight: rem(theme.gutters.md),
     },
     ':hover': {
       color: theme.colors.text,

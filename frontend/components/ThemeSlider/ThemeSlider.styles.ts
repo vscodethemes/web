@@ -1,11 +1,11 @@
 import { css } from 'emotion'
-import theme, { em, withContainer } from '../../theme'
+import theme, { rem, withContainer } from '../../theme'
 
 const shadowSize = 30
 
 export default {
   wrapper: css({
-    marginBottom: em(theme.gutters.lg),
+    marginBottom: rem(theme.gutters.lg),
   }),
 
   title: css(
@@ -22,10 +22,10 @@ export default {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: em(theme.gutters.sm),
+    marginLeft: rem(theme.gutters.sm),
     textAlign: 'center',
-    paddingLeft: em(theme.gutters.xs),
-    paddingRight: em(theme.gutters.xs),
+    paddingLeft: rem(theme.gutters.xs),
+    paddingRight: rem(theme.gutters.xs),
     color: theme.colors.text,
     cursor: 'pointer',
     textDecoration: 'none',
@@ -41,10 +41,10 @@ export default {
     zIndex: 10,
     overflow: 'hidden',
     // Compensate for overflow: hidden and shadow.
-    marginTop: em(-shadowSize),
-    marginBottom: em(-shadowSize),
-    padding: em(shadowSize),
-    paddingLeft: em(theme.container.gutter),
+    marginTop: rem(-shadowSize),
+    marginBottom: rem(-shadowSize),
+    padding: rem(shadowSize),
+    paddingLeft: rem(theme.container.gutter),
 
     [`:hover .next`]: {
       opacity: 1,
@@ -53,8 +53,8 @@ export default {
 
   row: css({
     display: 'flex',
-    marginLeft: em(-theme.gutters.md / 2),
-    width: `calc(100% + ${em(theme.gutters.md / 2)})`,
+    marginLeft: rem(-theme.gutters.md / 2),
+    width: `calc(100% + ${rem(theme.gutters.md / 2)})`,
   }),
 
   item: css({
@@ -62,14 +62,14 @@ export default {
     // TODO: Use media queries to change this value.
     width: '30%',
     flexShrink: 0,
-    paddingLeft: em(theme.gutters.md / 2),
-    paddingRight: em(theme.gutters.md / 2),
+    paddingLeft: rem(theme.gutters.md / 2),
+    paddingRight: rem(theme.gutters.md / 2),
   }),
 
   previous: css({
     position: 'absolute',
-    top: em(shadowSize),
-    bottom: em(shadowSize),
+    top: rem(shadowSize),
+    bottom: rem(shadowSize),
     left: 0,
     width: theme.container.gutter,
 

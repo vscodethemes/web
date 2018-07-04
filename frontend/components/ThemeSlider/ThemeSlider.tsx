@@ -2,7 +2,7 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
 import { Heading, ThemePreview } from '../'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 import NextButton from './NextButton'
 import PreviousButton from './PreviousButton'
 import styles from './ThemeSlider.styles'
@@ -226,7 +226,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
                 {...moreProps}
                 className={styles.more}
                 style={{
-                  width: `calc(${itemWidthRemainder}% + ${em(
+                  width: `calc(${itemWidthRemainder}% + ${rem(
                     theme.container.gutter,
                   )})`,
                 }}
