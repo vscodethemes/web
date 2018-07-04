@@ -1,5 +1,5 @@
 import { css } from 'emotion'
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 export default {
   header: css({
@@ -7,8 +7,8 @@ export default {
     top: 0,
     left: 0,
     width: '100%',
-    height: em(theme.header.height),
-    padding: `0 ${em(theme.container.gutter)}`,
+    height: rem(theme.header.height),
+    padding: `0 ${rem(theme.container.gutter)}`,
     backgroundColor: `${theme.header.backgroundColor}F0`,
     zIndex: 100,
     display: 'flex',
@@ -20,5 +20,9 @@ export default {
     color: theme.colors.text,
     marginLeft: theme.gutters.sm,
     marginRight: theme.gutters.sm,
+  }),
+
+  search: css({
+    width: rem(220),
   }),
 }

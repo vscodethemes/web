@@ -4,7 +4,7 @@ import theme, { rem, withContainer } from '../../theme'
 export default {
   wrapper: css(
     withContainer({
-      height: '100%',
+      flex: 1,
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',

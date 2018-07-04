@@ -5,6 +5,7 @@ export default {
   container: css({
     position: 'relative',
     marginLeft: rem(theme.gutters.lg),
+    width: '100%',
   }),
 
   input: css({
@@ -19,6 +20,7 @@ export default {
     color: theme.colors.text,
     backgroundColor: `${theme.colors.inputBackground}88`,
     border: 0,
+    outline: 0,
     borderRadius: rem(theme.borderRadius.round),
     WebkitAppearance: 'none',
 
