@@ -1,4 +1,4 @@
-import theme, { em } from '../../theme'
+import theme, { rem } from '../../theme'
 
 const size = [64, 128]
 const offset = theme.gutters.md
@@ -11,27 +11,32 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
       position: 'absolute',
       fontSize: 'inherit',
       top: '50%',
-      marginTop: em(-size[1] / 2),
-      width: em(size[0] + offset),
-      height: em(size[1]),
+      marginTop: rem(-size[1] / 2),
+      width: rem(size[0] + offset),
+      height: rem(size[1]),
       background: theme.colors.backgroundInverse,
       color: theme.colors.text,
       border: 0,
+      outline: 0,
       boxShadow: theme.shadows.md,
       cursor: 'pointer',
-      transform: `translateX(${em(translateOffset)})`,
+      transform: `translateX(${rem(translateOffset)})`,
       transition: `opacity 0.15s ease-in, transform 0.15s ease-in`,
 
       ...(isLeftAligned
         ? {
             left: 0,
             borderLeft: 'none',
-            paddingLeft: em(offset),
+            paddingLeft: rem(offset),
+            borderTopRightRadius: rem(theme.borderRadius.md),
+            borderBottomRightRadius: rem(theme.borderRadius.md),
           }
         : {
             right: 0,
             borderRight: 'none',
-            paddingRight: em(offset),
+            paddingRight: rem(offset),
+            borderTopLeftRadius: rem(theme.borderRadius.md),
+            borderBottomLeftRadius: rem(theme.borderRadius.md),
           }),
 
       ':hover': {
@@ -39,11 +44,11 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
       },
 
       ':hover .icon': {
-        transform: `scaleY(1) translateX(${em(translateOffset / 2)})`,
+        transform: `scaleY(1) translateX(${rem(translateOffset / 2)})`,
       },
 
       ':active .icon': {
-        transform: `scaleY(0.85) translateX(${em(translateOffset / 2)})`,
+        transform: `scaleY(0.85) translateX(${rem(translateOffset / 2)})`,
       },
     },
 
@@ -54,7 +59,7 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
     },
 
     icon: {
-      height: em(40),
+      height: rem(40),
       transform: 'scaleY(0.85) translateX(0em)',
       transition: 'transform 0.15s ease-in',
     },

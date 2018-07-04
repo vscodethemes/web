@@ -61,7 +61,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
         </LightLink>
         <SearchLink q={search}>
           {({ onClick }) => (
-            <form onSubmit={onClick}>
+            <form onSubmit={onClick} className={styles.search}>
               <SearchInput
                 value={search}
                 placeholder="Search... (ie. monokai)"

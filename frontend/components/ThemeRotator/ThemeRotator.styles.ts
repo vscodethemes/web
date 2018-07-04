@@ -35,6 +35,7 @@ export default {
     marginTop: rem(-size[1] / 2),
     padding: 0,
     border: 0,
+    outline: 0,
     borderTopLeftRadius: rem(theme.borderRadius.sm),
     borderBottomLeftRadius: rem(theme.borderRadius.sm),
     display: 'flex',
