@@ -16,6 +16,10 @@ declare module 'next' {
     replaceTo: () => any
   }
 
+  export interface CustomError extends Error {
+    statusCode: number
+  }
+
   export interface Context {
     asPath: string
     pathname: string
@@ -23,7 +27,7 @@ declare module 'next' {
     req?: http.IncomingMessage
     res?: http.ServerResponse
     renderPage: () => any
-    err?: Error
+    err?: CustomError
   }
 
   export interface URLProps {
