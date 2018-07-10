@@ -1,17 +1,57 @@
+import { css } from 'emotion'
 import { Context } from 'next'
-import NextError from 'next/error'
+import * as React from 'react'
 import sentry from '../clients/sentry'
+import { Paragraph } from '../components'
 
-class MyError extends NextError {
-  static async getInitialProps(ctx: Context) {
-    if (ctx.err && sentry) {
-      sentry.captureException(ctx.err)
+interface ErrorProps {
+  statusCode?: number
+}
+
+const styles = {
+  container: css({
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+}
+
+class ErrorPage extends React.Component<ErrorProps> {
+  static async getInitialProps({ res, err }: Context): Promise<ErrorProps> {
+    if (err && sentry) {
+      sentry.captureException(err)
+    } else {
+      console.error(err)
     }
-    // @types/next is broken and uses default export so we can't
-    // use module augmentation to fix it: https://github.com/zeit/next.js/issues/3396
-    const errorProps = await (NextError as any).getInitialProps(ctx)
-    return errorProps
+
+    let statusCode
+    if (res && res.statusCode) {
+      statusCode = res.statusCode
+    } else if (err && err.statusCode) {
+      statusCode = err.statusCode
+    }
+
+    return { statusCode }
+  }
+
+  render() {
+    const { statusCode } = this.props
+
+    if (statusCode === 404) {
+      return (
+        <div className={styles.container}>
+          <Paragraph text="Page not found." />
+        </div>
+      )
+    }
+
+    return (
+      <div className={styles.container}>
+        <Paragraph text="Oops! Something went wrong." />
+      </div>
+    )
   }
 }
 
-export default MyError
+export default ErrorPage
