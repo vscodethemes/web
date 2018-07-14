@@ -56,17 +56,14 @@ const theme = {
     height: 40,
     backgroundColor: colors.inputBorder,
   },
-  container: {
-    gutter: gutters.lg,
-  },
   animation: {
     bezier: 'cubic-bezier(.63,.01,.44,1)',
   },
 }
 
 const withContainer = (styles: any) => ({
-  marginLeft: rem(theme.container.gutter),
-  marginRight: rem(theme.container.gutter),
+  marginLeft: rem(theme.gutters.lg),
+  marginRight: rem(theme.gutters.lg),
   ...styles,
 
   [theme.breakpoints.mobile]: {

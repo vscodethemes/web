@@ -2,10 +2,10 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
 import { Heading, ThemePreview } from '../'
-import theme, { rem } from '../../theme'
+import theme from '../../theme'
 import NextButton from './NextButton'
 import PreviousButton from './PreviousButton'
-import styles from './ThemeSlider.styles'
+import styles, { sizes } from './ThemeSlider.styles'
 
 interface ThemeSliderProps {
   title: string
@@ -39,12 +39,32 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
 
   rowEl: HTMLElement
   itemEl: HTMLElement
+  mqListeners: Array<{ mql: MediaQueryList; listener: MediaQueryListListener }>
 
   componentDidMount() {
     this.calculateVisibleItems()
-    // TODO: Recalculate with matchMedia instead.
-    // window.addEventListener('resize', this.calculateVisibleItems, false)
-    // window.addEventListener('orientationchange', this.calculateVisibleItems, false)
+
+    this.mqListeners = sizes.map(size => {
+      const mql = window.matchMedia(size.media)
+      const listener: MediaQueryListListener = e => {
+        if (e.matches) {
+          // Reset state when a breakpoint matches.
+          this.setState({ currentIndex: 0, queuedIndex: 0 })
+          this.calculateVisibleItems()
+        }
+      }
+
+      mql.addListener(listener)
+
+      return { mql, listener }
+    })
+  }
+
+  componentWillUnmount() {
+    this.mqListeners.forEach(({ mql, listener }) => {
+      mql.removeListener(listener)
+    })
+    this.mqListeners = []
   }
 
   shouldComponentUpdate(
@@ -194,8 +214,6 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
         duration > 0 ? `transform ${duration}s ${theme.animation.bezier}` : '',
     }
 
-    const itemWidthRemainder = 100 - numOfVisibleItems * itemWidthPercent
-
     return (
       <div className={styles.wrapper}>
         <div className={styles.title}>
@@ -222,15 +240,7 @@ class ThemeSlider extends React.Component<ThemeSliderProps, ThemeSliderState> {
               </div>
             ))}
             {isLastSlide && (
-              <a
-                {...moreProps}
-                className={styles.more}
-                style={{
-                  width: `calc(${itemWidthRemainder}% + ${rem(
-                    theme.container.gutter,
-                  )})`,
-                }}
-              >
+              <a {...moreProps} className={styles.more}>
                 View more<br />
                 <span style={{ whiteSpace: 'nowrap' }}>{description}</span>
               </a>
