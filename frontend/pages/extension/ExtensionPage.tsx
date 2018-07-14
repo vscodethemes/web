@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import {
   Button,
+  Extension,
   Heading,
   Icon,
   Icons,
@@ -31,8 +32,6 @@ export default class ExtensionPage extends React.Component<
     const language = getLanguage(ctx)
     const { publisherName, extensionName } = ctx.query
     const page = 1
-
-    // TODO: Validate repositoryOwner and repository
 
     const extensionThemes = await algolia.search({
       dark: true,
@@ -75,44 +74,17 @@ export default class ExtensionPage extends React.Component<
     return (
       <div className={styles.wrapper}>
         <Meta title={title} description={description} />
-        <div className={styles.preview}>
-          <ThemeRotator
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-          />
-        </div>
-        <div className={styles.info}>
-          <Heading text={displayName} />
-          <span className={styles.owner}>by {publisherName}</span>
-          <Paragraph text={description} />
-          <div className={styles.actions}>
-            <span className={styles.install}>
-              <Button
-                icon={Icons.download}
-                label="Install Extension"
-                href={`vscode:extension/${publisherName}.${extensionName}`}
-              />
-            </span>
-            <a
-              className={styles.link}
-              href={`https://github.com/${repositoryOwner}/${repository}`}
-            >
-              <Icon icon={Icons.github} />
-            </a>
-            <a
-              className={styles.link}
-              target="_blank"
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
-                title,
-              )}&url=${encodeURIComponent(
-                `https://vscodethemes.com/e/${publisherName}.${extensionName}`,
-              )}&hashtags=vscode`}
-            >
-              <Icon icon={Icons.twitter} />
-            </a>
-          </div>
-        </div>
+        <Extension
+          displayName={primary.displayName}
+          shortDescription={description}
+          publisherName={primary.publisherName}
+          extensionName={primary.extensionName}
+          repositoryOwner={primary.repositoryOwner}
+          repository={primary.repository}
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+        />
       </div>
     )
   }
