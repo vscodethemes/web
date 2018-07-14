@@ -72,7 +72,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
                 <form onSubmit={onClick}>
                   <SearchInput
                     value={search}
-                    placeholder="Search..."
+                    placeholder="Search... (ie. monokai)"
                     onChange={value => this.setState({ search: value })}
                   />
                 </form>
