@@ -56,6 +56,11 @@ export default {
       opacity: 1,
     },
 
+    [theme.breakpoints.touch]: {
+      transform: 'scale(1)',
+      opacity: 1,
+    },
+
     ' svg': {
       height: rem(theme.fontSizes.md * 1.5),
       transform: 'scaleY(1)',

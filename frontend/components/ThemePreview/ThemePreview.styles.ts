@@ -10,6 +10,11 @@ const actions = css({
   transition: `opacity 0.15s ${theme.animation.bezier}, transform 0.15s ${
     theme.animation.bezier
   }`,
+
+  [theme.breakpoints.touch]: {
+    opacity: 1,
+    transform: 'translateY(0%)',
+  },
 })
 
 export default {

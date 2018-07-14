@@ -52,6 +52,7 @@ const theme = {
   },
   breakpoints: {
     mobile: `@media (max-width: ${rem(640)})`,
+    touch: '@media (hover: none)',
   },
   header: {
     height: 40,

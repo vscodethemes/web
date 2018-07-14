@@ -9,7 +9,7 @@ import StatusBar from './StatusBar'
 import Tab from './Tab'
 import TabBar from './TabBar'
 import TabContent from './TabContent'
-import styles from './ThemePrevies.styles'
+import styles from './ThemePreview.styles'
 import TopBar from './TopBar'
 
 interface ThemePreviewProps {
