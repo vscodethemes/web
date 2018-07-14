@@ -2,16 +2,7 @@ import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import * as React from 'react'
 import * as algolia from '../../clients/algolia'
-import {
-  Button,
-  Extension,
-  Heading,
-  Icon,
-  Icons,
-  Meta,
-  Paragraph,
-  ThemeRotator,
-} from '../../components'
+import { Extension, Meta } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import styles from './ExtensionPage.styles'
 
@@ -58,13 +49,7 @@ export default class ExtensionPage extends React.Component<
 
   render() {
     const { primary, themes, language } = this.props
-    const {
-      displayName,
-      repositoryOwner,
-      repository,
-      extensionName,
-      publisherName,
-    } = primary
+    const { displayName, publisherName } = primary
     const title = `${displayName} by ${publisherName}`
     // Add a '.' to the end if it doesn't exist.
     const description = /[!\?\.]$/.test(primary.shortDescription)
