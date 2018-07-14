@@ -3,6 +3,38 @@ import theme, { rem, withContainer } from '../../theme'
 
 const shadowSize = 30
 
+export const sizes = [
+  { media: `(max-width: ${rem(700)})`, width: 85 },
+  {
+    media: `(min-width: ${rem(700)}) and (max-width: ${rem(800)})`,
+    width: 75,
+  },
+  {
+    media: `(min-width: ${rem(800)}) and (max-width: ${rem(920)})`,
+    width: 45,
+  },
+  {
+    media: `(min-width: ${rem(920)}) and (max-width: ${rem(1200)})`,
+    width: 42,
+  },
+  {
+    media: `(min-width: ${rem(1200)}) and (max-width: ${rem(1500)})`,
+    width: 30,
+  },
+  { media: `(min-width: ${rem(1500)})`, width: 22.5 },
+]
+
+const withSizes = (baseStyles = {}) =>
+  sizes.reduce(
+    (curStyles, size) => ({
+      ...curStyles,
+      [`@media ${size.media}`]: {
+        width: `${size.width}%`,
+      },
+    }),
+    baseStyles,
+  )
+
 export default {
   wrapper: css({
     marginBottom: rem(theme.gutters.lg),
@@ -44,7 +76,11 @@ export default {
     marginTop: rem(-shadowSize),
     marginBottom: rem(-shadowSize),
     padding: rem(shadowSize),
-    paddingLeft: rem(theme.container.gutter),
+    paddingLeft: rem(theme.gutters.lg),
+
+    [theme.breakpoints.mobile]: {
+      paddingLeft: rem(theme.gutters.md),
+    },
 
     [`:hover .next`]: {
       opacity: 1,
@@ -57,21 +93,20 @@ export default {
     width: `calc(100% + ${rem(theme.gutters.md / 2)})`,
   }),
 
-  item: css({
-    // Ensure there is always a fraction of the next item visible.
-    // TODO: Use media queries to change this value.
-    width: '30%',
-    flexShrink: 0,
-    paddingLeft: rem(theme.gutters.md / 2),
-    paddingRight: rem(theme.gutters.md / 2),
-  }),
+  item: css(
+    withSizes({
+      flexShrink: 0,
+      paddingLeft: rem(theme.gutters.md / 2),
+      paddingRight: rem(theme.gutters.md / 2),
+    }),
+  ),
 
   previous: css({
     position: 'absolute',
     top: rem(shadowSize),
     bottom: rem(shadowSize),
     left: 0,
-    width: theme.container.gutter,
+    width: theme.gutters.lg,
 
     [`:hover .previous`]: {
       opacity: 1,
@@ -79,6 +114,6 @@ export default {
   }),
 
   previousExpanded: css({
-    width: theme.container.gutter * 4,
+    width: theme.gutters.lg * 4,
   }),
 }
