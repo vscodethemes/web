@@ -1,5 +1,3 @@
-import * as merge from 'merge'
-
 const spacingUnit = 10
 export const rootFontSize = 14
 
@@ -66,19 +64,17 @@ const theme = {
   },
 }
 
-const withContainer = (styles: any) =>
-  merge(
-    {
-      marginLeft: rem(theme.container.gutter),
-      marginRight: rem(theme.container.gutter),
+const withContainer = (styles: any) => ({
+  marginLeft: rem(theme.container.gutter),
+  marginRight: rem(theme.container.gutter),
+  ...styles,
 
-      [theme.breakpoints.mobile]: {
-        marginLeft: rem(theme.gutters.md),
-        marginRight: rem(theme.gutters.md),
-      },
-    },
-    styles,
-  )
+  [theme.breakpoints.mobile]: {
+    marginLeft: rem(theme.gutters.md),
+    marginRight: rem(theme.gutters.md),
+    ...styles[theme.breakpoints.mobile],
+  },
+})
 
 export default theme
 export { rem, withContainer }
