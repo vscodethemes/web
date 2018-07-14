@@ -1,6 +1,6 @@
 import { SingletonRouter, withRouter } from 'next/router'
 import * as React from 'react'
-import { SearchInput, Tab } from '../'
+import { SearchInput, Tab, Tabs } from '../'
 import { DarkLink } from '../../pages/dark'
 import { LightLink } from '../../pages/light'
 import { SearchLink } from '../../pages/search'
@@ -35,41 +35,51 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 
     return (
       <div className={styles.header}>
-        <Logo />
-        <TrendingLink>
-          {linkProps => (
-            <Tab color={theme.colors.palette[1]} {...linkProps}>
-              Trending
-            </Tab>
-          )}
-        </TrendingLink>
-        <span className={styles.sep}>·</span>
-        <DarkLink>
-          {linkProps => (
-            <Tab color={theme.colors.palette[2]} {...linkProps}>
-              Dark
-            </Tab>
-          )}
-        </DarkLink>
-        <span className={styles.sep}>·</span>
-        <LightLink>
-          {linkProps => (
-            <Tab color={theme.colors.palette[3]} {...linkProps}>
-              Light
-            </Tab>
-          )}
-        </LightLink>
-        <SearchLink q={search}>
-          {({ onClick }) => (
-            <form onSubmit={onClick} className={styles.search}>
-              <SearchInput
-                value={search}
-                placeholder="Search... (ie. monokai)"
-                onChange={value => this.setState({ search: value })}
-              />
-            </form>
-          )}
-        </SearchLink>
+        <div className={styles.container}>
+          <div className={styles.logo}>
+            <Logo />
+          </div>
+          <div className={styles.nav}>
+            <Tabs>
+              <TrendingLink>
+                {linkProps => (
+                  <Tab color={theme.colors.palette[1]} {...linkProps}>
+                    Trending
+                  </Tab>
+                )}
+              </TrendingLink>
+              <span className={styles.sep}>·</span>
+              <DarkLink>
+                {linkProps => (
+                  <Tab color={theme.colors.palette[2]} {...linkProps}>
+                    Dark
+                  </Tab>
+                )}
+              </DarkLink>
+              <span className={styles.sep}>·</span>
+              <LightLink>
+                {linkProps => (
+                  <Tab color={theme.colors.palette[3]} {...linkProps}>
+                    Light
+                  </Tab>
+                )}
+              </LightLink>
+            </Tabs>
+          </div>
+          <div className={styles.search}>
+            <SearchLink q={search}>
+              {({ onClick }) => (
+                <form onSubmit={onClick}>
+                  <SearchInput
+                    value={search}
+                    placeholder="Search..."
+                    onChange={value => this.setState({ search: value })}
+                  />
+                </form>
+              )}
+            </SearchLink>
+          </div>
+        </div>
       </div>
     )
   }

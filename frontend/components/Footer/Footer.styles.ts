@@ -10,7 +10,7 @@ export default {
     flexDirection: 'row',
     justifyContent: 'space-between',
 
-    [theme.breakpoints.pageMin]: {
+    [theme.breakpoints.mobile]: {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
@@ -21,7 +21,7 @@ export default {
   links: css({
     order: 0,
     display: 'flex',
-    [theme.breakpoints.pageMin]: {
+    [theme.breakpoints.mobile]: {
       order: 1,
       marginTop: rem(theme.gutters.md),
     },

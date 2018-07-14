@@ -9,7 +9,7 @@ export default {
     marginRight: rem(theme.gutters.sm),
     cursor: 'pointer',
 
-    [theme.breakpoints.pageMin]: {
+    [theme.breakpoints.mobile]: {
       marginBottom: 0,
       marginRight: rem(theme.gutters.sm),
       minWidth: rem(100),

@@ -4,7 +4,6 @@ import theme, { rem } from '../../theme'
 export default {
   container: css({
     position: 'relative',
-    marginLeft: rem(theme.gutters.lg),
     width: '100%',
   }),
 
