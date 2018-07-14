@@ -22,7 +22,7 @@ class ErrorPage extends React.Component<ErrorProps> {
     if (err && sentry) {
       sentry.captureException(err)
     } else {
-      console.error(err)
+      console.error(err) // tslint:disable-line
     }
 
     let statusCode

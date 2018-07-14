@@ -1,11 +1,10 @@
-import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
+import { LanguageOptions, Theme } from '@vscodethemes/types'
 import * as React from 'react'
 import {
   Button,
   Heading,
   Icon,
   Icons,
-  Meta,
   Paragraph,
   ThemeRotator,
 } from '../../components'
