@@ -3,7 +3,10 @@ import theme, { rem } from '../../theme'
 const size = [64, 128]
 const offset = theme.gutters.md
 
-export default function createButtonStyles(isLeftAligned: boolean = false) {
+export default function createButtonStyles(
+  isLeftAligned: boolean = false,
+  showWhenTouchDevice: boolean = false,
+) {
   const translateOffset = isLeftAligned ? -offset : offset
   return {
     button: {
@@ -39,17 +42,25 @@ export default function createButtonStyles(isLeftAligned: boolean = false) {
             borderBottomLeftRadius: rem(theme.borderRadius.md),
           }),
 
-      ':hover': {
-        transform: `translateX(0)`,
-      },
+      ...(showWhenTouchDevice
+        ? {
+            [theme.breakpoints.touch]: {
+              opacity: 1,
+            },
+          }
+        : {
+            ':hover': {
+              transform: `translateX(0)`,
+            },
 
-      ':hover .icon': {
-        transform: `scaleY(1) translateX(${rem(translateOffset / 2)})`,
-      },
+            ':hover .icon': {
+              transform: `scaleY(1) translateX(${rem(translateOffset / 2)})`,
+            },
 
-      ':active .icon': {
-        transform: `scaleY(0.85) translateX(${rem(translateOffset / 2)})`,
-      },
+            ':active .icon': {
+              transform: `scaleY(0.85) translateX(${rem(translateOffset / 2)})`,
+            },
+          }),
     },
 
     hide: {
