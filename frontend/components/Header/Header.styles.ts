@@ -9,7 +9,7 @@ export default {
     width: '100%',
     height: rem(theme.header.height),
     backgroundColor: `${theme.header.backgroundColor}F0`,
-    zIndex: 100,
+    zIndex: 1000,
   }),
 
   container: css({
