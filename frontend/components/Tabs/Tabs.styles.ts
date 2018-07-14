@@ -8,7 +8,7 @@ export default {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     maxWidth: rem(210),
   }),
 }

@@ -1,5 +1,5 @@
 import { css } from 'emotion'
-import theme, { rem } from '../../theme'
+import theme, { rem, withContainer } from '../../theme'
 
 export default {
   header: css({
@@ -8,11 +8,20 @@ export default {
     left: 0,
     width: '100%',
     height: rem(theme.header.height),
-    padding: `0 ${rem(theme.container.gutter)}`,
     backgroundColor: `${theme.header.backgroundColor}F0`,
     zIndex: 100,
+  }),
+
+  container: css({
+    height: '100%',
     display: 'flex',
     alignItems: 'center',
+  }),
+
+  logo: css(withContainer({})),
+
+  nav: css({
+    height: '100%',
   }),
 
   sep: css({
@@ -22,7 +31,9 @@ export default {
     marginRight: theme.gutters.sm,
   }),
 
-  search: css({
-    width: rem(220),
-  }),
+  search: css(
+    withContainer({
+      width: rem(220),
+    }),
+  ),
 }

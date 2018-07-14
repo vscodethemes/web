@@ -3,7 +3,6 @@ import theme, { rem } from '../../theme'
 
 export default {
   link: css({
-    marginRight: rem(theme.gutters.lg),
     height: '100%',
     display: 'inline-flex',
     alignItems: 'center',
@@ -23,7 +22,7 @@ export default {
     color: theme.colors.text,
     letterSpacing: rem(-0.3),
 
-    [theme.breakpoints.pageMin]: {
+    [theme.breakpoints.mobile]: {
       display: 'none',
     },
   }),
