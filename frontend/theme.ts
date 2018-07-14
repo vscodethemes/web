@@ -11,11 +11,6 @@ const gutters = {
   xl: spacingUnit * 7,
 }
 
-const pageSizes = {
-  max: 780,
-  min: 660,
-}
-
 const colors = {
   palette: ['#00A8FF', '#B8E63B', '#880055', '#E70258', '#FAF100'],
   background: '#202026',
@@ -33,7 +28,6 @@ const rem = (px: number) => `${Math.round((px / rootFontSize) * 100) / 100}rem`
 const theme = {
   colors,
   gutters,
-  pageSizes,
   fonts: {
     sansSerif:
       '-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif',
@@ -57,8 +51,7 @@ const theme = {
     md: '0px 6px 20px rgba(0, 0, 0, 0.35)',
   },
   breakpoints: {
-    pageMax: `@media (max-width: ${rem(pageSizes.max)})`,
-    pageMin: `@media (max-width: ${rem(pageSizes.min)})`,
+    mobile: `@media (max-width: ${rem(640)})`,
   },
   header: {
     height: 40,
@@ -78,7 +71,7 @@ const withContainer = (styles: any) =>
       marginLeft: rem(theme.container.gutter),
       marginRight: rem(theme.container.gutter),
 
-      [theme.breakpoints.pageMin]: {
+      [theme.breakpoints.mobile]: {
         marginLeft: rem(theme.gutters.md),
         marginRight: rem(theme.gutters.md),
       },
