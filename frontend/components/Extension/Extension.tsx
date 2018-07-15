@@ -31,13 +31,14 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
   repository,
   themes,
   language,
+  onLanguage,
 }) => (
   <div className={styles.container}>
     <div className={styles.preview}>
       <ThemeRotator
         themes={themes}
         language={language}
-        onLanguage={this.handleLanguage}
+        onLanguage={onLanguage}
       />
     </div>
     <div className={styles.info}>
