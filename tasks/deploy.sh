@@ -43,6 +43,10 @@ if [[ $DOCKER_TAG != "" ]] || [[ $DOCKER_REGISTRY != "" ]]; then
   echo "Pushing image..."
   docker tag $DOCKER_TAG $DOCKER_REGISTRY
   docker push $DOCKER_REGISTRY
+
+  # Release
+  echo "Creating release for $HEROKU_APP..."
+  heroku container:release -a $HEROKU_APP web
 else 
   echo "Skipping frontend because \$DOCKER_TAG or \$DOCKER_REGISTRY is not set."
 fi
