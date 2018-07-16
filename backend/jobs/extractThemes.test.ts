@@ -176,7 +176,7 @@ test('should create extract theme jobs for valid input', async () => {
   await extractThemes(services)
   expect(createSpy).toHaveBeenCalledTimes(2)
   expect(createSpy.mock.calls[0][0]).toEqual({
-    themeId: 'owner$repo$themes/theme1.json',
+    themeId: 'publishername$extensionname$themes/theme1.json',
     themeName: 'Theme Name',
     themeUrl:
       'https://raw.githubusercontent.com/owner/repo/master/themes/theme1.json',
@@ -199,7 +199,7 @@ test('should create extract theme jobs for valid input', async () => {
     trendingWeekly: 1,
   })
   expect(createSpy.mock.calls[1][0]).toEqual({
-    themeId: 'owner$repo$themes/theme2.json',
+    themeId: 'publishername$extensionname$themes/theme2.json',
     themeName: 'Theme Name',
     themeUrl:
       'https://raw.githubusercontent.com/owner/repo/master/themes/theme2.json',
