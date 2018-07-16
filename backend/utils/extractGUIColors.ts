@@ -1,5 +1,5 @@
+import themeVariables from '@vscodethemes/theme-variables'
 import { Colors, ThemeType } from '@vscodethemes/types'
-import * as themeVariables from './themeVariables'
 
 export default function extractGUIColors(
   type: ThemeType,
@@ -7,11 +7,8 @@ export default function extractGUIColors(
 ): Partial<Colors> {
   const colors: any = {}
 
-  Object.keys(themeVariables.gui).forEach(key => {
-    const colorVar = themeVariables.gui[key]
-    // Initially set color to the default and override
-    // if we find a match.
-    colors[key] = colorVar.defaults[type]
+  Object.keys(themeVariables).forEach((key: keyof typeof themeVariables) => {
+    const colorVar = themeVariables[key]
     if (data[colorVar.key]) {
       colors[key] = data[colorVar.key]
     }

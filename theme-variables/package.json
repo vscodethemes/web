@@ -1,0 +1,17 @@
+{
+  "name": "@vscodethemes/theme-variables",
+  "version": "0.1.0",
+  "private": true,
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "tsc": "tsc -p ./tsconfig.json",
+    "lint": "tslint --project ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.1"
+  }
+}

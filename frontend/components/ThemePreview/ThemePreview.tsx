@@ -2,6 +2,7 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import * as React from 'react'
 import { Button } from '../'
 import { ExtensionLink } from '../../pages/extension'
+import withDefaultColors from '../../utils/withDefaultColors'
 import ActivityBar from './ActivityBar'
 import Code from './Code'
 import Editor from './Editor'
@@ -24,61 +25,65 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
   language,
   onLanguage,
   hideViewExtension,
-}) => (
-  <div className={styles.container}>
-    <TopBar name={themeProps.themeName} />
-    <Editor colors={themeProps.colors}>
-      <ActivityBar colors={themeProps.colors} />
-      <TabBar colors={themeProps.colors}>
-        <Tab
-          colors={themeProps.colors}
-          active={language === LanguageOptions.javascript}
-          onClick={() => onLanguage(LanguageOptions.javascript)}
-        >
-          {LanguageOptions.javascript}
-        </Tab>
-        <Tab
-          colors={themeProps.colors}
-          active={language === LanguageOptions.css}
-          onClick={() => onLanguage(LanguageOptions.css)}
-        >
-          {LanguageOptions.css}
-        </Tab>
-        <Tab
-          colors={themeProps.colors}
-          active={language === LanguageOptions.html}
-          onClick={() => onLanguage(LanguageOptions.html)}
-        >
-          {LanguageOptions.html}
-        </Tab>
-      </TabBar>
-      <TabContent>
-        <Code
-          tokens={themeProps.tokens}
-          editorForeground={themeProps.colors.editorForeground}
-        />
-        <div className={styles.actions}>
-          {!hideViewExtension && (
-            <ExtensionLink
-              publisherName={themeProps.publisherName}
-              extensionName={themeProps.extensionName}
-            >
-              {({ href, onClick }) => (
-                <Button
-                  label="View Extension"
-                  foreground={themeProps.colors.statusBarForeground}
-                  background={themeProps.colors.statusBarBackground}
-                  href={href}
-                  onClick={onClick}
-                />
-              )}
-            </ExtensionLink>
-          )}
-        </div>
-      </TabContent>
-    </Editor>
-    <StatusBar colors={themeProps.colors} installs={themeProps.installs} />
-  </div>
-)
+}) => {
+  const colors = withDefaultColors(themeProps.themeType, themeProps.colors)
+
+  return (
+    <div className={styles.container}>
+      <TopBar name={themeProps.themeName} />
+      <Editor colors={colors}>
+        <ActivityBar colors={colors} />
+        <TabBar colors={colors}>
+          <Tab
+            colors={colors}
+            active={language === LanguageOptions.javascript}
+            onClick={() => onLanguage(LanguageOptions.javascript)}
+          >
+            {LanguageOptions.javascript}
+          </Tab>
+          <Tab
+            colors={colors}
+            active={language === LanguageOptions.css}
+            onClick={() => onLanguage(LanguageOptions.css)}
+          >
+            {LanguageOptions.css}
+          </Tab>
+          <Tab
+            colors={colors}
+            active={language === LanguageOptions.html}
+            onClick={() => onLanguage(LanguageOptions.html)}
+          >
+            {LanguageOptions.html}
+          </Tab>
+        </TabBar>
+        <TabContent>
+          <Code
+            tokens={themeProps.tokens}
+            editorForeground={colors.editorForeground}
+          />
+          <div className={styles.actions}>
+            {!hideViewExtension && (
+              <ExtensionLink
+                publisherName={themeProps.publisherName}
+                extensionName={themeProps.extensionName}
+              >
+                {({ href, onClick }) => (
+                  <Button
+                    label="View Extension"
+                    foreground={colors.statusBarForeground}
+                    background={colors.statusBarBackground}
+                    href={href}
+                    onClick={onClick}
+                  />
+                )}
+              </ExtensionLink>
+            )}
+          </div>
+        </TabContent>
+      </Editor>
+      <StatusBar colors={colors} installs={themeProps.installs} />
+    </div>
+  )
+}
 
 export default ThemePreview

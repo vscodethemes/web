@@ -1,4 +1,5 @@
 // tslint:disable no-console
+import themeVariables from '@vscodethemes/theme-variables'
 import Tokenizer from '@vscodethemes/tokenizer'
 import {
   ExtractColorsPayload,
@@ -10,7 +11,6 @@ import {
   Services,
 } from '@vscodethemes/types'
 import fetch from 'node-fetch'
-import * as themeVariables from '../utils/themeVariables'
 
 function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
   return {
@@ -41,7 +41,7 @@ function createJob<P>(name: string, receiveMock: JobMessage<P>): Job<P> {
 }
 
 function createVSCodeGUIColors(): any {
-  return Object.keys(themeVariables.gui).reduce((colors: any, key: string) => {
+  return Object.keys(themeVariables).reduce((colors: any, key: string) => {
     colors[key] = 'color'
     return colors
   }, {})

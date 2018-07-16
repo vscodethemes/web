@@ -3,9 +3,9 @@ import {
   JobMessage,
   SaveThemePayloadRuntime,
 } from '@vscodethemes/types'
+import themeVariables from '@vscodethemes/theme-variables'
 import * as fetch from 'jest-fetch-mock'
 import createServices from '../services/mock'
-import * as themeVariables from '../utils/themeVariables'
 import extractColors from './extractColors'
 
 afterEach(() => fetch.resetMocks())
@@ -42,8 +42,8 @@ function createJob(): JobMessage<ExtractColorsPayload> {
 function createColors(removeOptional: boolean): any {
   const payloadColors: any = {}
 
-  Object.keys(themeVariables.gui).forEach(key => {
-    const colorVar = themeVariables.gui[key]
+  Object.keys(themeVariables).forEach(key => {
+    const colorVar = themeVariables[key]
     payloadColors[colorVar.key] = 'color'
   })
 

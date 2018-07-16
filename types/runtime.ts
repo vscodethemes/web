@@ -116,31 +116,26 @@ export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
   ),
 )
 
-export const ColorsRuntime = Record({
-  // VSCode GUI
-  activityBarBackground: String,
-  activityBarForeground: String,
-  statusBarBackground: String,
-  statusBarForeground: String,
-  editorBackground: String,
-  editorForeground: String,
-  editorGroupHeaderTabsBackground: String,
-  editorLineNumberForeground: String,
-  tabActiveBackground: String,
-  tabActiveForeground: String,
-  tabInactiveBackground: String,
-  tabInactiveForeground: String,
-}).And(
-  Partial({
-    // Optional properties.
-    // These colors may not exist in the object but also may be null.
-    editorGroupHeaderTabsBorder: String.Or(Null),
-    tabActiveBorder: String.Or(Null),
-    tabBorder: String.Or(Null),
-    contrastActiveBorder: String.Or(Null),
-    contrastBorder: String.Or(Null),
-  }),
-)
+export const ColorsRuntime = Partial({
+  // These colors may not exist in the object but also may be null.
+  activityBarBackground: String.Or(Null),
+  activityBarForeground: String.Or(Null),
+  statusBarBackground: String.Or(Null),
+  statusBarForeground: String.Or(Null),
+  editorBackground: String.Or(Null),
+  editorForeground: String.Or(Null),
+  editorGroupHeaderTabsBackground: String.Or(Null),
+  editorLineNumberForeground: String.Or(Null),
+  tabActiveBackground: String.Or(Null),
+  tabActiveForeground: String.Or(Null),
+  tabInactiveBackground: String.Or(Null),
+  tabInactiveForeground: String.Or(Null),
+  editorGroupHeaderTabsBorder: String.Or(Null),
+  tabActiveBorder: String.Or(Null),
+  tabBorder: String.Or(Null),
+  contrastActiveBorder: String.Or(Null),
+  contrastBorder: String.Or(Null),
+})
 
 export const LineTokenRuntime = Record({
   token: String,
