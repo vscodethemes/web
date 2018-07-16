@@ -59,7 +59,7 @@ export default async function run(services: Services): Promise<any> {
       let type
       if (theme.uiTheme === 'vs-dark') {
         type = 'dark'
-      } else if (theme.uiTheme === 'vs-light') {
+      } else if (theme.uiTheme === 'vs-light' || theme.uiTheme === 'vs') {
         type = 'light'
       } else {
         logger.log(`Unkown uiTheme: ${theme.uiTheme}, theme: ${theme}`)
