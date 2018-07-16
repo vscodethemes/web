@@ -4,6 +4,7 @@ import theme, { rem, withContainer } from '../../theme'
 export default {
   wrapper: css(
     withContainer({
+      position: 'relative',
       flex: 1,
       display: 'flex',
       flexDirection: 'column',

@@ -39,6 +39,7 @@ export default function linkCallbackProps(
   router: SingletonRouter,
   href: UrlObject,
   as: UrlObject = href,
+  resetScroll = true,
 ): LinkCallbackProps {
   return {
     href: createUrl(as),
@@ -46,7 +47,9 @@ export default function linkCallbackProps(
     onClick: async (e: MouseEvent) => {
       e.preventDefault()
       await router.push(href, as)
-      window.scrollTo(0, 0)
+      if (resetScroll) {
+        window.scrollTo(0, 0)
+      }
     },
   }
 }

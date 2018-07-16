@@ -17,6 +17,7 @@ const ExtensionLink: React.SFC<LinkProps<ExtensionLinkProps>> = ({
       router,
       { pathname: '/extension', query },
       { pathname: `/e/${query.publisherName}.${query.extensionName}` },
+      false,
     ),
   )
 
