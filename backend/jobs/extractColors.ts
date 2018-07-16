@@ -133,11 +133,6 @@ async function fetchTheme(
     throw new PermanentJobError(`Failed to parse ${themeUrl}: Invalid theme.`)
   }
 
-  // The name in the theme json is used to generate the id.
-  if (!theme.name) {
-    throw new PermanentJobError(`Failed to parse ${themeUrl}: Missing name.'`)
-  }
-
   if (!theme.colors) {
     throw new PermanentJobError(`Failed to parse ${themeUrl}: Invalid colors.`)
   }
