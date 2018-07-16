@@ -5,29 +5,32 @@ ARG TF_VAR_algolia_app_id
 ARG TF_VAR_algolia_index
 ARG ALGOLIA_SEARCH_KEY
 ARG GTM_ID
-# Create app directories
+
 RUN mkdir -p /usr/src/app
-RUN mkdir -p /usr/src/app/frontend
-RUN mkdir -p /usr/src/app/frontend/build
-RUN mkdir -p /usr/src/app/types
-RUN mkdir -p /usr/src/app/types/build
-RUN mkdir -p /usr/src/app/tokenizer
-RUN mkdir -p /usr/src/app/tokenizer/build
 WORKDIR /usr/src/app
+
 # Add root workspace files
 ADD ./yarn.lock . 
 ADD ./package.json .
 ADD ./tsconfig.json .
 # Add types
+RUN mkdir -p /usr/src/app/types
+RUN mkdir -p /usr/src/app/types/build
 ADD ./types/package.json types
 ADD ./types/build types/build
 # Add tokenizer
+RUN mkdir -p /usr/src/app/tokenizer
+RUN mkdir -p /usr/src/app/tokenizer/build
 ADD ./tokenizer/package.json tokenizer
 ADD ./tokenizer/build tokenizer/build
 # Add theme-variables
+RUN mkdir -p /usr/src/app/theme-variables
+RUN mkdir -p /usr/src/app/theme-variables/build
 ADD ./theme-variables/package.json theme-variables
 ADD ./theme-variables/build theme-variables/build
 # Add frontend
+RUN mkdir -p /usr/src/app/frontend
+RUN mkdir -p /usr/src/app/frontend/build
 ADD ./frontend/package.json frontend
 ADD ./frontend/tsconfig.json frontend
 ADD ./frontend/typings.d.ts frontend
