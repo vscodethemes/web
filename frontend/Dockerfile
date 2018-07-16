@@ -24,6 +24,9 @@ ADD ./types/build types/build
 # Add tokenizer
 ADD ./tokenizer/package.json tokenizer
 ADD ./tokenizer/build tokenizer/build
+# Add theme-variables
+ADD ./theme-variables/package.json theme-variables
+ADD ./theme-variables/build theme-variables/build
 # Add frontend
 ADD ./frontend/package.json frontend
 ADD ./frontend/tsconfig.json frontend

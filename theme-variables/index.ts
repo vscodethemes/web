@@ -3,18 +3,7 @@
 // Defaults were pulled from https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/common/theme.ts
 // Example theme json: https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json
 
-export interface GUIVariables {
-  [key: string]: {
-    key: string
-    defaults: {
-      light: string | null
-      dark: string | null
-      hc: string | null
-    }
-  }
-}
-
-export const gui: GUIVariables = {
+export default {
   activityBarBackground: {
     key: 'activityBar.background',
     defaults: {
@@ -90,9 +79,12 @@ export const gui: GUIVariables = {
   tabActiveBackground: {
     key: 'tab.activeBackground',
     defaults: {
-      dark: '#1E1E1E',
-      light: '#FFFFFE',
-      hc: '#000000',
+      dark: (colors: any) => colors.editorBackground || null,
+      light: null,
+      hc: null,
+      // dark: '#1E1E1E',
+      // light: '#FFFFFE',
+      // hc: '#000000',
     },
   },
   tabActiveForeground: {
@@ -114,17 +106,23 @@ export const gui: GUIVariables = {
   tabBorder: {
     key: 'tab.border',
     defaults: {
-      dark: '#252526',
-      light: '#F3F3F3',
-      hc: '#6FC3DF',
+      dark: null,
+      light: null,
+      hc: null,
+      // dark: '#252526',
+      // light: '#F3F3F3',
+      // hc: '#6FC3DF',
     },
   },
   tabInactiveBackground: {
     key: 'tab.inactiveBackground',
     defaults: {
-      dark: '#2D2D2D',
-      light: '#ECECEC',
+      dark: null,
+      light: null,
       hc: null,
+      // dark: '#2D2D2D',
+      // light: '#ECECEC',
+      // hc: null,
     },
   },
   tabInactiveForeground: {

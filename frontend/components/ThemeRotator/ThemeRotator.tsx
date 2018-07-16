@@ -2,6 +2,7 @@ import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
 import * as React from 'react'
 import { Icon, Icons, ThemePreview } from '../'
+import withDefaultColors from '../../utils/withDefaultColors'
 import styles from './ThemeRotator.styles'
 
 interface ThemeRotatorProps {
@@ -84,6 +85,7 @@ class ThemeRotator extends React.Component<
       >
         {themesToRender.map((theme, i) => {
           const shouldRenderButton = themesToRender.length > 1 && i === 0
+          const colors = withDefaultColors(theme.themeType, theme.colors)
           return (
             <div
               key={theme.themeId}
@@ -101,8 +103,8 @@ class ThemeRotator extends React.Component<
                 <button
                   className={styles.button}
                   style={{
-                    backgroundColor: theme.colors.statusBarBackground,
-                    color: theme.colors.statusBarForeground,
+                    backgroundColor: colors.statusBarBackground,
+                    color: colors.statusBarForeground,
                   }}
                   onClick={this.nextSlide}
                 >

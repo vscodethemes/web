@@ -17,6 +17,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: rem(theme.fontSizes.xs),
+    color: 'inherit',
     cursor: 'pointer',
     border: 'none',
     background: 'transparent',
