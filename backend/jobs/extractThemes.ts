@@ -32,7 +32,12 @@ export default async function run(services: Services): Promise<any> {
     }
 
     const { payload } = job
-    const { repositoryOwner, repository } = payload
+    const {
+      repositoryOwner,
+      repository,
+      publisherName,
+      extensionName,
+    } = payload
     // Find the default branch of the repository.
     const repositoryBranch = await fetchDefaultBranch(
       services,
@@ -66,7 +71,7 @@ export default async function run(services: Services): Promise<any> {
       // Remove './' from './path'.
       const themePath = theme.path.replace(/^\.\//, '')
       const url = `${branchUrl}/${themePath}`
-      const themeId = createThemeId(repositoryOwner, repository, themePath)
+      const themeId = createThemeId(publisherName, extensionName, themePath)
 
       themes.push({
         ...payload,
