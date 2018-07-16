@@ -34,19 +34,19 @@ export default async function run(services: Services): Promise<any> {
     const themes = [
       {
         ...theme,
-        objectID: `${theme.themeId}/${LanguageOptions.javascript}`,
+        objectID: `${theme.themeId}|${LanguageOptions.javascript}`,
         language: LanguageOptions.javascript,
         tokens: languageTokens.javascript,
       },
       {
         ...theme,
-        objectID: `${theme.themeId}/${LanguageOptions.css}`,
+        objectID: `${theme.themeId}|${LanguageOptions.css}`,
         language: LanguageOptions.css,
         tokens: languageTokens.css,
       },
       {
         ...theme,
-        objectID: `${theme.themeId}/${LanguageOptions.html}`,
+        objectID: `${theme.themeId}|${LanguageOptions.html}`,
         language: LanguageOptions.html,
         tokens: languageTokens.html,
       },
