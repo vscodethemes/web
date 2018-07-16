@@ -11,12 +11,16 @@ interface ExtensionPageProps {
   themes: Theme[]
   language: LanguageOptions
   refetchInitialProps?: () => any
+  onClose?: () => any
 }
 
 export default class ExtensionPage extends React.Component<
   ExtensionPageProps,
   {}
 > {
+  // Allows this page to be rendered as a modal (see _app.jsx). When it is,
+  // it will receive the onClose callback to close the modal.
+  static showAsModal = true
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<ExtensionPageProps> {
@@ -48,7 +52,7 @@ export default class ExtensionPage extends React.Component<
   }
 
   render() {
-    const { primary, themes, language } = this.props
+    const { primary, themes, language, onClose } = this.props
     const { displayName, publisherName } = primary
     const title = `${displayName} by ${publisherName}`
     // Add a '.' to the end if it doesn't exist.
@@ -59,17 +63,20 @@ export default class ExtensionPage extends React.Component<
     return (
       <div className={styles.wrapper}>
         <Meta title={title} description={description} />
-        <Extension
-          displayName={primary.displayName}
-          shortDescription={description}
-          publisherName={primary.publisherName}
-          extensionName={primary.extensionName}
-          repositoryOwner={primary.repositoryOwner}
-          repository={primary.repository}
-          themes={themes}
-          language={language}
-          onLanguage={this.handleLanguage}
-        />
+        <div>
+          <Extension
+            displayName={primary.displayName}
+            shortDescription={description}
+            publisherName={primary.publisherName}
+            extensionName={primary.extensionName}
+            repositoryOwner={primary.repositoryOwner}
+            repository={primary.repository}
+            themes={themes}
+            language={language}
+            onLanguage={this.handleLanguage}
+            onClose={onClose}
+          />
+        </div>
       </div>
     )
   }

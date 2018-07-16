@@ -1,4 +1,5 @@
 import { LanguageOptions, Theme } from '@vscodethemes/types'
+import { cx } from 'emotion'
 import * as React from 'react'
 import {
   Button,
@@ -20,6 +21,7 @@ interface ExtensionProps {
   themes: Theme[]
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
+  onClose?: () => any
 }
 
 const ExtensionPage: React.SFC<ExtensionProps> = ({
@@ -32,8 +34,9 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
   themes,
   language,
   onLanguage,
+  onClose,
 }) => (
-  <div className={styles.container}>
+  <div className={styles.wrapper}>
     <div className={styles.preview}>
       <ThemeRotator
         themes={themes}
@@ -42,7 +45,18 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
       />
     </div>
     <div className={styles.info}>
-      <Heading text={displayName} />
+      <div className={styles.heading}>
+        <Heading text={displayName} />
+        {onClose && (
+          <a
+            className={cx(styles.link, styles.close)}
+            href="javascript:;"
+            onClick={onClose}
+          >
+            <Icon icon={Icons.close} />
+          </a>
+        )}
+      </div>
       <span className={styles.owner}>by {publisherName}</span>
       <Paragraph text={shortDescription} />
       <div className={styles.actions}>

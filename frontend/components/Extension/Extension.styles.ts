@@ -4,7 +4,7 @@ import theme, { rem } from '../../theme'
 const maxPreviewWidth = 440
 
 export default {
-  container: css({
+  wrapper: css({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -28,6 +28,7 @@ export default {
   }),
 
   info: css({
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -69,6 +70,26 @@ export default {
     },
     ':first-child': {
       marginRight: 0,
+    },
+  }),
+
+  heading: css({
+    position: 'relative',
+  }),
+
+  close: css({
+    position: 'absolute',
+    top: rem(-theme.fontSizes.xl),
+    right: rem(-theme.fontSizes.xl),
+
+    ' svg': {
+      height: rem(theme.fontSizes.xl),
+    },
+
+    // I'm being lazy and should figure out a better way to present the
+    // close button on mobile.
+    [theme.breakpoints.mobile]: {
+      display: 'none',
     },
   }),
 }
