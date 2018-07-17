@@ -68,10 +68,11 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           </div>
           <div className={styles.search}>
             <SearchLink q={search}>
-              {({ onClick }) => (
+              {({ active, onClick }) => (
                 <form onSubmit={onClick}>
                   <SearchInput
                     value={search}
+                    active={active}
                     placeholder="Search... (ie. monokai)"
                     onChange={value => this.setState({ search: value })}
                   />

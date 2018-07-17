@@ -45,4 +45,10 @@ export default {
       fill: `${theme.colors.textMuted}88`,
     },
   }),
+
+  iconActive: css({
+    ' svg': {
+      fill: `${theme.colors.palette[0]}`,
+    },
+  }),
 }
