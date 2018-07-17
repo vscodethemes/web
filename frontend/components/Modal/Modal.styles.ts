@@ -30,5 +30,11 @@ export default {
     overflowY: 'auto',
     WebkitOverflowScrolling: 'touch',
     animation: `${scaleIn} 0.15s ${theme.animation.bezier}`,
+
+    // The animation doesn't work well on mobile because of the fixed position
+    // close button in Extension. https://stackoverflow.com/q/2637058/1249098
+    [theme.breakpoints.mobile]: {
+      animation: 'none',
+    },
   }),
 }

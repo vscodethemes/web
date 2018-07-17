@@ -81,15 +81,17 @@ export default {
     position: 'absolute',
     top: rem(-theme.fontSizes.xl),
     right: rem(-theme.fontSizes.xl),
+    marginRight: 0,
 
     ' svg': {
       height: rem(theme.fontSizes.xl),
     },
 
-    // I'm being lazy and should figure out a better way to present the
-    // close button on mobile.
     [theme.breakpoints.mobile]: {
-      display: 'none',
+      position: 'fixed',
+      top: 'auto',
+      bottom: rem(theme.gutters.md),
+      right: rem(theme.gutters.md),
     },
   }),
 }
