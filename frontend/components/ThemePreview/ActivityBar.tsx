@@ -11,7 +11,11 @@ interface ActivityBarProps {
 const ActivityBar: React.SFC<ActivityBarProps> = ({ colors }) => (
   <div
     className={styles.activityBar}
-    style={{ background: colors.activityBarBackground }}
+    style={{
+      background: colors.activityBarBackground,
+      borderRight:
+        colors.activityBarBorder && `1px solid ${colors.activityBarBorder}`,
+    }}
   >
     <Icon
       className={cx(styles.icon, styles.active)}

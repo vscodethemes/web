@@ -120,6 +120,7 @@ export const ColorsRuntime = Partial({
   // These colors may not exist in the object but also may be null.
   activityBarBackground: String.Or(Null),
   activityBarForeground: String.Or(Null),
+  activityBarBorder: String.Or(Null),
   statusBarBackground: String.Or(Null),
   statusBarForeground: String.Or(Null),
   editorBackground: String.Or(Null),
