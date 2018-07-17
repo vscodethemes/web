@@ -63,20 +63,18 @@ export default class ExtensionPage extends React.Component<
     return (
       <div className={styles.wrapper}>
         <Meta title={title} description={description} />
-        <div>
-          <Extension
-            displayName={primary.displayName}
-            shortDescription={description}
-            publisherName={primary.publisherName}
-            extensionName={primary.extensionName}
-            repositoryOwner={primary.repositoryOwner}
-            repository={primary.repository}
-            themes={themes}
-            language={language}
-            onLanguage={this.handleLanguage}
-            onClose={onClose}
-          />
-        </div>
+        <Extension
+          displayName={primary.displayName}
+          shortDescription={description}
+          publisherName={primary.publisherName}
+          extensionName={primary.extensionName}
+          repositoryOwner={primary.repositoryOwner}
+          repository={primary.repository}
+          themes={themes}
+          language={language}
+          onLanguage={this.handleLanguage}
+          onClose={onClose}
+        />
       </div>
     )
   }
