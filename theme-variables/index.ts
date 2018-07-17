@@ -20,6 +20,14 @@ export default {
       hc: '#FFFFFF',
     },
   },
+  activityBarBorder: {
+    key: 'activityBar.border',
+    defaults: {
+      dark: null,
+      light: null,
+      hc: null,
+    },
+  },
   statusBarBackground: {
     key: 'statusBar.background',
     defaults: {

@@ -40,11 +40,11 @@ const Tab: React.SFC<TabProps> = ({ colors, active, children, onClick }) => (
         ? colors.tabActiveBackground
         : colors.tabInactiveBackground,
       color: active ? colors.tabActiveForeground : colors.tabInactiveForeground,
-      borderRight: colors.tabBorder ? `1px solid ${colors.tabBorder}` : '',
+      borderRight: colors.tabBorder && `1px solid ${colors.tabBorder}`,
       borderBottom:
-        active && colors.tabActiveBorder
-          ? `1px solid ${colors.tabActiveBorder}`
-          : '',
+        active &&
+        colors.tabActiveBorder &&
+        `1px solid ${colors.tabActiveBorder}`,
     }}
     onClick={onClick}
   >
