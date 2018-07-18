@@ -58,6 +58,6 @@ app
     })
   })
   .catch(err => {
-    console.error(err.stack) // tslint:disable-line
+    console.error(err) // tslint:disable-line
     process.exit(1)
   })
