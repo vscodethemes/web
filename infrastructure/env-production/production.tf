@@ -7,6 +7,8 @@ variable "algolia_app_id" {}
 variable "algolia_api_key" {}
 variable "algolia_index" {}
 variable "sentry_dsn" {}
+variable "app_domain" {}
+variable "logs_bucket" {}
 
 terraform {
   backend "s3" {
@@ -22,6 +24,12 @@ provider "aws" {
   secret_key = "${var.aws_secret_key}"
 }
 
+module "logs" {
+  source      = "../modules/logs"
+  environment = "production"
+  bucket      = "${var.logs_bucket}"
+}
+
 module "backend" {
   source               = "../modules/backend"
   environment          = "production"
@@ -33,38 +41,12 @@ module "backend" {
   sentry_dsn           = "${var.sentry_dsn}"
 }
 
-output "scrape_extensions_sns_topic_arn" {
-  value = "${module.backend.scrape_extensions_sns_topic_arn}"
-}
+module "frontend" {
+  source      = "../modules/frontend"
+  environment = "proudction"
+  app_domain  = "${var.app_domain}"
+  logs_bucket = "${module.logs.bucket_domain}"
 
-output "scrape_extensions_sqs_queue_url" {
-  value = "${module.backend.scrape_extensions_sqs_queue_url}"
-}
-
-output "scrape_extensions_sqs_deadletter_queue_url" {
-  value = "${module.backend.scrape_extensions_sqs_deadletter_queue_url}"
-}
-
-output "extract_themes_sns_topic_arn" {
-  value = "${module.backend.extract_themes_sns_topic_arn}"
-}
-
-output "extract_themes_sqs_queue_url" {
-  value = "${module.backend.extract_themes_sqs_queue_url}"
-}
-
-output "extract_themes_sqs_deadletter_queue_url" {
-  value = "${module.backend.extract_themes_sqs_deadletter_queue_url}"
-}
-
-output "extract_colors_sns_topic_arn" {
-  value = "${module.backend.extract_colors_sns_topic_arn}"
-}
-
-output "extract_colors_sqs_queue_url" {
-  value = "${module.backend.extract_colors_sqs_queue_url}"
-}
-
-output "extract_colors_sqs_deadletter_queue_url" {
-  value = "${module.backend.extract_colors_sqs_deadletter_queue_url}"
+  # aliases = [""]
+  # acm_certificate_arn = ""
 }
