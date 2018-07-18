@@ -1,15 +1,21 @@
 import * as express from 'express'
-import * as next from 'next'
+import * as createApp from 'next'
 
 const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = createApp({ dev })
 const handle = app.getRequestHandler()
 
 app
   .prepare()
   .then(() => {
     const server = express()
+
+    server.use((req, res, next) => {
+      // Cache each SSR page for 4 hours at the CDN, don't cache on the client.
+      res.setHeader('Cache-Control', `max-age=0, s-maxage=${60 * 60 * 4}`)
+      next()
+    })
 
     server.get('/', (req, res) => {
       app.render(req, res, '/home', req.query)
@@ -55,7 +61,3 @@ app
     console.error(err.stack) // tslint:disable-line
     process.exit(1)
   })
-
-// Nodemon sometimes doesn't close the port, this ensures that it does.
-// https://github.com/remy/nodemon/issues/1025
-process.on('SIGINT', () => process.exit())
