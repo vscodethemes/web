@@ -7,10 +7,7 @@ export default {
     paddingTop: rem(theme.gutters.md),
     paddingBottom: rem(theme.gutters.md),
     borderTop: `1px solid ${theme.colors.inputBorder}`,
-
-    [theme.breakpoints.mobile]: {
-      backgroundColor: theme.colors.inputBorder,
-    },
+    backgroundColor: theme.colors.inputBorder,
   }),
 
   container: css(
