@@ -10,6 +10,10 @@ variable "sentry_dsn" {}
 variable "app_domain" {}
 variable "logs_bucket" {}
 
+variable "acm_certificate_arn" {
+  default = ""
+}
+
 terraform {
   backend "s3" {
     # Manually created bucket with versioning enabled.
@@ -43,11 +47,10 @@ module "backend" {
 }
 
 module "frontend" {
-  source      = "../modules/frontend"
-  environment = "proudction"
-  app_domain  = "${var.app_domain}"
-  logs_bucket = "${module.logs.bucket_domain}"
-
-  # aliases = [""]
-  # acm_certificate_arn = ""
+  source              = "../modules/frontend"
+  environment         = "proudction"
+  aliases             = ["vscodethemes.com", "www.vscodethemes.com"]
+  app_domain          = "${var.app_domain}"
+  acm_certificate_arn = "${var.acm_certificate_arn}"
+  logs_bucket         = "${module.logs.bucket_domain}"
 }
