@@ -11,10 +11,19 @@ app
   .then(() => {
     const server = express()
 
-    server.use(require('express-naked-redirect')(true))
-
+    // Redirect www.vscodethemes.com -> vscodethemes.com
     server.use((req, res, next) => {
-      // Cache each SSR page for 4 hours at the CDN, don't cache on the client.
+      const subdomains = req.subdomains
+      const protocol = req.protocol
+      if (subdomains[0] === 'wwww') {
+        res.redirect(301, `${protocol}://${req.header('host')}/${req.url}`)
+      } else {
+        next()
+      }
+    })
+
+    // Cache each SSR page for 4 hours at the CDN, don't cache on the client.
+    server.use((req, res, next) => {
       res.setHeader('Cache-Control', `max-age=0, s-maxage=${60 * 60 * 4}`)
       next()
     })
