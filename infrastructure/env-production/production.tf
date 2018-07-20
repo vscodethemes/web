@@ -33,6 +33,7 @@ module "logs" {
 module "backend" {
   source               = "../modules/backend"
   environment          = "production"
+  init_job_rate        = "8 hours"
   github_client_id     = "${var.github_client_id}"
   github_client_secret = "${var.github_client_secret}"
   algolia_app_id       = "${var.algolia_app_id}"
