@@ -8,59 +8,33 @@ Preview themes from the VSCode marketplace.
 
 **Built with**
 
-* [NextJS](https://github.com/zeit/next.js/)
-* [Algolia](https://www.algolia.com/)
-* [Emotion](https://emotion.sh/)
-* [Sentry](https://sentry.io/)
-* [Heroku](https://www.heroku.com/)
-* [AWS Lambda](https://aws.amazon.com/lambda/),
+- [NextJS](https://github.com/zeit/next.js/)
+- [Algolia](https://www.algolia.com/)
+- [Emotion](https://emotion.sh/)
+- [Sentry](https://sentry.io/)
+- [Heroku](https://www.heroku.com/)
+- [AWS Lambda](https://aws.amazon.com/lambda/),
   [SQS](https://aws.amazon.com/sqs/) and [SNS](https://aws.amazon.com/sns/)
-* [Terraform](https://www.terraform.io/)
-
-## How it works
-
-**Backend**
-
-* Server-less web scraper with AWS Lambda and SQS
-* Scrapes the VSCode marketplace
-* Finds all themes in an extension's Github repository
-* Extracts colors from a theme
-* Saves themes to Algolia
-
-**Frontend**
-
-* Server-side rendering with NextJS
-* Extract critical css with EmotionJS
-* Universal error tracking with Sentry
-* Hosted with Heroku
-
-**Infrastructure**
-
-* Declarative infrastructure using Terraform
-* Uses a single, reusable module for the backend
-
-**CI / CD**
-
-* Automatically deploys to AWS and Heroku with Travis CI
+- [Terraform](https://www.terraform.io/)
 
 ## How do I get my theme on _vscodethemes_?
 
 In order for your themes to show up on on
 [vscodethemes](https://vscodethemes.com) they must:
 
-* Be published to the
+- Be published to the
   [VSCode Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Downloads)
-* Include a
+- Include a
   [public Github in the repository field](https://code.visualstudio.com/docs/extensions/publish-extension#_advanced-usage)
   of your extensions's package.json
-* Have
+- Have
   [themes in the contributes field](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes)
   of your extension's package.json
-* Theme definitions
+- Theme definitions
   [must be JSON](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_create-a-new-color-theme)
   (not .tmTheme) and define `colors` and `tokenColors` ‒
   [Example](https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json)
-* See [theme variables](backend/jobs/utils/themeVariables.ts) for which GUI and token
+- See [theme variables](backend/jobs/utils/themeVariables.ts) for which GUI and token
   colors are used
 
 If you're not sure why a theme isn't showing up, feel free to
