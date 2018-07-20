@@ -7,11 +7,15 @@ interface ModalProps {
 
 class Modal extends React.Component<ModalProps, {}> {
   componentDidMount() {
+    // Exit modal on esc.
     document.addEventListener('keydown', this.handleKeyDown, false)
+    // Disable scroll when open.
+    document.body.classList.add(styles.body)
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyDown)
+    document.body.classList.remove(styles.body)
   }
 
   handleKeyDown = (e: KeyboardEvent) => {

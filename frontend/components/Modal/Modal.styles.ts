@@ -11,6 +11,10 @@ const scaleIn = keyframes({
 })
 
 export default {
+  body: css({
+    overflow: 'hidden',
+  }),
+
   modal: css({
     position: 'fixed',
     top: 0,
