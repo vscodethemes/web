@@ -43,14 +43,13 @@ if [[ -d "$dir" ]]; then
     heroku container:release -a $HEROKU_APP web
 
     # Invalidate cache
+    echo "Invalidating CloudFront..."
     AWS_ACCESS_KEY_ID=$TF_VAR_aws_access_key \
     AWS_SECRET_ACCESS_KEY=$TF_VAR_aws_secret_key \
-    $HOME/.local/bin/aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /*
+    $HOME/.local/bin/aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /* >/dev/null 2>&1
   else 
     echo "Skipping frontend because \$DOCKER_TAG or \$DOCKER_REGISTRY is not set."
   fi
-
-  echo "Done."
 else 
   echo "Skipping backend because $dir does not exist."
 fi
