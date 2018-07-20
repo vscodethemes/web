@@ -1,5 +1,6 @@
 import { SingletonRouter } from 'next/router'
 import * as qs from 'querystring'
+import theme from '../theme'
 
 interface LinkCallbackProps {
   href: string
@@ -45,6 +46,16 @@ export default function linkCallbackProps(
     href: createUrl(as),
     active: isUrlEqual(href, router),
     onClick: async (e: MouseEvent) => {
+      // On mobile, specifically iOS, the history.push experience isn't great
+      // out of the box. The scroll position doesn't reset when navigating and
+      // you can't prevent background scroll on modals. More info on scroll
+      // reseting in NextJS: https://github.com/zeit/next.js/issues/1309
+      const isMobile = window.matchMedia(
+        theme.breakpoints.mobile.replace('@media ', ''),
+      ).matches
+
+      if (isMobile) return
+
       e.preventDefault()
       await router.push(href, as)
       if (resetScroll) {
