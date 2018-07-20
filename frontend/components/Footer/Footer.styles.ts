@@ -15,22 +15,11 @@ export default {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-
-      [theme.breakpoints.mobile]: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
     }),
   ),
 
   links: css({
-    order: 0,
     display: 'flex',
-    [theme.breakpoints.mobile]: {
-      order: 1,
-      marginTop: rem(theme.gutters.md),
-    },
   }),
 
   icon: css({
