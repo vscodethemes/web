@@ -7,10 +7,7 @@ const Footer: React.SFC<{}> = () => (
   <div className={styles.footer}>
     <div className={styles.container}>
       <div className={styles.links}>
-        <a
-          className={styles.link}
-          href="'https://github.com/jschr/vscodethemes'"
-        >
+        <a className={styles.link} href="https://github.com/jschr/vscodethemes">
           <Icon className={styles.icon} icon={Icons.github} />View on Github
         </a>
       </div>
