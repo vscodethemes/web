@@ -25,6 +25,7 @@ resource "aws_cloudfront_distribution" "app" {
 
     forwarded_values {
       query_string = true
+      headers      = ["Origin", "Host"]
 
       cookies {
         forward = "all"
