@@ -11,6 +11,8 @@ app
   .then(() => {
     const server = express()
 
+    server.use(require('express-naked-redirect')(true))
+
     server.use((req, res, next) => {
       // Cache each SSR page for 4 hours at the CDN, don't cache on the client.
       res.setHeader('Cache-Control', `max-age=0, s-maxage=${60 * 60 * 4}`)
