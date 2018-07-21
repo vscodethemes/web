@@ -29,7 +29,13 @@ app
     })
 
     server.get('/', (req, res) => {
-      app.render(req, res, '/home', req.query)
+      if (req.query.light) {
+        res.redirect(301, '/light')
+      } else if (req.query.dark) {
+        res.redirect(301, '/dark')
+      } else {
+        app.render(req, res, '/home', req.query)
+      }
     })
 
     server.get('/trending', (req, res) => {
