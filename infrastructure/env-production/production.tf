@@ -15,11 +15,7 @@ variable "acm_certificate_arn" {
 }
 
 terraform {
-  backend "s3" {
-    # Manually created bucket with versioning enabled.
-    bucket = "vscodethemes-tfstate"
-    key    = "production.tfstate"
-  }
+  backend "s3" {}
 }
 
 provider "aws" {
