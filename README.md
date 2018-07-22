@@ -34,7 +34,7 @@ In order for your themes to show up on on
   [must be JSON](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_create-a-new-color-theme)
   (not .tmTheme) and define `colors` and `tokenColors` ‒
   [Example](https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json)
-- See [theme variables](backend/jobs/utils/themeVariables.ts) for which GUI and token
+- See [theme variables](theme-variables/index.ts) for which GUI and token
   colors are used
 
 If you're not sure why a theme isn't showing up, feel free to
