@@ -6,6 +6,7 @@ import { Paragraph } from '../components'
 
 interface ErrorProps {
   statusCode?: number
+  message?: string
 }
 
 const styles = {
@@ -36,19 +37,19 @@ class ErrorPage extends React.Component<ErrorProps> {
   }
 
   render() {
-    const { statusCode } = this.props
+    const { statusCode, message } = this.props
+    let text = message
 
     if (statusCode === 404) {
-      return (
-        <div className={styles.container}>
-          <Paragraph text="Page not found." />
-        </div>
-      )
+      text = 'Page not found.'
+    } else if (statusCode) {
+      // Hide internal server error messages.
+      text = 'Oops! Something went wrong.'
     }
 
     return (
       <div className={styles.container}>
-        <Paragraph text="Oops! Something went wrong." />
+        <Paragraph text={text} />
       </div>
     )
   }

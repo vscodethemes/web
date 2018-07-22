@@ -4,6 +4,7 @@ import * as React from 'react'
 import * as algolia from '../../clients/algolia'
 import { Extension, Meta } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
+import Error from '../_error'
 import styles from './ExtensionPage.styles'
 
 interface ExtensionPageProps {
@@ -39,6 +40,10 @@ export default class ExtensionPage extends React.Component<
       page: page - 1,
     })
 
+    if (extensionThemes.hits.length === 0) {
+      ctx.res.statusCode = 404
+    }
+
     return {
       primary: extensionThemes.hits[0],
       themes: extensionThemes.hits,
@@ -53,6 +58,10 @@ export default class ExtensionPage extends React.Component<
 
   render() {
     const { primary, themes, language, onClose } = this.props
+    if (!primary) {
+      return <Error message="Sorry, that extension could not be found." />
+    }
+
     const { displayName, publisherName } = primary
     const title = `${displayName} by ${publisherName}`
     // Add a '.' to the end if it doesn't exist.
