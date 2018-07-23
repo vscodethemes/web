@@ -50,11 +50,12 @@ resource "aws_cloudfront_distribution" "app" {
     cloudfront_default_certificate = "true"
   }
 
-  logging_config {
-    bucket          = "${var.logs_bucket}"
-    prefix          = "${var.app_domain}"
-    include_cookies = true
-  }
+  # This will cost money exceeding the amount of S3 put requests. 
+  # logging_config {
+  #   bucket          = "${var.logs_bucket}"
+  #   prefix          = "${var.app_domain}"
+  #   include_cookies = true
+  # }
 
   tags {
     Environment = "${var.environment}"
