@@ -63,7 +63,7 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
         <span className={styles.install}>
           <Button
             icon={Icons.download}
-            label="Install Extension"
+            label="Open in VSCode"
             href={`vscode:extension/${publisherName}.${extensionName}`}
           />
         </span>
