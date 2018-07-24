@@ -1,4 +1,5 @@
 import { LanguageOptions, Theme } from '@vscodethemes/types'
+import { cx } from 'emotion'
 import * as React from 'react'
 import { ThemePreview } from '../../components'
 import styles from './ThemeGrid.styles'
@@ -14,7 +15,7 @@ const ThemeGrid: React.SFC<ThemeGridProps> = ({
   language,
   onLanguage,
 }) => (
-  <div className={styles.grid}>
+  <div className={cx(styles.flex, styles.grid)}>
     {themes.map(t => (
       <div key={t.themeId} className={styles.item}>
         <ThemePreview theme={t} language={language} onLanguage={onLanguage} />

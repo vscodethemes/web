@@ -19,6 +19,13 @@ export default {
     },
   }),
 
+  flex: css({
+    // IE fallback.
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  }),
+
   item: css({
     width: '100%',
     maxWidth: 460,
