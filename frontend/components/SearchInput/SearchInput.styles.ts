@@ -1,5 +1,6 @@
 import { css } from 'emotion'
 import theme, { rem } from '../../theme'
+import hexToRGB from '../../utils/hexToRGB'
 
 export default {
   container: css({
@@ -17,14 +18,14 @@ export default {
     padding: rem(theme.gutters.sm),
     paddingLeft: rem(theme.gutters.lg),
     color: theme.colors.text,
-    backgroundColor: `${theme.colors.inputBackground}88`,
+    backgroundColor: hexToRGB(theme.colors.inputBackground, 0.6),
     border: 0,
     outline: 0,
     borderRadius: rem(theme.borderRadius.round),
     WebkitAppearance: 'none',
 
     ':focus': {
-      backgroundColor: `${theme.colors.inputBackground}F0`,
+      backgroundColor: hexToRGB(theme.colors.inputBackground, 0.9),
     },
 
     '::placeholder': {
@@ -42,7 +43,7 @@ export default {
     paddingLeft: rem(theme.fontSizes.sm),
 
     ' svg': {
-      fill: `${theme.colors.textMuted}88`,
+      fill: hexToRGB(theme.colors.textMuted, 0.6),
     },
   }),
 

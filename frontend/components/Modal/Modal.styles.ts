@@ -1,5 +1,6 @@
 import { css, keyframes } from 'emotion'
 import theme from '../../theme'
+import hexToRGB from '../../utils/hexToRGB'
 
 const scaleIn = keyframes({
   from: {
@@ -26,7 +27,7 @@ export default {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: `${theme.colors.backgroundDark}F0`,
+    backgroundColor: hexToRGB(theme.colors.backgroundDark, 0.9),
   }),
 
   contents: css({

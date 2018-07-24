@@ -54,7 +54,6 @@ const theme = {
   },
   header: {
     height: 40,
-    backgroundColor: colors.inputBorder,
   },
   animation: {
     bezier: 'cubic-bezier(.63,.01,.44,1)',
