@@ -4,7 +4,7 @@
 
 ---
 
-Preview themes from the VSCode marketplace.
+Preview themes from the VSCode marketplace. Check out the [annoucement post](https://hackernoon.com/announcing-vscodethemes-4544f50c2b5b).
 
 **Built with**
 
