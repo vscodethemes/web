@@ -1,6 +1,6 @@
+import * as Color from 'color'
 import { css } from 'emotion'
 import theme, { rem, withContainer } from '../../theme'
-import hexToRGB from '../../utils/hexToRGB'
 
 export default {
   header: css({
@@ -9,7 +9,9 @@ export default {
     left: 0,
     width: '100%',
     height: rem(theme.header.height),
-    backgroundColor: hexToRGB(theme.colors.backgroundDark, 0.9),
+    backgroundColor: Color(theme.colors.backgroundDark)
+      .alpha(0.9)
+      .toString(),
     zIndex: 1000,
   }),
 
