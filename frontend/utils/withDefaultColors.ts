@@ -17,7 +17,7 @@ export default function withDefaultColors(
   Object.keys(themeVariables).forEach((key: keyof typeof themeVariables) => {
     const colorVar = themeVariables[key]
     if (!colors[key]) {
-      withDefaults[key] = unwrap(colorVar.defaults[type], colors)
+      withDefaults[key] = unwrap(colorVar.defaults[type], withDefaults)
     }
   })
 

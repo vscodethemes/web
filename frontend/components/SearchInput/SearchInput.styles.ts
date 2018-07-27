@@ -1,6 +1,6 @@
+import * as Color from 'color'
 import { css } from 'emotion'
 import theme, { rem } from '../../theme'
-import * as Color from 'color'
 
 export default {
   container: css({
