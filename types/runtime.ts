@@ -136,6 +136,11 @@ export const ColorsRuntime = Partial({
   tabBorder: String.Or(Null),
   contrastActiveBorder: String.Or(Null),
   contrastBorder: String.Or(Null),
+  titleBarActiveBackground: String.Or(Null),
+  titleBarActiveForeground: String.Or(Null),
+  titleBarInactiveBackground: String.Or(Null),
+  titleBarInactiveForeground: String.Or(Null),
+  titleBarBorder: String.Or(Null),
 })
 
 export const LineTokenRuntime = Record({

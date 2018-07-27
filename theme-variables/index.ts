@@ -3,6 +3,15 @@
 // Defaults were pulled from https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/common/theme.ts
 // Example theme json: https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json
 
+import * as Color from 'color'
+
+const transparent = (color: string, alpha: number) =>
+  color
+    ? Color(color)
+        .alpha(alpha)
+        .toString()
+    : null
+
 export default {
   activityBarBackground: {
     key: 'activityBar.background',
@@ -87,7 +96,7 @@ export default {
   tabActiveBackground: {
     key: 'tab.activeBackground',
     defaults: {
-      dark: (colors: any) => colors.editorBackground || null,
+      dark: null,
       light: null,
       hc: null,
       // dark: '#1E1E1E',
@@ -144,16 +153,56 @@ export default {
   contrastActiveBorder: {
     key: 'contrastActiveBorder',
     defaults: {
-      light: null,
       dark: null,
+      light: null,
       hc: '#F38518',
     },
   },
   contrastBorder: {
     key: 'contrastBorder',
     defaults: {
-      light: null,
       dark: null,
+      light: null,
+      hc: '#6FC3DF',
+    },
+  },
+  titleBarActiveBackground: {
+    key: 'titleBar.activeBackground',
+    defaults: {
+      dark: '#3C3C3C',
+      light: '#DDDDDD',
+      hc: '#000000',
+    },
+  },
+  titleBarActiveForeground: {
+    key: 'titleBar.activeForeground',
+    defaults: {
+      dark: '#CCCCCC',
+      light: '#333333',
+      hc: '#FFFFFF',
+    },
+  },
+  titleBarInactiveBackground: {
+    key: 'titleBar.inactiveBackground',
+    defaults: {
+      dark: (colors: any) => transparent(colors.titleBarActiveBackground, 0.6),
+      light: (colors: any) => transparent(colors.titleBarActiveBackground, 0.6),
+      hc: null,
+    },
+  },
+  titleBarInactiveForeground: {
+    key: 'titleBar.inactiveForeground',
+    defaults: {
+      dark: (colors: any) => transparent(colors.titleBarActiveForeground, 0.6),
+      light: (colors: any) => transparent(colors.titleBarActiveForeground, 0.6),
+      hc: null,
+    },
+  },
+  titleBarBorder: {
+    key: 'titleBar.border',
+    defaults: {
+      dark: null,
+      light: null,
       hc: '#6FC3DF',
     },
   },

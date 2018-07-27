@@ -11,7 +11,7 @@ import Tab from './Tab'
 import TabBar from './TabBar'
 import TabContent from './TabContent'
 import styles from './ThemePreview.styles'
-import TopBar from './TopBar'
+import TitleBar from './TitleBar'
 
 interface ThemePreviewProps {
   theme: Theme
@@ -30,7 +30,7 @@ const ThemePreview: React.SFC<ThemePreviewProps> = ({
 
   return (
     <div className={styles.container}>
-      <TopBar name={themeProps.themeName} />
+      <TitleBar name={themeProps.themeName} colors={colors} />
       <Editor colors={colors}>
         <ActivityBar colors={colors} />
         <TabBar colors={colors}>
