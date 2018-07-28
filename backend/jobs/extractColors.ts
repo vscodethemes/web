@@ -9,6 +9,7 @@ import {
 import * as stripComments from 'strip-json-comments'
 import { PermanentJobError, TransientJobError } from '../errors'
 import extractGUIColors from '../utils/extractGUIColors'
+import stripTrailingCommas from '../utils/stripTrailingCommas'
 
 export default async function run(services: Services): Promise<any> {
   const { extractColors, saveTheme, logger } = services
@@ -124,7 +125,9 @@ async function fetchTheme(
 
   let theme
   try {
-    theme = JSON.parse(stripComments(await res.text()))
+    const text = await res.text()
+    const json = stripTrailingCommas(stripComments(text))
+    theme = JSON.parse(json)
   } catch (err) {
     throw new PermanentJobError(`Failed to parse ${themeUrl}: ${err.message}.`)
   }
