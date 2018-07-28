@@ -28,7 +28,7 @@ export default {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Color(theme.colors.backgroundDark)
-      .alpha(0.9)
+      .alpha(0.95)
       .toString(),
   }),
 

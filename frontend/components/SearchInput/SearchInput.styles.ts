@@ -19,7 +19,7 @@ export default {
     paddingLeft: rem(theme.gutters.lg),
     color: theme.colors.text,
     backgroundColor: Color(theme.colors.inputBackground)
-      .alpha(0.6)
+      .alpha(0.7)
       .toString(),
     border: 0,
     outline: 0,
@@ -28,7 +28,7 @@ export default {
 
     ':focus': {
       backgroundColor: Color(theme.colors.inputBackground)
-        .alpha(0.9)
+        .alpha(0.95)
         .toString(),
     },
 
@@ -48,7 +48,7 @@ export default {
 
     ' svg': {
       fill: Color(theme.colors.textMuted)
-        .alpha(0.6)
+        .alpha(0.7)
         .toString(),
     },
   }),
