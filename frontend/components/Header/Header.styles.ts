@@ -10,7 +10,7 @@ export default {
     width: '100%',
     height: rem(theme.header.height),
     backgroundColor: Color(theme.colors.backgroundDark)
-      .alpha(0.9)
+      .alpha(0.95)
       .toString(),
     zIndex: 1000,
   }),
