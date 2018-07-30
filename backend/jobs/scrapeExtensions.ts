@@ -9,8 +9,12 @@ import {
 } from '@vscodethemes/types'
 import { PermanentJobError, TransientJobError } from '../errors'
 
-export const GITHUB_PROPERTY_NAME =
+export const MARKETPLACE_BASE_URL = 'https://marketplace.visualstudio.com'
+export const MARKETPLACE_EXTENSION_ENDPOINT =
+  '/_apis/public/gallery/extensionquery'
+export const GITHUB_PROPERTY_KEY =
   'Microsoft.VisualStudio.Services.Links.GitHub'
+export const PACKAGE_FILE_KEY = 'Microsoft.VisualStudio.Services.VSIXPackage'
 
 export default async function run(services: Services): Promise<any> {
   const { scrapeExtensions, extractThemes, logger } = services
@@ -36,8 +40,8 @@ export default async function run(services: Services): Promise<any> {
 
     const { page } = job.payload
     // Fetch page from VSCode Marketplace
-    const themes = await fetchMarketplaceThemes(services, page)
-    if (themes.length === 0) {
+    const extensions = await getExtensions(services, page)
+    if (extensions.length === 0) {
       logger.log('No more pages to process.')
       await scrapeExtensions.succeed(job)
       return
@@ -47,25 +51,17 @@ export default async function run(services: Services): Promise<any> {
     await scrapeExtensions.create({ page: page + 1 })
 
     // Get all themes with repository URLs.
-    const themesWithRepos = filterThemes(services, themes)
-    if (themesWithRepos.length === 0) {
-      logger.log('No themes extracted for page.')
-      return
-    }
-
-    // Log each valid theme.
-    themesWithRepos.forEach(logger.log)
+    extensions.forEach(logger.log)
 
     // Create a job to extract the themes of each repository.
-    await Promise.all(themesWithRepos.map(extractThemes.create))
+    await Promise.all(extensions.map(extractThemes.create))
 
     // Job succeeded.
     await scrapeExtensions.succeed(job)
 
     logger.log(`
       Page: ${page}
-      Themes for page: ${themes.length}
-      Themes with repos: ${themesWithRepos.length}
+      Extensions: ${extensions.length}
     `)
   } catch (err) {
     if (TransientJobError.is(err)) {
@@ -86,13 +82,13 @@ export default async function run(services: Services): Promise<any> {
 /**
  * Fetch themes from the VSCode Marketplace for the provided page.
  */
-async function fetchMarketplaceThemes(
+async function getExtensions(
   services: Services,
   page: number,
-): Promise<Extension[]> {
-  let themes = []
+): Promise<ExtractThemesPayload[]> {
+  const extensions: ExtractThemesPayload[] = []
   const { fetch, logger } = services
-  const url = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`
+  const url = `${MARKETPLACE_BASE_URL}${MARKETPLACE_EXTENSION_ENDPOINT}`
   const query = {
     filters: [
       {
@@ -126,91 +122,69 @@ async function fetchMarketplaceThemes(
 
   if (!response.ok) {
     throw new TransientJobError(
-      `fetchMarketplaceThemes error: Bad response ${response.statusText}`,
+      `getExtensions error: Bad response ${response.statusText}`,
     )
   }
 
   try {
     const data: ExtensionQueryResults = await response.json()
-    themes = data.results[0].extensions
+    data.results[0].extensions.forEach(extension => {
+      if (ExtensionRuntime.guard(extension)) {
+        // Sort by the lastUpdatedAt (ISO string) to get the latest version.
+        const latestVersion = extension.versions.sort((a: any, b: any) =>
+          b.lastUpdated.localeCompare(a.lastUpdated),
+        )[0]
+        // Find the property the contains extension's repository url.
+        const repoUrlProp = latestVersion.properties.find(
+          prop => prop.key === GITHUB_PROPERTY_KEY,
+        )
+        // Get the extensions package url.
+        const packageUrlProp = latestVersion.files.find(
+          prop => prop.assetType === PACKAGE_FILE_KEY,
+        )
+
+        if (packageUrlProp) {
+          extensions.push({
+            extensionId: extension.extensionId,
+            extensionName: extension.extensionName,
+            publisherName: extension.publisher.publisherName,
+            lastUpdated: +new Date(extension.lastUpdated),
+            publishedDate: +new Date(extension.publishedDate),
+            releaseDate: +new Date(extension.releaseDate),
+            displayName: extension.displayName,
+            shortDescription: extension.shortDescription,
+            packageUrl: packageUrlProp.source,
+            repositoryUrl: repoUrlProp ? repoUrlProp.value : null,
+            installs: extractStatistic(extension, 'install'),
+            rating: extractStatistic(extension, 'averagerating'),
+            ratingCount: extractStatistic(extension, 'ratingcount'),
+            trendingDaily: extractStatistic(extension, 'trendingdaily'),
+            trendingWeekly: extractStatistic(extension, 'trendingmonthly'),
+            trendingMonthly: extractStatistic(extension, 'trendingweekly'),
+          })
+        } else {
+          // Skip themes without github url.
+          logger.log(
+            `Missing property '${PACKAGE_FILE_KEY}': \n${JSON.stringify(
+              extension,
+            )}\n`,
+          )
+        }
+      } else {
+        // Skip themes with unexpected structure.
+        logger.log(`Invalid extension: ${JSON.stringify(extension)}`)
+      }
+    })
   } catch (err) {
     logger.error(err)
-    throw new PermanentJobError(
-      'fetchMarketplaceThemes error: Invalid response data',
-    )
+    throw new PermanentJobError('getExtensions error: Invalid response data')
   }
 
-  if (!themes) {
-    throw new PermanentJobError('fetchMarketplaceThemes error: Invalid themes')
+  if (!extensions) {
+    throw new PermanentJobError('getExtensions error: Invalid extensions')
   }
 
-  return themes
-}
-
-/**
- * Extracts repository urls from a list of themes.
- */
-function filterThemes(
-  services: Services,
-  themes: Extension[],
-): ExtractThemesPayload[] {
-  const { logger } = services
-  const extracted: ExtractThemesPayload[] = []
-
-  themes.forEach(theme => {
-    if (ExtensionRuntime.guard(theme)) {
-      // Sort by the lastUpdatedAt (ISO string) to get the latest version.
-      const latestVersion = theme.versions.sort((a: any, b: any) =>
-        b.lastUpdated.localeCompare(a.lastUpdated),
-      )[0]
-      // Find the property the contains theme's repository url.
-      const repoUrlProp = latestVersion.properties.find(
-        (prop: any) => prop.key === GITHUB_PROPERTY_NAME,
-      )
-
-      if (repoUrlProp) {
-        extracted.push({
-          extensionId: theme.extensionId,
-          extensionName: theme.extensionName,
-          publisherName: theme.publisher.publisherName,
-          lastUpdated: +new Date(theme.lastUpdated),
-          publishedDate: +new Date(theme.publishedDate),
-          releaseDate: +new Date(theme.releaseDate),
-          displayName: theme.displayName,
-          shortDescription: theme.shortDescription,
-          installs: extractStatistic(theme, 'install'),
-          rating: extractStatistic(theme, 'averagerating'),
-          ratingCount: extractStatistic(theme, 'ratingcount'),
-          trendingDaily: extractStatistic(theme, 'trendingdaily'),
-          trendingWeekly: extractStatistic(theme, 'trendingmonthly'),
-          trendingMonthly: extractStatistic(theme, 'trendingweekly'),
-          ...extractRepositoryInfo(repoUrlProp.value),
-        })
-      } else {
-        // Skip themes without github url.
-        logger.log(
-          `Missing property '${GITHUB_PROPERTY_NAME}': \n${JSON.stringify(
-            theme,
-          )}\n`,
-        )
-      }
-    } else {
-      // Skip themes with unexpected structure.
-      logger.log(`Invalid theme: ${JSON.stringify(theme)}`)
-    }
-  })
-
-  return extracted
-}
-
-function extractRepositoryInfo(url: string): RepositoryInfo {
-  const [repositoryOwner, repository] = url
-    .replace(/^(https:\/\/)?(www\.)?github\.com\//, '')
-    .replace(/^git@github\.com:/, '')
-    .replace(/\.git$/, '')
-    .split('/')
-
-  return { repository, repositoryOwner }
+  return extensions
 }
 
 function extractStatistic(theme: Extension, name: string): number {
