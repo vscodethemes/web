@@ -1,9 +1,18 @@
 import { Extension } from '@vscodethemes/types'
-import * as fetch from 'jest-fetch-mock'
+import * as nock from 'nock'
 import createServices from '../services/mock'
-import scrapeExtensions, { GITHUB_PROPERTY_NAME } from './scrapeExtensions'
+import scrapeExtensions, {
+  MARKETPLACE_BASE_URL,
+  MARKETPLACE_EXTENSION_ENDPOINT,
+  GITHUB_PROPERTY_KEY,
+  PACKAGE_FILE_KEY,
+} from './scrapeExtensions'
 
 const date = new Date()
+const mockPostMarketplace = (statusCode: number, body?: any) =>
+  nock(MARKETPLACE_BASE_URL)
+    .post(MARKETPLACE_EXTENSION_ENDPOINT)
+    .reply(statusCode, body)
 
 const createValidThemes = (): Extension[] => {
   const statistics = [
@@ -29,9 +38,15 @@ const createValidThemes = (): Extension[] => {
       versions: [
         {
           lastUpdated: '2000-01-00T00:00:00.000',
+          files: [
+            {
+              assetType: PACKAGE_FILE_KEY,
+              source: 'https://package.vsix',
+            },
+          ],
           properties: [
             {
-              key: GITHUB_PROPERTY_NAME,
+              key: GITHUB_PROPERTY_KEY,
               value: 'https://github.com/owner/repo',
             },
           ],
@@ -63,14 +78,18 @@ const createInvalidThemes = (): any[] => {
       versions: [
         {
           lastUpdated: '2000-01-00T00:00:00.000',
-          properties: [],
+          files: [],
+          properties: [
+            {
+              key: GITHUB_PROPERTY_KEY,
+              value: 'https://github.com/owner/repo',
+            },
+          ],
         },
       ],
     },
   ]
 }
-
-afterEach(() => fetch.resetMocks())
 
 test('should not process empty job', async () => {
   const services = createServices()
@@ -111,7 +130,7 @@ test('should fail job if it has an invalid payload', async () => {
 
 test('should retry job if fetch returns bad response', async () => {
   const services = createServices()
-  fetch.mockResponseOnce('', { status: 400 })
+  mockPostMarketplace(400)
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -123,7 +142,7 @@ test('should retry job if fetch returns bad response', async () => {
 
 test('should fail job if fetch returns invalid response data', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ results: null }))
+  mockPostMarketplace(200, JSON.stringify({ results: null }))
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -135,7 +154,7 @@ test('should fail job if fetch returns invalid response data', async () => {
 
 test('should fail job if fetch returns invalid extensions', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: null }] }))
+  mockPostMarketplace(200, JSON.stringify({ results: [{ extensions: null }] }))
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -147,7 +166,7 @@ test('should fail job if fetch returns invalid extensions', async () => {
 
 test('should not create job for next page when current page is empty', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
+  mockPostMarketplace(200, JSON.stringify({ results: [{ extensions: [] }] }))
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -158,9 +177,12 @@ test('should not create job for next page when current page is empty', async () 
 })
 
 test('should not create job for invalid repositories', async () => {
-  const services = createServices()
   const themes = createInvalidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  const services = createServices()
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -172,8 +194,8 @@ test('should not create job for invalid repositories', async () => {
 
 test('should throw on unexpected error', async () => {
   const services = createServices()
-  // Simulate unexpected error by forcing fetch to reject.
-  fetch.mockRejectOnce(new Error())
+  // Simulate unexpected error by not calling the mock, this causes nock
+  // to throw an error when requesting the url.
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -193,7 +215,10 @@ test('should throw on unexpected error', async () => {
 test('should succeed job for valid input', async () => {
   const services = createServices()
   const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -205,7 +230,7 @@ test('should succeed job for valid input', async () => {
 
 test('should succeed job for empty page', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
+  mockPostMarketplace(200, JSON.stringify({ results: [{ extensions: [] }] }))
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -218,7 +243,10 @@ test('should succeed job for empty page', async () => {
 test('should create job for next page', async () => {
   const services = createServices()
   const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -231,7 +259,10 @@ test('should create job for next page', async () => {
 test('should create job for repositories', async () => {
   const services = createServices()
   const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -248,8 +279,8 @@ test('should create job for repositories', async () => {
     releaseDate: +date,
     displayName: 'displayName',
     shortDescription: 'shortDescription',
-    repository: 'repo',
-    repositoryOwner: 'owner',
+    packageUrl: 'https://package.vsix',
+    repositoryUrl: 'https://github.com/owner/repo',
     installs: 1,
     rating: 1,
     ratingCount: 1,
@@ -262,7 +293,10 @@ test('should create job for repositories', async () => {
 test('should notify self for valid input', async () => {
   const services = createServices()
   const themes = createValidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -274,7 +308,7 @@ test('should notify self for valid input', async () => {
 
 test('should notify self for empty page', async () => {
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: [] }] }))
+  mockPostMarketplace(200, JSON.stringify({ results: [{ extensions: [] }] }))
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
@@ -287,7 +321,10 @@ test('should notify self for empty page', async () => {
 test('should notify self for invalid input', async () => {
   const services = createServices()
   const themes = createInvalidThemes()
-  fetch.mockResponseOnce(JSON.stringify({ results: [{ extensions: themes }] }))
+  mockPostMarketplace(
+    200,
+    JSON.stringify({ results: [{ extensions: themes }] }),
+  )
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
