@@ -6,7 +6,6 @@ require('source-map-support').install({ environment: 'node' }) // tslint:disable
 import '@babel/polyfill'
 import { Handler } from '@vscodethemes/types'
 import * as Raven from 'raven'
-import extractColors from './jobs/extractColors'
 import extractThemes from './jobs/extractThemes'
 import init from './jobs/init'
 import runAll from './jobs/runAll'
@@ -20,7 +19,6 @@ const handlers: { [key: string]: Handler } = {
   runAll,
   scrapeExtensions,
   extractThemes,
-  extractColors,
   saveTheme,
 }
 

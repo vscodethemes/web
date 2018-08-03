@@ -5,5 +5,8 @@ export default function createThemeId(
   extensionName: string,
   themePath: string,
 ): string {
-  return `${publisherName}$${extensionName}$${themePath}`.toLowerCase()
+  return `${publisherName}$${extensionName}$${themePath.replace(
+    /^\.\//,
+    '',
+  )}`.toLowerCase()
 }

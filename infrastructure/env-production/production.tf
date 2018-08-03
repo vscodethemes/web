@@ -1,8 +1,6 @@
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "region" {}
-variable "github_client_id" {}
-variable "github_client_secret" {}
 variable "algolia_app_id" {}
 variable "algolia_api_key" {}
 variable "algolia_index" {}
@@ -31,15 +29,13 @@ module "logs" {
 }
 
 module "backend" {
-  source               = "../modules/backend"
-  environment          = "production"
-  init_job_rate        = "8 hours"
-  github_client_id     = "${var.github_client_id}"
-  github_client_secret = "${var.github_client_secret}"
-  algolia_app_id       = "${var.algolia_app_id}"
-  algolia_api_key      = "${var.algolia_api_key}"
-  algolia_index        = "${var.algolia_index}"
-  sentry_dsn           = "${var.sentry_dsn}"
+  source          = "../modules/backend"
+  environment     = "production"
+  init_job_rate   = "8 hours"
+  algolia_app_id  = "${var.algolia_app_id}"
+  algolia_api_key = "${var.algolia_api_key}"
+  algolia_index   = "${var.algolia_index}"
+  sentry_dsn      = "${var.sentry_dsn}"
 }
 
 module "frontend" {

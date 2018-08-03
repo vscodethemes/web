@@ -1,7 +1,6 @@
 // tslint:disable no-console
 import Tokenizer from '@vscodethemes/tokenizer'
 import {
-  ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
   JobMessage,
@@ -25,9 +24,6 @@ const {
   EXTRACT_THEMES_QUEUE_URL,
   EXTRACT_THEMES_DEADLETTER_URL,
   EXTRACT_THEMES_TOPIC_ARN,
-  EXTRACT_COLORS_QUEUE_URL,
-  EXTRACT_COLORS_DEADLETTER_URL,
-  EXTRACT_COLORS_TOPIC_ARN,
   SAVE_THEME_QUEUE_URL,
   SAVE_THEME_DEADLETTER_URL,
   SAVE_THEME_TOPIC_ARN,
@@ -157,12 +153,6 @@ export default function createServices(raven: Raven.Client): Services {
       EXTRACT_THEMES_QUEUE_URL,
       EXTRACT_THEMES_DEADLETTER_URL,
       EXTRACT_THEMES_TOPIC_ARN,
-    ),
-    extractColors: createJob<ExtractColorsPayload>(
-      'extractColors',
-      EXTRACT_COLORS_QUEUE_URL,
-      EXTRACT_COLORS_DEADLETTER_URL,
-      EXTRACT_COLORS_TOPIC_ARN,
     ),
     saveTheme: createJob<SaveThemePayload>(
       'saveTheme',

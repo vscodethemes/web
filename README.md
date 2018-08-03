@@ -24,9 +24,6 @@ In order for your themes to show up on on
 
 - Be published to the
   [VSCode Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Downloads)
-- Include a
-  [public Github in the repository field](https://code.visualstudio.com/docs/extensions/publish-extension#_advanced-usage)
-  of your extensions's package.json
 - Have
   [themes in the contributes field](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes)
   of your extension's package.json
