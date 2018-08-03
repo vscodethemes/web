@@ -5,7 +5,6 @@ import {
   ColorsRuntime,
   ExtensionQueryResultsRuntime,
   ExtensionRuntime,
-  ExtractColorsPayloadRuntime,
   ExtractThemesPayloadRuntime,
   PackageJSONRuntime,
   PropertyRuntime,
@@ -25,7 +24,6 @@ export type Property = Static<typeof PropertyRuntime>
 export type Publisher = Static<typeof PublisherRuntime>
 export type Version = Static<typeof VersionRuntime>
 export type Colors = Static<typeof ColorsRuntime>
-export type ExtractColorsPayload = Static<typeof ExtractColorsPayloadRuntime>
 export type ExtractThemesPayload = Static<typeof ExtractThemesPayloadRuntime>
 export type PackageJSON = Static<typeof PackageJSONRuntime>
 export type SaveThemePayload = Static<typeof SaveThemePayloadRuntime>
@@ -80,18 +78,12 @@ export interface Services {
   }
   scrapeExtensions: Job<ScrapeExtensionsPayload>
   extractThemes: Job<ExtractThemesPayload>
-  extractColors: Job<ExtractColorsPayload>
   saveTheme: Job<SaveThemePayload>
 }
 
 export type Handler = (services: Services, event?: any) => Promise<any>
 
-export interface RepositoryInfo {
-  repository: string
-  repositoryOwner: string
-}
-
-export interface Theme extends ExtractColorsPayload {
+export interface Theme extends ExtractThemesPayload {
   objectID: string
   themeId: string
   themeName: string

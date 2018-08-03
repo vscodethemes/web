@@ -21,15 +21,3 @@ output "extract_themes_sqs_queue_url" {
 output "extract_themes_sqs_deadletter_queue_url" {
   value = "${aws_sqs_queue.extract_themes_deadletter.id}"
 }
-
-output "extract_colors_sns_topic_arn" {
-  value = "${aws_sns_topic.extract_colors.arn}"
-}
-
-output "extract_colors_sqs_queue_url" {
-  value = "${aws_sqs_queue.extract_colors.id}"
-}
-
-output "extract_colors_sqs_deadletter_queue_url" {
-  value = "${aws_sqs_queue.extract_colors_deadletter.id}"
-}

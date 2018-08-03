@@ -3,7 +3,6 @@ import {
   ExtensionQueryResults,
   ExtensionRuntime,
   ExtractThemesPayload,
-  RepositoryInfo,
   ScrapeExtensionsPayloadRuntime,
   Services,
 } from '@vscodethemes/types'

@@ -2,7 +2,6 @@
 import themeVariables from '@vscodethemes/theme-variables'
 import Tokenizer from '@vscodethemes/tokenizer'
 import {
-  ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
   JobMessage,
@@ -90,33 +89,9 @@ export default function createServices(): Services {
         releaseDate: 1,
         displayName: 'displayName',
         shortDescription: 'shortDescription',
-        repository: 'OneDark-Pro',
-        repositoryOwner: 'Binaryify',
-        installs: 0,
-        rating: 0,
-        ratingCount: 0,
-        trendingDaily: 0,
-        trendingWeekly: 0,
-        trendingMonthly: 0,
-      },
-    }),
-    extractColors: createJob<ExtractColorsPayload>('extractColors', {
-      receiptHandle: '',
-      payload: {
-        themeId: 'themeId',
-        themeType: 'dark',
-        extensionId: 'extensionId',
-        extensionName: 'extensionName',
-        publisherName: 'publisherName',
-        lastUpdated: 1,
-        publishedDate: 1,
-        releaseDate: 1,
-        displayName: 'displayName',
-        shortDescription: 'shortDescription',
-        repository: 'OneDark-Pro',
-        repositoryOwner: 'Binaryify',
-        themeUrl:
-          'https://raw.githubusercontent.com/Binaryify/OneDark-Pro/master/themes/OneDark-Pro.json',
+        repositoryUrl: 'https://github.com/Binaryify/OneDark-Pro',
+        packageUrl:
+          'https://zhuangtongfa.gallerycdn.vsassets.io/extensions/zhuangtongfa/material-theme/2.15.1/1530771490844/Microsoft.VisualStudio.Services.VSIXPackage',
         installs: 0,
         rating: 0,
         ratingCount: 0,
@@ -139,10 +114,9 @@ export default function createServices(): Services {
         shortDescription: 'shortDescription',
         themeName: 'One Dark',
         themeType: 'dark',
-        repository: 'OneDark-Pro',
-        repositoryOwner: 'Binaryify',
-        themeUrl:
-          'https://raw.githubusercontent.com/Binaryify/OneDark-Pro/master/themes/OneDark-Pro.json',
+        repositoryUrl: 'https://github.com/Binaryify/OneDark-Pro',
+        packageUrl:
+          'https://zhuangtongfa.gallerycdn.vsassets.io/extensions/zhuangtongfa/material-theme/2.15.1/1530771490844/Microsoft.VisualStudio.Services.VSIXPackage',
         installs: 0,
         rating: 0,
         ratingCount: 0,

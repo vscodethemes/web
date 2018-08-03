@@ -25,9 +25,15 @@ export const PropertyRuntime = Record({
   value: String,
 })
 
+export const FilesRuntime = Record({
+  assetType: String,
+  source: String,
+})
+
 export const VersionRuntime = Record({
   lastUpdated: String,
   properties: Array(PropertyRuntime),
+  files: Array(FilesRuntime),
 })
 
 export const StatisticRuntime = Record({
@@ -67,8 +73,7 @@ export const ExtractThemesPayloadRuntime = Record({
   lastUpdated: Number,
   publishedDate: Number,
   releaseDate: Number,
-  repository: String,
-  repositoryOwner: String,
+  packageUrl: String,
   installs: Number,
   rating: Number,
   ratingCount: Number,
@@ -80,6 +85,7 @@ export const ExtractThemesPayloadRuntime = Record({
   Partial({
     displayName: String,
     shortDescription: String,
+    repositoryUrl: String,
   }),
 )
 
@@ -102,18 +108,6 @@ export const ThemeTypeRuntime = Union(
   Literal('light'),
   Literal('dark'),
   Literal('hc'),
-)
-
-export const ExtractColorsPayloadRuntime = ExtractThemesPayloadRuntime.And(
-  Record({
-    themeId: String,
-    themeUrl: String,
-  }).And(
-    Partial({
-      themeName: String,
-      themeType: ThemeTypeRuntime,
-    }),
-  ),
 )
 
 export const ColorsRuntime = Partial({
@@ -161,8 +155,9 @@ export const LanguageTokensRuntime = Record({
   css: Array(LineTokensRuntime),
 })
 
-export const SaveThemePayloadRuntime = ExtractColorsPayloadRuntime.And(
+export const SaveThemePayloadRuntime = ExtractThemesPayloadRuntime.And(
   Record({
+    themeId: String,
     themeName: String,
     themeType: ThemeTypeRuntime,
     colors: ColorsRuntime,

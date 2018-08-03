@@ -1,13 +1,12 @@
 // tslint:disable no-empty
 import {
-  ExtractColorsPayload,
   ExtractThemesPayload,
   Job,
   SaveThemePayload,
   ScrapeExtensionsPayload,
   Services,
 } from '@vscodethemes/types'
-import * as fetch from 'jest-fetch-mock'
+import fetch from 'node-fetch'
 
 function createJob<P>(): Job<P> {
   return {
@@ -39,7 +38,6 @@ export default function createServices(): Services {
     },
     scrapeExtensions: createJob<ScrapeExtensionsPayload>(),
     extractThemes: createJob<ExtractThemesPayload>(),
-    extractColors: createJob<ExtractColorsPayload>(),
     saveTheme: createJob<SaveThemePayload>(),
   }
 }
