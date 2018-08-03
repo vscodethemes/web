@@ -3,51 +3,45 @@ import {
   JobMessage,
   PackageJSON,
 } from '@vscodethemes/types'
-import * as fetch from 'jest-fetch-mock'
+import * as fs from 'fs-extra'
+import * as nock from 'nock'
+import * as path from 'path'
+import * as Stream from 'stream'
 import createServices from '../services/mock'
-import extractThemes from './extractThemes'
+import extractThemes, { TMP_DIR } from './extractThemes'
 
-afterEach(() => fetch.resetMocks())
+const extensionName = 'test-extensionName'
+const publisherName = 'test-publisherName'
+const localPackagePath = `${TMP_DIR}/${publisherName}/${extensionName}`
+const packageUrl = 'https://package.zip'
+const mockGetPackage = (statusCode: number, body?: any) =>
+  nock(packageUrl)
+    .get('/')
+    .reply(statusCode, body)
+
+afterEach(async () => {
+  await fs.remove(TMP_DIR)
+})
 
 function createJob(): JobMessage<ExtractThemesPayload> {
   return {
     receiptHandle: '',
     payload: {
       extensionId: 'extensionId',
-      extensionName: 'extensionName',
-      publisherName: 'publisherName',
+      extensionName,
+      publisherName,
       lastUpdated: 1,
       publishedDate: 1,
       releaseDate: 1,
       displayName: 'displayName',
       shortDescription: 'shortDescription',
-      repository: 'repo',
-      repositoryOwner: 'owner',
+      packageUrl,
       installs: 1,
       rating: 1,
       ratingCount: 1,
       trendingDaily: 1,
       trendingWeekly: 1,
       trendingMonthly: 1,
-    },
-  }
-}
-
-function createPackageJson(): PackageJSON {
-  return {
-    contributes: {
-      themes: [
-        {
-          uiTheme: 'vs-dark',
-          path: './themes/theme1.json',
-          label: 'Theme Name',
-        },
-        {
-          uiTheme: 'vs-dark',
-          path: './themes/theme2.json',
-          label: 'Theme Name',
-        },
-      ],
     },
   }
 }
@@ -76,9 +70,9 @@ test('should fail job if it has an invalid payload', async () => {
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should retry job if fetching default branch returns bad response', async () => {
+test('should retry job if downloading extension returns bad response', async () => {
+  mockGetPackage(400)
   const services = createServices()
-  fetch.mockResponseOnce('', { status: 400 })
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
@@ -88,9 +82,9 @@ test('should retry job if fetching default branch returns bad response', async (
   expect(retrySpy).toHaveBeenCalledTimes(1)
 })
 
-test('should fail job if fetching default branch returns invalid response data', async () => {
+test('should fail job if downloading extension returns invalid package', async () => {
+  mockGetPackage(200, new Stream())
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify(null))
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
@@ -100,9 +94,13 @@ test('should fail job if fetching default branch returns invalid response data',
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should fail job if fetching default branch returns invalid branch', async () => {
+test('should fail job for extension with invalid package json', async () => {
+  const invalidPackagePath = path.resolve(
+    __dirname,
+    'mocks/invalid-package-json.zip',
+  )
+  mockGetPackage(200, fs.createReadStream(invalidPackagePath))
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: null }))
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
@@ -110,128 +108,42 @@ test('should fail job if fetching default branch returns invalid branch', async 
   const failSpy = jest.spyOn(services.extractThemes, 'fail')
   await extractThemes(services)
   expect(failSpy).toHaveBeenCalledTimes(1)
+  expect(fs.existsSync(localPackagePath)).toEqual(false)
 })
 
-test('should retry job if fetching package json returns bad response', async () => {
+test('should skip theme for extension with missing name', async () => {
+  const invalidPackagePath = path.resolve(__dirname, 'mocks/missing-name.zip')
+  mockGetPackage(200, fs.createReadStream(invalidPackagePath))
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce('', { status: 400 })
-  jest
-    .spyOn(services.extractThemes, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
-  const retrySpy = jest.spyOn(services.extractThemes, 'retry')
-  await extractThemes(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
-})
-
-test('should retry job if fetching package json returns invalid response data', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce('', { status: 400 })
-  jest
-    .spyOn(services.extractThemes, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
-  const retrySpy = jest.spyOn(services.extractThemes, 'retry')
-  await extractThemes(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
-})
-
-test('should fail job if fetching default branch returns invalid package json', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce(JSON.stringify({ contributes: { themes: null } }))
-  jest
-    .spyOn(services.extractThemes, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
-  const failSpy = jest.spyOn(services.extractThemes, 'fail')
-  await extractThemes(services)
-  expect(failSpy).toHaveBeenCalledTimes(1)
-})
-
-test('should succeed job for valid input', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
   const succeedSpy = jest.spyOn(services.extractThemes, 'succeed')
+  const saveSpy = jest.spyOn(services.saveTheme, 'create')
   await extractThemes(services)
   expect(succeedSpy).toHaveBeenCalledTimes(1)
+  expect(saveSpy).toHaveBeenCalledTimes(0)
+  expect(fs.existsSync(localPackagePath)).toEqual(false)
 })
 
-test('should create extract theme jobs for valid input', async () => {
+test('should save theme for valid package', async () => {
+  const validPackagePath = path.resolve(
+    __dirname,
+    'mocks/zhuangtongfa.Material-theme.zip',
+  )
+  mockGetPackage(200, fs.createReadStream(validPackagePath))
   const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
   jest
     .spyOn(services.extractThemes, 'receive')
     .mockImplementation(() => Promise.resolve(createJob()))
 
-  const createSpy = jest.spyOn(services.extractColors, 'create')
-  await extractThemes(services)
-  expect(createSpy).toHaveBeenCalledTimes(2)
-  expect(createSpy.mock.calls[0][0]).toEqual({
-    themeId: 'publishername$extensionname$themes/theme1.json',
-    themeName: 'Theme Name',
-    themeUrl:
-      'https://raw.githubusercontent.com/owner/repo/master/themes/theme1.json',
-    themeType: 'dark',
-    extensionId: 'extensionId',
-    extensionName: 'extensionName',
-    publisherName: 'publisherName',
-    lastUpdated: 1,
-    publishedDate: 1,
-    releaseDate: 1,
-    displayName: 'displayName',
-    shortDescription: 'shortDescription',
-    repository: 'repo',
-    repositoryOwner: 'owner',
-    installs: 1,
-    rating: 1,
-    ratingCount: 1,
-    trendingDaily: 1,
-    trendingMonthly: 1,
-    trendingWeekly: 1,
-  })
-  expect(createSpy.mock.calls[1][0]).toEqual({
-    themeId: 'publishername$extensionname$themes/theme2.json',
-    themeName: 'Theme Name',
-    themeUrl:
-      'https://raw.githubusercontent.com/owner/repo/master/themes/theme2.json',
-    themeType: 'dark',
-    extensionId: 'extensionId',
-    extensionName: 'extensionName',
-    publisherName: 'publisherName',
-    lastUpdated: 1,
-    publishedDate: 1,
-    releaseDate: 1,
-    displayName: 'displayName',
-    shortDescription: 'shortDescription',
-    repository: 'repo',
-    repositoryOwner: 'owner',
-    installs: 1,
-    rating: 1,
-    ratingCount: 1,
-    trendingDaily: 1,
-    trendingMonthly: 1,
-    trendingWeekly: 1,
-  })
-})
-
-test('should notify self', async () => {
-  const services = createServices()
-  fetch.mockResponseOnce(JSON.stringify({ default_branch: 'master' }))
-  fetch.mockResponseOnce(JSON.stringify(createPackageJson()))
-  jest
-    .spyOn(services.extractThemes, 'receive')
-    .mockImplementation(() => Promise.resolve(createJob()))
-
+  const succeedSpy = jest.spyOn(services.extractThemes, 'succeed')
+  const saveSpy = jest.spyOn(services.saveTheme, 'create')
   const notifySpy = jest.spyOn(services.extractThemes, 'notify')
   await extractThemes(services)
+  expect(succeedSpy).toHaveBeenCalledTimes(1)
+  expect(saveSpy).toHaveBeenCalledTimes(2)
   expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(fs.existsSync(localPackagePath)).toEqual(false)
 })

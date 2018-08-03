@@ -1,17 +1,27 @@
+import templates from '@vscodethemes/templates'
 import {
-  ExtractColorsPayload,
+  Colors,
+  ColorsRuntime,
   ExtractThemesPayloadRuntime,
+  LanguageOptions,
   PackageJSON,
   PackageJSONRuntime,
   Services,
   ThemeType,
 } from '@vscodethemes/types'
+import * as fs from 'fs-extra'
+import * as path from 'path'
+import * as stripComments from 'strip-json-comments'
+import * as unzip from 'unzip-stream'
 import { PermanentJobError, TransientJobError } from '../errors'
-const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env
 import createThemeId from '../utils/createThemeId'
+import extractGUIColors from '../utils/extractGUIColors'
+import stripTrailingCommas from '../utils/stripTrailingCommas'
+
+export const TMP_DIR = '/tmp/vscodethemes'
 
 export default async function run(services: Services): Promise<any> {
-  const { extractThemes, extractColors, logger } = services
+  const { extractThemes, saveTheme, logger } = services
 
   const job = await extractThemes.receive()
   if (!job) {
@@ -26,64 +36,62 @@ export default async function run(services: Services): Promise<any> {
   logger.log(`Receipt Handle: ${job.receiptHandle}`)
   logger.log(`Payload: ${JSON.stringify(job.payload)}`)
 
+  let localPackageDir
   try {
     if (!ExtractThemesPayloadRuntime.guard(job.payload)) {
       throw new PermanentJobError('Invalid job payload.')
     }
 
     const { payload } = job
-    const {
-      repositoryOwner,
-      repository,
-      publisherName,
-      extensionName,
-    } = payload
-    // Find the default branch of the repository.
-    const repositoryBranch = await fetchDefaultBranch(
-      services,
-      repositoryOwner,
-      repository,
-    )
+    const { packageUrl, publisherName, extensionName } = payload
 
-    // Get the package.json for the default branch.
-    const packageJson = await fetchPackageJson(
-      services,
-      repositoryOwner,
-      repository,
-      repositoryBranch,
-    )
+    // Download and extract the extension to the local tmp directory.
+    localPackageDir = `${TMP_DIR}/${publisherName}/${extensionName}`
+    await downloadExtension(services, packageUrl, localPackageDir)
 
-    const themes: ExtractColorsPayload[] = []
-    // A package.json definition can contain multiple theme sources.
-    packageJson.contributes.themes.forEach((theme: any) => {
-      let type
-      if (theme.uiTheme === 'vs-dark') {
-        type = 'dark'
-      } else if (theme.uiTheme === 'vs-light' || theme.uiTheme === 'vs') {
-        type = 'light'
-      } else {
-        logger.log(`Unkown uiTheme: ${theme.uiTheme}, theme: ${theme}`)
+    // Get all themes in the contributes key of the extension's package.json.
+    const packageJson = await getPackageJson(
+      `${localPackageDir}/extension/package.json`,
+    )
+    // For each theme in the contributes key, extract it's gui colors, generate
+    // language tokens, and save to Algolia.
+    for (const theme of packageJson.contributes.themes) {
+      const themeId = createThemeId(publisherName, extensionName, theme.path)
+
+      try {
+        const themePath = path.resolve(localPackageDir, 'extension', theme.path)
+        const themeDefinition = await readJson(themePath)
+        // Fallback to the name field in the theme's json definition if label
+        // is not set in package.json.
+        const themeName = theme.label || themeDefinition.name
+        if (!themeName) {
+          throw new Error('Missing theme name.')
+        }
+        // Set default to light colors if uiTheme is vs-light or vs, otherwise
+        // set to dark.
+        const themeType =
+          theme.uiTheme === 'vs-light' || theme.uiTheme === 'vs'
+            ? 'light'
+            : 'dark'
+
+        const [colors, languageTokens] = await Promise.all([
+          getColors(themeId, themeType, themeDefinition),
+          getLanguageTokens(services, themeType, themeDefinition),
+        ])
+
+        // Save theme.
+        await saveTheme.create({
+          ...payload,
+          themeId,
+          themeType,
+          themeName,
+          colors,
+          languageTokens,
+        })
+      } catch (err) {
+        logger.log(`Invalid theme '${themeId}': ${err.message}`)
       }
-
-      const baseUrl = 'https://raw.githubusercontent.com'
-      const repoUrl = `${baseUrl}/${repositoryOwner}/${repository}`
-      const branchUrl = `${repoUrl}/${repositoryBranch}`
-      // Remove './' from './path'.
-      const themePath = theme.path.replace(/^\.\//, '')
-      const url = `${branchUrl}/${themePath}`
-      const themeId = createThemeId(publisherName, extensionName, themePath)
-
-      themes.push({
-        ...payload,
-        themeId,
-        themeUrl: url,
-        themeType: type as ThemeType,
-        themeName: theme.label,
-      })
-    })
-
-    // For each theme source, create a job to extract the colors.
-    await Promise.all(themes.map(extractColors.create))
+    }
 
     // Job succeeded.
     await extractThemes.succeed(job)
@@ -100,87 +108,126 @@ export default async function run(services: Services): Promise<any> {
       // Rethrow error for global error handlers.
       throw err
     }
+  } finally {
+    if (localPackageDir) {
+      await cleanupExtension(localPackageDir)
+    }
   }
 }
 
-// Fetch the repository's default branch.
-async function fetchDefaultBranch(
+async function downloadExtension(
   services: Services,
-  repositoryOwner: string,
-  repository: string,
-): Promise<string> {
-  let branch = ''
-  const { fetch } = services
-  const baseUrl = 'https://api.github.com/repos'
-  const auth = `client_id=${GITHUB_CLIENT_ID}&client_secret=${GITHUB_CLIENT_SECRET}`
-  const url = `${baseUrl}/${repositoryOwner}/${repository}?${auth}`
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
+  url: string,
+  localDirectory: string,
+) {
+  await fs.ensureDir(localDirectory)
+  const res = await services.fetch(url)
+  if (!res.ok) {
     throw new TransientJobError(
-      `fetchDefaultBranch error: Bad response '${response.statusText}'`,
+      `Error fetching extension at ${url}: ${res.statusText}`,
     )
   }
 
-  try {
-    const data = await response.json()
-    branch = data.default_branch
-  } catch (err) {
-    throw new PermanentJobError(
-      'fetchDefaultBranch error: Invalid response data',
-    )
-  }
-
-  if (!branch) {
-    throw new PermanentJobError(
-      'fetchDefaultBranch error: Invalid default branch',
-    )
-  }
-
-  return branch
+  // Download and extract extension.
+  await new Promise((resolve, reject) => {
+    res.body
+      .pipe(unzip.Extract({ path: localDirectory }))
+      .on('close', resolve)
+      .on('error', (err: Error) => {
+        reject(new PermanentJobError(`Error unzipping ${url}: ${err.message}`))
+      })
+  })
 }
 
-// Fetch the repository's package.json.
-async function fetchPackageJson(
-  services: Services,
-  repositoryOwner: string,
-  repository: string,
-  branch: string,
-): Promise<PackageJSON> {
-  let packageJson: PackageJSON
-  const { fetch, logger } = services
-  const url = `https://raw.githubusercontent.com/${repositoryOwner}/${repository}/${branch}/package.json`
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-
-  if (!response.ok) {
-    throw new TransientJobError(
-      `fetchPackageJson error: Bad response '${response.statusText}'`,
+async function cleanupExtension(localDirectory: string) {
+  try {
+    await fs.remove(localDirectory)
+  } catch (err) {
+    throw new PermanentJobError(
+      `Failed to cleanup extension at ${localDirectory}: ${err.message}`,
     )
   }
+}
 
-  try {
-    packageJson = await response.json()
-  } catch (err) {
-    logger.error(err)
-    throw new TransientJobError('fetchPackageJson error: Invalid response data')
-  }
-
+async function getPackageJson(packageJsonPath: string): Promise<PackageJSON> {
+  const packageJson = await readJson(packageJsonPath)
   if (!PackageJSONRuntime.guard(packageJson)) {
-    throw new PermanentJobError('fetchPackageJson error: Invalid package json')
+    throw new PermanentJobError(`Invalid package.json at ${packageJsonPath}.`)
+  }
+  return packageJson
+}
+
+async function getColors(
+  themeId: string,
+  type: ThemeType,
+  themeDefinition: any,
+): Promise<Colors> {
+  if (themeDefinition.colors && typeof themeDefinition.colors === 'object') {
+    const colors = extractGUIColors(type, themeDefinition.colors)
+    if (!ColorsRuntime.guard(colors)) {
+      throw new PermanentJobError(`Invalid colors for ${themeId}.`)
+    }
+    return colors
+  } else {
+    throw new PermanentJobError(`Missing colors for ${themeId}.`)
+  }
+}
+
+async function readJson(filePath: string) {
+  try {
+    const buffer = await fs.readFile(filePath)
+    const text = stripTrailingCommas(stripComments(buffer.toString()))
+    return JSON.parse(text)
+  } catch (err) {
+    throw new PermanentJobError(`Invalid json at ${filePath}.`)
+  }
+}
+
+async function getLanguageTokens(
+  services: Services,
+  themeId: string,
+  themeDefinition: any,
+) {
+  return {
+    [LanguageOptions.javascript]: tokenizeTheme(
+      services,
+      themeId,
+      themeDefinition,
+      LanguageOptions.javascript,
+    ),
+    [LanguageOptions.css]: tokenizeTheme(
+      services,
+      themeId,
+      themeDefinition,
+      LanguageOptions.css,
+    ),
+    [LanguageOptions.html]: tokenizeTheme(
+      services,
+      themeId,
+      themeDefinition,
+      LanguageOptions.html,
+    ),
+  }
+}
+
+function tokenizeTheme(
+  services: Services,
+  themeId: string,
+  themeDefinition: any,
+  language: LanguageOptions,
+) {
+  const { tokenizer } = services
+
+  let tokens
+  try {
+    const code = templates[language]
+    const tokenize = tokenizer.create(themeDefinition, language)
+    tokens = tokenize.text(code)
+  } catch (err) {
+    throw new PermanentJobError(
+      `Failed to tokenize ${language} for ${themeId}: ${err.message}.`,
+    )
   }
 
-  return packageJson
+  return tokens
 }
