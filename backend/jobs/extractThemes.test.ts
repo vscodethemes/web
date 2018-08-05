@@ -147,3 +147,24 @@ test('should save theme for valid package', async () => {
   expect(notifySpy).toHaveBeenCalledTimes(1)
   expect(fs.existsSync(localPackagePath)).toEqual(false)
 })
+
+test('should save theme for valid package with includes', async () => {
+  const includePackagePath = path.resolve(
+    __dirname,
+    'mocks/eamodio.amethyst-theme.zip',
+  )
+  mockGetPackage(200, fs.createReadStream(includePackagePath))
+  const services = createServices()
+  jest
+    .spyOn(services.extractThemes, 'receive')
+    .mockImplementation(() => Promise.resolve(createJob()))
+
+  const succeedSpy = jest.spyOn(services.extractThemes, 'succeed')
+  const saveSpy = jest.spyOn(services.saveTheme, 'create')
+  const notifySpy = jest.spyOn(services.extractThemes, 'notify')
+  await extractThemes(services)
+  expect(succeedSpy).toHaveBeenCalledTimes(1)
+  expect(saveSpy).toHaveBeenCalledTimes(3)
+  expect(notifySpy).toHaveBeenCalledTimes(1)
+  expect(fs.existsSync(localPackagePath)).toEqual(false)
+})

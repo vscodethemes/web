@@ -9,6 +9,7 @@ import {
   Services,
   ThemeType,
 } from '@vscodethemes/types'
+import * as extendify from 'extendify'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import * as stripComments from 'strip-json-comments'
@@ -19,6 +20,10 @@ import extractGUIColors from '../utils/extractGUIColors'
 import stripTrailingCommas from '../utils/stripTrailingCommas'
 
 export const TMP_DIR = '/tmp/vscodethemes'
+
+const extend = extendify({
+  arrays: 'concat',
+})
 
 export default async function run(services: Services): Promise<any> {
   const { extractThemes, saveTheme, logger } = services
@@ -60,7 +65,7 @@ export default async function run(services: Services): Promise<any> {
 
       try {
         const themePath = path.resolve(localPackageDir, 'extension', theme.path)
-        const themeDefinition = await readJson(themePath)
+        const themeDefinition = await readTheme(themePath)
         // Fallback to the name field in the theme's json definition if label
         // is not set in package.json.
         const themeName = theme.label || themeDefinition.name
@@ -179,7 +184,29 @@ async function readJson(filePath: string) {
     const text = stripTrailingCommas(stripComments(buffer.toString()))
     return JSON.parse(text)
   } catch (err) {
-    throw new PermanentJobError(`Invalid json at ${filePath}.`)
+    throw new PermanentJobError(`Invalid json at ${filePath}: ${err.message}`)
+  }
+}
+
+async function readTheme(filePath: string) {
+  try {
+    const theme = await readJson(filePath)
+    const maxDepth = 10 // The max amount of theme includes to traverse.
+    for (let i = 0; i < maxDepth; i += 1) {
+      if (!theme || !theme.include) {
+        break
+      }
+      const includesPath = path.resolve(filePath, '..', theme.include)
+      const include = await readJson(includesPath)
+      extend(theme, include)
+      // Make sure we stop iterating if there are no more includes
+      // by setting the next include to the current one.
+      theme.include = include.include
+    }
+
+    return theme
+  } catch (err) {
+    throw new PermanentJobError(`Invalid theme at ${filePath}: ${err.message}`)
   }
 }
 
