@@ -67,12 +67,15 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
             href={`vscode:extension/${publisherName}.${extensionName}`}
           />
         </span>
-        <a
-          className={styles.link}
-          href={`https://github.com/${repositoryOwner}/${repository}`}
-        >
-          <Icon icon={Icons.github} />
-        </a>
+        {repositoryOwner &&
+          repository && (
+            <a
+              className={styles.link}
+              href={`https://github.com/${repositoryOwner}/${repository}`}
+            >
+              <Icon icon={Icons.github} />
+            </a>
+          )}
         <a
           className={styles.link}
           target="_blank"
