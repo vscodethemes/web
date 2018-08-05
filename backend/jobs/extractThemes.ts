@@ -60,7 +60,7 @@ export default async function run(services: Services): Promise<any> {
 
       try {
         const themePath = path.resolve(localPackageDir, 'extension', theme.path)
-        const themeDefinition = await readJson(themePath)
+        const themeDefinition = await readTheme(themePath)
         // Fallback to the name field in the theme's json definition if label
         // is not set in package.json.
         const themeName = theme.label || themeDefinition.name
@@ -179,7 +179,37 @@ async function readJson(filePath: string) {
     const text = stripTrailingCommas(stripComments(buffer.toString()))
     return JSON.parse(text)
   } catch (err) {
-    throw new PermanentJobError(`Invalid json at ${filePath}.`)
+    throw new PermanentJobError(`Invalid json at ${filePath}: ${err.message}`)
+  }
+}
+
+async function readTheme(filePath: string) {
+  try {
+    const includes = [await readJson(filePath)]
+    const maxDepth = 10 // The max amount of theme includes to traverse.
+    for (let i = 0; i < maxDepth; i += 1) {
+      const nextInclude = includes[includes.length - 1].include
+      if (!nextInclude) {
+        break
+      }
+      const includesPath = path.resolve(filePath, '..', nextInclude)
+      includes.push(await readJson(includesPath))
+    }
+
+    // Merge includes together starting from the right-most include.
+    const theme: any = { colors: {}, tokenColors: [] }
+    for (let i = includes.length - 1; i >= 0; i -= 1) {
+      const include = includes[i]
+      theme.name = include.name || theme.name
+      theme.type = include.type || theme.type
+      // The left-most include's colors takes precedence.
+      theme.colors = { ...(theme.colors || {}), ...include.colors }
+      // The right-most include's tokenColors get's appended.
+      theme.tokenColors = [...(include.tokenColors || []), ...theme.tokenColors]
+    }
+    return theme
+  } catch (err) {
+    throw new PermanentJobError(`Invalid theme at ${filePath}: ${err.message}`)
   }
 }
 
