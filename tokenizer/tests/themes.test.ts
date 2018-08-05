@@ -1,4 +1,3 @@
-import * as fs from 'fs'
 import Tokenizer from '../index'
 import { readJSON, templates } from './paths'
 // import toHTML from './toHTML'
