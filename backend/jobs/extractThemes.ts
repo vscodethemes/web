@@ -12,6 +12,7 @@ import {
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import * as stripComments from 'strip-json-comments'
+import { convertTheme as tmThemeToJSON } from 'tmtheme-to-json'
 import * as unzip from 'unzip-stream'
 import { PermanentJobError, TransientJobError } from '../errors'
 import createThemeId from '../utils/createThemeId'
@@ -204,8 +205,15 @@ async function readTheme(filePath: string) {
       theme.type = include.type || theme.type
       // The left-most include's colors takes precedence.
       theme.colors = { ...(theme.colors || {}), ...include.colors }
+      let includeTokenColors = include.tokenColors
+      // Convert tmTheme to json
+      if (typeof includeTokenColors === 'string') {
+        const tmThemePath = path.resolve(filePath, '..', includeTokenColors)
+        const tmTheme = (await fs.readFile(tmThemePath)).toString()
+        includeTokenColors = tmThemeToJSON(tmTheme).settings
+      }
       // The right-most include's tokenColors get's appended.
-      theme.tokenColors = [...(include.tokenColors || []), ...theme.tokenColors]
+      theme.tokenColors = [...(includeTokenColors || []), ...theme.tokenColors]
     }
     return theme
   } catch (err) {

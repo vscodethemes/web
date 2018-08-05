@@ -83,9 +83,9 @@ export const ExtractThemesPayloadRuntime = Record({
 }).And(
   // Optional properties.
   Partial({
-    displayName: String,
-    shortDescription: String,
-    repositoryUrl: String,
+    displayName: String.Or(Null),
+    shortDescription: String.Or(Null),
+    repositoryUrl: String.Or(Null),
   }),
 )
 

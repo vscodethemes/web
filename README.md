@@ -27,10 +27,6 @@ In order for your themes to show up on on
 - Have
   [themes in the contributes field](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes)
   of your extension's package.json
-- Theme definitions
-  [must be JSON](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_create-a-new-color-theme)
-  (not .tmTheme) and define `colors` and `tokenColors` ‒
-  [Example](https://github.com/Binaryify/OneDark-Pro/blob/master/themes/OneDark-Pro.json)
 - See [theme variables](theme-variables/index.ts) for which GUI and token
   colors are used
 
