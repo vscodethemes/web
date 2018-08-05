@@ -1,5 +1,6 @@
 import { LanguageOptions, Theme } from '@vscodethemes/types'
 import { cx } from 'emotion'
+import getConfig from 'next/config'
 import * as React from 'react'
 import {
   Button,
@@ -16,13 +17,16 @@ interface ExtensionProps {
   shortDescription: string
   publisherName: string
   extensionName: string
-  repositoryOwner: string
-  repository: string
+  repositoryOwner?: string
+  repository?: string
   themes: Theme[]
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
   onClose?: () => any
 }
+
+const { publicRuntimeConfig } = getConfig()
+const { host } = publicRuntimeConfig
 
 const ExtensionPage: React.SFC<ExtensionProps> = ({
   displayName,
@@ -82,7 +86,7 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
             `${displayName} by ${publisherName}`,
           )}&url=${encodeURIComponent(
-            `https://vscodethemes.com/e/${publisherName}.${extensionName}`,
+            `${host}/e/${publisherName}.${extensionName}`,
           )}&hashtags=vscode`}
         >
           <Icon icon={Icons.twitter} />

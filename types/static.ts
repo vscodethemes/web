@@ -91,6 +91,8 @@ export interface Theme extends ExtractThemesPayload {
   colors: Colors
   language: string
   tokens: LineToken[][]
+  repositoryOwner?: string
+  repository?: string
 }
 
 export enum SortByOptions {

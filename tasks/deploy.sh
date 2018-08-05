@@ -31,7 +31,8 @@ if [[ -d "$dir" ]]; then
       --build-arg TF_VAR_algolia_app_id=$TF_VAR_algolia_app_id \
       --build-arg TF_VAR_algolia_index=$TF_VAR_algolia_index \
       --build-arg ALGOLIA_SEARCH_KEY=$ALGOLIA_SEARCH_KEY \
-      --build-arg GTM_ID=$GTM_ID
+      --build-arg GTM_ID=$GTM_ID \
+      --build-arg HOST=$HOST
 
     # Push image to heroku.
     echo "Pushing image..."

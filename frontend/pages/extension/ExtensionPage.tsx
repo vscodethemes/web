@@ -71,7 +71,11 @@ export default class ExtensionPage extends React.Component<
 
     return (
       <div className={styles.wrapper}>
-        <Meta title={title} description={description} />
+        <Meta
+          title={title}
+          description={description}
+          path={`/e/${primary.publisherName}.${primary.extensionName}`}
+        />
         <Extension
           displayName={primary.displayName}
           shortDescription={description}
