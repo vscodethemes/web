@@ -71,21 +71,9 @@
       }
     },
     {
-      "token": "'",
-      "style": {
-        "color": "#D9F5DD"
-      }
-    },
-    {
       "token": "sans-serif",
       "style": {
-        "color": "#C3E88D"
-      }
-    },
-    {
-      "token": "'",
-      "style": {
-        "color": "#D9F5DD"
+        "color": "#89DDFF"
       }
     },
     {
@@ -247,21 +235,9 @@
       }
     },
     {
-      "token": "'",
-      "style": {
-        "color": "#D9F5DD"
-      }
-    },
-    {
       "token": "border-box",
       "style": {
-        "color": "#C3E88D"
-      }
-    },
-    {
-      "token": "'",
-      "style": {
-        "color": "#D9F5DD"
+        "color": "#89DDFF"
       }
     },
     {

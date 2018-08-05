@@ -1,6 +1,6 @@
 export default `html {
   font-size: 16px;
-  font-family: 'sans-serif';
+  font-family: sans-serif;
 }
 
 body {
@@ -10,5 +10,5 @@ body {
 *,
 *:before,
 *:after {
-  box-sizing: 'border-box';
+  box-sizing: border-box;
 }`

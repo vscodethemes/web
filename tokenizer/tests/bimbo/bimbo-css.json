@@ -83,21 +83,9 @@
       }
     },
     {
-      "token": "'",
-      "style": {
-        "color": "#5FB3B3"
-      }
-    },
-    {
       "token": "sans-serif",
       "style": {
-        "color": "#99C794"
-      }
-    },
-    {
-      "token": "'",
-      "style": {
-        "color": "#5FB3B3"
+        "color": "#F99157"
       }
     },
     {
@@ -295,21 +283,9 @@
       }
     },
     {
-      "token": "'",
-      "style": {
-        "color": "#5FB3B3"
-      }
-    },
-    {
       "token": "border-box",
       "style": {
-        "color": "#99C794"
-      }
-    },
-    {
-      "token": "'",
-      "style": {
-        "color": "#5FB3B3"
+        "color": "#F99157"
       }
     },
     {
