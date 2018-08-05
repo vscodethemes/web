@@ -1,7 +1,7 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import * as React from 'react'
-import * as algolia from '../../clients/algolia'
+import AlgoliaClient from '../../clients/algolia'
 import { Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { TrendingLink } from './'
@@ -22,6 +22,7 @@ export default class TrendingPage extends React.Component<
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<TrendingPageProps> {
+    const algolia = new AlgoliaClient(ctx)
     const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
 
