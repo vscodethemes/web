@@ -13,7 +13,6 @@ app
 
     // Redirect www.vscodethemes.com -> vscodethemes.com.
     server.use((req, res, next) => {
-      const subdomains = req.subdomains
       const protocol = req.protocol
       if (/^www\./.test(req.host)) {
         // Strip www. domain from host.

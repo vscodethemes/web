@@ -1,7 +1,7 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import * as React from 'react'
-import * as algolia from '../../clients/algolia'
+import AlgoliaClient from '../../clients/algolia'
 import { Meta, ThemeSlider } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { DarkLink } from '../dark'
@@ -34,7 +34,10 @@ interface HomePageProps {
 export default class HomePage extends React.Component<HomePageProps, {}> {
   static perPage = 30
 
-  static async getTrendingThemes(lang: LanguageOptions) {
+  static async getTrendingThemes(
+    algolia: AlgoliaClient,
+    lang: LanguageOptions,
+  ) {
     return algolia.search({
       dark: true,
       light: true,
@@ -46,7 +49,7 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
     })
   }
 
-  static async getDarkThemes(lang: LanguageOptions) {
+  static async getDarkThemes(algolia: AlgoliaClient, lang: LanguageOptions) {
     return algolia.search({
       dark: true,
       sortBy: SortByOptions.installs,
@@ -57,7 +60,7 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
     })
   }
 
-  static async getLightThemes(lang: LanguageOptions) {
+  static async getLightThemes(algolia: AlgoliaClient, lang: LanguageOptions) {
     return algolia.search({
       light: true,
       sortBy: SortByOptions.installs,
@@ -68,7 +71,7 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
     })
   }
 
-  static async getNewThemes(lang: LanguageOptions) {
+  static async getNewThemes(algolia: AlgoliaClient, lang: LanguageOptions) {
     return algolia.search({
       dark: true,
       light: true,
@@ -81,12 +84,13 @@ export default class HomePage extends React.Component<HomePageProps, {}> {
   }
 
   static async getInitialProps(ctx: Context): Promise<HomePageProps> {
+    const algolia = new AlgoliaClient(ctx)
     const language = getLanguage(ctx)
 
     const [trendingThemes, darkThemes, lightThemes] = await Promise.all([
-      HomePage.getTrendingThemes(language),
-      HomePage.getDarkThemes(language),
-      HomePage.getLightThemes(language),
+      HomePage.getTrendingThemes(algolia, language),
+      HomePage.getDarkThemes(algolia, language),
+      HomePage.getLightThemes(algolia, language),
     ])
 
     return {

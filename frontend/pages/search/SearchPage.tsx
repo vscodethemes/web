@@ -1,7 +1,7 @@
 import { LanguageOptions, SortByOptions, Theme } from '@vscodethemes/types'
 import { Context } from 'next'
 import * as React from 'react'
-import * as algolia from '../../clients/algolia'
+import AlgoliaClient from '../../clients/algolia'
 import { Heading, Meta, Pagination, ThemeGrid } from '../../components'
 import { getLanguage, setLanguage } from '../../utils/cookies'
 import { SearchLink } from './'
@@ -20,6 +20,7 @@ export default class SearchPage extends React.Component<SearchPageProps, {}> {
   static perPage = 24
 
   static async getInitialProps(ctx: Context): Promise<SearchPageProps> {
+    const algolia = new AlgoliaClient(ctx)
     const language = getLanguage(ctx)
     const page = parseInt(ctx.query.page, 10) || 1
     const search = ctx.query.q || ''
