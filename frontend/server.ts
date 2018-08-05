@@ -15,7 +15,7 @@ app
     server.use((req, res, next) => {
       const subdomains = req.subdomains
       const protocol = req.protocol
-      if (subdomains[0] === 'wwww') {
+      if (subdomains[0] === 'www') {
         res.redirect(301, `${protocol}://${req.header('host')}/${req.url}`)
       } else {
         next()
