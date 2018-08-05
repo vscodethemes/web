@@ -11,12 +11,14 @@ app
   .then(() => {
     const server = express()
 
-    // Redirect www.vscodethemes.com -> vscodethemes.com
+    // Redirect www.vscodethemes.com -> vscodethemes.com.
     server.use((req, res, next) => {
       const subdomains = req.subdomains
       const protocol = req.protocol
-      if (subdomains[0] === 'www') {
-        res.redirect(301, `${protocol}://${req.header('host')}/${req.url}`)
+      if (/^www\./.test(req.host)) {
+        // Strip www. domain from host.
+        const host = req.host.substring(4, req.host.length)
+        res.redirect(301, `${protocol}://${host}${req.url}`)
       } else {
         next()
       }
