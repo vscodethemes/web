@@ -82,8 +82,7 @@ export default class ExtensionPage extends React.Component<
           shortDescription={description}
           publisherName={primary.publisherName}
           extensionName={primary.extensionName}
-          repositoryOwner={primary.repositoryOwner}
-          repository={primary.repository}
+          repositoryUrl={primary.repositoryUrl}
           themes={themes}
           language={language}
           onLanguage={this.handleLanguage}
