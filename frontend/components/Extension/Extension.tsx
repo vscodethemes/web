@@ -17,8 +17,7 @@ interface ExtensionProps {
   shortDescription: string
   publisherName: string
   extensionName: string
-  repositoryOwner?: string
-  repository?: string
+  repositoryUrl?: string
   themes: Theme[]
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
@@ -33,8 +32,7 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
   shortDescription,
   publisherName,
   extensionName,
-  repositoryOwner,
-  repository,
+  repositoryUrl,
   themes,
   language,
   onLanguage,
@@ -71,15 +69,6 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
             href={`vscode:extension/${publisherName}.${extensionName}`}
           />
         </span>
-        {repositoryOwner &&
-          repository && (
-            <a
-              className={styles.link}
-              href={`https://github.com/${repositoryOwner}/${repository}`}
-            >
-              <Icon icon={Icons.github} />
-            </a>
-          )}
         <a
           className={styles.link}
           target="_blank"
@@ -91,6 +80,11 @@ const ExtensionPage: React.SFC<ExtensionProps> = ({
         >
           <Icon icon={Icons.twitter} />
         </a>
+        {repositoryUrl && (
+          <a className={styles.link} href={repositoryUrl}>
+            <Icon icon={Icons.github} />
+          </a>
+        )}
       </div>
     </div>
   </div>
