@@ -31,7 +31,7 @@ module "logs" {
 module "backend" {
   source          = "../modules/backend"
   environment     = "production"
-  init_job_rate   = "8 hours"
+  init_job_rate   = "24 hours"
   algolia_app_id  = "${var.algolia_app_id}"
   algolia_api_key = "${var.algolia_api_key}"
   algolia_index   = "${var.algolia_index}"
