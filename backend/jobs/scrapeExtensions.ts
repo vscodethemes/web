@@ -115,6 +115,9 @@ async function getExtensions(
     headers: {
       Accept: 'application/json;api-version=3.0-preview.1',
       'Content-Type': 'application/json',
+      // node-fetch sets user-agent header if not provided, causing bad
+      // requests from the marketplace api.
+      'User-Agent': '',
     },
     body: JSON.stringify(query),
   })
