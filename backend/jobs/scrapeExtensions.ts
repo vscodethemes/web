@@ -155,7 +155,9 @@ async function getExtensions(
             shortDescription: extension.shortDescription,
             packageUrl: packageUrlProp.source,
             repositoryUrl: repoUrlProp ? repoUrlProp.value : null,
-            installs: extractStatistic(extension, 'install'),
+            installs:
+              extractStatistic(extension, 'install') +
+              extractStatistic(extension, 'updateCount'),
             rating: extractStatistic(extension, 'averagerating'),
             ratingCount: extractStatistic(extension, 'ratingcount'),
             trendingDaily: extractStatistic(extension, 'trendingdaily'),

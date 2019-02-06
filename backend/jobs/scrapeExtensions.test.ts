@@ -17,6 +17,7 @@ const mockPostMarketplace = (statusCode: number, body?: any) =>
 const createValidThemes = (): Extension[] => {
   const statistics = [
     { statisticName: 'install', value: 1 },
+    { statisticName: 'updateCount', value: 1 },
     { statisticName: 'averagerating', value: 1 },
     { statisticName: 'ratingcount', value: 1 },
     { statisticName: 'trendingdaily', value: 1 },
@@ -293,7 +294,7 @@ test('should create job for repositories', async () => {
     shortDescription: 'shortDescription',
     packageUrl: 'https://package.vsix',
     repositoryUrl: 'https://github.com/owner/repo',
-    installs: 1,
+    installs: 2,
     rating: 1,
     ratingCount: 1,
     trendingDaily: 1,
