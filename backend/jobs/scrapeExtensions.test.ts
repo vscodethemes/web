@@ -128,16 +128,20 @@ test('should fail job if it has an invalid payload', async () => {
   expect(failSpy).toHaveBeenCalledTimes(1)
 })
 
-test('should retry job if fetch returns bad response', async () => {
+test('should throw unexpected error if fetch returns bad response', async () => {
   const services = createServices()
   mockPostMarketplace(400)
   jest
     .spyOn(services.scrapeExtensions, 'receive')
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
-  const retrySpy = jest.spyOn(services.scrapeExtensions, 'retry')
-  await scrapeExtensions(services)
-  expect(retrySpy).toHaveBeenCalledTimes(1)
+  const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
+  try {
+    await scrapeExtensions(services)
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error)
+    expect(failSpy).toHaveBeenCalledTimes(1)
+  }
 })
 
 test('should fail job if fetch returns invalid response data', async () => {
@@ -148,8 +152,12 @@ test('should fail job if fetch returns invalid response data', async () => {
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
   const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
-  await scrapeExtensions(services)
-  expect(failSpy).toHaveBeenCalledTimes(1)
+  try {
+    await scrapeExtensions(services)
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error)
+    expect(failSpy).toHaveBeenCalledTimes(1)
+  }
 })
 
 test('should fail job if fetch returns invalid extensions', async () => {
@@ -160,8 +168,12 @@ test('should fail job if fetch returns invalid extensions', async () => {
     .mockImplementation(() => Promise.resolve({ payload: { page: 1 } }))
 
   const failSpy = jest.spyOn(services.scrapeExtensions, 'fail')
-  await scrapeExtensions(services)
-  expect(failSpy).toHaveBeenCalledTimes(1)
+  try {
+    await scrapeExtensions(services)
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error)
+    expect(failSpy).toHaveBeenCalledTimes(1)
+  }
 })
 
 test('should not create job for next page when current page is empty', async () => {

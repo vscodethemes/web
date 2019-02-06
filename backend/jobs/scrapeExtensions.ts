@@ -123,9 +123,7 @@ async function getExtensions(
   })
 
   if (!response.ok) {
-    throw new TransientJobError(
-      `getExtensions error: Bad response ${response.statusText}`,
-    )
+    throw new Error(`getExtensions error: Bad response ${response.statusText}`)
   }
 
   try {
@@ -179,11 +177,11 @@ async function getExtensions(
     })
   } catch (err) {
     logger.error(err)
-    throw new PermanentJobError('getExtensions error: Invalid response data')
+    throw new Error('getExtensions error: Invalid response data')
   }
 
   if (!extensions) {
-    throw new PermanentJobError('getExtensions error: Invalid extensions')
+    throw new Error('getExtensions error: Invalid extensions')
   }
 
   return extensions
