@@ -12,7 +12,7 @@ interface MetaProps {
 }
 
 const Meta: React.SFC<MetaProps> = ({
-  title = 'VSCodeThemes',
+  title = 'VSCodeThemes — Preview Visual Studio Code Themes.',
   description = 'Preview VSCode themes from the Visual Studio Marketplace. Browse by trending, dark, or light themes.',
   path = '',
 }) => (
