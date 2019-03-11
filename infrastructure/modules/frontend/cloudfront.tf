@@ -15,8 +15,7 @@ resource "aws_cloudfront_distribution" "app" {
   enabled         = true
   is_ipv6_enabled = true
 
-  # use PriceClass_200 for edge locations outside of US, Canada and Europe
-  price_class = "PriceClass_100"
+  price_class = "PriceClass_All"
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
