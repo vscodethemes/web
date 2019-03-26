@@ -19,7 +19,7 @@ Preview themes from the VSCode marketplace. Check out the [annoucement post](htt
 
 ## How do I get my theme on _vscodethemes_?
 
-In order for your themes to show up on on
+In order for your themes to show up on
 [vscodethemes](https://vscodethemes.com) they must:
 
 - Be published to the
