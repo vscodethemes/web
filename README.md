@@ -37,6 +37,10 @@ Consult the
 [VSCode docs](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers)
 for how to build your own theme.
 
-## Enjoy using VSCodeThemes?
+## Want to help?
 
-Help keep the servers running and [become a backer](https://opencollective.com/vscodethemes).
+Suggest new features or contribute to the [existing discussions](https://github.com/jschr/vscodethemes/issues?q=is%3Aissue+is%3Aopen+label%3Adiscussion).
+
+You can keep VSCodeThemes running and [become a backer](https://opencollective.com/vscodethemes).
+
+I'll gladly accept PRs but you'll probably need help setting up the project. 
