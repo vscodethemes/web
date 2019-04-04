@@ -17,7 +17,7 @@ Preview themes from the VSCode marketplace. Check out the [annoucement post](htt
   [SQS](https://aws.amazon.com/sqs/) and [SNS](https://aws.amazon.com/sns/)
 - [Terraform](https://www.terraform.io/)
 
-## How do I get my theme on _vscodethemes_?
+## How do I get my theme on VSCodeThemes?
 
 In order for your themes to show up on
 [vscodethemes](https://vscodethemes.com) they must:
@@ -36,3 +36,7 @@ If you're not sure why a theme isn't showing up, feel free to
 Consult the
 [VSCode docs](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers)
 for how to build your own theme.
+
+## Enjoy using VSCodeThemes?
+
+Help keep the servers running and [become a backer](https://opencollective.com/vscodethemes).
