@@ -22,7 +22,8 @@
     "plan": "tasks/plan.sh",
     "get-env": "tasks/remote-env-get.sh",
     "update-env": "tasks/remote-env-update.sh",
-    "deploy": "tasks/deploy.sh"
+    "deploy": "tasks/deploy.sh",
+    "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.0",
@@ -34,5 +35,13 @@
     "tslint-react": "^3.2.0",
     "typescript": "^2.8.1",
     "wsrun": "^3.0.0"
+  },
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.2",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/vscodethemes"
   }
 }
