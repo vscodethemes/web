@@ -15,7 +15,7 @@ const Icon: React.SFC<IconProps> = ({ icon, className, fill }) => (
     viewBox={icons[icon].viewBox}
     style={{ fill }}
   >
-    <path d={icons[icon].path} />
+    <path fillRule={icons[icon].fillRule} d={icons[icon].path} />
   </svg>
 )
 

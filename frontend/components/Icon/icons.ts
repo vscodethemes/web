@@ -125,6 +125,7 @@ export default {
   // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/files/browser/media/files-activity-bar.svg
   [Icons.vscodeExplorer]: {
     viewBox: '0 0 24 24',
+    fillRule: 'evenodd',
     path:
       'm8.5 0h9l4.5 4.5v12.1l-1.3 1.4h-4.7v4.6l-1.4 1.4h-12.1l-1.5-1.4v-15.1l1.5-1.5h4.5v-4.5zm7.5 1.5v4.5h4.5v10.5h-12v-15zm3.9 3-2.4-2.4v2.4zm-12.9 3v9.1l1.5 1.4h6v4.5h-12v-15z',
   },
@@ -146,6 +147,7 @@ export default {
   // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/search/browser/media/search-activity-bar.svg
   [Icons.vscodeSearch]: {
     viewBox: '0 0 24 24',
+    fillRule: 'evenodd',
     path:
       'm22 8.3c0 3.7-3 6.7-6.7 6.7-3.8 0-6.8-3-6.8-6.7 0-3.8 3-6.8 6.8-6.8 3.7 0 6.7 3 6.7 6.8zm1.5 0c0 4.5-3.7 8.2-8.2 8.2-2 0-3.7-.7-5.1-1.8l-8.1 9.2-1.1-1 8.1-9.2c-1.3-1.4-2.1-3.4-2.1-5.4 0-4.6 3.7-8.3 8.3-8.3 4.5 0 8.2 3.7 8.2 8.3z',
   },
