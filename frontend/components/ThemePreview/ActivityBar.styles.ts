@@ -14,8 +14,8 @@ export default {
 
   icon: css({
     width: '100%',
-    height: '8%',
-    margin: '12% 0',
+    height: '6%',
+    margin: '18% 0',
     opacity: 0.5,
   }),
 
