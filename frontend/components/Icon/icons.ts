@@ -22,7 +22,15 @@ export enum Icons {
   'vscodeSearch' = 'vscodeSearch',
 }
 
-export default {
+export interface IconList {
+  [key: string]: {
+    viewBox: string
+    path: string
+    fillRule?: 'inherit' | 'nonzero' | 'evenodd'
+  }
+}
+
+const icons: IconList = {
   [Icons.cart]: {
     viewBox: '0 0 24 24',
     path:
@@ -152,3 +160,5 @@ export default {
       'm22 8.3c0 3.7-3 6.7-6.7 6.7-3.8 0-6.8-3-6.8-6.7 0-3.8 3-6.8 6.8-6.8 3.7 0 6.7 3 6.7 6.8zm1.5 0c0 4.5-3.7 8.2-8.2 8.2-2 0-3.7-.7-5.1-1.8l-8.1 9.2-1.1-1 8.1-9.2c-1.3-1.4-2.1-3.4-2.1-5.4 0-4.6 3.7-8.3 8.3-8.3 4.5 0 8.2 3.7 8.2 8.3z',
   },
 }
+
+export default icons
