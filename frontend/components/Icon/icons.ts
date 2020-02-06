@@ -123,14 +123,14 @@ const icons: IconList = {
       'M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.7,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z',
   },
 
-  // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/debug/browser/media/debug-activity-bar.svg
+  // https://github.com/microsoft/vscode-icons/blob/master/icons/light/debug-and-run.svg
   [Icons.vscodeDebug]: {
     viewBox: '0 0 24 24',
     path:
       'm24 14.6h-3.6c-.3 1.6-.9 3.1-1.8 4.5l3.1 3.1-1.2 1.2-2.9-2.9c-1.6 1.7-3.5 2.7-5.6 2.7-1.7-.1-3.3-.7-4.5-1.7l1.4-1.1c.9.7 2 1 3.1 1.1 1.8 0 3.4-.9 4.7-2.6 1.5-2 2.2-4.5 2.2-6.9 0-1.5-.2-2.9-.8-4.3h-12.2c-.4 1.2-.7 2.4-.7 3.6l-1.6-1.1c.1-1.1.4-2.1.7-3.1l-2.6-2.5 1.2-1.2 2.8 2.6h1.2v-.9c0-1.3.5-2.6 1.5-3.6s2.3-1.5 3.6-1.5c.7 0 1.4.1 2 .4.6.2 1.2.6 1.6 1.1.5.5.9 1 1.1 1.7.3.6.4 1.2.4 1.9v.9h1.3l2.7-2.7 1.1 1.2-2.5 2.6c.6 1.5.9 3.2.9 4.9v.9h3.4zm-15.4-8.6h6.8v-.9c0-.4 0-.9-.2-1.3s-.4-.8-.8-1.1c-.3-.3-.6-.6-1.1-.8-.4-.1-.8-.2-1.3-.2-.9 0-1.8.4-2.4 1-.7.6-1 1.5-1 2.4zm-8.6 17 1.4.7 8.1-5.8v-1.4l-8.1-5.8-1.4.7zm1.7-1.6v-8.4l5.9 4.2z',
   },
 
-  // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/files/browser/media/files-activity-bar.svg
+  // https://github.com/microsoft/vscode-icons/blob/master/icons/light/files.svg
   [Icons.vscodeExplorer]: {
     viewBox: '0 0 24 24',
     fillRule: 'evenodd',
@@ -138,21 +138,21 @@ const icons: IconList = {
       'm8.5 0h9l4.5 4.5v12.1l-1.3 1.4h-4.7v4.6l-1.4 1.4h-12.1l-1.5-1.4v-15.1l1.5-1.5h4.5v-4.5zm7.5 1.5v4.5h4.5v10.5h-12v-15zm3.9 3-2.4-2.4v2.4zm-12.9 3v9.1l1.5 1.4h6v4.5h-12v-15z',
   },
 
-  // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/extensions/browser/media/extensions-activity-bar.svg
+  // https://github.com/microsoft/vscode-icons/blob/master/icons/light/extensions.svg
   [Icons.vscodeExtensions]: {
     viewBox: '0 0 24 24',
     path:
       'M13.5 1.5L15 0H22.5L24 1.5V9L22.5 10.5H15L13.5 9V1.5ZM15 1.5V9H22.5V1.5H15ZM0 15V6L1.5 4.5H9L10.5 6V13.5H18L19.5 15V22.5L18 24H10.5 9 1.5L0 22.5V15ZM9 13.5V6H1.5V13.5H9ZM9 15H1.5V22.5H9V15ZM10.5 22.5H18V15H10.5V22.5Z',
   },
 
-  // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/scm/browser/media/scm-activity-bar.svg
+  // https://github.com/microsoft/vscode-icons/blob/master/icons/light/source-control.svg
   [Icons.vscodeGit]: {
     viewBox: '0 0 24 24',
     path:
       'm21 8.3c0-.7-.2-1.4-.5-2-.4-.6-.9-1.1-1.6-1.4-.6-.3-1.3-.5-2-.4s-1.3.3-1.9.7c-.5.4-1 1-1.2 1.6-.3.7-.4 1.4-.2 2.1.1.7.4 1.3.8 1.8.5.5 1.1.9 1.8 1.1-.3.5-.6.9-1.1 1.2s-1 .5-1.6.5h-3c-1.1 0-2.2.4-3 1.2v-7.3c.9-.2 1.7-.7 2.3-1.4.5-.8.8-1.7.7-2.6-.1-1-.5-1.8-1.2-2.4-.7-.7-1.6-1-2.5-1-1 0-1.9.3-2.6 1-.7.6-1.1 1.4-1.2 2.4-.1.9.2 1.8.7 2.6.6.7 1.4 1.2 2.3 1.4v9.2c-.9.1-1.7.6-2.3 1.4-.6.7-.8 1.6-.8 2.6.1.9.5 1.7 1.2 2.4.6.6 1.5 1 2.4 1.1.9 0 1.8-.3 2.6-.8.7-.6 1.2-1.4 1.3-2.3.2-1 0-1.9-.5-2.7-.4-.8-1.2-1.4-2.1-1.6.3-.5.7-.9 1.1-1.2.5-.3 1-.5 1.6-.5h3c.9 0 1.8-.3 2.6-.8.8-.6 1.3-1.4 1.6-2.2.9-.2 1.8-.6 2.4-1.3s.9-1.5.9-2.4zm-16.5-4.5c0-.5.1-.9.4-1.3.2-.4.6-.7 1-.8.4-.2.9-.2 1.3-.2.4.1.8.3 1.1.7.4.3.6.7.7 1.1 0 .4 0 .9-.2 1.3-.1.4-.4.8-.8 1-.4.3-.8.4-1.2.4-.6 0-1.2-.2-1.6-.7-.5-.4-.7-1-.7-1.5zm4.5 16.5c0 .4-.1.8-.4 1.2-.2.4-.6.7-1 .8-.4.2-.9.2-1.3.2-.4-.1-.8-.3-1.1-.7-.4-.3-.6-.7-.7-1.1 0-.4 0-.9.2-1.3.1-.4.4-.8.8-1 .4-.3.8-.4 1.3-.4s1.1.2 1.5.7c.5.4.7 1 .7 1.6zm8.3-9.8c-.5 0-.9-.1-1.3-.4-.4-.2-.7-.6-.8-1-.2-.4-.2-.9-.2-1.3.1-.4.3-.8.7-1.1.3-.4.7-.6 1.1-.7.4 0 .9 0 1.3.2.4.1.8.4 1 .8.3.4.4.8.4 1.3s-.2 1.1-.7 1.5c-.4.5-1 .7-1.5.7z',
   },
 
-  // https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/contrib/search/browser/media/search-activity-bar.svg
+  // https://github.com/microsoft/vscode-icons/blob/master/icons/light/search.svg
   [Icons.vscodeSearch]: {
     viewBox: '0 0 24 24',
     fillRule: 'evenodd',
