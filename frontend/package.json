@@ -28,7 +28,7 @@
     "html-entities": "^1.2.1",
     "isomorphic-fetch": "^2.2.1",
     "mem": "^3.0.0",
-    "next": "^6.0.3",
+    "next": "^9.3.2",
     "query-string": "^6.0.0",
     "raven": "^2.5.0",
     "raven-js": "^3.24.0",
