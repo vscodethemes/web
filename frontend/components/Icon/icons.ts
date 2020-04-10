@@ -137,7 +137,6 @@ const icons: IconList = {
     path:
       'm8.5 0h9l4.5 4.5v12.1l-1.3 1.4h-4.7v4.6l-1.4 1.4h-12.1l-1.5-1.4v-15.1l1.5-1.5h4.5v-4.5zm7.5 1.5v4.5h4.5v10.5h-12v-15zm3.9 3-2.4-2.4v2.4zm-12.9 3v9.1l1.5 1.4h6v4.5h-12v-15z',
   },
-
   // https://github.com/microsoft/vscode-icons/blob/master/icons/light/extensions.svg
   [Icons.vscodeExtensions]: {
     viewBox: '0 0 24 24',
