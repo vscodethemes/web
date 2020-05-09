@@ -14,9 +14,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "tasks/dev.sh",
-    "tsc": "wsrun tsc --exclude-missing",
-    "lint": "wsrun lint --exclude-missing",
-    "test": "wsrun test --exclude-missing",
+    "tsc": "wsrun --exclude-missing tsc",
+    "lint": "wsrun --exclude-missing lint",
+    "test": "wsrun --exclude-missing test",
     "build": "tasks/build.sh",
     "package": "tasks/package.sh",
     "plan": "tasks/plan.sh",
