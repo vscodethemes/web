@@ -3,4 +3,4 @@ set -e
 # Set env vars from .env
 set -o allexport; source .env; set +o allexport
 
-yarn wsrun dev --exclude-missing
+yarn wsrun --exclude-missing dev 
