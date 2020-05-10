@@ -7,9 +7,8 @@ const actions = css({
   right: rem(theme.gutters.sm),
   opacity: 0,
   transform: 'translateY(10%)',
-  transition: `opacity 0.15s ${theme.animation.bezier}, transform 0.15s ${
-    theme.animation.bezier
-  }`,
+  transition: `opacity 0.15s ${theme.animation.bezier}, transform 0.15s ${theme.animation.bezier}`,
+  willChange: 'opacity, transform',
 
   [theme.breakpoints.touch]: {
     opacity: 1,
