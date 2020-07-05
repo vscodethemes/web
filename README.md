@@ -40,7 +40,3 @@ for how to build your own theme.
 ## Want to help?
 
 Suggest new features or contribute to the [existing discussions](https://github.com/jschr/vscodethemes/issues?q=is%3Aissue+is%3Aopen+label%3Adiscussion).
-
-You can keep VSCodeThemes running and [become a backer](https://opencollective.com/vscodethemes).
-
-I'll gladly accept PRs but you'll probably need help setting up the project. 

@@ -4,7 +4,7 @@ resource "aws_lambda_function" "lambda" {
   function_name    = "${var.name}"
   role             = "${aws_iam_role.lambda.arn}"
   memory_size      = "${var.memory}"
-  runtime          = "nodejs8.10"
+  runtime          = "nodejs10.x"
 
   # The path to the webpack build of the job handler. 
   # See backend/webpack.config.ts.

@@ -18,7 +18,7 @@
     "@vscodethemes/theme-variables": "0.1.0",
     "@vscodethemes/tokenizer": "0.1.0",
     "@vscodethemes/types": "0.1.0",
-    "@zeit/next-typescript": "^1.1.0",
+    "@zeit/next-typescript": "1.1.0",
     "algoliasearch": "^3.26.0",
     "color": "^3.0.0",
     "emotion": "^9.1.1",
