@@ -28,7 +28,7 @@ const isUrlEqual = (href: UrlObject, router: UrlObject) => {
 
   if (Object.keys(href.query).length) {
     const isQueryEqual = Object.keys(href.query).every(
-      param => String(href.query[param]) === String(router.query[param]),
+      (param) => String(href.query[param]) === String(router.query[param]),
     )
     return isPathnameEqual && isQueryEqual
   }
@@ -54,9 +54,10 @@ export default function linkCallbackProps(
         theme.breakpoints.mobile.replace('@media ', ''),
       ).matches
 
+      e.preventDefault()
+
       if (isMobile) return
 
-      e.preventDefault()
       await router.push(href, as)
       if (resetScroll) {
         window.scrollTo(0, 0)
