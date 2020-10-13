@@ -54,9 +54,9 @@ export default function linkCallbackProps(
         theme.breakpoints.mobile.replace('@media ', ''),
       ).matches
 
-      e.preventDefault()
-
       if (isMobile) return
+
+      e.preventDefault()
 
       await router.push(href, as)
       if (resetScroll) {

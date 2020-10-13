@@ -36,7 +36,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           <div className={styles.nav}>
             <Tabs>
               <TrendingLink>
-                {linkProps => (
+                {(linkProps) => (
                   <Tab color={theme.colors.palette[1]} {...linkProps}>
                     Trending
                   </Tab>
@@ -44,7 +44,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
               </TrendingLink>
               <span className={styles.sep}>·</span>
               <DarkLink>
-                {linkProps => (
+                {(linkProps) => (
                   <Tab color={theme.colors.palette[2]} {...linkProps}>
                     Dark
                   </Tab>
@@ -52,7 +52,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
               </DarkLink>
               <span className={styles.sep}>·</span>
               <LightLink>
-                {linkProps => (
+                {(linkProps) => (
                   <Tab color={theme.colors.palette[3]} {...linkProps}>
                     Light
                   </Tab>
@@ -62,13 +62,14 @@ class Header extends React.Component<HeaderProps, HeaderState> {
           </div>
           <div className={styles.search}>
             <SearchLink q={search}>
-              {({ active, onClick }) => (
-                <form onSubmit={onClick}>
+              {({ active, onClick, href }) => (
+                <form method="GET" action={href} onSubmit={onClick}>
                   <SearchInput
+                    name="q"
                     value={search}
                     active={active}
                     placeholder="Search... (ie. monokai)"
-                    onChange={value => this.setState({ search: value })}
+                    onChange={(value) => this.setState({ search: value })}
                   />
                 </form>
               )}

@@ -5,6 +5,7 @@ import styles from './SearchInput.styles'
 
 interface SearchInputProps {
   value: string
+  name: string
   active?: boolean
   placeholder?: string
   onChange?: (value: string) => any
@@ -12,6 +13,7 @@ interface SearchInputProps {
 
 const SearchInput: React.SFC<SearchInputProps> = ({
   value,
+  name,
   active,
   placeholder,
   onChange,
@@ -22,9 +24,10 @@ const SearchInput: React.SFC<SearchInputProps> = ({
     </div>
     <input
       type="search"
+      name={name}
       value={value || ''}
       placeholder={placeholder}
-      onChange={evt => {
+      onChange={(evt) => {
         if (onChange) {
           onChange(evt.target.value)
         }
