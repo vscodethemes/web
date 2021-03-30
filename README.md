@@ -29,6 +29,8 @@ In order for your themes to show up on
   of your extension's package.json
 - See [theme variables](theme-variables/index.ts) for which GUI and token
   colors are used
+  
+**Note**: Themes may take serveral days before they show up on the site, including updates to existing themes.
 
 If you're not sure why a theme isn't showing up, feel free to
 [open an issue](https://github.com/jschr/vscodethemes/issues/new).
