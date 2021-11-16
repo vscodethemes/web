@@ -18,7 +18,7 @@
     "@vscodethemes/tokenizer": "0.1.0",
     "@vscodethemes/types": "0.1.0",
     "algoliasearch": "^3.26.0",
-    "aws-sdk": "^2.222.1",
+    "aws-sdk": "^2.814.0",
     "fs-extra": "^7.0.0",
     "node-fetch": "^2.1.2",
     "querystring": "^0.2.0",
