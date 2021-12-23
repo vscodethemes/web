@@ -26,6 +26,7 @@ export default {
     padding: `${rem(theme.gutters.sm)} ${rem(theme.gutters.md)}`,
     border: 0,
     outline: 0,
+    margin: 0,
     borderRadius: rem(theme.borderRadius.sm),
     boxShadow: theme.shadows.sm,
     cursor: 'pointer',
