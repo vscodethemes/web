@@ -11,6 +11,8 @@ const gutters = {
 
 const colors = {
   palette: ['#00A8FF', '#B8E63B', '#880055', '#E70258', '#FAF100'],
+  primary: '#00A8FF',
+  primaryLight: '#1FB2FF',
   background: '#202026',
   backgroundDark: '#18181F',
   backgroundInverse: 'rgba(0, 0, 0, 0.8)',

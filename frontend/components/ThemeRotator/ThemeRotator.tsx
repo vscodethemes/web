@@ -9,6 +9,7 @@ interface ThemeRotatorProps {
   themes: Array<Theme | undefined>
   language: LanguageOptions
   onLanguage: (language: LanguageOptions) => any
+  onNext: (theme: Theme) => void
 }
 
 interface ThemeRotatorState {
@@ -32,12 +33,12 @@ class ThemeRotator extends React.Component<
   }
 
   nextSlide = () => {
-    const { themes } = this.props
+    const { themes, onNext } = this.props
     const { currentIndex } = this.state
     // Increment queuedIndex to trigger a transition.
-    this.setState({
-      queuedIndex: (currentIndex + 1) % themes.length,
-    })
+    const newQueuedIndex = (currentIndex + 1) % themes.length
+    this.setState({ queuedIndex: newQueuedIndex })
+    onNext(themes[newQueuedIndex])
   }
 
   handleSlideEnd = () => {
