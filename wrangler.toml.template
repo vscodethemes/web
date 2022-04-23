@@ -1,0 +1,30 @@
+name = "web"
+type = "javascript"
+
+routes = [
+  "https://www.vscodethemes-beta.com", 
+  "https://vscodethemes-beta.com", 
+  "http://vscodethemes-beta.com", 
+  "http://www.vscodethemes-beta.com",
+  "https://beta.vscodethemes.com", 
+  "http://beta.vscodethemes.com", 
+]
+
+[site]
+bucket = "./public"
+entry-point = "."
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format="service-worker"
+
+[vars]
+INTERNAL_API_URL = "${INTERNAL_API_URL}"
+INTERNAL_API_KEY = "${INTERNAL_API_KEY}"
+EXTENSION_MEDIA_URL = "${EXTENSION_MEDIA_URL}"
+
+[[kv-namespaces]]
+binding = "VSCODETHEMES_EXTENSIONS"
+id = "${CF_EXTENSIONS_KV_ID}"
