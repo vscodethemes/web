@@ -54,7 +54,7 @@ export class KVClient {
     language: string,
   ): Promise<GetExtensionWithTokensResult | null> {
     const match: GetExtensionWithTokensResult | null = await VSCODETHEMES_EXTENSIONS.get(
-      `${extensionSlug}/${language}`,
+      `${extensionSlug}/${language}`.toLowerCase(),
       { type: 'json' },
     );
 
@@ -63,7 +63,7 @@ export class KVClient {
 
   async getExtension(extensionSlug: string, language: string): Promise<GetExtensionResult | null> {
     const match: GetExtensionResult | null = await VSCODETHEMES_EXTENSIONS.get(
-      `${extensionSlug}/${language}`,
+      `${extensionSlug}/${language}`.toLowerCase(),
       { type: 'json' },
     );
 
