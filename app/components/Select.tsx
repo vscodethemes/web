@@ -41,8 +41,6 @@ export default function Select<
   const [isOpen, setIsOpen] = React.useState(false);
   const anchor = React.useRef<HTMLButtonElement | null>(null);
 
-  // const handle
-
   const selectedOption = options.find((o) => o.value === value);
 
   return (

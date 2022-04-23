@@ -16,8 +16,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Error('Missing extension');
   }
   if (!themeSlug) {
-    // TODO: Redirect to first theme in extension
-    throw new Error('Missing extension');
+    throw new Error('Missing theme');
   }
 
   const query = parseQuery(request);
@@ -31,7 +30,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response('Not Found', { status: 404 });
   }
 
-  // TODO: Make S3 bucket an env var.
   const imageUrl = `${EXTENSION_MEDIA_URL}/${extensionSlug}/media/${themeSlug}|${query.language}.jpg?c=${result.extension.updatedAt}`;
   const imageRequest = new Request(imageUrl);
 

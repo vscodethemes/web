@@ -41,7 +41,6 @@ export default function Header({ logoColor, children }: React.PropsWithChildren<
           {children}
         </div>
       </header>
-      {/* <div className="header-threshold" /> */}
     </>
   );
 }

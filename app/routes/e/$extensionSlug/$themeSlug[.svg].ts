@@ -17,8 +17,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Error('Missing extension');
   }
   if (!themeSlug) {
-    // TODO: Redirect to first theme in extension
-    throw new Error('Missing extension');
+    throw new Error('Missing theme');
   }
 
   const query = parseQuery(request);
