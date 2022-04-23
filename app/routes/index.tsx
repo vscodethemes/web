@@ -106,10 +106,10 @@ export const meta: MetaFunction = () => {
     description: 'Search and preview themes for Visual Studio Code',
     'twitter:card': 'summary_large_image',
     'twitter:creator': '_jschr',
-    'twitter:url': 'https://beta.vscodethemes.com',
+    'twitter:url': 'https://vscodethemes.com',
     'twitter:title': 'VS Code Themes',
     'twitter:description': 'Search and preview themes for Visual Studio Code',
-    'twitter:image': 'https://beta.vscodethemes.com/thumbnail.jpg',
+    'twitter:image': 'https://vscodethemes.com/thumbnail.jpg',
   };
 };
 

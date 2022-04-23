@@ -2,12 +2,10 @@ name = "web"
 type = "javascript"
 
 routes = [
-  "https://www.vscodethemes-beta.com", 
-  "https://vscodethemes-beta.com", 
-  "http://vscodethemes-beta.com", 
-  "http://www.vscodethemes-beta.com",
-  "https://beta.vscodethemes.com", 
-  "http://beta.vscodethemes.com", 
+  "https://www.vscodethemes.com", 
+  "https://www.vscodethemes.com", 
+  "http://vscodethemes.com", 
+  "http://vscodethemes.com", 
 ]
 
 [site]

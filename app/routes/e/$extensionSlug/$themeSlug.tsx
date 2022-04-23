@@ -87,8 +87,8 @@ export const meta: MetaFunction = ({ data }) => {
   const { extension, extensionSlug, themeSlug, query } = data as ExtensionData;
   const title = `${extension.displayName} by ${extension.publisherDisplayName}`;
   const description = printDescription(extension);
-  const pageUrl = `https://beta.vscodethemes.com/e/${extensionSlug}/${themeSlug}?language=${query.language}`;
-  const imageUrl = `https://beta.vscodethemes.com/e/${extensionSlug}/${themeSlug}.jpg?language=${query.language}`;
+  const pageUrl = `https://vscodethemes.com/e/${extensionSlug}/${themeSlug}?language=${query.language}`;
+  const imageUrl = `https://vscodethemes.com/e/${extensionSlug}/${themeSlug}.jpg?language=${query.language}`;
   return {
     title,
     description,
