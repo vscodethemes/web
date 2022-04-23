@@ -1,0 +1,57 @@
+name: Test and Deploy
+
+on: push
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PAT }}
+  CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+  INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
+  INTERNAL_API_URL: ${{ secrets.INTERNAL_API_URL }}
+  CF_EXTENSIONS_KV_ID: ${{ secrets.CF_EXTENSIONS_KV_ID }}
+  EXTENSION_MEDIA_URL: ${{ secrets.EXTENSION_MEDIA_URL }}
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: 'yarn'
+
+      - run: yarn install
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - run: yarn lint
+      - run: yarn build
+      - run: yarn test
+
+  deploy:
+    name: Deploy
+    needs: [test]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: 'yarn'
+
+      - run: yarn install
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - run: yarn generate-wrangler-toml
+      - run: yarn deploy

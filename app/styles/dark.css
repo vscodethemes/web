@@ -1,0 +1,19 @@
+:root {
+  --color-foreground: hsl(0, 0%, 100%);
+  --color-foreground-muted: hsl(0, 0%, 50%);
+  --color-background: hsl(0, 0%, 5%);
+  --color-background-raised: hsl(0, 0%, 7%);
+  --color-links: hsl(213, 100%, 73%);
+  --color-links-hover: hsl(213, 100%, 80%);
+
+  --border-color: hsl(0, 0%, 18%);
+  --border-color-muted: hsl(0, 0%, 10%);
+
+  --input-background: hsl(0, 0%, 9%);
+  --input-background-active: hsl(0, 0%, 12%);
+  --input-inset-shadow: inset 1px 2px hsla(0, 0%, 0%, 15%);
+
+  --elevation-1: 0px 4px 12px hsla(0, 0%, 0%, 50%);
+  --elevation-2: 0px 4px 4px hsla(0, 0%, 0%, 15%), 0px 4px 24px hsla(0, 0%, 0%, 25%);
+  --elevation-3: 0px 1px 2px hsla(0, 0%, 0%, 12%), 0px 2px 4px hsla(0, 0%, 0%, 20%);
+}
