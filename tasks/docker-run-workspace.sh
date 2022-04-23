@@ -1,1 +1,0 @@
-docker run -it vscodethemes-workspace:latest /bin/bash

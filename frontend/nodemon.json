@@ -1,6 +1,0 @@
-{
-  "watch": ["./"],
-  "ext": "ts",
-  "ignore": ["build", "**/*.spec.ts"],
-  "exec": "./run-server.sh"
-}
