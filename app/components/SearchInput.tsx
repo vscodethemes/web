@@ -15,7 +15,7 @@ const icon = (
 export default function SearchInput({ name, value }: SeachInputProps) {
   return (
     <div className="input-container">
-      <input type="search" placeholder="Search... (ie. monokai)" name={name} defaultValue={value} />
+      <input type="search" placeholder="Search..." name={name} defaultValue={value} />
       {icon}
     </div>
   );
