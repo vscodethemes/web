@@ -15,25 +15,27 @@
     "lint": "eslint 'app/**/*.{js,ts,tsx}' --quiet --fix",
     "format": "prettier --write .",
     "test": "jest",
+    "typecheck": "tsc -b",
     "generate-wrangler-toml-dev": "envsub --all --env INTERNAL_API_URL=http://localhost:3000 wrangler.toml.template wrangler.toml",
     "generate-wrangler-toml": "envsub wrangler.toml.template wrangler.toml"
   },
   "dependencies": {
-    "@remix-run/cloudflare": "^1.4.0",
-    "@remix-run/cloudflare-workers": "^1.4.0",
-    "@remix-run/react": "^1.4.0",
+    "@remix-run/cloudflare": "^1.7.5",
+    "@remix-run/cloudflare-workers": "^1.7.5",
+    "@remix-run/react": "^1.7.5",
+    "@types/form-data": "^2.5.0",
     "@vscodethemes/utilities": "^0.1.14",
-    "colord": "^2.9.2",
     "cross-env": "^7.0.3",
+    "form-data": "^4.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.4.0",
-    "@cloudflare/wrangler": "^1.19.11",
+    "@cloudflare/workers-types": "^3.18.0",
+    "@cloudflare/wrangler": "^1.20.0",
     "@miniflare/storage-redis": "^2.4.0",
-    "@remix-run/dev": "^1.4.0",
-    "@remix-run/eslint-config": "^1.4.0",
+    "@remix-run/dev": "^1.7.5",
+    "@remix-run/eslint-config": "^1.7.5",
     "@types/jest": "^27.4.1",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
@@ -45,7 +47,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.5.5"
+    "typescript": "^4.8.4"
   },
   "engines": {
     "node": ">=14"

@@ -1,4 +1,4 @@
-import type { LoaderFunction, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
+import type { LoaderArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
 import { json, redirect } from '@remix-run/cloudflare';
 import { useLoaderData, NavLink, Link } from '@remix-run/react';
 import { colord } from 'colord';
@@ -32,7 +32,7 @@ const parseQuery = (request: Request) => {
   return { language };
 };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export async function loader({ request, params }: LoaderArgs) {
   const { extensionSlug, themeSlug } = params;
 
   if (!extensionSlug) {
@@ -67,7 +67,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     themes: Object.entries(result.themes).map(([slug, { theme }]) => ({ slug, theme })),
   };
   return json(data);
-};
+}
 
 const printDescription = (extension: Extension) => {
   // The max length of shortDescription is 300.
@@ -136,7 +136,7 @@ export const handle = { dynamicStyle };
 
 export default function ThemeView() {
   const { query, themeSlug, extensionSlug, extension, themes, selectedTheme } =
-    useLoaderData<ExtensionData>();
+    useLoaderData<typeof loader>();
 
   const editorBackgroundColor = colord(selectedTheme.editorBackground);
   const logoColor = themeHelpers.primaryColor(editorBackgroundColor);

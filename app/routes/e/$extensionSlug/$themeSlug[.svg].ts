@@ -1,4 +1,4 @@
-import type { LoaderFunction } from '@remix-run/cloudflare';
+import type { LoaderArgs } from '@remix-run/cloudflare';
 import { renderers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
 import kv from '~/clients/kv';
@@ -10,7 +10,7 @@ const parseQuery = (request: Request) => {
   return { language };
 };
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export async function loader({ request, params }: LoaderArgs) {
   const { extensionSlug, themeSlug } = params;
 
   if (!extensionSlug) {
@@ -46,4 +46,4 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       'Cache-Control': 'max-age=3600',
     },
   });
-};
+}

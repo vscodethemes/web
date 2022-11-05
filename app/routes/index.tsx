@@ -1,4 +1,4 @@
-import type { MetaFunction, LoaderFunction, LinksFunction } from '@remix-run/cloudflare';
+import type { MetaFunction, LoaderArgs, LinksFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
 import { useLoaderData, Link, Form, useSearchParams } from '@remix-run/react';
 import { colord } from 'colord';
@@ -69,7 +69,7 @@ const parseQuery = (request: Request) => {
   };
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }: LoaderArgs) {
   const query = parseQuery(request);
 
   const searchOptions: SearchExtensionsOptions = {
@@ -98,7 +98,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const data: SearchData = { query, result };
 
   return json(data);
-};
+}
 
 export const meta: MetaFunction = () => {
   return {
@@ -114,7 +114,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Search() {
-  const { query, result } = useLoaderData<SearchData>();
+  const { query, result } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
 
   const extensions = result?.extensions ?? [];
