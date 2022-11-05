@@ -9,10 +9,10 @@ export interface Extension {
   trendingWeekly: number;
   trendingMonthly: number;
   weightedRating: number;
-  updatedAt: Date;
-  createdAt: Date;
-  publishedAt: Date;
-  releasedAt: Date;
+  updatedAt: string;
+  createdAt: string;
+  publishedAt: string;
+  releasedAt: string;
 }
 
 export interface Theme {

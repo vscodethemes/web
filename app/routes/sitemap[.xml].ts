@@ -1,6 +1,4 @@
-import type { LoaderFunction } from '@remix-run/cloudflare';
-
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   return fetch(`${INTERNAL_API_URL}/sitemap`, {
     headers: {
       'X-API-Key': INTERNAL_API_KEY,
@@ -11,4 +9,4 @@ export const loader: LoaderFunction = async () => {
       cacheEverything: true,
     },
   });
-};
+}
