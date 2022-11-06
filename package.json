@@ -7,7 +7,7 @@
   "main": "build/index.js",
   "scripts": {
     "build": "remix build",
-    "deploy": "npm run build && wrangler publish",
+    "deploy": "wrangler publish",
     "dev:remix": "remix watch",
     "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch --kv-persist redis://localhost:6379 --kv VSCODETHEMES_EXTENSIONS",
     "dev": "remix build && run-p dev:*",
@@ -32,8 +32,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.18.0",
-    "@cloudflare/wrangler": "^1.20.0",
-    "@miniflare/storage-redis": "^2.4.0",
+    "@miniflare/storage-redis": "2.10.0",
     "@remix-run/dev": "^1.7.5",
     "@remix-run/eslint-config": "^1.7.5",
     "@types/jest": "^27.4.1",
@@ -43,13 +42,14 @@
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
-    "miniflare": "^2.1.0",
+    "miniflare": "2.10.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "wrangler": "^2.1.15"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=16.13"
   }
 }
