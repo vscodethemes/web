@@ -52,7 +52,7 @@ export class APIClient {
       },
     });
 
-    const result = await response.json();
+    const result = await response.json<SearchExtensionResults>();
     return result;
   }
 }
