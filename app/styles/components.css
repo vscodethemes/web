@@ -461,6 +461,7 @@ input:where([type='search']) {
   align-items: center;
   justify-content: center;
   min-width: 10rem;
+  cursor: pointer;
 }
 
 .button:hover {
@@ -478,6 +479,17 @@ input:where([type='search']) {
 
 .button-secondary:hover {
   color: var(--color-foreground);
+}
+
+.button-icon {
+  width: 2.86rem;
+  border-radius: 100px;
+  padding: 0;
+  min-width: 0;
+}
+
+.button-icon:hover {
+  background-color: var(--color-foreground-muted);
 }
 
 /** -- ErrorView -- **/

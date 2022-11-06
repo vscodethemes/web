@@ -1,6 +1,6 @@
-import type { LoaderArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
+import type { LoaderArgs, ActionArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
 import { json, redirect } from '@remix-run/cloudflare';
-import { useLoaderData, NavLink, Link } from '@remix-run/react';
+import { useLoaderData, useActionData, NavLink, Link, Form } from '@remix-run/react';
 import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
@@ -11,6 +11,7 @@ import Header from '~/components/Header';
 import LanguageSelect from '~/components/LanguageSelect';
 import Spacer from '~/components/Spacer';
 import ExtensionErrorView from '~/components/ExtensionErrorView';
+import FavoriteButton from '~/components/FavoriteButton';
 
 type ExtensionData = {
   query: ReturnType<typeof parseQuery>;
@@ -67,6 +68,19 @@ export async function loader({ request, params }: LoaderArgs) {
     themes: Object.entries(result.themes).map(([slug, { theme }]) => ({ slug, theme })),
   };
   return json(data);
+}
+
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const intent = formData.get('intent');
+
+  if (intent === 'add') {
+    return json({ isFavorite: true });
+  } else if (intent === 'remove') {
+    return json({ isFavorite: false });
+  }
+
+  throw new Response(`Unsupported intent: ${intent}`, { status: 400 });
 }
 
 const printDescription = (extension: Extension) => {
@@ -138,6 +152,9 @@ export default function ThemeView() {
   const { query, themeSlug, extensionSlug, extension, themes, selectedTheme } =
     useLoaderData<typeof loader>();
 
+  const data = useActionData<typeof action>();
+  const isFavorite = data?.isFavorite ?? false;
+
   const editorBackgroundColor = colord(selectedTheme.editorBackground);
   const logoColor = themeHelpers.primaryColor(editorBackgroundColor);
 
@@ -170,6 +187,10 @@ export default function ThemeView() {
               <Link reloadDocument to="open?with=web" className="button button-secondary">
                 VS Code for the Web
               </Link>
+              <div className="spacer" />
+              <Form method="post">
+                <FavoriteButton isFavorite={isFavorite} />
+              </Form>
             </div>
           </div>
         </div>
