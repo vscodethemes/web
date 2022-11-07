@@ -9,7 +9,7 @@
     "build": "remix build",
     "deploy": "wrangler publish",
     "dev:remix": "remix watch",
-    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch --kv-persist redis://localhost:6379 --kv VSCODETHEMES_EXTENSIONS",
+    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch --kv-persist redis://localhost:6379 --kv VSCODETHEMES_EXTENSIONS --kv VSCODETHEMES_SESSIONS",
     "dev": "remix build && run-p dev:*",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
     "lint": "eslint 'app/**/*.{js,ts,tsx}' --quiet --fix",

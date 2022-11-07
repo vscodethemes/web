@@ -12,8 +12,10 @@ import SortBySelect from '~/components/SortBySelect';
 import Pagination from '~/components/Pagination';
 import TypeTabs from '~/components/TypeTabs';
 import ErrorView from '~/components/ErrorView';
+import Avatar from '~/components/Avatar';
 import { getQueryParam, getNumberQuery, getColorParam, getSortByParam } from '~/utilities/requests';
 import { resetColorQuery } from '~/utilities/colorQuery';
+import { getSession } from '~/sessions.server';
 
 type Extension = {
   name: string;
@@ -28,6 +30,11 @@ type SearchData = {
   result?: {
     total: number;
     extensions: Extension[];
+  };
+  user?: {
+    id: string;
+    login: string;
+    avatarUrl: string;
   };
 };
 
@@ -71,6 +78,7 @@ const parseQuery = (request: Request) => {
 
 export async function loader({ request }: LoaderArgs) {
   const query = parseQuery(request);
+  const session = await getSession(request.headers.get('Cookie'));
 
   const searchOptions: SearchExtensionsOptions = {
     text: query.text,
@@ -95,7 +103,7 @@ export async function loader({ request }: LoaderArgs) {
   }
 
   const result = await api.searchExtensions(searchOptions);
-  const data: SearchData = { query, result };
+  const data: SearchData = { query, result, user: session.get('user') };
 
   return json(data);
 }
@@ -114,8 +122,10 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Search() {
-  const { query, result } = useLoaderData<typeof loader>();
+  const { query, result, user } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
+
+  console.log('user', user);
 
   const extensions = result?.extensions ?? [];
   const clearTo = new URLSearchParams(searchParams);
@@ -131,6 +141,7 @@ export default function Search() {
           <SortBySelect value={query.sortBy} />
           <LanguageSelect value={query.language} />
         </Form>
+        {user && <Avatar src={user.avatarUrl} />}
       </Header>
       {extensions.length > 0 ? (
         <main>
