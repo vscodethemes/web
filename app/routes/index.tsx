@@ -12,7 +12,7 @@ import SortBySelect from '~/components/SortBySelect';
 import Pagination from '~/components/Pagination';
 import TypeTabs from '~/components/TypeTabs';
 import ErrorView from '~/components/ErrorView';
-import Avatar from '~/components/Avatar';
+import UserMenu from '~/components/UserMenu';
 import { getQueryParam, getNumberQuery, getColorParam, getSortByParam } from '~/utilities/requests';
 import { resetColorQuery } from '~/utilities/colorQuery';
 import { getSession } from '~/sessions.server';
@@ -125,8 +125,6 @@ export default function Search() {
   const { query, result, user } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
 
-  console.log('user', user);
-
   const extensions = result?.extensions ?? [];
   const clearTo = new URLSearchParams(searchParams);
   clearTo.delete('text');
@@ -141,7 +139,7 @@ export default function Search() {
           <SortBySelect value={query.sortBy} />
           <LanguageSelect value={query.language} />
         </Form>
-        {user && <Avatar src={user.avatarUrl} />}
+        <UserMenu user={user} />
       </Header>
       {extensions.length > 0 ? (
         <main>

@@ -11,7 +11,9 @@ import Header from '~/components/Header';
 import LanguageSelect from '~/components/LanguageSelect';
 import Spacer from '~/components/Spacer';
 import ExtensionErrorView from '~/components/ExtensionErrorView';
+import UserMenu from '~/components/UserMenu';
 import FavoriteButton from '~/components/FavoriteButton';
+import { getSession } from '~/sessions.server';
 
 type ExtensionData = {
   query: ReturnType<typeof parseQuery>;
@@ -20,6 +22,11 @@ type ExtensionData = {
   extension: Extension;
   themes: Array<{ slug: string; theme: Theme }>;
   selectedTheme: Theme;
+  user?: {
+    id: string;
+    login: string;
+    avatarUrl: string;
+  };
 };
 
 export const links: LinksFunction = () => {
@@ -59,6 +66,8 @@ export async function loader({ request, params }: LoaderArgs) {
     return redirect(`/e/${extensionSlug}${qs ? `?${qs}` : ''}`);
   }
 
+  const session = await getSession(request.headers.get('Cookie'));
+
   const data: ExtensionData = {
     query,
     extensionSlug,
@@ -66,6 +75,7 @@ export async function loader({ request, params }: LoaderArgs) {
     extension: result.extension,
     selectedTheme: themeMatch.theme,
     themes: Object.entries(result.themes).map(([slug, { theme }]) => ({ slug, theme })),
+    user: session.get('user'),
   };
   return json(data);
 }
@@ -149,7 +159,7 @@ const dynamicStyle: DynamicStylesFunction<ExtensionData> = ({ data }) => {
 export const handle = { dynamicStyle };
 
 export default function ThemeView() {
-  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme } =
+  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme, user } =
     useLoaderData<typeof loader>();
 
   const data = useActionData<typeof action>();
@@ -163,6 +173,7 @@ export default function ThemeView() {
       <Header logoColor={logoColor}>
         <Spacer />
         <LanguageSelect value={query.language} />
+        <UserMenu user={user} />
       </Header>
       <main>
         <div className="extension">
