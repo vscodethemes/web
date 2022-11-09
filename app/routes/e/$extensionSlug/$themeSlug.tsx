@@ -14,6 +14,7 @@ import ExtensionErrorView from '~/components/ExtensionErrorView';
 import UserMenu from '~/components/UserMenu';
 import FavoriteButton from '~/components/FavoriteButton';
 import { getSession } from '~/sessions.server';
+import { User } from '~/types';
 
 type ExtensionData = {
   query: ReturnType<typeof parseQuery>;
@@ -22,11 +23,7 @@ type ExtensionData = {
   extension: Extension;
   themes: Array<{ slug: string; theme: Theme }>;
   selectedTheme: Theme;
-  user?: {
-    id: string;
-    login: string;
-    avatarUrl: string;
-  };
+  user?: User;
 };
 
 export const links: LinksFunction = () => {
@@ -187,7 +184,7 @@ export default function ThemeView() {
           <div className="extension-info">
             <div className="extension-name">
               <h1>{extension.displayName}</h1>
-              <h3>by {extension.publisherDisplayName}</h3>
+              <h4>by {extension.publisherDisplayName}</h4>
             </div>
             <p className="extension-description">{printDescription(extension)}</p>
             <h6 className="extension-actions-heading">Open With</h6>

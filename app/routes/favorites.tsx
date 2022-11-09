@@ -1,24 +1,21 @@
 import type { MetaFunction, LoaderArgs, LinksFunction } from '@remix-run/cloudflare';
 import { json } from '@remix-run/cloudflare';
-import { useLoaderData, Link, Form, useSearchParams } from '@remix-run/react';
+import { useLoaderData, Link, Form } from '@remix-run/react';
 import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
-import stylesUrl from '~/styles/search.css';
+import stylesUrl from '~/styles/favorites.css';
 import api, { SearchExtensionsOptions } from '~/clients/api';
 import Header from '~/components/Header';
-import SearchInput from '~/components/SearchInput';
 import LanguageSelect from '~/components/LanguageSelect';
-import SortBySelect from '~/components/SortBySelect';
 import Pagination from '~/components/Pagination';
-import TypeTabs from '~/components/TypeTabs';
+import Spacer from '~/components/Spacer';
 import ErrorView from '~/components/ErrorView';
 import UserMenu from '~/components/UserMenu';
-import { getQueryParam, getNumberQuery, getColorParam, getSortByParam } from '~/utilities/requests';
-import { resetColorQuery } from '~/utilities/colorQuery';
+import { getQueryParam, getNumberQuery } from '~/utilities/requests';
 import { getSession } from '~/sessions.server';
 import { PartialExtension, User } from '~/types';
 
-type SearchData = {
+type FavoritesData = {
   query: ReturnType<typeof parseQuery>;
   result?: {
     total: number;
@@ -37,30 +34,11 @@ const parseQuery = (request: Request) => {
   const url = new URL(request.url);
   const params = new URLSearchParams(url.search);
 
-  const text = getQueryParam(params, 'text') ?? '';
-  const editorBackground = getColorParam(params, 'editorBackground');
-  const activityBarBackground = getColorParam(params, 'activityBarBackground');
-  const statusBarBackground = getColorParam(params, 'statusBarBackground');
-  const tabActiveBackground = getColorParam(params, 'tabActiveBackground');
-  const titleBarActiveBackground = getColorParam(params, 'titleBarActiveBackground');
-  const type = getQueryParam(params, 'type');
-  const colorDistance = getNumberQuery(params, 'colorDistance') ?? 10;
-
   const page = getNumberQuery(params, 'page') ?? 1;
   const language = getQueryParam(params, 'language') ?? 'javascript';
-  const sortBy = getSortByParam(params, 'sortBy') ?? 'installs';
 
   return {
-    text,
-    editorBackground,
-    activityBarBackground,
-    statusBarBackground,
-    tabActiveBackground,
-    titleBarActiveBackground,
     language,
-    sortBy,
-    type,
-    colorDistance,
     page: Math.max(page, 1),
   };
 };
@@ -70,62 +48,41 @@ export async function loader({ request }: LoaderArgs) {
   const session = await getSession(request.headers.get('Cookie'));
 
   const searchOptions: SearchExtensionsOptions = {
-    text: query.text,
-    editorBackground: query.editorBackground,
-    activityBarBackground: query.activityBarBackground,
-    statusBarBackground: query.statusBarBackground,
-    tabActiveBackground: query.tabActiveBackground,
-    titleBarActiveBackground: query.titleBarActiveBackground,
-    maxColorDistance: query.colorDistance,
-    sortBy: query.sortBy,
-    sortDirection: query.sortBy === 'relevance' ? 'asc' : 'desc',
+    maxColorDistance: 10,
+    sortBy: 'installs', // TODO: Sort by favorite date.
+    sortDirection: 'desc',
     page: query.page,
     pageSize,
   };
 
-  if (query.type === 'dark') {
-    searchOptions.editorBackground = '#202020';
-    searchOptions.maxColorDistance = 50;
-  } else if (query.type === 'light') {
-    searchOptions.editorBackground = '#ffffff';
-    searchOptions.maxColorDistance = 50;
-  }
-
   const result = await api.searchExtensions(searchOptions);
-  const data: SearchData = { query, result, user: session.get('user') };
+  const data: FavoritesData = { query, result, user: session.get('user') };
 
   return json(data);
 }
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'VS Code Themes',
-    description: 'Search and preview themes for Visual Studio Code',
+    title: 'Favorites',
+    description: 'My favorite VS Code themes',
     'twitter:card': 'summary_large_image',
     'twitter:creator': '_jschr',
-    'twitter:url': 'https://vscodethemes.com',
-    'twitter:title': 'VS Code Themes',
-    'twitter:description': 'Search and preview themes for Visual Studio Code',
+    'twitter:url': 'https://vscodethemes.com/favorites',
+    'twitter:title': 'Favorites',
+    'twitter:description': 'My favorite VS Code themes',
     'twitter:image': 'https://vscodethemes.com/thumbnail.jpg',
   };
 };
 
 export default function Search() {
   const { query, result, user } = useLoaderData<typeof loader>();
-  const [searchParams] = useSearchParams();
-
   const extensions = result?.extensions ?? [];
-  const clearTo = new URLSearchParams(searchParams);
-  clearTo.delete('text');
-  resetColorQuery(clearTo);
 
   return (
     <>
       <Header>
         <Form method="get" reloadDocument>
-          <SearchInput name="text" value={query.text} />
-          <TypeTabs />
-          <SortBySelect value={query.sortBy} />
+          <Spacer />
           <LanguageSelect value={query.language} />
         </Form>
         <UserMenu user={user} />
@@ -161,9 +118,10 @@ export default function Search() {
                   </Link>
                   <div className="result-info">
                     <div className="result-name">
-                      <h3>{extension.displayName}</h3>
+                      <h2>{extension.displayName}</h2>
                       <h4>by {extension.publisherDisplayName}</h4>
                     </div>
+                    <p className="result-description">Some description of a theme.</p>
                     {extension.themes.length > 1 && (
                       <div className="result-themes">
                         {extension.themes.map((theme) => {
@@ -192,8 +150,8 @@ export default function Search() {
         </main>
       ) : (
         <ErrorView>
-          <h1>No themes found</h1>
-          <Link to={`/?${clearTo.toString()}`}>Try clearing search?</Link>
+          <h1>You don't have any favorites yet.</h1>
+          <Link to="/">Try searching for some themes</Link>
         </ErrorView>
       )}
     </>

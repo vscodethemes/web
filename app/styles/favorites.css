@@ -1,0 +1,85 @@
+.results {
+  display: flex;
+  flex-direction: column;
+  padding: var(--screen-offset);
+  gap: 4rem;
+}
+
+.result {
+  width: 100%;
+  max-width: 920px;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.result a {
+  display: flex;
+  background: var(--color-background);
+  border-radius: 10px;
+  aspect-ratio: 438 / 315;
+  width: 100%;
+  max-width: 420px;
+}
+
+.result a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .result a:hover {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
+
+@media (hover: hover) and (prefers-color-scheme: dark) {
+  .result a:hover {
+    outline-color: var(--color-primary-dark);
+  }
+}
+
+.result img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: var(--elevation-2);
+}
+
+.result-info {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  gap: 0.5rem;
+}
+
+.result-name {
+  flex: 1;
+}
+
+.result-description {
+    font-size: 1.2rem;
+    margin: 0;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    max-width: 36rem;
+}
+
+.result-themes {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding-top: 0.25rem;
+  display: flex;
+  gap: 0.3rem;
+  justify-content: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.result-themes > div {
+  width: 0.8rem;
+  height: 0.4rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
