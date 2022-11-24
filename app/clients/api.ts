@@ -35,6 +35,7 @@ export class APIClient {
     url.searchParams.set('activityBarBackground', opts.activityBarBackground ?? '');
     url.searchParams.set('statusBarBackground', opts.statusBarBackground ?? '');
     url.searchParams.set('tabActiveBackground', opts.tabActiveBackground ?? '');
+    url.searchParams.set('titleBarActiveBackground', opts.titleBarActiveBackground ?? '');
     url.searchParams.set('maxColorDistance', String(opts.maxColorDistance) ?? '');
     url.searchParams.set('sortBy', String(opts.sortBy) ?? '');
     url.searchParams.set('sortDirection', String(opts.sortDirection) ?? '');
