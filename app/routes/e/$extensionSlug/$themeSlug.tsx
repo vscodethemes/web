@@ -1,6 +1,6 @@
 import type { LoaderArgs, ActionArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
 import { json, redirect } from '@remix-run/cloudflare';
-import { useLoaderData, useActionData, NavLink, Link, Form } from '@remix-run/react';
+import { useLoaderData, useTransition, NavLink, Link, Form } from '@remix-run/react';
 import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
@@ -55,11 +55,11 @@ export async function loader({ request, params }: LoaderArgs) {
 
   const themeMatch = result.themes[themeSlug];
   if (!themeMatch) {
-    const searhParams = new URLSearchParams();
+    const searchParams = new URLSearchParams();
     if (query.language) {
-      searhParams.set('language', query.language);
+      searchParams.set('language', query.language);
     }
-    const qs = searhParams.toString();
+    const qs = searchParams.toString();
     return redirect(`/e/${extensionSlug}${qs ? `?${qs}` : ''}`);
   }
 
@@ -77,17 +77,41 @@ export async function loader({ request, params }: LoaderArgs) {
   return json(data);
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request, params, context }: ActionArgs) {
+  const { extensionSlug, themeSlug } = params;
+
   const formData = await request.formData();
   const intent = formData.get('intent');
 
+  const session = await getSession(request.headers.get('Cookie'));
+  const user = session.get('user');
+  const cache = (caches as any).default;
+
+  console.log('ACTION', intent, user.id, extensionSlug, themeSlug);
+
   if (intent === 'add') {
-    return json({ isFavorite: true });
+    // TODO: Add favorite using extension and theme slugs.
+    // await api.addFavorite(user.id, extensionSlug, themeSlug);
+    // TODO: Set cache for user favorite.
+    (context as any).waitUntil(
+      cache.put(
+        `https://vscodethemes.com/users/${user.id}/favorites/${extensionSlug}/${themeSlug}`,
+        new Response('', { status: 200 }),
+      ),
+    );
   } else if (intent === 'remove') {
-    return json({ isFavorite: false });
+    // TODO: Remove favorite using extension and theme slugs.
+    // await api.removeFavorite(user.id, extensionSlug, themeSlug);
+    // TODO: Set cache for user favorite.
+    // event.waitUntil(cache.put('/users/1/favorites/:extensionSlug/:themeSlug',  new Response('', { status: 404 })));
+  } else {
+    throw new Response(`Unsupported intent: ${intent}`, { status: 400 });
   }
 
-  throw new Response(`Unsupported intent: ${intent}`, { status: 400 });
+  // TODO: Delete favorites cache for user.
+  // event.waitUntil(cache.delete('/users/1/favorites'));
+
+  return null;
 }
 
 const printDescription = (extension: Extension) => {
@@ -159,11 +183,13 @@ export default function ThemeView() {
   const { query, themeSlug, extensionSlug, extension, themes, selectedTheme, user } =
     useLoaderData<typeof loader>();
 
-  const data = useActionData<typeof action>();
-  const isFavorite = data?.isFavorite ?? false;
+  const transition = useTransition();
+  const formData = transition.submission?.formData;
 
   const editorBackgroundColor = colord(selectedTheme.editorBackground);
   const logoColor = themeHelpers.primaryColor(editorBackgroundColor);
+
+  console.log('user', user);
 
   return (
     <>
@@ -197,7 +223,11 @@ export default function ThemeView() {
               </Link>
               <div className="spacer" />
               <Form method="post">
-                <FavoriteButton isFavorite={isFavorite} />
+                {formData ? (
+                  <FavoriteButton isFavorite={formData.get('intent') === 'add'} />
+                ) : (
+                  <FavoriteButton />
+                )}
               </Form>
             </div>
           </div>

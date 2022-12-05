@@ -25,6 +25,13 @@ export interface SearchExtensionResults {
   extensions: SearchExtensionResult[];
 }
 
+export interface User {
+  id: string;
+  accessToken: string;
+  login: string;
+  avatarUrl: string;
+}
+
 export class APIClient {
   constructor(private baseUrl: string, private apiKey: string) {}
 
@@ -43,9 +50,7 @@ export class APIClient {
     url.searchParams.set('pageSize', String(opts.pageSize) ?? '');
 
     const response = await fetch(url.toString(), {
-      headers: {
-        'X-API-Key': this.apiKey,
-      },
+      headers: { 'X-API-Key': this.apiKey },
       cf: {
         // Cache search results for 4 hours.
         cacheTtl: 60 * 60 * 4,
@@ -53,8 +58,19 @@ export class APIClient {
       },
     });
 
-    const result = await response.json<SearchExtensionResults>();
-    return result;
+    return await response.json<SearchExtensionResults>();
+  }
+
+  async authorizeGithub(code: string): Promise<User> {
+    const url = new URL(`${this.baseUrl}/auth/github`);
+    url.searchParams.set('code', code);
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: { 'X-API-Key': this.apiKey },
+    });
+
+    return await response.json<User>();
   }
 }
 

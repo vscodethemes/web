@@ -1,5 +1,5 @@
 import { LoaderArgs, redirect } from '@remix-run/cloudflare';
-import github from '~/clients/github';
+import api from '~/clients/api';
 import { getSession, commitSession } from '~/sessions.server';
 
 export async function loader({ request }: LoaderArgs) {
@@ -11,15 +11,10 @@ export async function loader({ request }: LoaderArgs) {
     throw new Response(`Missing code`, { status: 400 });
   }
 
-  const auth = await github.getAccessToken(code);
-  const user = await github.getUser(auth.access_token);
+  const user = await api.authorizeGithub(code);
 
   const session = await getSession(request.headers.get('Cookie'));
-  session.set('user', {
-    id: user.id,
-    login: user.login,
-    avatarUrl: user.avatar_url,
-  });
+  session.set('user', user);
 
   return redirect('/', {
     headers: {

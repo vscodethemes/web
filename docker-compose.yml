@@ -16,6 +16,8 @@ services:
       - db:db
     environment:
       - DATABASE_URL=postgresql://local:local@db:5432/vscodethemes-local
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
 
   kv:
     image: ghcr.io/vscodethemes/kv:main

@@ -45,8 +45,8 @@ export default function UserMenu({ user }: UserMenuProps) {
             <Link className="select-option" to="/favorites">
               Favorites
             </Link>
-            <Link className="select-option" to="/preferences">
-              Preferences
+            <Link className="select-option" to="/settings">
+              Settings
             </Link>
             <hr className="user-divider" />
             <Form className="user-signout" method="post" action="/auth/signout">
