@@ -58,6 +58,10 @@ export class APIClient {
       },
     });
 
+    if (!response.ok) {
+      throw new Error(`Failed to search extensions: ${response.statusText}`);
+    }
+
     return await response.json<SearchExtensionResults>();
   }
 
@@ -70,7 +74,82 @@ export class APIClient {
       headers: { 'X-API-Key': this.apiKey },
     });
 
+    if (!response.ok) {
+      throw new Error(`Failed to authorize GitHub: ${response.statusText}`);
+    }
+
     return await response.json<User>();
+  }
+
+  async isFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites/exists`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to check if favorite exists: ${response.statusText}`);
+    }
+
+    const { exists } = await response.json<{ exists: boolean }>();
+    return exists;
+  }
+
+  async addFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to add favorite: ${response.statusText}`);
+    }
+
+    await response.json<void>();
+  }
+
+  async removeFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to remove favorite: ${response.statusText} ${await response.text()}}`,
+      );
+    }
+
+    await response.json<void>();
   }
 }
 

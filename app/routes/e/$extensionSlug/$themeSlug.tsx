@@ -6,6 +6,7 @@ import { themeHelpers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
 import stylesUrl from '~/styles/theme.css';
 import kv, { Extension, Theme } from '~/clients/kv';
+import api from '~/clients/api';
 import { DynamicStylesFunction } from '~/components/DynamicStyles';
 import Header from '~/components/Header';
 import LanguageSelect from '~/components/LanguageSelect';
@@ -16,7 +17,7 @@ import FavoriteButton from '~/components/FavoriteButton';
 import { getSession } from '~/sessions.server';
 import { User } from '~/types';
 
-type ExtensionData = {
+type ThemeProps = {
   query: ReturnType<typeof parseQuery>;
   extensionSlug: string;
   themeSlug: string;
@@ -24,6 +25,7 @@ type ExtensionData = {
   themes: Array<{ slug: string; theme: Theme }>;
   selectedTheme: Theme;
   user?: User;
+  isFavorite: boolean;
 };
 
 export const links: LinksFunction = () => {
@@ -47,13 +49,26 @@ export async function loader({ request, params }: LoaderArgs) {
     throw new Error('Missing extension');
   }
 
+  const session = await getSession(request.headers.get('Cookie'));
+  const user: User | undefined = session.get('user');
+
   const query = parseQuery(request);
-  const result = await kv.getExtension(extensionSlug, query.language);
-  if (!result) {
+
+  const [extensionResult, isFavorite] = await Promise.all([
+    kv.getExtension(extensionSlug, query.language),
+    user
+      ? api.isFavorite(user, extensionSlug, themeSlug).catch((err) => {
+          console.error(`Failed to check favorite: ${err}`);
+          return false;
+        })
+      : false,
+  ]);
+
+  if (!extensionResult) {
     throw new Response('Not Found', { status: 404 });
   }
 
-  const themeMatch = result.themes[themeSlug];
+  const themeMatch = extensionResult.themes[themeSlug];
   if (!themeMatch) {
     const searchParams = new URLSearchParams();
     if (query.language) {
@@ -63,16 +78,15 @@ export async function loader({ request, params }: LoaderArgs) {
     return redirect(`/e/${extensionSlug}${qs ? `?${qs}` : ''}`);
   }
 
-  const session = await getSession(request.headers.get('Cookie'));
-
-  const data: ExtensionData = {
+  const data: ThemeProps = {
     query,
     extensionSlug,
     themeSlug,
-    extension: result.extension,
+    extension: extensionResult.extension,
     selectedTheme: themeMatch.theme,
-    themes: Object.entries(result.themes).map(([slug, { theme }]) => ({ slug, theme })),
-    user: session.get('user'),
+    themes: Object.entries(extensionResult.themes).map(([slug, { theme }]) => ({ slug, theme })),
+    user,
+    isFavorite,
   };
   return json(data);
 }
@@ -80,28 +94,35 @@ export async function loader({ request, params }: LoaderArgs) {
 export async function action({ request, params, context }: ActionArgs) {
   const { extensionSlug, themeSlug } = params;
 
+  if (!extensionSlug) {
+    throw new Error('Missing extension');
+  }
+  if (!themeSlug) {
+    throw new Error('Missing extension');
+  }
+
   const formData = await request.formData();
   const intent = formData.get('intent');
 
   const session = await getSession(request.headers.get('Cookie'));
   const user = session.get('user');
-  const cache = (caches as any).default;
+  // const cache = (caches as any).default;
 
   console.log('ACTION', intent, user.id, extensionSlug, themeSlug);
 
   if (intent === 'add') {
-    // TODO: Add favorite using extension and theme slugs.
-    // await api.addFavorite(user.id, extensionSlug, themeSlug);
+    await api.addFavorite(user, extensionSlug, themeSlug);
+
     // TODO: Set cache for user favorite.
-    (context as any).waitUntil(
-      cache.put(
-        `https://vscodethemes.com/users/${user.id}/favorites/${extensionSlug}/${themeSlug}`,
-        new Response('', { status: 200 }),
-      ),
-    );
+    // (context as any).waitUntil(
+    //   cache.put(
+    //     `https://vscodethemes.com/users/${user.id}/favorites/${extensionSlug}/${themeSlug}`,
+    //     new Response('', { status: 200 }),
+    //   ),
+    // );
   } else if (intent === 'remove') {
-    // TODO: Remove favorite using extension and theme slugs.
-    // await api.removeFavorite(user.id, extensionSlug, themeSlug);
+    await api.removeFavorite(user, extensionSlug, themeSlug);
+
     // TODO: Set cache for user favorite.
     // event.waitUntil(cache.put('/users/1/favorites/:extensionSlug/:themeSlug',  new Response('', { status: 404 })));
   } else {
@@ -129,7 +150,7 @@ const printDescription = (extension: Extension) => {
 export const meta: MetaFunction = ({ data }) => {
   if (!data) return {};
 
-  const { extension, extensionSlug, themeSlug, query } = data as ExtensionData;
+  const { extension, extensionSlug, themeSlug, query } = data as ThemeProps;
   const title = `${extension.displayName} by ${extension.publisherDisplayName}`;
   const description = printDescription(extension);
   const pageUrl = `https://vscodethemes.com/e/${extensionSlug}/${themeSlug}?language=${query.language}`;
@@ -146,7 +167,7 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-const dynamicStyle: DynamicStylesFunction<ExtensionData> = ({ data }) => {
+const dynamicStyle: DynamicStylesFunction<ThemeProps> = ({ data }) => {
   if (!data) return '';
 
   const { selectedTheme } = data;
@@ -180,7 +201,7 @@ const dynamicStyle: DynamicStylesFunction<ExtensionData> = ({ data }) => {
 export const handle = { dynamicStyle };
 
 export default function ThemeView() {
-  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme, user } =
+  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme, user, isFavorite } =
     useLoaderData<typeof loader>();
 
   const transition = useTransition();
@@ -188,8 +209,6 @@ export default function ThemeView() {
 
   const editorBackgroundColor = colord(selectedTheme.editorBackground);
   const logoColor = themeHelpers.primaryColor(editorBackgroundColor);
-
-  console.log('user', user);
 
   return (
     <>
@@ -226,7 +245,7 @@ export default function ThemeView() {
                 {formData ? (
                   <FavoriteButton isFavorite={formData.get('intent') === 'add'} />
                 ) : (
-                  <FavoriteButton />
+                  <FavoriteButton isFavorite={isFavorite} />
                 )}
               </Form>
             </div>
