@@ -17,7 +17,8 @@
     "test": "jest",
     "typecheck": "tsc -b",
     "generate-wrangler-toml-dev": "envsub --all --env INTERNAL_API_URL=http://localhost:3000 wrangler.toml.template wrangler.toml",
-    "generate-wrangler-toml": "envsub wrangler.toml.template wrangler.toml"
+    "generate-wrangler-toml": "envsub wrangler.toml.template wrangler.toml",
+    "generate-wrangler-next-toml": "envsub wrangler-next.toml.template wrangler.toml"
   },
   "dependencies": {
     "@remix-run/cloudflare": "^1.7.5",
