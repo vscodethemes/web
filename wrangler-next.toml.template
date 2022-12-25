@@ -5,9 +5,8 @@ main = "./build/index.js"
 compatibility_date = "2022-04-05"
 
 routes = [
-  "next.vscodethemes.com",
-  "next.vscodethemes.com/*"
-]
+  { pattern = "next.vscodethemes.com", custom_domain = true, zone_name = "vscodethemes.com" }
+  ]
 
 [site]
 bucket = "./public"
