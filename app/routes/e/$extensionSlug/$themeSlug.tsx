@@ -4,6 +4,7 @@ import { useLoaderData, useTransition, NavLink, Link, Form } from '@remix-run/re
 import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
+import { printDescription } from '~/utilities/extension';
 import stylesUrl from '~/styles/theme.css';
 import kv, { Extension, Theme } from '~/clients/kv';
 import api from '~/clients/api';
@@ -134,18 +135,6 @@ export async function action({ request, params, context }: ActionArgs) {
 
   return null;
 }
-
-const printDescription = (extension: Extension) => {
-  // The max length of shortDescription is 300.
-  const text = extension.shortDescription ?? '';
-  if (text.length >= 300) {
-    return `${text.slice(0, 297)}...`;
-  } else if (/[a-zA-Z0-9]/.test(text.charAt(text.length - 1))) {
-    return `${text}.`;
-  }
-
-  return text;
-};
 
 export const meta: MetaFunction = ({ data }) => {
   if (!data) return {};

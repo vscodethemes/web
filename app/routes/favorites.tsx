@@ -5,6 +5,7 @@ import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
 import stylesUrl from '~/styles/favorites.css';
 import api, { SearchExtensionsOptions } from '~/clients/api';
+import { printDescription } from '~/utilities/extension';
 import Header from '~/components/Header';
 import LanguageSelect from '~/components/LanguageSelect';
 import Pagination from '~/components/Pagination';
@@ -13,13 +14,13 @@ import ErrorView from '~/components/ErrorView';
 import UserMenu from '~/components/UserMenu';
 import { getQueryParam, getNumberQuery } from '~/utilities/requests';
 import { getSession } from '~/sessions.server';
-import { PartialExtension, User } from '~/types';
+import { FavoriteExtension, User } from '~/types';
 
 type FavoritesData = {
   query: ReturnType<typeof parseQuery>;
   result?: {
     total: number;
-    extensions: PartialExtension[];
+    extensions: FavoriteExtension[];
   };
   user?: User;
 };
@@ -46,6 +47,7 @@ const parseQuery = (request: Request) => {
 export async function loader({ request }: LoaderArgs) {
   const query = parseQuery(request);
   const session = await getSession(request.headers.get('Cookie'));
+  const user = session.get('user');
 
   const searchOptions: SearchExtensionsOptions = {
     maxColorDistance: 10,
@@ -55,7 +57,7 @@ export async function loader({ request }: LoaderArgs) {
     pageSize,
   };
 
-  const result = await api.searchExtensions(searchOptions);
+  const result = await api.searchFavorites(user, searchOptions);
   const data: FavoritesData = { query, result, user: session.get('user') };
 
   return json(data);
@@ -99,15 +101,19 @@ export default function Search() {
               const primaryColorDark = themeHelpers.primaryColor(color, true);
 
               return (
-                <div key={extensionSlug} className="result">
+                <div
+                  key={extensionSlug}
+                  className="result"
+                  style={{
+                    '--color-background': theme.editorBackground,
+                    '--color-primary': primaryColorLight,
+                    '--color-primary-dark': primaryColorDark,
+                  }}
+                >
                   <Link
+                    className="result-theme"
                     to={`/e/${extensionSlug}/${theme.slug}?language=${query.language}`}
                     prefetch="intent"
-                    style={{
-                      '--color-background': theme.editorBackground,
-                      '--color-primary': primaryColorLight,
-                      '--color-primary-dark': primaryColorDark,
-                    }}
                   >
                     <img
                       key={extensionSlug}
@@ -121,8 +127,17 @@ export default function Search() {
                       <h2>{extension.displayName}</h2>
                       <h4>by {extension.publisherDisplayName}</h4>
                     </div>
-                    <p className="result-description">Some description of a theme.</p>
-                    {extension.themes.length > 1 && (
+                    <p className="result-description">{printDescription(extension, 120)}</p>
+                    <h6 className="result-actions-heading">Open With</h6>
+                    <div className="result-actions">
+                      <Link reloadDocument to="open?with=desktop" className="button">
+                        VS Code
+                      </Link>
+                      <Link reloadDocument to="open?with=web" className="button button-secondary">
+                        VS Code for the Web
+                      </Link>
+                    </div>
+                    {/* {extension.themes.length > 1 && (
                       <div className="result-themes">
                         {extension.themes.map((theme) => {
                           // TODO: Support light and dark mode.
@@ -138,7 +153,7 @@ export default function Search() {
                           );
                         })}
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
               );

@@ -25,11 +25,30 @@ export interface SearchExtensionResults {
   extensions: SearchExtensionResult[];
 }
 
+export interface SearchFavoriteResults {
+  name: string;
+  publisherName: string;
+  displayName: string;
+  publisherDisplayName: string;
+  shortDescription: string;
+  themes: Array<{ slug: string; editorBackground: string }>;
+}
+
+export interface SearchFavoritesResults {
+  total: number;
+  extensions: SearchFavoriteResults[];
+}
+
 export interface User {
   id: string;
   accessToken: string;
   login: string;
   avatarUrl: string;
+}
+
+export interface SearchFavoritesOptions {
+  page: number;
+  pageSize: number;
 }
 
 export class APIClient {
@@ -150,6 +169,25 @@ export class APIClient {
     }
 
     await response.json<void>();
+  }
+
+  async searchFavorites(user: User, opts: SearchFavoritesOptions): Promise<SearchFavoritesResults> {
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites/search`);
+    url.searchParams.set('page', String(opts.page) ?? '');
+    url.searchParams.set('pageSize', String(opts.pageSize) ?? '');
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to search favorites: ${response.statusText}`);
+    }
+
+    return await response.json<SearchFavoritesResults>();
   }
 }
 
