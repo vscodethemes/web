@@ -1,4 +1,8 @@
-import { createCookie, createCloudflareKVSessionStorage } from '@remix-run/cloudflare';
+import {
+  createCookie,
+  // createCloudflareKVSessionStorage,
+  createMemorySessionStorage,
+} from '@remix-run/cloudflare';
 
 const sessionCookie = createCookie('session', {
   sameSite: true,
@@ -6,9 +10,13 @@ const sessionCookie = createCookie('session', {
   secure: true,
 });
 
-const { getSession, commitSession, destroySession } = createCloudflareKVSessionStorage({
-  kv: VSCODETHEMES_SESSIONS,
+const { getSession, commitSession, destroySession } = createMemorySessionStorage({
   cookie: sessionCookie,
 });
+
+// const { getSession, commitSession, destroySession } = createCloudflareKVSessionStorage({
+//   kv: VSCODETHEMES_SESSIONS,
+//   cookie: sessionCookie,
+// });
 
 export { getSession, commitSession, destroySession };
