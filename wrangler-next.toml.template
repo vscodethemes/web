@@ -6,7 +6,7 @@ compatibility_date = "2022-04-05"
 
 routes = [
   { pattern = "next.vscodethemes.com", custom_domain = true, zone_name = "vscodethemes.com" }
-  ]
+]
 
 [site]
 bucket = "./public"
