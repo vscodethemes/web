@@ -16,4 +16,6 @@
   --elevation-1: 0px 4px 12px hsla(0, 0%, 0%, 50%);
   --elevation-2: 0px 4px 4px hsla(0, 0%, 0%, 15%), 0px 4px 24px hsla(0, 0%, 0%, 25%);
   --elevation-3: 0px 1px 2px hsla(0, 0%, 0%, 12%), 0px 2px 4px hsla(0, 0%, 0%, 20%);
+  
+  color-scheme: dark;
 }
