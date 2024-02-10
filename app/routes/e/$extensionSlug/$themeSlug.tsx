@@ -1,24 +1,32 @@
-import type { LoaderArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
+import type { LoaderArgs, ActionArgs, LinksFunction, MetaFunction } from '@remix-run/cloudflare';
 import { json, redirect } from '@remix-run/cloudflare';
-import { useLoaderData, NavLink, Link } from '@remix-run/react';
+import { useLoaderData, useTransition, NavLink, Link, Form } from '@remix-run/react';
 import { colord } from 'colord';
 import { themeHelpers } from '@vscodethemes/utilities';
 import { getQueryParam } from '~/utilities/requests';
+import { printDescription } from '~/utilities/extension';
 import stylesUrl from '~/styles/theme.css';
 import kv, { Extension, Theme } from '~/clients/kv';
+import api from '~/clients/api';
 import { DynamicStylesFunction } from '~/components/DynamicStyles';
 import Header from '~/components/Header';
 import LanguageSelect from '~/components/LanguageSelect';
 import Spacer from '~/components/Spacer';
 import ExtensionErrorView from '~/components/ExtensionErrorView';
+import UserMenu from '~/components/UserMenu';
+import FavoriteButton from '~/components/FavoriteButton';
+import { getSession } from '~/sessions.server';
+import { User } from '~/types';
 
-type ExtensionData = {
+type ThemeProps = {
   query: ReturnType<typeof parseQuery>;
   extensionSlug: string;
   themeSlug: string;
   extension: Extension;
   themes: Array<{ slug: string; theme: Theme }>;
   selectedTheme: Theme;
+  user?: User;
+  isFavorite: boolean;
 };
 
 export const links: LinksFunction = () => {
@@ -42,49 +50,96 @@ export async function loader({ request, params }: LoaderArgs) {
     throw new Error('Missing extension');
   }
 
+  const session = await getSession(request.headers.get('Cookie'));
+  const user: User | undefined = session.get('user');
+
   const query = parseQuery(request);
-  const result = await kv.getExtension(extensionSlug, query.language);
-  if (!result) {
+
+  const [extensionResult, isFavorite] = await Promise.all([
+    kv.getExtension(extensionSlug, query.language),
+    user
+      ? api.isFavorite(user, extensionSlug, themeSlug).catch((err) => {
+          console.error(`Failed to check favorite: ${err}`);
+          return false;
+        })
+      : false,
+  ]);
+
+  if (!extensionResult) {
     throw new Response('Not Found', { status: 404 });
   }
 
-  const themeMatch = result.themes[themeSlug];
+  const themeMatch = extensionResult.themes[themeSlug];
   if (!themeMatch) {
-    const searhParams = new URLSearchParams();
+    const searchParams = new URLSearchParams();
     if (query.language) {
-      searhParams.set('language', query.language);
+      searchParams.set('language', query.language);
     }
-    const qs = searhParams.toString();
+    const qs = searchParams.toString();
     return redirect(`/e/${extensionSlug}${qs ? `?${qs}` : ''}`);
   }
 
-  const data: ExtensionData = {
+  const data: ThemeProps = {
     query,
     extensionSlug,
     themeSlug,
-    extension: result.extension,
+    extension: extensionResult.extension,
     selectedTheme: themeMatch.theme,
-    themes: Object.entries(result.themes).map(([slug, { theme }]) => ({ slug, theme })),
+    themes: Object.entries(extensionResult.themes).map(([slug, { theme }]) => ({ slug, theme })),
+    user,
+    isFavorite,
   };
   return json(data);
 }
 
-const printDescription = (extension: Extension) => {
-  // The max length of shortDescription is 300.
-  const text = extension.shortDescription ?? '';
-  if (text.length >= 300) {
-    return `${text.slice(0, 297)}...`;
-  } else if (/[a-zA-Z0-9]/.test(text.charAt(text.length - 1))) {
-    return `${text}.`;
+export async function action({ request, params, context }: ActionArgs) {
+  const { extensionSlug, themeSlug } = params;
+
+  if (!extensionSlug) {
+    throw new Error('Missing extension');
+  }
+  if (!themeSlug) {
+    throw new Error('Missing extension');
   }
 
-  return text;
-};
+  const formData = await request.formData();
+  const intent = formData.get('intent');
+
+  const session = await getSession(request.headers.get('Cookie'));
+  const user = session.get('user');
+  // const cache = (caches as any).default;
+
+  console.log('ACTION', intent, user.id, extensionSlug, themeSlug);
+
+  if (intent === 'add') {
+    await api.addFavorite(user, extensionSlug, themeSlug);
+
+    // TODO: Set cache for user favorite.
+    // (context as any).waitUntil(
+    //   cache.put(
+    //     `https://vscodethemes.com/users/${user.id}/favorites/${extensionSlug}/${themeSlug}`,
+    //     new Response('', { status: 200 }),
+    //   ),
+    // );
+  } else if (intent === 'remove') {
+    await api.removeFavorite(user, extensionSlug, themeSlug);
+
+    // TODO: Set cache for user favorite.
+    // event.waitUntil(cache.put('/users/1/favorites/:extensionSlug/:themeSlug',  new Response('', { status: 404 })));
+  } else {
+    throw new Response(`Unsupported intent: ${intent}`, { status: 400 });
+  }
+
+  // TODO: Delete favorites cache for user.
+  // event.waitUntil(cache.delete('/users/1/favorites'));
+
+  return null;
+}
 
 export const meta: MetaFunction = ({ data }) => {
   if (!data) return {};
 
-  const { extension, extensionSlug, themeSlug, query } = data as ExtensionData;
+  const { extension, extensionSlug, themeSlug, query } = data as ThemeProps;
   const title = `${extension.displayName} by ${extension.publisherDisplayName}`;
   const description = printDescription(extension);
   const pageUrl = `https://vscodethemes.com/e/${extensionSlug}/${themeSlug}?language=${query.language}`;
@@ -101,7 +156,7 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
-const dynamicStyle: DynamicStylesFunction<ExtensionData> = ({ data }) => {
+const dynamicStyle: DynamicStylesFunction<ThemeProps> = ({ data }) => {
   if (!data) return '';
 
   const { selectedTheme } = data;
@@ -135,8 +190,11 @@ const dynamicStyle: DynamicStylesFunction<ExtensionData> = ({ data }) => {
 export const handle = { dynamicStyle };
 
 export default function ThemeView() {
-  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme } =
+  const { query, themeSlug, extensionSlug, extension, themes, selectedTheme, user, isFavorite } =
     useLoaderData<typeof loader>();
+
+  const transition = useTransition();
+  const formData = transition.submission?.formData;
 
   const editorBackgroundColor = colord(selectedTheme.editorBackground);
   const logoColor = themeHelpers.primaryColor(editorBackgroundColor);
@@ -146,6 +204,7 @@ export default function ThemeView() {
       <Header logoColor={logoColor}>
         <Spacer />
         <LanguageSelect value={query.language} />
+        <UserMenu user={user} />
       </Header>
       <main>
         <div className="extension">
@@ -159,7 +218,7 @@ export default function ThemeView() {
           <div className="extension-info">
             <div className="extension-name">
               <h1>{extension.displayName}</h1>
-              <h3>by {extension.publisherDisplayName}</h3>
+              <h4>by {extension.publisherDisplayName}</h4>
             </div>
             <p className="extension-description">{printDescription(extension)}</p>
             <h6 className="extension-actions-heading">Open With</h6>
@@ -170,6 +229,14 @@ export default function ThemeView() {
               <Link reloadDocument to="open?with=web" className="button button-secondary">
                 VS Code for the Web
               </Link>
+              <div className="spacer" />
+              <Form method="post">
+                {formData ? (
+                  <FavoriteButton isFavorite={formData.get('intent') === 'add'} />
+                ) : (
+                  <FavoriteButton isFavorite={isFavorite} />
+                )}
+              </Form>
             </div>
           </div>
         </div>

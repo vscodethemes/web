@@ -25,6 +25,32 @@ export interface SearchExtensionResults {
   extensions: SearchExtensionResult[];
 }
 
+export interface SearchFavoriteResults {
+  name: string;
+  publisherName: string;
+  displayName: string;
+  publisherDisplayName: string;
+  shortDescription: string;
+  themes: Array<{ slug: string; editorBackground: string }>;
+}
+
+export interface SearchFavoritesResults {
+  total: number;
+  extensions: SearchFavoriteResults[];
+}
+
+export interface User {
+  id: string;
+  accessToken: string;
+  login: string;
+  avatarUrl: string;
+}
+
+export interface SearchFavoritesOptions {
+  page: number;
+  pageSize: number;
+}
+
 export class APIClient {
   constructor(private baseUrl: string, private apiKey: string) {}
 
@@ -43,9 +69,7 @@ export class APIClient {
     url.searchParams.set('pageSize', String(opts.pageSize) ?? '');
 
     const response = await fetch(url.toString(), {
-      headers: {
-        'X-API-Key': this.apiKey,
-      },
+      headers: { 'X-API-Key': this.apiKey },
       cf: {
         // Cache search results for 4 hours.
         cacheTtl: 60 * 60 * 4,
@@ -53,8 +77,117 @@ export class APIClient {
       },
     });
 
-    const result = await response.json();
-    return result;
+    if (!response.ok) {
+      throw new Error(`Failed to search extensions: ${response.statusText}`);
+    }
+
+    return await response.json<SearchExtensionResults>();
+  }
+
+  async authorizeGithub(code: string): Promise<User> {
+    const url = new URL(`${this.baseUrl}/auth/github`);
+    url.searchParams.set('code', code);
+
+    const response = await fetch(url.toString(), {
+      method: 'POST',
+      headers: { 'X-API-Key': this.apiKey },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to authorize GitHub: ${response.statusText}`);
+    }
+
+    return await response.json<User>();
+  }
+
+  async isFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites/exists`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to check if favorite exists: ${response.statusText}`);
+    }
+
+    const { exists } = await response.json<{ exists: boolean }>();
+    return exists;
+  }
+
+  async addFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to add favorite: ${response.statusText}`);
+    }
+
+    await response.json<void>();
+  }
+
+  async removeFavorite(user: User, extensionSlug: string, themeSlug: string) {
+    const [publisherName, extensionName] = extensionSlug.split('.');
+
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites`);
+    url.searchParams.set('publisherName', publisherName);
+    url.searchParams.set('extensionName', extensionName);
+    url.searchParams.set('themeSlug', themeSlug);
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to remove favorite: ${response.statusText} ${await response.text()}}`,
+      );
+    }
+
+    await response.json<void>();
+  }
+
+  async searchFavorites(user: User, opts: SearchFavoritesOptions): Promise<SearchFavoritesResults> {
+    const url = new URL(`${this.baseUrl}/users/${user.id}/favorites/search`);
+    url.searchParams.set('page', String(opts.page) ?? '');
+    url.searchParams.set('pageSize', String(opts.pageSize) ?? '');
+
+    const response = await fetch(url.toString(), {
+      headers: {
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-API-Key': this.apiKey,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to search favorites: ${response.statusText}`);
+    }
+
+    return await response.json<SearchFavoritesResults>();
   }
 }
 

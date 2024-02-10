@@ -1,14 +1,11 @@
 
-name = "web"
+name = "web-next"
 main = "./build/index.js"
 # https://developers.cloudflare.com/workers/platform/compatibility-dates
 compatibility_date = "2022-04-05"
 
 routes = [
-  "www.vscodethemes.com",
-  "www.vscodethemes.com/*",
-  "vscodethemes.com",
-  "vscodethemes.com/*"
+  { pattern = "next.vscodethemes.com", custom_domain = true, zone_name = "vscodethemes.com" }
 ]
 
 [site]

@@ -8,7 +8,9 @@ declare global {
   const INTERNAL_API_URL: string;
   const INTERNAL_API_KEY: string;
   const EXTENSION_MEDIA_URL: string;
+  const GITHUB_CLIENT_ID: string;
   const VSCODETHEMES_EXTENSIONS: KVNamespace;
+  const VSCODETHEMES_SESSIONS: KVNamespace;
 }
 
 declare module 'react' {

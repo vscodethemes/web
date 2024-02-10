@@ -9,7 +9,7 @@
     "build": "remix build",
     "deploy": "wrangler publish",
     "dev:remix": "remix watch",
-    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch --kv-persist redis://localhost:6379 --kv VSCODETHEMES_EXTENSIONS",
+    "dev:miniflare": "cross-env NODE_ENV=development miniflare ./build/index.js --watch --kv-persist redis://localhost:6379 --kv VSCODETHEMES_EXTENSIONS --kv VSCODETHEMES_SESSIONS",
     "dev": "remix build && run-p dev:*",
     "start": "cross-env NODE_ENV=production miniflare ./build/index.js",
     "lint": "eslint 'app/**/*.{js,ts,tsx}' --quiet --fix",
@@ -17,7 +17,8 @@
     "test": "jest",
     "typecheck": "tsc -b",
     "generate-wrangler-toml-dev": "envsub --all --env INTERNAL_API_URL=http://localhost:3000 wrangler.toml.template wrangler.toml",
-    "generate-wrangler-toml": "envsub wrangler.toml.template wrangler.toml"
+    "generate-wrangler-toml": "envsub wrangler.toml.template wrangler.toml",
+    "generate-wrangler-next-toml": "envsub wrangler-next.toml.template wrangler.toml"
   },
   "dependencies": {
     "@remix-run/cloudflare": "^1.7.5",
@@ -48,6 +49,9 @@
     "ts-jest": "^27.1.4",
     "typescript": "^4.8.4",
     "wrangler": "^2.1.15"
+  },
+  "resolutions": {
+    "undici": "5.11.0"
   },
   "engines": {
     "node": ">=16.13"

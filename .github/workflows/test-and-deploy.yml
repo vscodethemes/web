@@ -10,6 +10,7 @@ env:
   INTERNAL_API_KEY: ${{ secrets.INTERNAL_API_KEY }}
   INTERNAL_API_URL: ${{ secrets.INTERNAL_API_URL }}
   CF_EXTENSIONS_KV_ID: ${{ secrets.CF_EXTENSIONS_KV_ID }}
+  CF_SESSIONS_KV_ID: ${{ secrets.CF_SESSIONS_KV_ID }}
   EXTENSION_MEDIA_URL: ${{ secrets.EXTENSION_MEDIA_URL }}
 
 jobs:
@@ -54,4 +55,26 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - run: yarn generate-wrangler-toml
+      - run: yarn deploy
+
+  deploy-next:
+    name: Deploy Next
+    needs: [test]
+    if: github.ref == 'refs/heads/favorites'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: 'yarn'
+
+      - run: yarn install
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+
+      - run: yarn generate-wrangler-next-toml
       - run: yarn deploy
