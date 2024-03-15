@@ -170,6 +170,9 @@ export default function ThemeView() {
               <Link reloadDocument to="open?with=web" className="button button-secondary">
                 VS Code for the Web
               </Link>
+              <Link reloadDocument to=`https://marketplace.visualstudio.com/items?itemName=${extensionSlug}` className="button button-secondary">
+                View on Marketplace
+              </Link>
             </div>
           </div>
         </div>
