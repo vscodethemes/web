@@ -4,7 +4,16 @@ import { useLoaderData } from "@remix-run/react";
 import { colord, extend } from "colord";
 import namesPlugin from "colord/plugins/names";
 import api from "~/clients/api";
-import * as s from "~/utils/searchParams";
+import * as s from "~/utils/search-params";
+import { SearchResults } from "~/components/search-results";
+import { Header } from "~/components/header";
+import { SearchInput } from "~/components/search-input";
+import { SortByMenu } from "~/components/sort-menu";
+import { LanguageMenu } from "~/components/language-menu";
+import { ThemeMenu } from "~/components/theme-menu";
+import { GithubLink } from "~/components/github-link";
+import { sortByValues } from "~/data";
+import { getSession, commitSession } from "~/sessions";
 
 extend([namesPlugin]);
 
@@ -30,34 +39,17 @@ const pageSize = 36;
 const maxPages = Number.MAX_SAFE_INTEGER;
 const maxColorDistance = 100;
 
-const languageValues = [
-  "cpp",
-  "css",
-  "go",
-  "html",
-  "java",
-  "js",
-  "php",
-  "py",
-] as const;
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userLanguage = session.get("language");
+  const userTheme = session.get("theme");
 
-const sortByValues = [
-  "relevance",
-  "installs",
-  "trending_daily",
-  "trending_weekly",
-  "trending_monthly",
-  "rating",
-  "updated_at",
-] as const;
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const q = s.string(url.searchParams, "q", "");
   const pageNumber = s.integer(url.searchParams, "page", 1, 1, maxPages);
-  const language = s.literal(url.searchParams, "l", "js", languageValues);
   const sortBy = s.literal(url.searchParams, "sort", "installs", sortByValues);
   const colorDistance = s.float(url.searchParams, "d", 10, 0, maxColorDistance);
+  const language = userLanguage ?? "js";
 
   let text = "";
   let editorBackground = "";
@@ -66,11 +58,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     editorBackground = color.alpha(1).toHex();
   } else {
     text = q;
+    if (userTheme === "dark") {
+      editorBackground = "#1e1e1e";
+    } else if (userTheme === "light") {
+      editorBackground = "#ffffff";
+    }
   }
 
-  console.log({ text, editorBackground });
-
-  const results = await api.searchExtensions({
+  const params = {
     text,
     editorBackground,
     colorDistance,
@@ -78,22 +73,29 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     pageNumber,
     pageSize,
     sortBy,
-  });
+    q,
+    userTheme,
+  };
 
-  return json({ results });
-};
+  const results = await api.searchExtensions(params);
+
+  return json({ results, params });
+}
 
 export default function Index() {
-  const { results } = useLoaderData<typeof loader>();
+  const { results, params } = useLoaderData<typeof loader>();
   return (
-    <div className="grid grid-cols-3 gap-8 p-8">
-      {results.extensions.map((extension) => (
-        <img
-          key={`${extension.publisherName}/${extension.name}`}
-          src={extension.themes[0].url}
-          alt={`${extension.publisherName}/${extension.name}`}
-        />
-      ))}
-    </div>
+    <>
+      <Header>
+        <SearchInput value={params.q} />
+        <SortByMenu value={params.sortBy} />
+        <LanguageMenu value={params.language} />
+        <ThemeMenu value={params.userTheme ?? "system"} />
+        <GithubLink />
+      </Header>
+      <main className="flex-1">
+        <SearchResults extensions={results.extensions} />
+      </main>
+    </>
   );
 }

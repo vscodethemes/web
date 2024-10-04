@@ -29,11 +29,11 @@ export interface SearchExtensionsInput {
   sortBy?:
     | "relevance"
     | "installs"
-    | "trending_daily"
-    | "trending_weekly"
-    | "trending_monthly"
+    | "trendingDaily"
+    | "trendingWeekly"
+    | "trendingMonthly"
     | "rating"
-    | "updated_at";
+    | "updatedAt";
 }
 
 export class ApiClient {
@@ -57,25 +57,6 @@ export class ApiClient {
       params.set("sortBy", input.sortBy);
     }
 
-    // // We don't want to encode the URL, so we don't use the URLSearchParams.toString() method.
-    // let query = `language=${input.language}`;
-    // query += `&pageNumber=${input.pageNumber}`;
-    // query += `&pageSize=${input.pageSize}`;
-    // if (input.text) {
-    //   query += `&text=${input.text}`;
-    // }
-    // if (input.editorBackground) {
-    //   query += `&editorBackground=${input.editorBackground}`;
-    // }
-    // if (input.colorDistance) {
-    //   query += `&colorDistance=${input.colorDistance}`;
-    // }
-    // if (input.sortBy) {
-    //   query += `&sortBy=${input.sortBy}`;
-    // }
-
-    console.log(`${this.baseUrl}/extensions/search?${params}`);
-
     const response = await fetch(
       `${this.baseUrl}/extensions/search?${params}`,
       {
@@ -85,9 +66,27 @@ export class ApiClient {
       }
     );
 
-    // TODO: Handle errors.
+    if (!response.ok) {
+      throw new Error(`Failed to fetch extensions: ${response.statusText}`);
+    }
 
     return await response.json();
+  }
+
+  async makeRequest(request: Request): Promise<Response> {
+    const response = await fetch(request, {
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch make request to ${request.url}: ${response.statusText}`
+      );
+    }
+
+    return response;
   }
 }
 

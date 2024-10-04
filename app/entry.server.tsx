@@ -6,7 +6,12 @@
 
 import { PassThrough } from "node:stream";
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
+import type {
+  AppLoadContext,
+  EntryContext,
+  LoaderFunctionArgs,
+  ActionFunctionArgs,
+} from "@remix-run/node";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
@@ -137,4 +142,14 @@ function handleBrowserRequest(
 
     setTimeout(abort, ABORT_DELAY);
   });
+}
+
+export function handleError(
+  error: unknown,
+  { request, params, context }: LoaderFunctionArgs | ActionFunctionArgs
+) {
+  if (!request.signal.aborted) {
+    const msg = error instanceof Error ? error.message : JSON.stringify(error);
+    console.error({ msg, request, params, context });
+  }
 }
