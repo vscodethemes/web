@@ -39,7 +39,7 @@ export function SearchResults({ extensions }: SearchResultsProps) {
                     return (
                       <div
                         key={slug}
-                        className="w-5 h-[7px] rounded-sm border"
+                        className="w-5 h-2 rounded-sm border"
                         style={{
                           backgroundColor: theme.editorBackground,
                         }}

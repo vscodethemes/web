@@ -12,8 +12,9 @@ import { SortByMenu } from "~/components/sort-menu";
 import { LanguageMenu } from "~/components/language-menu";
 import { ThemeMenu } from "~/components/theme-menu";
 import { GithubLink } from "~/components/github-link";
+import { SearchPagination } from "~/components/search-pagination";
 import { sortByValues } from "~/data";
-import { getSession, commitSession } from "~/sessions";
+import { getSession } from "~/sessions";
 
 extend([namesPlugin]);
 
@@ -95,8 +96,13 @@ export default function Index() {
         <ThemeMenu value={params.userTheme ?? "system"} />
         <GithubLink />
       </Header>
-      <main className="flex-1">
+      <main className="flex-1 pb-24">
         <SearchResults extensions={results.extensions} />
+        <SearchPagination
+          total={results.total}
+          pageNumber={params.pageNumber}
+          pageSize={params.pageSize}
+        />
       </main>
     </>
   );

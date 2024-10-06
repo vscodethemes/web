@@ -40,11 +40,6 @@ export function ThemeMenu({ value }: ThemeMenuProps) {
     );
 
     const isDark = theme === "dark" || (theme === "system" && prefersDark());
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
     setIsDark(isDark);
   };
 
