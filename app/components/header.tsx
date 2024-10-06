@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react";
+import { GlobalLoading } from "~/components/global-loading";
 
 export interface HeaderProps {
   children?: React.ReactNode;
@@ -7,6 +8,7 @@ export interface HeaderProps {
 export function Header({ children }: HeaderProps) {
   return (
     <header className="sticky top-0 z-10 px-8 h-[60px] bg-background/95 bg-opacity-95 border-b flex items-center gap-4">
+      <GlobalLoading />
       <Link className="flex gap-2 items-center" title="VS Code Themes" to="/">
         <svg
           className="h-5 text-muted-foreground/75"

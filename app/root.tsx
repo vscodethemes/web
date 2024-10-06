@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
+  useNavigation,
 } from "@remix-run/react";
 import type {
   LinksFunction,
@@ -16,6 +17,7 @@ import { getSession, commitSession } from "~/sessions";
 import { languageValues, Language } from "~/data";
 import { cn } from "~/lib/utils";
 import { UserThemeScript } from "~/components/user-theme-script";
+import { GlobalLoading } from "~/components/global-loading";
 import "./tailwind.css";
 
 export const links: LinksFunction = () => [];
@@ -59,7 +61,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
-
   return (
     <html lang="en" className={cn(userTheme === "dark" && "dark")}>
       <head>
