@@ -16,6 +16,7 @@ export interface Theme {
   name: string;
   displayName: string;
   editorBackground: string;
+  activityBarBadgeBackground: string;
   url: string;
 }
 

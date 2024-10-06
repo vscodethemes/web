@@ -4,7 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import { colord, extend } from "colord";
 import namesPlugin from "colord/plugins/names";
 import api from "~/clients/api";
-import * as s from "~/utils/search-params";
+import * as s from "~/lib/search-params";
 import { SearchResults } from "~/components/search-results";
 import { Header } from "~/components/header";
 import { SearchInput } from "~/components/search-input";
@@ -49,11 +49,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const q = s.string(url.searchParams, "q", "");
   const pageNumber = s.integer(url.searchParams, "page", 1, 1, maxPages);
   const sortBy = s.literal(url.searchParams, "sort", "installs", sortByValues);
-  const colorDistance = s.float(url.searchParams, "d", 10, 0, maxColorDistance);
   const language = userLanguage ?? "js";
 
   let text = "";
   let editorBackground = "";
+  let colorDistance = 20;
   const color = colord(q);
   if (color.isValid()) {
     editorBackground = color.alpha(1).toHex();
@@ -63,8 +63,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
     if (userTheme === "dark") {
       editorBackground = "#1e1e1e";
+      colorDistance = 40;
     } else if (userTheme === "light") {
       editorBackground = "#ffffff";
+      colorDistance = 40;
     }
   }
 

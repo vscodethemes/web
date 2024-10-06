@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import { Extension } from "~/clients/api";
+import { toHsl } from "~/lib/utils";
 
 export interface SearchResultsProps {
   extensions: Extension[];
@@ -15,8 +16,11 @@ export function SearchResults({ extensions }: SearchResultsProps) {
           <div key={slug} className="flex flex-col gap-2">
             <Link
               to={`/e/${slug}`}
-              className="flex aspect-theme rounded-lg shadow-lg"
-              style={{ backgroundColor: theme.editorBackground }}
+              className="flex aspect-theme rounded-lg shadow-lg hover:outline outline-offset-2 outline-2 outline-ring"
+              style={{
+                backgroundColor: theme.editorBackground,
+                "--ring": toHsl(theme.activityBarBadgeBackground),
+              }}
             >
               <img
                 className="rounded-lg"
@@ -33,7 +37,7 @@ export function SearchResults({ extensions }: SearchResultsProps) {
               </div>
 
               {extension.themes.length > 1 && (
-                <div className="flex justify-end content-start flex-wrap gap-1">
+                <div className="flex justify-end content-start flex-wrap gap-1 mt-2">
                   {extension.themes.map((theme) => {
                     const slug = `${extension.publisherName}.${extension.name}/${theme.name}`;
                     return (
