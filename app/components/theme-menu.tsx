@@ -34,9 +34,15 @@ export function ThemeMenu({ value }: ThemeMenuProps) {
   }, [value]);
 
   const handleThemeChange = (theme: "dark" | "light" | "system") => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.delete("page");
+
     submit(
       { theme },
-      { method: "POST", action: location.pathname + location.search }
+      {
+        method: "POST",
+        action: location.pathname + "?" + searchParams.toString(),
+      }
     );
 
     const isDark = theme === "dark" || (theme === "system" && prefersDark());

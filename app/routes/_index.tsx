@@ -53,7 +53,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   let text = "";
   let editorBackground = "";
-  let colorDistance = 20;
+  let colorDistance = 10;
   const color = colord(q);
   if (color.isValid()) {
     editorBackground = color.alpha(1).toHex();
@@ -63,10 +63,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
     if (userTheme === "dark") {
       editorBackground = "#1e1e1e";
-      colorDistance = 40;
+      colorDistance = 50;
     } else if (userTheme === "light") {
       editorBackground = "#ffffff";
-      colorDistance = 40;
+      colorDistance = 50;
     }
   }
 
