@@ -58,6 +58,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     editorBackground = color.alpha(1).toHex();
   } else {
     text = q;
+
+    // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
     if (userTheme === "dark") {
       editorBackground = "#1e1e1e";
     } else if (userTheme === "light") {

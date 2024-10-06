@@ -71,6 +71,9 @@ export default {
           "5": "hsl(var(--vsct-5))",
         },
       },
+      aspectRatio: {
+        theme: "461 / 332",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

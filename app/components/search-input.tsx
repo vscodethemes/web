@@ -15,7 +15,7 @@ export function SearchInput({ value }: SearchInputProps) {
         name="q"
         defaultValue={value}
       />
-      <MagnifyingGlassIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+      <MagnifyingGlassIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
     </Form>
   );
 }

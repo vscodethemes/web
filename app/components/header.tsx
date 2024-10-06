@@ -1,3 +1,5 @@
+import { Link } from "@remix-run/react";
+
 export interface HeaderProps {
   children?: React.ReactNode;
 }
@@ -5,7 +7,7 @@ export interface HeaderProps {
 export function Header({ children }: HeaderProps) {
   return (
     <header className="sticky top-0 z-10 px-8 h-[60px] bg-background/95 bg-opacity-95 border-b flex items-center gap-4">
-      <a className="flex gap-2 items-center" title="VS Code Themes" href="/">
+      <Link className="flex gap-2 items-center" title="VS Code Themes" to="/">
         <svg
           className="h-5 text-muted-foreground/75"
           viewBox="0 0 18 18"
@@ -93,7 +95,7 @@ export function Header({ children }: HeaderProps) {
           <span className="text-vsct-1">VS Code</span>
           &nbsp;Themes
         </div>
-      </a>
+      </Link>
       <div className="flex-1 flex items-center justify-end gap-3">
         {children}
       </div>
