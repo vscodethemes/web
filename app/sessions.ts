@@ -1,15 +1,15 @@
 // app/sessions.ts
-import { createCookieSessionStorage } from "@remix-run/node";
-import { Language } from "~/data";
+import { createCookieSessionStorage, Session } from "@remix-run/node";
+import { Language, languageValues } from "~/data";
 
-type SessionData = {
+export interface SessionData {
   language: Language;
   theme: "light" | "dark" | "system";
-};
+}
 
-type SessionFlashData = {
+export interface SessionFlashData {
   error: string;
-};
+}
 
 const { getSession, commitSession, destroySession } =
   createCookieSessionStorage<SessionData, SessionFlashData>({
@@ -24,5 +24,28 @@ const { getSession, commitSession, destroySession } =
       secure: true,
     },
   });
+
+export async function handleSessionUpdate(
+  session: Session<SessionData, SessionFlashData>,
+  request: Request
+) {
+  const form = await request.formData();
+  const userLanguage = form.get("language");
+  const userTheme = form.get("theme");
+
+  if (
+    userLanguage !== null &&
+    (languageValues as string[]).includes(userLanguage.toString())
+  ) {
+    session.set("language", userLanguage.toString() as Language);
+  }
+
+  if (
+    userTheme !== null &&
+    ["light", "dark", "system"].includes(userTheme.toString())
+  ) {
+    session.set("theme", userTheme.toString() as "light" | "dark" | "system");
+  }
+}
 
 export { getSession, commitSession, destroySession };

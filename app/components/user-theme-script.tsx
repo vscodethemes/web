@@ -1,8 +1,9 @@
 // Modified from https://github.com/remix-run/remix-website/blob/main/app/lib/color-scheme.tsx
 
-import { useMemo, useLayoutEffect } from "react";
+import { useMemo } from "react";
 import { useRouteLoaderData } from "@remix-run/react";
 import type { loader as rootLoader } from "~/root";
+import { useUniversalLayoutEffect } from "~/lib/use-universal-layout-effect";
 
 export type Theme = "light" | "dark" | "system";
 
@@ -32,7 +33,7 @@ export function UserThemeScript() {
     []
   );
 
-  useLayoutEffect(() => {
+  useUniversalLayoutEffect(() => {
     switch (userTheme) {
       case "light":
         document.documentElement.classList.remove("dark");

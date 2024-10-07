@@ -9,24 +9,53 @@ export interface Extension {
   publisherName: string;
   publisherDisplayName: string;
   shortDescription: string;
-  themes: Theme[];
+  totalThemes: number;
+  themes: ThemePartial[];
+  theme?: Theme;
 }
 
 export interface Theme {
+  url: string;
+  name: string;
+  displayName: string;
+  editorBackground: string;
+  editorForeground: string;
+  activityBarBackground: string;
+  activityBarForeground: string;
+  activityBarInActiveForeground: string;
+  activityBarBorder: string | null;
+  activityBarActiveBorder: string;
+  activityBarActiveBackground: string | null;
+  activityBarBadgeBackground: string;
+  activityBarBadgeForeground: string;
+  tabsContainerBackground: string | null;
+  tabsContainerBorder: string | null;
+  statusBarBackground: string | null;
+  statusBarForeground: string;
+  statusBarBorder: string | null;
+  tabActiveBackground: string | null;
+  tabInactiveBackground: string | null;
+  tabActiveForeground: string;
+  tabBorder: string;
+  tabActiveBorder: string | null;
+  tabActiveBorderTop: string | null;
+  titleBarActiveBackground: string;
+  titleBarActiveForeground: string;
+  titleBarBorder: string | null;
+}
+
+export interface ThemePartial {
+  url: string;
   name: string;
   displayName: string;
   editorBackground: string;
   activityBarBadgeBackground: string;
-  url: string;
 }
 
 export interface SearchExtensionsInput {
-  language: string;
-  pageNumber: number;
-  pageSize: number;
   text?: string;
   editorBackground?: string;
-  colorDistance?: number;
+  language?: string;
   sortBy?:
     | "relevance"
     | "installs"
@@ -35,6 +64,14 @@ export interface SearchExtensionsInput {
     | "trendingMonthly"
     | "rating"
     | "updatedAt";
+  colorDistance?: number;
+  publisherName?: string;
+  extensionName?: string;
+  themeName?: string;
+  extensionsPageNumber?: number;
+  extensionsPageSize?: number;
+  themesPageNumber?: number;
+  themesPageSize?: number;
 }
 
 export class ApiClient {
@@ -42,20 +79,42 @@ export class ApiClient {
 
   async searchExtensions(input: SearchExtensionsInput): Promise<SearchResults> {
     const params = new URLSearchParams();
-    params.set("language", input.language);
-    params.set("pageNumber", input.pageNumber.toString());
-    params.set("pageSize", input.pageSize.toString());
+
     if (input.text) {
       params.set("text", input.text);
     }
     if (input.editorBackground) {
       params.set("editorBackground", input.editorBackground);
     }
-    if (input.colorDistance) {
-      params.set("colorDistance", input.colorDistance.toString());
+    if (input.language) {
+      params.set("language", input.language);
     }
     if (input.sortBy) {
       params.set("sortBy", input.sortBy);
+    }
+    if (input.colorDistance) {
+      params.set("colorDistance", input.colorDistance.toString());
+    }
+    if (input.publisherName) {
+      params.set("publisherName", input.publisherName);
+    }
+    if (input.extensionName) {
+      params.set("extensionName", input.extensionName);
+    }
+    if (input.themeName) {
+      params.set("themeName", input.themeName);
+    }
+    if (input.extensionsPageNumber) {
+      params.set("extensionsPageNumber", input.extensionsPageNumber.toString());
+    }
+    if (input.extensionsPageSize) {
+      params.set("extensionsPageSize", input.extensionsPageSize.toString());
+    }
+    if (input.themesPageNumber) {
+      params.set("themesPageNumber", input.themesPageNumber.toString());
+    }
+    if (input.themesPageSize) {
+      params.set("themesPageSize", input.themesPageSize.toString());
     }
 
     const response = await fetch(

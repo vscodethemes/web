@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "@remix-run/react";
-import { Extension, Theme } from "~/clients/api";
-import { toHsl } from "~/lib/utils";
+import { Extension, ThemePartial } from "~/clients/api";
+import * as t from "~/lib/theme-variables";
 
 export interface SearchResultsItemProps {
   extension: Extension;
@@ -12,19 +12,21 @@ export function SearchResultsItem({
   extension,
   loadingStrategy,
 }: SearchResultsItemProps) {
-  const [hoveredTheme, setHoveredTheme] = useState<Theme | null>(null);
+  const [hoveredTheme, setHoveredTheme] = useState<ThemePartial | null>(null);
 
   const previewTheme = hoveredTheme || extension.themes[0];
   const previewSlug = `${extension.publisherName}.${extension.name}/${previewTheme.name}`;
+
+  const otherThemes = extension.themes.slice(1);
 
   return (
     <div className="flex flex-col gap-2">
       <Link
         to={`/e/${previewSlug}`}
-        className="flex aspect-theme rounded-lg shadow-lg hover:outline outline-offset-2 outline-2 outline-ring"
+        className="flex aspect-theme rounded-lg shadow-lg border border-accent hover:outline outline-offset-2 outline-2 outline-ring "
         style={{
           backgroundColor: previewTheme.editorBackground,
-          "--ring": toHsl(previewTheme.activityBarBadgeBackground),
+          "--ring": t.ring(previewTheme.activityBarBadgeBackground),
         }}
       >
         <img
@@ -41,9 +43,9 @@ export function SearchResultsItem({
           <h3 className="text-xs">by {extension.publisherDisplayName}</h3>
         </div>
 
-        {extension.themes.length > 1 && (
+        {otherThemes.length > 0 && (
           <div className="flex justify-end content-start flex-wrap mt-1">
-            {extension.themes.map((theme) => {
+            {otherThemes.map((theme) => {
               const slug = `${extension.publisherName}.${extension.name}/${theme.name}`;
               return (
                 <Link
@@ -58,7 +60,7 @@ export function SearchResultsItem({
                     title={theme.displayName}
                     style={{
                       backgroundColor: theme.editorBackground,
-                      "--ring": toHsl(previewTheme.activityBarBadgeBackground),
+                      "--ring": t.ring(previewTheme.activityBarBadgeBackground),
                     }}
                   ></div>
                 </Link>

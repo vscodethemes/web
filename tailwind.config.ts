@@ -69,6 +69,13 @@ export default {
           "3": "hsl(var(--vsct-3))",
           "4": "hsl(var(--vsct-4))",
           "5": "hsl(var(--vsct-5))",
+          primary: "hsl(var(--vsct-primary))",
+          foreground: "hsl(var(--vsct-foreground))",
+        },
+        progress: {
+          from: "hsl(var(--progress-from))",
+          via: "hsl(var(--progress-via))",
+          to: "hsl(var(--progress-to))",
         },
       },
       aspectRatio: {

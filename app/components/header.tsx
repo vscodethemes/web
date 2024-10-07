@@ -94,8 +94,8 @@ export function Header({ children }: HeaderProps) {
           ></rect>
         </svg>
         <div className="flex">
-          <span className="text-vsct-1">VS Code</span>
-          &nbsp;Themes
+          <span className="text-vsct-primary">VS Code</span>&nbsp;
+          <span className="text-vsct-foreground"> Themes</span>
         </div>
       </Link>
       <div className="flex-1 flex items-center justify-end gap-3">

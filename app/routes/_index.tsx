@@ -38,7 +38,6 @@ export const meta: MetaFunction = () => {
 
 const pageSize = 36;
 const maxPages = Number.MAX_SAFE_INTEGER;
-const maxColorDistance = 100;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -70,40 +69,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
   }
 
-  const params = {
+  const searchQuery = {
     text,
     editorBackground,
-    colorDistance,
     language,
-    pageNumber,
-    pageSize,
     sortBy,
-    q,
-    userTheme,
+    colorDistance,
+    extensionsPageNumber: pageNumber,
+    extensionsPageSize: pageSize,
+    // Only return first 10 themes.
+    themesPageNumber: 1,
+    themesPageSize: 10,
   };
 
-  const results = await api.searchExtensions(params);
+  const results = await api.searchExtensions(searchQuery);
 
-  return json({ results, params });
+  return json({ results, searchQuery, q, userLanguage, userTheme });
 }
 
 export default function Index() {
-  const { results, params } = useLoaderData<typeof loader>();
+  const { results, searchQuery, q, userLanguage, userTheme } =
+    useLoaderData<typeof loader>();
   return (
     <>
       <Header>
-        <SearchInput value={params.q} />
-        <SortByMenu value={params.sortBy} />
-        <LanguageMenu value={params.language} />
-        <ThemeMenu value={params.userTheme ?? "system"} />
+        <SearchInput value={q} />
+        <SortByMenu value={searchQuery.sortBy} />
+        <LanguageMenu value={userLanguage ?? "js"} />
+        <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
       <main className="flex-1 pb-24">
         <SearchResults extensions={results.extensions} />
         <SearchPagination
           total={results.total}
-          pageNumber={params.pageNumber}
-          pageSize={params.pageSize}
+          pageNumber={searchQuery.extensionsPageNumber}
+          pageSize={searchQuery.extensionsPageSize}
         />
       </main>
     </>

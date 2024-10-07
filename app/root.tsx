@@ -5,7 +5,6 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
-  useNavigation,
 } from "@remix-run/react";
 import type {
   LinksFunction,
@@ -13,12 +12,11 @@ import type {
   ActionFunctionArgs,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getSession, commitSession } from "~/sessions";
-import { languageValues, Language } from "~/data";
+import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
 import { cn } from "~/lib/utils";
 import { UserThemeScript } from "~/components/user-theme-script";
-import { GlobalLoading } from "~/components/global-loading";
-import "./tailwind.css";
+import { DynamicStyles } from "~/components/dynamic-styles";
+import tailwindStyles from "./tailwind.css?inline";
 
 export const links: LinksFunction = () => [];
 
@@ -37,25 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 // routes/_index.tsx share the same path.
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-
-  const form = await request.formData();
-  const userLanguage = form.get("language");
-  const userTheme = form.get("theme");
-
-  if (
-    userLanguage !== null &&
-    (languageValues as string[]).includes(userLanguage.toString())
-  ) {
-    session.set("language", userLanguage.toString() as Language);
-  }
-
-  if (
-    userTheme !== null &&
-    ["light", "dark", "system"].includes(userTheme.toString())
-  ) {
-    session.set("theme", userTheme.toString() as "light" | "dark" | "system");
-  }
-
+  await handleSessionUpdate(session, request);
   return json({}, { headers: { "Set-Cookie": await commitSession(session) } });
 }
 
@@ -69,6 +49,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <style>{tailwindStyles}</style>
+        <DynamicStyles />
       </head>
       <body className="flex flex-col">
         {children}

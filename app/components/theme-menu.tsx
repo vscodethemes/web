@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from "react";
+import { useState } from "react";
 import { useSubmit } from "@remix-run/react";
 import {
   SunIcon,
@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useUniversalLayoutEffect } from "~/lib/use-universal-layout-effect";
 
 export interface ThemeMenuProps {
   value: "dark" | "light" | "system";
@@ -25,7 +26,7 @@ export function ThemeMenu({ value }: ThemeMenuProps) {
   const submit = useSubmit();
   const [isDark, setIsDark] = useState(value !== "light");
 
-  useLayoutEffect(() => {
+  useUniversalLayoutEffect(() => {
     if (value === "system") {
       setIsDark(prefersDark());
     } else {
