@@ -138,7 +138,7 @@ const dynamicStyle: DynamicStylesFunction<SerializeFrom<typeof loader>> = ({
     --vsct-5: ${t.vsct(theme.editorBackground, true)};
     --vsct-primary: ${t.mutedForeground(theme.editorBackground, true)};
     --vsct-foreground: ${t.vsct(theme.editorBackground, true)};
-    --progress-from: ${t.hsl(theme.editorBackground)};
+    --progress-from: ${t.background(theme.editorBackground, true)};
     --progress-via: ${t.hsl(theme.activityBarBadgeBackground)};
     --progress-to: ${t.hsl(theme.editorBackground)};
   }
