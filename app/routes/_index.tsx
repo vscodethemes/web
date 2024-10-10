@@ -52,7 +52,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   let text = "";
   let editorBackground = "";
-  let colorDistance = 10;
+  let colorDistance = 8;
   const color = colord(q);
   if (color.isValid()) {
     editorBackground = color.alpha(1).toHex();

@@ -74,6 +74,19 @@ export interface SearchExtensionsInput {
   themesPageSize?: number;
 }
 
+export interface GetColorsInput {
+  anchor?: number;
+}
+
+export interface ColorsResults {
+  colors: Color[];
+}
+
+export interface Color {
+  hex: string;
+  count: number;
+}
+
 export class ApiClient {
   constructor(private baseUrl: string, private apiKey: string) {}
 
@@ -133,20 +146,24 @@ export class ApiClient {
     return await response.json();
   }
 
-  async makeRequest(request: Request): Promise<Response> {
-    const response = await fetch(request, {
+  async getColors(input: GetColorsInput): Promise<ColorsResults> {
+    const params = new URLSearchParams();
+
+    if (input.anchor) {
+      params.set("anchor", input.anchor.toString());
+    }
+
+    const response = await fetch(`${this.baseUrl}/themes/colors?${params}`, {
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
       },
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch make request to ${request.url}: ${response.statusText}`
-      );
+      throw new Error(`Failed to fetch extensions: ${response.statusText}`);
     }
 
-    return response;
+    return await response.json();
   }
 }
 
