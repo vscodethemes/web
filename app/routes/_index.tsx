@@ -52,9 +52,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   let text = "";
   let editorBackground = "";
-  let colorDistance = 8;
+  let colorDistance = 10;
   const color = colord(q);
   if (color.isValid()) {
+    const { l } = color.toHsl();
+
+    // There is a high concentration of white themes so the closer the color is to white,
+    // the smaller the color distance.
+    colorDistance = Math.min(Math.max(100 - l, 5), 10);
+
     editorBackground = color.alpha(1).toHex();
   } else {
     text = q;

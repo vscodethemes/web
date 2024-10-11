@@ -64,10 +64,10 @@ export function ColorsChart({
       return getLightness(b.hex) - getLightness(a.hex);
     } else if (sortBy === "hue") {
       const delta = getHue(a.hex) - getHue(b.hex);
-      // Round to the nearest fifth.
-      return delta === 0 ? getLightness(a.hex) - getLightness(b.hex) : delta;
+      return delta <= 5 ? getLightness(a.hex) - getLightness(b.hex) : delta;
     } else if (sortBy === "saturation") {
-      return getSaturation(a.hex) - getSaturation(b.hex);
+      const delta = getSaturation(a.hex) - getSaturation(b.hex);
+      return delta <= 5 ? getLightness(a.hex) - getLightness(b.hex) : delta;
     } else {
       return b.count - a.count;
     }
@@ -77,6 +77,12 @@ export function ColorsChart({
   const lightColors = sortedColors.filter((color) =>
     colord(color.hex).isLight()
   );
+
+  console.log({
+    all: sortedColors.map((color) => color.hex),
+    dark: darkColors.map((color) => color.hex),
+    light: lightColors.map((color) => color.hex),
+  });
 
   const renderChart = (colors: Color[]) => {
     return (

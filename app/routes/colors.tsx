@@ -25,7 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const userTheme = session.get("theme");
 
   const url = new URL(request.url);
-  const anchor = s.integer(url.searchParams, "anchor", 4, 1, 10);
+  const anchor = s.integer(url.searchParams, "anchor", 3, 1, 10);
 
   const results = await api.getColors({ anchor });
 

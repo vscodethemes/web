@@ -162,7 +162,7 @@ export default function ExtensionThemeRoute() {
         <GithubLink />
       </Header>
       <main className="flex-1 pt-24 pb-24 flex justify-center">
-        <div className="flex flex-col gap-20 max-w-[960px]">
+        <div className="flex flex-col gap-20 max-w-[1080px]">
           <div className="flex flex-row gap-12">
             <img
               className="aspect-theme w-[540px] rounded-lg shadow-lg border border-accent"
