@@ -6,6 +6,8 @@ import type {
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { Share2Icon } from "@radix-ui/react-icons";
+import { useState } from "react";
 import api from "~/clients/api";
 import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
 import * as s from "~/lib/search-params";
@@ -19,6 +21,12 @@ import { SearchPagination } from "~/components/search-pagination";
 import { DynamicStylesFunction } from "~/components/dynamic-styles";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
 import { languageValues } from "~/data";
 
 const pageSize = 16;
@@ -37,11 +45,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const queryLanguage = s.literal(
     url.searchParams,
     "language",
-    "js",
+    "",
     languageValues
   );
 
-  const language = queryLanguage ?? userLanguage ?? "js";
+  const language = queryLanguage || userLanguage || "js";
 
   let editorBackground = "";
   // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
@@ -176,13 +184,31 @@ export default function ExtensionThemeRoute() {
   const { results, searchQuery, userLanguage, userTheme } =
     useLoaderData<typeof loader>();
 
+  const [openTooltip, setOpenTooltip] = useState<boolean>();
+  const [copied, setCopied] = useState(false);
+
   const extension = results.extensions[0];
   const theme = extension.theme!;
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${window.location.href}?language=${searchQuery.language}`
+    );
+    setCopied(true);
+    setOpenTooltip(true);
+
+    setTimeout(() => {
+      setOpenTooltip(undefined);
+      setTimeout(() => {
+        setCopied(false);
+      }, 500);
+    }, 2000);
+  };
 
   return (
     <>
       <Header>
-        <LanguageMenu value={userLanguage ?? "js"} />
+        <LanguageMenu value={searchQuery.language} />
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
@@ -213,6 +239,23 @@ export default function ExtensionThemeRoute() {
                   <Button variant="outline" size="lg">
                     VS Code for Web
                   </Button>
+                  <TooltipProvider>
+                    <Tooltip open={openTooltip}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="lg"
+                          className="px-4"
+                          onClick={copyToClipboard}
+                        >
+                          <Share2Icon className="w-5 h-5 text-muted-foreground" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        {copied ? "Copied!" : "Copy URL"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
             </div>

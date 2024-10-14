@@ -110,7 +110,7 @@ export default function Index() {
       <Header>
         <SearchInput value={q} />
         <SortByMenu value={searchQuery.sortBy} />
-        <LanguageMenu value={userLanguage ?? "js"} />
+        <LanguageMenu value={searchQuery.language} />
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>

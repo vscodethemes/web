@@ -32,12 +32,19 @@ export function LanguageMenu({ value }: LanguageMenuProps) {
           <DropdownMenuItem
             key={option.value}
             disabled={selected.value === option.value}
-            onClick={() =>
+            onClick={() => {
+              // Remove the language query parameter if when the session language changes.
+              const searchParams = new URLSearchParams(location.search);
+              searchParams.delete("language");
+
               submit(
                 { language: option.value },
-                { method: "POST", action: location.pathname + location.search }
-              )
-            }
+                {
+                  method: "POST",
+                  action: `${location.pathname}?${searchParams}`,
+                }
+              );
+            }}
           >
             <div className="w-6 h-6 mr-1">{icons[option.value]}</div>
             <div className="flex-1">{option.label}</div>
