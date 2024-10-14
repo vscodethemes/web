@@ -41,6 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
+
   return (
     <html lang="en" className={cn(userTheme === "dark" && "dark")}>
       <head>
@@ -49,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <style>{tailwindStyles}</style>
+        <style suppressHydrationWarning>{tailwindStyles}</style>
         <DynamicStyles />
       </head>
       <body className="flex flex-col">
