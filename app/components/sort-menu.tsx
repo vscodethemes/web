@@ -21,9 +21,9 @@ export function SortByMenu({ value }: SortByMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="pr-3">
-          <span className="text-gray-400 font-light">Sort By:</span>
-          &nbsp;{selected.label}
+        <Button variant="ghost" className="hidden md:flex p-0 md:pl-3 md:pr-3">
+          <span className="text-gray-400 font-light mr-2">Sort By:</span>
+          {selected.label}
           <ChevronDownIcon className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -34,17 +34,17 @@ export function SortByMenu({ value }: SortByMenuProps) {
             disabled={selected.value === option.value}
             onClick={() => {
               const searchParams = new URLSearchParams(location.search);
+              const query: Record<string, string> = {};
+              if (searchParams.has("q")) {
+                query.q = searchParams.get("q")!;
+              }
+              query.sort = option.value;
 
-              submit(
-                {
-                  q: searchParams.get("q"),
-                  sort: option.value,
-                },
-                {
-                  method: "GET",
-                  action: location.pathname + "?" + searchParams.toString(),
-                }
-              );
+              submit(query, {
+                method: "GET",
+                action: `${location.pathname}?${searchParams}`,
+                // action: location.pathname + "?" + searchParams.toString(),
+              });
             }}
           >
             <div className="flex-1">{option.label}</div>

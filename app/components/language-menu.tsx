@@ -21,10 +21,10 @@ export function LanguageMenu({ value }: LanguageMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="pl-3 pr-3">
+        <Button variant="ghost" className="p-0 md:pl-3 md:pr-3">
           <div className="w-6 h-6 mr-1">{icons[selected.value]}</div>
-          {selected.label}
-          <ChevronDownIcon className="ml-2 h-4 w-4" />
+          <div className="hidden md:block">{selected.label}</div>
+          <ChevronDownIcon className="md:ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40">

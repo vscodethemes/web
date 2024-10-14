@@ -212,17 +212,17 @@ export default function ExtensionThemeRoute() {
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
-      <main className="flex-1 pt-24 pb-24 flex justify-center">
-        <div className="flex flex-col gap-20 max-w-[1080px]">
-          <div className="flex flex-row gap-12">
+      <main className="flex-1 px-5 pb-12 md:pb-24 pt-12 md:pt-24 flex justify-center">
+        <div className="flex flex-col gap-14 md:gap-20 w-full max-w-[1080px]">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-12">
             <img
-              className="aspect-theme w-[540px] rounded-lg shadow-lg border border-accent"
+              className="aspect-theme w-full max-w-[540px] rounded-lg shadow-lg border border-accent"
               loading="eager"
               src={theme.url}
               alt=""
             />
 
-            <div className="flex flex-col justify-center gap-8">
+            <div className="flex flex-col justify-center gap-6 md:gap-8">
               <div>
                 <h1 className="text-4xl font-light">{extension.displayName}</h1>
                 <h2 className="text-xs">by {extension.publisherDisplayName}</h2>
@@ -233,7 +233,7 @@ export default function ExtensionThemeRoute() {
                   Open With
                 </h5>
                 <div className="flex flex-row gap-4">
-                  <Button className="w-40" size="lg" asChild>
+                  <Button size="lg" className="w-40" asChild>
                     <Link
                       to={`vscode:extension/${extension.publisherName}.${extension.name}`}
                       reloadDocument
@@ -241,7 +241,12 @@ export default function ExtensionThemeRoute() {
                       VS Code
                     </Link>
                   </Button>
-                  <Button variant="outline" size="lg" asChild>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-40 px-4"
+                    asChild
+                  >
                     <Link
                       to={`https://vscode.dev/theme/${
                         extension.publisherName
@@ -259,7 +264,7 @@ export default function ExtensionThemeRoute() {
                         <Button
                           variant="ghost"
                           size="lg"
-                          className="px-4"
+                          className="px-4 hidden md:flex"
                           onClick={copyToClipboard}
                         >
                           <Share2Icon className="w-5 h-5 text-muted-foreground" />
@@ -281,7 +286,7 @@ export default function ExtensionThemeRoute() {
                 <h2 className="text-2xl font-light">More Themes</h2>
                 <Badge variant="secondary">+ {extension.totalThemes - 1}</Badge>
               </div>
-              <div className="grid grid-cols-4 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
                 {extension.themes.map((theme, index) => {
                   const slug = `${extension.publisherName}.${extension.name}/${theme.name}`;
 
@@ -299,7 +304,7 @@ export default function ExtensionThemeRoute() {
                     >
                       <img
                         key={slug}
-                        className="aspect-theme w-[540px] rounded-lg shadow-lg border border-accent"
+                        className="aspect-theme w-full max-w-[540px] rounded-lg shadow-lg border border-accent"
                         loading={index >= 12 ? "lazy" : "eager"}
                         src={theme.url}
                         alt=""

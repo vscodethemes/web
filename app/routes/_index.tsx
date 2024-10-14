@@ -113,7 +113,7 @@ export default function Index() {
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
-      <main className="flex-1 pb-24">
+      <main className="flex-1 pb-12 md:pb-24">
         <SearchResults extensions={results.extensions} />
         <SearchPagination
           total={results.total}

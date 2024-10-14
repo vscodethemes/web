@@ -93,7 +93,7 @@ export function SearchInput({ value }: SearchInputProps) {
   };
 
   return (
-    <Form className="w-[230px] relative">
+    <Form className="sm:w-[230px] relative">
       <Popover open={openColorSelector}>
         <PopoverAnchor asChild>
           <div>
@@ -107,7 +107,6 @@ export function SearchInput({ value }: SearchInputProps) {
               onFocus={() => setOpenColorSelector(true)}
               onBlur={() => setOpenColorSelector(false)}
             />
-            {sort && <input type="hidden" name="sort" value={sort} />}
             {searchColor.isValid() ? (
               <div
                 className={cn(
@@ -119,6 +118,7 @@ export function SearchInput({ value }: SearchInputProps) {
             ) : (
               <MagnifyingGlassIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground pointer-events-none" />
             )}
+            {sort && <input type="hidden" name="sort" value={sort} />}
           </div>
         </PopoverAnchor>
 

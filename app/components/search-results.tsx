@@ -7,7 +7,7 @@ export interface SearchResultsProps {
 
 export function SearchResults({ extensions }: SearchResultsProps) {
   return (
-    <div className="grid grid-cols-3 gap-8 p-8">
+    <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-8 p-5 md:p-8">
       {extensions.map((extension, index) => {
         const slug = `${extension.publisherName}.${extension.name}`;
         return (
