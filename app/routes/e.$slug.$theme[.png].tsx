@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { renderAsync } from "@resvg/resvg-js";
 import { colord } from "colord";
 import path from "path";

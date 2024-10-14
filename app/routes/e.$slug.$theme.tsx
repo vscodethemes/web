@@ -1,10 +1,10 @@
-import type {
+import {
+  json,
   MetaFunction,
   LoaderFunctionArgs,
   SerializeFrom,
   ActionFunctionArgs,
 } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Share2Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
