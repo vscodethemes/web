@@ -103,8 +103,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 };
 
 export default function Index() {
-  const { results, searchQuery, q, userLanguage, userTheme } =
-    useLoaderData<typeof loader>();
+  const { results, searchQuery, q, userTheme } = useLoaderData<typeof loader>();
+
   return (
     <>
       <Header>

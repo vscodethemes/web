@@ -233,11 +233,25 @@ export default function ExtensionThemeRoute() {
                   Open With
                 </h5>
                 <div className="flex flex-row gap-4">
-                  <Button className="w-40" size="lg">
-                    VS Code
+                  <Button className="w-40" size="lg" asChild>
+                    <Link
+                      to={`vscode:extension/${extension.publisherName}.${extension.name}`}
+                      reloadDocument
+                    >
+                      VS Code
+                    </Link>
                   </Button>
-                  <Button variant="outline" size="lg">
-                    VS Code for Web
+                  <Button variant="outline" size="lg" asChild>
+                    <Link
+                      to={`https://vscode.dev/theme/${
+                        extension.publisherName
+                      }.${extension.name}/${encodeURIComponent(
+                        theme.displayName
+                      )}`}
+                      reloadDocument
+                    >
+                      VS Code for Web
+                    </Link>
                   </Button>
                   <TooltipProvider>
                     <Tooltip open={openTooltip}>
