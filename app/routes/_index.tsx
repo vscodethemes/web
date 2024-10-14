@@ -18,24 +18,6 @@ import { getSession } from "~/sessions";
 
 extend([namesPlugin]);
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "VS Code Themes" },
-    {
-      name: "description",
-      content: "Search and preview themes for Visual Studio Code",
-    },
-
-    // TODO: Add social meta tags.
-    // 'twitter:card': 'summary_large_image',
-    // 'twitter:creator': '_jschr',
-    // 'twitter:url': 'https://vscodethemes.com',
-    // 'twitter:title': 'VS Code Themes',
-    // 'twitter:description': 'Search themes for Visual Studio Code',
-    // 'twitter:image': 'https://vscodethemes.com/thumbnail.jpg',
-  ];
-};
-
 const pageSize = 36;
 const maxPages = Number.MAX_SAFE_INTEGER;
 
@@ -90,8 +72,35 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const results = await api.searchExtensions(searchQuery);
 
-  return json({ results, searchQuery, q, userLanguage, userTheme });
+  return json({
+    results,
+    searchQuery,
+    q,
+    userLanguage,
+    userTheme,
+    ENV: {
+      webUrl: process.env.WEB_URL!,
+    },
+  });
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) return [];
+
+  const title = "VS Code Themes";
+  const description = "Search themes for Visual Studio Code";
+  const url = data.ENV.webUrl;
+  const image = `${url}/thumbnail.jpg`;
+
+  return [
+    { title },
+    { name: "description", content: description },
+    { property: "og:title", content: "VS Code Themes" },
+    { property: "og:description", content: description },
+    { property: "og:url", content: url },
+    { property: "og:image", content: image },
+  ];
+};
 
 export default function Index() {
   const { results, searchQuery, q, userLanguage, userTheme } =

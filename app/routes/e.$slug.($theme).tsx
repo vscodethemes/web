@@ -19,24 +19,7 @@ import { SearchPagination } from "~/components/search-pagination";
 import { DynamicStylesFunction } from "~/components/dynamic-styles";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
-
-// TODO: Add social meta tags for extensions and theme.
-export const meta: MetaFunction = () => {
-  return [
-    // { title: "VS Code Themes" },
-    // {
-    //   name: "description",
-    //   content: "Search and preview themes for Visual Studio Code",
-    // },
-    // TODO: Add social meta tags.
-    // 'twitter:card': 'summary_large_image',
-    // 'twitter:creator': '_jschr',
-    // 'twitter:url': 'https://vscodethemes.com',
-    // 'twitter:title': 'VS Code Themes',
-    // 'twitter:description': 'Search themes for Visual Studio Code',
-    // 'twitter:image': 'https://vscodethemes.com/thumbnail.jpg',
-  ];
-};
+import { languageValues } from "~/data";
 
 const pageSize = 16;
 const maxPages = Number.MAX_SAFE_INTEGER;
@@ -51,7 +34,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const pageNumber = s.integer(url.searchParams, "page", 1, 1, maxPages);
-  const language = userLanguage ?? "js";
+  const queryLanguage = s.literal(
+    url.searchParams,
+    "language",
+    "js",
+    languageValues
+  );
+
+  const language = queryLanguage ?? userLanguage ?? "js";
 
   let editorBackground = "";
   // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
@@ -77,8 +67,43 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const results = await api.searchExtensions(searchQuery);
 
-  return json({ results, searchQuery, userLanguage, userTheme });
+  return json({
+    results,
+    searchQuery,
+    userLanguage,
+    userTheme,
+    ENV: {
+      webUrl: process.env.WEB_URL!,
+    },
+  });
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  if (!data) return [];
+
+  const extension = data.results.extensions[0];
+  if (!extension) {
+    return [];
+  }
+
+  const theme = extension.theme;
+  if (!theme) {
+    return [];
+  }
+
+  const title = `${extension.displayName} by ${extension.publisherDisplayName}`;
+  const url = `${data.ENV.webUrl}/e/${extension.publisherName}.${extension.name}/${theme.name}`;
+  const image = `${url}.png?language=${data.searchQuery.language}`;
+
+  return [
+    { title: `${title} | VS Code Themes` },
+    { name: "description", content: extension.shortDescription },
+    { property: "og:title", content: title },
+    { property: "og:description", content: extension.shortDescription },
+    { property: "og:url", content: url },
+    { property: "og:image", content: image },
+  ];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));

@@ -7,7 +7,7 @@ export interface HeaderProps {
 
 export function Header({ children }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-10 px-8 h-[60px] bg-background/95 bg-opacity-95 border-b flex items-center gap-4">
+    <header className="sticky top-0 z-10 px-8 h-[60px] backdrop-blur bg-background/90 bg-opacity-90 border-b flex items-center gap-4">
       <GlobalLoading />
       <Link className="flex gap-2 items-center" title="VS Code Themes" to="/">
         <svg

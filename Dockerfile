@@ -21,6 +21,7 @@ ENV NODE_ENV=production
 COPY package.json .
 COPY package-lock.json .
 COPY entrypoint.sh /
+COPY fonts ./fonts
 COPY --from=builder /app/build /app/build
 
 RUN npm install --production

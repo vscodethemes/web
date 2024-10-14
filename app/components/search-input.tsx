@@ -102,6 +102,7 @@ export function SearchInput({ value }: SearchInputProps) {
               placeholder="Search..."
               name="q"
               value={search}
+              autoComplete="off"
               onChange={(e) => setSearch(e.target.value)}
               onFocus={() => setOpenColorSelector(true)}
               onBlur={() => setOpenColorSelector(false)}
@@ -122,7 +123,7 @@ export function SearchInput({ value }: SearchInputProps) {
         </PopoverAnchor>
 
         <PopoverContent
-          className="w-[230px] bg-background/95 bg-opacity-95 p-2"
+          className="w-[230px] backdrop-blur bg-background/90 bg-opacity-90 p-2"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="grid gap-4">
