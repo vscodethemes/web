@@ -20,6 +20,8 @@ export function background(value: string, dark: boolean) {
     }
   }
 
+  s = Math.min(s, 50);
+
   return `${h} ${s}% ${l}%`;
 }
 
@@ -46,6 +48,8 @@ export function mutedForeground(value: string, dark: boolean) {
     l = 20;
   }
 
+  s = Math.min(s, 50);
+
   return `${h} ${s}% ${l}%`;
 }
 
@@ -58,6 +62,8 @@ export function border(value: string, dark: boolean) {
   } else {
     l = 85;
   }
+
+  s = Math.min(s, 50);
 
   return `${h} ${s}% ${l}%`;
 }
@@ -104,6 +110,8 @@ export function secondary(value: string, dark: boolean) {
   } else {
     l = 88;
   }
+
+  s = Math.min(s, 50);
 
   return `${h} ${s}% ${l}%`;
 }
