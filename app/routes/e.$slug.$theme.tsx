@@ -52,11 +52,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const language = queryLanguage || userLanguage || "js";
 
   let editorBackground = "";
-  // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
+
   if (userTheme === "dark") {
     editorBackground = "#1e1e1e";
   } else if (userTheme === "light") {
     editorBackground = "#ffffff";
+  } else {
+    const clientHint = request.headers.get("Sec-CH-Prefers-Color-Scheme");
+    if (clientHint === "dark") {
+      editorBackground = "#1e1e1e";
+    } else if (clientHint === "light") {
+      editorBackground = "#ffffff";
+    }
   }
 
   const searchQuery = {

@@ -46,13 +46,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } else {
     text = q;
 
-    // TODO: Use Sec-CH-Prefers-Color-Scheme header when available.
     if (userTheme === "dark") {
       editorBackground = "#1e1e1e";
       colorDistance = 50;
     } else if (userTheme === "light") {
       editorBackground = "#ffffff";
       colorDistance = 50;
+    } else {
+      const clientHint = request.headers.get("Sec-CH-Prefers-Color-Scheme");
+      if (clientHint === "dark") {
+        editorBackground = "#1e1e1e";
+        colorDistance = 50;
+      } else if (clientHint === "light") {
+        editorBackground = "#ffffff";
+        colorDistance = 50;
+      }
     }
   }
 

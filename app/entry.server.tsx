@@ -115,6 +115,9 @@ function handleBrowserRequest(
           const stream = createReadableStreamFromReadable(body);
 
           responseHeaders.set("Content-Type", "text/html");
+          responseHeaders.set("Accept-CH", "Sec-CH-Prefers-Color-Scheme");
+          responseHeaders.set("Vary", "Sec-CH-Prefers-Color-Scheme");
+          responseHeaders.set("Critical-CH", "Sec-CH-Prefers-Color-Scheme");
 
           resolve(
             new Response(stream, {
