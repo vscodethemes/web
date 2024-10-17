@@ -299,6 +299,7 @@ export default function ExtensionThemeRoute() {
 
                   return (
                     <Link
+                      key={slug}
                       to={`/e/${slug}`}
                       className={cn(
                         "flex aspect-theme rounded-lg shadow-lg border border-accent hover:outline outline-offset-2 outline-2 outline-ring",
@@ -310,7 +311,6 @@ export default function ExtensionThemeRoute() {
                       }}
                     >
                       <img
-                        key={slug}
                         className="aspect-theme w-full max-w-[540px] rounded-lg shadow-lg border border-accent"
                         loading={index >= 12 ? "lazy" : "eager"}
                         src={theme.url}
