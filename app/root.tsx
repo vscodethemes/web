@@ -5,6 +5,8 @@ import {
   Scripts,
   ScrollRestoration,
   useRouteLoaderData,
+  useRouteError,
+  isRouteErrorResponse,
 } from "@remix-run/react";
 import type {
   LinksFunction,
@@ -16,6 +18,8 @@ import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
 import { cn } from "~/lib/utils";
 import { UserThemeScript } from "~/components/user-theme-script";
 import { DynamicStyles } from "~/components/dynamic-styles";
+import { Header } from "~/components/header";
+import { GithubLink } from "~/components/github-link";
 import tailwindStyles from "./tailwind.css?inline";
 
 export const links: LinksFunction = () => [];
@@ -39,7 +43,7 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({}, { headers: { "Set-Cookie": await commitSession(session) } });
 }
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export default function App() {
   const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
 
   return (
@@ -53,21 +57,45 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <style suppressHydrationWarning>{tailwindStyles}</style>
         <DynamicStyles />
       </head>
-      <body className="flex flex-col">
-        {children}
+      <body className="min-h-screen flex flex-col">
+        <Outlet />
         <ScrollRestoration />
         <Scripts />
         {/* TODO: Add analytics */}
-        {/* <script
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "170a147d58824cf485cb425f9770c269"}'
-        ></script> */}
       </body>
     </html>
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export function ErrorBoundary() {
+  const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
+  const error = useRouteError();
+  console.error(error);
+
+  return (
+    <html lang="en" className={cn(userTheme === "dark" && "dark")}>
+      <head>
+        <UserThemeScript />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+        <style suppressHydrationWarning>{tailwindStyles}</style>
+      </head>
+      <body className="min-h-screen flex flex-col">
+        <Header>
+          <GithubLink />
+        </Header>
+        <main className="flex-1 px-5 py-10 flex items-center justify-center">
+          <h1 className="text-3xl pb-40">
+            {isRouteErrorResponse(error)
+              ? `${error.status} ${error.statusText}`
+              : "Oops! Something went wrong."}
+          </h1>
+        </main>
+        <Scripts />
+        {/* TODO: Add analytics */}
+      </body>
+    </html>
+  );
 }

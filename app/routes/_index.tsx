@@ -1,5 +1,5 @@
 import { json, MetaFunction, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { colord, extend } from "colord";
 import namesPlugin from "colord/plugins/names";
 import api from "~/clients/api";
@@ -14,6 +14,7 @@ import { GithubLink } from "~/components/github-link";
 import { SearchPagination } from "~/components/search-pagination";
 import { sortByValues } from "~/data";
 import { getSession } from "~/sessions";
+import { cn } from "~/lib/utils";
 
 extend([namesPlugin]);
 
@@ -112,6 +113,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function Index() {
   const { results, searchQuery, q, userTheme } = useLoaderData<typeof loader>();
 
+  const hasResults = results.extensions.length > 0;
+
   return (
     <>
       <Header>
@@ -121,13 +124,29 @@ export default function Index() {
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
-      <main className="flex-1 pb-12 md:pb-24">
-        <SearchResults extensions={results.extensions} />
-        <SearchPagination
-          total={results.total}
-          pageNumber={searchQuery.extensionsPageNumber}
-          pageSize={searchQuery.extensionsPageSize}
-        />
+      <main
+        className={cn(
+          "flex-1 pb-12 md:pb-24",
+          !hasResults && "py-10 pb-40 flex items-center justify-center"
+        )}
+      >
+        {hasResults ? (
+          <>
+            <SearchResults extensions={results.extensions} />
+            <SearchPagination
+              total={results.total}
+              pageNumber={searchQuery.extensionsPageNumber}
+              pageSize={searchQuery.extensionsPageSize}
+            />
+          </>
+        ) : (
+          <div className="flex flex-col items-center gap-2">
+            <h1 className="text-3xl">No themes found</h1>
+            <Link className="text-sm text-vsct-1 hover:underline" to={`/`}>
+              Try clearing search?
+            </Link>
+          </div>
+        )}
       </main>
     </>
   );

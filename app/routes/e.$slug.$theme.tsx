@@ -4,6 +4,7 @@ import {
   LoaderFunctionArgs,
   SerializeFrom,
   ActionFunctionArgs,
+  redirect,
 } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { Share2Icon } from "@radix-ui/react-icons";
@@ -21,6 +22,7 @@ import { SearchPagination } from "~/components/search-pagination";
 import { DynamicStylesFunction } from "~/components/dynamic-styles";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
+import { ExtensionErrorBoundary } from "~/components/extension-error-boundary";
 import {
   Tooltip,
   TooltipContent,
@@ -81,6 +83,17 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   };
 
   const results = await api.searchExtensions(searchQuery);
+
+  if (results.extensions.length === 0) {
+    throw new Response(null, {
+      status: 404,
+      statusText: "Extension not Found",
+    });
+  }
+
+  if (!results.extensions[0].theme) {
+    return redirect(`/e/${publisherName}.${extensionName}`);
+  }
 
   return json({
     results,
@@ -188,9 +201,7 @@ const dynamicStyle: DynamicStylesFunction<SerializeFrom<typeof loader>> = ({
 export const handle = { dynamicStyle };
 
 export default function ExtensionThemeRoute() {
-  const { results, searchQuery, userLanguage, userTheme } =
-    useLoaderData<typeof loader>();
-
+  const { results, searchQuery, userTheme } = useLoaderData<typeof loader>();
   const [openTooltip, setOpenTooltip] = useState<boolean>();
   const [copied, setCopied] = useState(false);
 
@@ -332,3 +343,5 @@ export default function ExtensionThemeRoute() {
     </>
   );
 }
+
+export { ExtensionErrorBoundary as ErrorBoundary };

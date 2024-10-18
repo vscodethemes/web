@@ -1,5 +1,6 @@
 import { redirect, LoaderFunctionArgs } from "@remix-run/node";
 import api from "~/clients/api";
+import { ExtensionErrorBoundary } from "~/components/extension-error-boundary";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const [publisherName, extensionName] = (params.slug ?? "").split(".");
@@ -30,3 +31,5 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   return redirect(`/e/${publisherName}.${extensionName}/${theme.name}`);
 }
+
+export { ExtensionErrorBoundary as ErrorBoundary };
