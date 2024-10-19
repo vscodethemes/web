@@ -8,7 +8,7 @@ import { useUniversalLayoutEffect } from "~/lib/use-universal-layout-effect";
 export type Theme = "light" | "dark" | "system";
 
 export function useUserTheme(): Theme {
-  let rootLoaderData = useRouteLoaderData<typeof rootLoader>("root");
+  const rootLoaderData = useRouteLoaderData<typeof rootLoader>("root");
   return rootLoaderData?.userTheme ?? "system";
 }
 
@@ -21,8 +21,8 @@ function syncUserTheme(media: MediaQueryList | MediaQueryListEvent) {
 }
 
 export function UserThemeScript() {
-  let userTheme = useUserTheme();
-  let script = useMemo(
+  const userTheme = useUserTheme();
+  const script = useMemo(
     () => `
         let userTheme = ${JSON.stringify(userTheme)};
         if (userTheme === "system") {
@@ -42,7 +42,7 @@ export function UserThemeScript() {
         document.documentElement.classList.add("dark");
         break;
       case "system":
-        let media = window.matchMedia("(prefers-color-scheme: dark)");
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
         syncUserTheme(media);
         media.addEventListener("change", syncUserTheme);
         return () => media.removeEventListener("change", syncUserTheme);

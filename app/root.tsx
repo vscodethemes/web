@@ -17,6 +17,7 @@ import { json } from "@remix-run/node";
 import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
 import { cn } from "~/lib/utils";
 import { UserThemeScript } from "~/components/user-theme-script";
+import { AnalyticsScript } from "~/components/analytics-script";
 import { DynamicStyles } from "~/components/dynamic-styles";
 import { Header } from "~/components/header";
 import { GithubLink } from "~/components/github-link";
@@ -27,9 +28,10 @@ export const links: LinksFunction = () => [];
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const userTheme = session.get("theme") ?? "system";
+  const userLanguage = session.get("language") ?? "js";
 
   return json(
-    { userTheme },
+    { userTheme, userLanguage },
     { headers: { "Set-Cookie": await commitSession(session) } }
   );
 }
@@ -50,6 +52,7 @@ export default function App() {
     <html lang="en" className={cn(userTheme === "dark" && "dark")}>
       <head>
         <UserThemeScript />
+        <AnalyticsScript />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
@@ -61,7 +64,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {/* TODO: Add analytics */}
       </body>
     </html>
   );
@@ -76,6 +78,7 @@ export function ErrorBoundary() {
     <html lang="en" className={cn(userTheme === "dark" && "dark")}>
       <head>
         <UserThemeScript />
+        <AnalyticsScript />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />

@@ -208,7 +208,18 @@ export default function ExtensionThemeRoute() {
   const extension = results.extensions[0];
   const theme = extension.theme!;
 
+  const sendEvent = (event: string) => {
+    window.plausible(event, {
+      props: {
+        extension: `${extension.publisherName}.${extension.name}`,
+        theme: `${extension.publisherName}.${extension.name}/${theme.name}`,
+      },
+    });
+  };
+
   const copyToClipboard = () => {
+    sendEvent("Copy Theme URL");
+
     navigator.clipboard.writeText(
       `${window.location.href}?language=${searchQuery.language}`
     );
@@ -240,7 +251,7 @@ export default function ExtensionThemeRoute() {
               alt=""
             />
 
-            <div className="flex flex-col justify-center gap-6 md:gap-8">
+            <div className="flex max-w-[492px] flex-col justify-center gap-6 md:gap-8">
               <div>
                 <h1 className="text-4xl font-light">{extension.displayName}</h1>
                 <h2 className="text-xs">by {extension.publisherDisplayName}</h2>
@@ -253,8 +264,7 @@ export default function ExtensionThemeRoute() {
                 <div className="flex flex-row gap-4">
                   <Button size="lg" className="w-40" asChild>
                     <Link
-                      to={`vscode:extension/${extension.publisherName}.${extension.name}`}
-                      reloadDocument
+                      to={`/e/${extension.publisherName}.${extension.name}/${theme.name}/open?with=vscode`}
                     >
                       VS Code
                     </Link>
@@ -266,11 +276,7 @@ export default function ExtensionThemeRoute() {
                     asChild
                   >
                     <Link
-                      to={`https://vscode.dev/theme/${
-                        extension.publisherName
-                      }.${extension.name}/${encodeURIComponent(
-                        theme.displayName
-                      )}`}
+                      to={`/e/${extension.publisherName}.${extension.name}/${theme.name}/open?with=vscodeweb`}
                       reloadDocument
                     >
                       VS Code for Web

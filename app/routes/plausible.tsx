@@ -1,5 +1,6 @@
 import {
   json,
+  SerializeFrom,
   LoaderFunctionArgs,
   ActionFunctionArgs,
   MetaFunction,
@@ -9,15 +10,10 @@ import { getSession, handleSessionUpdate, commitSession } from "~/sessions";
 import { Header } from "~/components/header";
 import { ThemeMenu } from "~/components/theme-menu";
 import { GithubLink } from "~/components/github-link";
-import {
-  ColorsChart,
-  ColorsChartProps,
-} from "~/components/colors-chart.client";
-import api from "~/clients/api";
-import * as s from "~/lib/search-params";
+import { DynamicStylesFunction } from "~/components/dynamic-styles";
 
 export const meta: MetaFunction = () => {
-  const title = "Colors | VS Code Themes";
+  const title = "Analytics | VS Code Themes";
   const description = "Search themes for Visual Studio Code";
 
   return [{ title }, { name: "description", content: description }];
@@ -26,13 +22,7 @@ export const meta: MetaFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   const userTheme = session.get("theme");
-
-  const url = new URL(request.url);
-  const anchor = s.integer(url.searchParams, "anchor", 3, 1, 10);
-
-  const results = await api.getColors({ anchor });
-
-  return json({ colors: results.colors.slice(0, 100), userTheme });
+  return json({ userTheme });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -41,14 +31,23 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({}, { headers: { "Set-Cookie": await commitSession(session) } });
 }
 
-export default function Colors() {
-  const { colors, userTheme } = useLoaderData<typeof loader>();
-  let defaultTab: ColorsChartProps["defaultTab"] = "all";
-  if (userTheme === "dark") {
-    defaultTab = "dark";
-  } else if (userTheme === "light") {
-    defaultTab = "light";
+const dynamicStyle: DynamicStylesFunction<
+  SerializeFrom<typeof loader>
+> = () => {
+  return `
+  .dark {
+    --background: 220 25.7% 13.7%;
+    --popover: 220 25.7% 13.7%;
+    --border: 216.9 26% 19.6%;
+    --accent: 216.9 26% 19.6%;
   }
+  `;
+};
+
+export const handle = { dynamicStyle };
+
+export default function Analytics() {
+  const { userTheme } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -56,8 +55,22 @@ export default function Colors() {
         <ThemeMenu value={userTheme ?? "system"} />
         <GithubLink />
       </Header>
-      <main className="flex-1 p-8 pb-24">
-        {ColorsChart && <ColorsChart defaultTab={defaultTab} colors={colors} />}
+      <main className="flex-1 flex">
+        <iframe
+          plausible-embed
+          src={`https://plausible.vscodethemes.com/share/vscodethemes.com?auth=_0yZ1lziZtxjNkncxEyYN&embed=true&theme=${userTheme}`}
+          loading="lazy"
+          allowTransparency={true}
+          className="w-full flex-1"
+        ></iframe>
+        <script
+          async
+          src="https://plausible-analytics-ce-production-e882.up.railway.app/js/embed.host.js"
+        ></script>
+        <script
+          async
+          src="https://plausible.vscodethemes.com/js/embed.host.js"
+        ></script>
       </main>
     </>
   );
