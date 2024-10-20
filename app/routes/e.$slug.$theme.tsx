@@ -13,7 +13,7 @@ import api from "~/clients/api";
 import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
 import * as s from "~/lib/search-params";
 import * as t from "~/lib/theme-variables";
-import { cn } from "~/lib/utils";
+import { cn, printDescription } from "~/lib/utils";
 import { Header } from "~/components/header";
 import { LanguageMenu } from "~/components/language-menu";
 import { ThemeMenu } from "~/components/theme-menu";
@@ -256,7 +256,7 @@ export default function ExtensionThemeRoute() {
                 <h1 className="text-4xl font-light">{extension.displayName}</h1>
                 <h2 className="text-xs">by {extension.publisherDisplayName}</h2>
               </div>
-              <p>{extension.shortDescription}</p>
+              <p>{printDescription(extension.shortDescription)}</p>
               <div className="flex flex-col gap-1">
                 <h5 className="text-[9px] uppercase text-primary tracking-wider">
                   Open With
