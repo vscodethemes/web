@@ -1,8 +1,33 @@
-import { colord } from "colord";
+import { colord, extend } from "colord";
+import a11yPlugin from "colord/plugins/a11y";
+
+extend([a11yPlugin]);
 
 export function hsl(value: string) {
   const color = colord(value);
   let { h, s, l } = color.toHsl();
+  return `${h} ${s}% ${l}%`;
+}
+
+const backgroundDark = colord("hsl(0, 0%, 3.9%)");
+const backgroundLight = colord("hsl(0, 0%, 100%)");
+export function primary(value: string, dark: boolean) {
+  let color = colord(value);
+
+  if (dark) {
+    // Ensure contrast with dark background.
+    if (color.contrast(backgroundDark) < 3) {
+      color = color.lighten(0.25);
+    }
+  } else {
+    // Ensure contrast with light background.
+    if (color.contrast(backgroundLight) < 3) {
+      color = color.darken(0.15);
+    }
+  }
+
+  const { h, s, l } = color.toHsl();
+
   return `${h} ${s}% ${l}%`;
 }
 

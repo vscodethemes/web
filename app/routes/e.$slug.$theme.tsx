@@ -149,10 +149,10 @@ const dynamicStyle: DynamicStylesFunction<SerializeFrom<typeof loader>> = ({
 
   return `
   :root {
-    --primary: ${t.hsl(theme.activityBarBadgeBackground)};
+    --primary: ${t.primary(theme.activityBarBadgeBackground, false)};
     --primary-foreground: ${t.hsl(theme.activityBarBadgeForeground)};
     --secondary: ${t.secondary(theme.editorBackground, false)};
-    --input: ${t.hsl(theme.activityBarBadgeBackground)};
+    --input: ${t.primary(theme.activityBarBadgeBackground, false)};
     --background: ${t.background(theme.editorBackground, false)};
     --foreground: ${t.foreground(theme.editorBackground, false)};
     --muted-foreground: ${t.mutedForeground(theme.editorBackground, false)};
@@ -173,10 +173,10 @@ const dynamicStyle: DynamicStylesFunction<SerializeFrom<typeof loader>> = ({
   }
 
   .dark {
-    --primary: ${t.hsl(theme.activityBarBadgeBackground)};
+    --primary: ${t.primary(theme.activityBarBadgeBackground, true)};
     --primary-foreground: ${t.hsl(theme.activityBarBadgeForeground)};
     --secondary: ${t.secondary(theme.editorBackground, true)};
-    --input: ${t.hsl(theme.activityBarBadgeBackground)};
+    --input: ${t.primary(theme.activityBarBadgeBackground, true)};
     --background: ${t.background(theme.editorBackground, true)};
     --foreground: ${t.foreground(theme.editorBackground, true)};
     --muted-foreground: ${t.mutedForeground(theme.editorBackground, true)};
