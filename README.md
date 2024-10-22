@@ -1,40 +1,31 @@
-# Welcome to Remix!
+[![vscodethemes](public/banner.png)](https://vscodethemes.com)
 
-- 📖 [Remix docs](https://remix.run/docs)
+Search and preview themes from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Installs).
 
-## Development
+## How it Works
 
-Run the dev server:
+VS Code Themes scans the Visual Studio Marketplace and maintains a searchable database of themes.
 
-```shellscript
-npm run dev
-```
+In order for a theme to show up on the website:
 
-## Deployment
+1. A description must exist in the [extension's manifest](https://code.visualstudio.com/api/references/extension-manifest)
+2. Themes must be `.json` (`.tmTheme` files are not supported)
 
-First, build your app for production:
+Missing a theme? [Open an issue](https://github.com/vscodethemes/web/issues/new).
 
-```sh
-npm run build
-```
 
-Then run the app in production mode:
+## Creating a Theme
 
-```sh
-npm start
-```
+Here are some helpful links if you'd like to create your own theme:
 
-Now you'll need to pick a host to deploy it to.
+- [Color Themes, VS Code docs](https://code.visualstudio.com/docs/getstarted/themes)
+- [Creating a VS Code Theme by Sarah Drasner, CSS-Tricks](https://css-tricks.com/creating-a-vs-code-theme/)
 
-### DIY
+## History
 
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
+Helping you discover new themes since 2018:
 
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
+- **Version 1**: February 2018 ([Reddit](https://www.reddit.com/r/vscode/comments/7y79e4/preview_vscode_themes_before_installing_them/))
+- **Version 2**: July 2018 ([Medium](https://hackernoon.com/announcing-vscodethemes-4544f50c2b5b))
+- **Version 3**: April 2022 ([Github](https://github.com/vscodethemes/web/pull/228))
+- **Version 4**: October 2024 ([Github](https://github.com/vscodethemes/web/pull/284))
