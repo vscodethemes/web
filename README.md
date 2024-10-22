@@ -1,6 +1,8 @@
 [![vscodethemes](public/banner.png)](https://vscodethemes.com)
 
-Search and preview themes from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Installs).
+Search and preview themes from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/search?target=VSCode&category=Themes&sortBy=Installs). Built with [Remix](https://remix.run/), [shadcn](https://ui.shadcn.com/) and hosted with [Railway](https://railway.app/).
+
+Aanlytics powered by [Plausible CE](https://plausible.io/docs/self-hosting) and available at [vscodethemes.com/plausible](https://vscodethemes.com/plausible).
 
 ## How it Works
 
