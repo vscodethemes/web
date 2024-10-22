@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  const userTheme = session.get("theme");
+  const userTheme = session.get("theme") ?? "system";
   return json({ userTheme });
 }
 
