@@ -1,52 +1,103 @@
-import type { MetaFunction, LinksFunction } from '@remix-run/cloudflare';
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
-import Footer from '~/components/Footer';
-import DynamicStyles from '~/components/DynamicStyles';
-import globalStyles from '~/styles/global.css';
-import darkStyles from '~/styles/dark.css';
-import componentStyles from '~/styles/components.css';
+import {
+  Links,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useRouteLoaderData,
+  useRouteError,
+  isRouteErrorResponse,
+} from "@remix-run/react";
+import type {
+  LinksFunction,
+  LoaderFunctionArgs,
+  ActionFunctionArgs,
+} from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { getSession, commitSession, handleSessionUpdate } from "~/sessions";
+import { cn } from "~/lib/utils";
+import { UserThemeScript } from "~/components/user-theme-script";
+import { AnalyticsScript } from "~/components/analytics-script";
+import { DynamicStyles } from "~/components/dynamic-styles";
+import { Header } from "~/components/header";
+import { GithubLink } from "~/components/github-link";
+import tailwindStyles from "./tailwind.css?inline";
 
-export let links: LinksFunction = () => {
-  return [
-    { rel: 'stylesheet', href: globalStyles },
-    { rel: 'stylesheet', href: darkStyles, media: '(prefers-color-scheme: dark)' },
-    { rel: 'stylesheet', href: componentStyles },
-  ];
-};
+export const links: LinksFunction = () => [];
 
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  title: 'VS Code Themes',
-  description: 'Search themes for Visual Studio Code',
-  'twitter:card': 'summary_large_image',
-  'twitter:creator': '_jschr',
-  'twitter:url': 'https://vscodethemes.com',
-  'twitter:title': 'VS Code Themes',
-  'twitter:description': 'Search themes for Visual Studio Code',
-  'twitter:image': 'https://vscodethemes.com/thumbnail.jpg',
-});
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userTheme = session.get("theme") ?? "system";
+  const userLanguage = session.get("language") ?? "js";
+
+  return json(
+    { userTheme, userLanguage },
+    { headers: { "Set-Cookie": await commitSession(session) } }
+  );
+}
+
+// This action is used to set the user's language and them preference. This needs to be in the root
+// to to prevent adding ?index to the URL when POSTing to /. This is because the root and
+// routes/_index.tsx share the same path.
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  await handleSessionUpdate(session, request);
+  return json({}, { headers: { "Set-Cookie": await commitSession(session) } });
+}
 
 export default function App() {
+  const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
+
   return (
-    <html lang="en">
+    <html lang="en" className={cn(userTheme === "dark" && "dark")}>
       <head>
+        <UserThemeScript />
+        <AnalyticsScript />
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <style suppressHydrationWarning>{tailwindStyles}</style>
         <DynamicStyles />
       </head>
-      <body>
+      <body className="min-h-screen flex flex-col">
         <Outlet />
-        <Footer />
         <ScrollRestoration />
         <Scripts />
-        <script
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon='{"token": "170a147d58824cf485cb425f9770c269"}'
-        ></script>
-        <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
+  const error = useRouteError();
+  console.error(error);
+
+  return (
+    <html lang="en" className={cn(userTheme === "dark" && "dark")}>
+      <head>
+        <UserThemeScript />
+        <AnalyticsScript />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
+        <style suppressHydrationWarning>{tailwindStyles}</style>
+      </head>
+      <body className="min-h-screen flex flex-col">
+        <Header>
+          <GithubLink />
+        </Header>
+        <main className="flex-1 px-5 py-10 flex items-center justify-center">
+          <h1 className="text-3xl pb-40">
+            {isRouteErrorResponse(error)
+              ? `${error.status} ${error.statusText}`
+              : "Oops! Something went wrong."}
+          </h1>
+        </main>
+        <Scripts />
+        {/* TODO: Add analytics */}
       </body>
     </html>
   );

@@ -1,10 +1,11 @@
-import type { LoaderArgs } from '@remix-run/cloudflare';
-import { redirect } from '@remix-run/cloudflare';
+import { redirect, LoaderFunctionArgs } from "@remix-run/node";
+import { getSession, commitSession } from "~/sessions";
 
-export async function loader({ request }: LoaderArgs) {
-  const url = new URL(request.url);
-  const searchParams = new URLSearchParams(url.search);
-  searchParams.set('type', 'light');
+export async function loader({ request }: LoaderFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  session.set("theme", "light");
 
-  return redirect(`/?${searchParams.toString()}`);
+  return redirect("/", {
+    headers: { "Set-Cookie": await commitSession(session) },
+  });
 }

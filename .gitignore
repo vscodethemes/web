@@ -2,9 +2,6 @@ node_modules
 
 /.cache
 /build
-/dist
-/public/build
-/.mf
-
+.env
+.envrc
 *.log
-wrangler.toml

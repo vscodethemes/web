@@ -1,61 +1,180 @@
-export interface SearchExtensionsOptions {
+export interface SearchResults {
+  total: number;
+  extensions: Extension[];
+}
+
+export interface Extension {
+  name: string;
+  displayName: string;
+  publisherName: string;
+  publisherDisplayName: string;
+  shortDescription: string;
+  totalThemes: number;
+  themes: ThemePartial[];
+  theme?: Theme;
+}
+
+export interface Theme {
+  url: string;
+  name: string;
+  displayName: string;
+  editorBackground: string;
+  editorForeground: string;
+  activityBarBackground: string;
+  activityBarForeground: string;
+  activityBarInActiveForeground: string;
+  activityBarBorder: string | null;
+  activityBarActiveBorder: string;
+  activityBarActiveBackground: string | null;
+  activityBarBadgeBackground: string;
+  activityBarBadgeForeground: string;
+  tabsContainerBackground: string | null;
+  tabsContainerBorder: string | null;
+  statusBarBackground: string | null;
+  statusBarForeground: string;
+  statusBarBorder: string | null;
+  tabActiveBackground: string | null;
+  tabInactiveBackground: string | null;
+  tabActiveForeground: string;
+  tabBorder: string;
+  tabActiveBorder: string | null;
+  tabActiveBorderTop: string | null;
+  titleBarActiveBackground: string;
+  titleBarActiveForeground: string;
+  titleBarBorder: string | null;
+}
+
+export interface ThemePartial {
+  url: string;
+  name: string;
+  displayName: string;
+  editorBackground: string;
+  activityBarBadgeBackground: string;
+}
+
+export interface SearchExtensionsInput {
   text?: string;
   editorBackground?: string;
-  activityBarBackground?: string;
-  statusBarBackground?: string;
-  tabActiveBackground?: string;
-  titleBarActiveBackground?: string;
-  maxColorDistance: number;
-  sortBy: string;
-  sortDirection: string;
-  page: number;
-  pageSize: number;
+  language?: string;
+  sortBy?:
+    | "relevance"
+    | "installs"
+    | "trendingDaily"
+    | "trendingWeekly"
+    | "trendingMonthly"
+    | "rating"
+    | "updatedAt";
+  colorDistance?: number;
+  publisherName?: string;
+  extensionName?: string;
+  themeName?: string;
+  extensionsPageNumber?: number;
+  extensionsPageSize?: number;
+  themesPageNumber?: number;
+  themesPageSize?: number;
 }
 
-export interface SearchExtensionResult {
-  name: string;
-  publisherName: string;
-  displayName: string;
-  publisherDisplayName: string;
-  themes: Array<{ slug: string; editorBackground: string }>;
+export interface GetColorsInput {
+  anchor?: number;
 }
 
-export interface SearchExtensionResults {
-  total: number;
-  extensions: SearchExtensionResult[];
+export interface ColorsResults {
+  colors: Color[];
 }
 
-export class APIClient {
+export interface Color {
+  hex: string;
+  count: number;
+}
+
+export class ApiClient {
   constructor(private baseUrl: string, private apiKey: string) {}
 
-  async searchExtensions(opts: SearchExtensionsOptions): Promise<SearchExtensionResults> {
-    const url = new URL(`${this.baseUrl}/extensions/search`);
-    url.searchParams.set('text', opts.text ?? '');
-    url.searchParams.set('editorBackground', opts.editorBackground ?? '');
-    url.searchParams.set('activityBarBackground', opts.activityBarBackground ?? '');
-    url.searchParams.set('statusBarBackground', opts.statusBarBackground ?? '');
-    url.searchParams.set('tabActiveBackground', opts.tabActiveBackground ?? '');
-    url.searchParams.set('titleBarActiveBackground', opts.titleBarActiveBackground ?? '');
-    url.searchParams.set('maxColorDistance', String(opts.maxColorDistance) ?? '');
-    url.searchParams.set('sortBy', String(opts.sortBy) ?? '');
-    url.searchParams.set('sortDirection', String(opts.sortDirection) ?? '');
-    url.searchParams.set('page', String(opts.page) ?? '');
-    url.searchParams.set('pageSize', String(opts.pageSize) ?? '');
+  async searchExtensions(input: SearchExtensionsInput): Promise<SearchResults> {
+    const params = new URLSearchParams();
 
-    const response = await fetch(url.toString(), {
+    if (input.text) {
+      params.set("text", input.text);
+    }
+    if (input.editorBackground) {
+      params.set("editorBackground", input.editorBackground);
+    }
+    if (input.language) {
+      params.set("language", input.language);
+    }
+    if (input.sortBy) {
+      params.set("sortBy", input.sortBy);
+    }
+    if (input.colorDistance) {
+      params.set("colorDistance", input.colorDistance.toString());
+    }
+    if (input.publisherName) {
+      params.set("publisherName", input.publisherName);
+    }
+    if (input.extensionName) {
+      params.set("extensionName", input.extensionName);
+    }
+    if (input.themeName) {
+      params.set("themeName", input.themeName);
+    }
+    if (input.extensionsPageNumber) {
+      params.set("extensionsPageNumber", input.extensionsPageNumber.toString());
+    }
+    if (input.extensionsPageSize) {
+      params.set("extensionsPageSize", input.extensionsPageSize.toString());
+    }
+    if (input.themesPageNumber) {
+      params.set("themesPageNumber", input.themesPageNumber.toString());
+    }
+    if (input.themesPageSize) {
+      params.set("themesPageSize", input.themesPageSize.toString());
+    }
+
+    const response = await fetch(
+      `${this.baseUrl}/extensions/search?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch extensions: ${response.statusText}`);
+    }
+
+    return await response.json();
+  }
+
+  async getColors(input: GetColorsInput): Promise<ColorsResults> {
+    const params = new URLSearchParams();
+
+    if (input.anchor) {
+      params.set("anchor", input.anchor.toString());
+    }
+
+    const response = await fetch(`${this.baseUrl}/themes/colors?${params}`, {
       headers: {
-        'X-API-Key': this.apiKey,
-      },
-      cf: {
-        // Cache search results for 4 hours.
-        cacheTtl: 60 * 60 * 4,
-        cacheEverything: true,
+        Authorization: `Bearer ${this.apiKey}`,
       },
     });
 
-    const result = await response.json();
-    return result;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch extensions: ${response.statusText}`);
+    }
+
+    return await response.json();
   }
 }
 
-export default new APIClient(INTERNAL_API_URL, INTERNAL_API_KEY);
+const apiUrl = process.env.API_URL;
+if (!apiUrl) {
+  throw new Error("Missing API_URL environment variable");
+}
+
+const apiKey = process.env.API_KEY;
+if (!apiKey) {
+  throw new Error("Missing API_KEY environment variable");
+}
+
+export default new ApiClient(apiUrl, apiKey);
