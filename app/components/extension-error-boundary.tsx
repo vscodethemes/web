@@ -34,7 +34,7 @@ export function ExtensionErrorBoundary() {
       <Header>
         <GithubLink />
       </Header>
-      <main className="flex-1 px-5 py-10 pb-40 flex items-center justify-center">
+      <main className="flex-1 px-5 py-10 pb-20 flex items-center justify-center">
         {message}
       </main>
     </>

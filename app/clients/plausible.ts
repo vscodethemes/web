@@ -9,7 +9,7 @@ export class PlausibleClient {
   async event(
     request: Request,
     event: string,
-    props: PlausibleProps
+    props?: PlausibleProps
   ): Promise<void> {
     if (request.url.includes("localhost")) {
       console.warn("Skipping plausible event in development");

@@ -126,8 +126,8 @@ export default function Index() {
       </Header>
       <main
         className={cn(
-          "flex-1 pb-12 md:pb-24",
-          !hasResults && "py-10 pb-40 flex items-center justify-center"
+          "flex-1 pb-12",
+          !hasResults && "py-10 pb-20 flex items-center justify-center"
         )}
       >
         {hasResults ? (

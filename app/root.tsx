@@ -7,6 +7,7 @@ import {
   useRouteLoaderData,
   useRouteError,
   isRouteErrorResponse,
+  useLocation,
 } from "@remix-run/react";
 import type {
   LinksFunction,
@@ -20,6 +21,7 @@ import { UserThemeScript } from "~/components/user-theme-script";
 import { AnalyticsScript } from "~/components/analytics-script";
 import { DynamicStyles } from "~/components/dynamic-styles";
 import { Header } from "~/components/header";
+import { Footer } from "~/components/footer";
 import { GithubLink } from "~/components/github-link";
 import tailwindStyles from "./tailwind.css?inline";
 
@@ -47,6 +49,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function App() {
   const { userTheme } = useRouteLoaderData<typeof loader>("root") || {};
+  const location = useLocation();
+
+  // Don't show footer on /plausible page.
+  const showFooter = !location.pathname.includes("/plausible");
 
   return (
     <html lang="en" className={cn(userTheme === "dark" && "dark")}>
@@ -62,6 +68,7 @@ export default function App() {
       </head>
       <body className="min-h-screen flex flex-col">
         <Outlet />
+        {showFooter && <Footer />}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -90,12 +97,13 @@ export function ErrorBoundary() {
           <GithubLink />
         </Header>
         <main className="flex-1 px-5 py-10 flex items-center justify-center">
-          <h1 className="text-3xl pb-40">
+          <h1 className="text-3xl pb-20">
             {isRouteErrorResponse(error)
               ? `${error.status} ${error.statusText}`
               : "Oops! Something went wrong."}
           </h1>
         </main>
+        <Footer />
         <Scripts />
         {/* TODO: Add analytics */}
       </body>
