@@ -15,6 +15,13 @@ export function SearchResultsItem({
   const [hoveredTheme, setHoveredTheme] = useState<ThemePartial | null>(null);
 
   const previewTheme = hoveredTheme || extension.themes[0];
+  if (!previewTheme) {
+    // If there are no themes then it likely means the extension hasn't backfilled a new language.
+    // this is a temporary state that should not happen since we should be removing extensions that
+    // failed to backfill (most likely because they no longer exist).
+    return null;
+  }
+
   const previewSlug = `${extension.publisherName}.${extension.name}/${previewTheme.name}`;
 
   const otherThemes = extension.themes.slice(1);

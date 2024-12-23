@@ -7,6 +7,8 @@ export const languages = [
   { value: "js", label: "JavaScript" },
   { value: "php", label: "PHP" },
   { value: "py", label: "Python" },
+  { value: "rb", label: "Ruby" },
+  { value: "rs", label: "Rust" },
 ] as const;
 
 export const languageValues = languages.map((l) => l.value);
