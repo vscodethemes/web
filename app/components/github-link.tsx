@@ -8,7 +8,7 @@ export function GithubLink() {
       asChild
       className="hidden sm:flex px-3 text-muted-foreground"
     >
-      <a title="Github" href="https://github.com/vscodethemes/web">
+      <a title="Github" href="https://github.com/vscodethemes/web" target="_blank">
         <GitHubLogoIcon className="h-4 w-4" />
       </a>
     </Button>
