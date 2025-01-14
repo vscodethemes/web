@@ -277,6 +277,7 @@ export default function ExtensionThemeRoute() {
                   >
                     <Link
                       to={`/e/${extension.publisherName}.${extension.name}/${theme.name}/open?with=vscodeweb`}
+                      target="_blank"
                       reloadDocument
                     >
                       VS Code for Web
