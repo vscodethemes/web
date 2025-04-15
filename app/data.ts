@@ -1,6 +1,7 @@
 export const languages = [
   { value: "cpp", label: "C++" },
   { value: "css", label: "CSS" },
+  { value: "ex", label: "Elixir" },
   { value: "go", label: "Go" },
   { value: "html", label: "HTML" },
   { value: "java", label: "Java" },
@@ -9,7 +10,6 @@ export const languages = [
   { value: "py", label: "Python" },
   { value: "rb", label: "Ruby" },
   { value: "rs", label: "Rust" },
-  { value: "ex", label: "Elixir" },
 ] as const;
 
 export const languageValues = languages.map((l) => l.value);
