@@ -179,7 +179,7 @@ const icons: Record<(typeof languageValues)[0], JSX.Element> = {
   swift: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 59.391 59.3911"
+      viewBox="0 0 32 32"
       aria-hidden="true"
     >
       <path
