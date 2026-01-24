@@ -1,6 +1,7 @@
 export const languages = [
   { value: "cpp", label: "C++" },
   { value: "css", label: "CSS" },
+  { value: "dart", label: "Dart" },
   { value: "ex", label: "Elixir" },
   { value: "go", label: "Go" },
   { value: "html", label: "HTML" },
