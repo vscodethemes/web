@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useSearchParams } from "@remix-run/react";
 import {
   Pagination,
@@ -7,6 +8,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/components/ui/pagination";
+import { Input } from "~/components/ui/input";
+import { Button } from "~/components/ui/button";
+import { CornerDownLeft } from "lucide-react";
 
 export interface SearchPaginationProps {
   total: number;
@@ -21,7 +25,8 @@ export function SearchPagination({
   pageNumber,
   pageSize,
 }: SearchPaginationProps) {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const totalPages = Math.ceil(total / pageSize);
   const startPage = Math.max(pageNumber - Math.floor(maxVisiblePages / 2), 1);
@@ -35,6 +40,23 @@ export function SearchPagination({
   if (totalPages <= 1) {
     return null;
   }
+
+  const doJump = () => {
+    const value = inputRef.current?.value || "";
+    const targetPage = Math.min(
+      Math.max(parseInt(value, 10) || 1, 1),
+      totalPages
+    );
+    const next = new URLSearchParams(searchParams);
+    next.set("page", String(targetPage));
+    setSearchParams(next);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    doJump();
+  };
 
   const prevTo = new URLSearchParams(searchParams);
   prevTo.set("page", String(Math.max(pageNumber - 1, 1)));
@@ -63,6 +85,31 @@ export function SearchPagination({
         })}
         <PaginationItem>
           <PaginationNext to={`?${nextTo.toString()}`} />
+        </PaginationItem>
+        <PaginationItem>
+          <span className="flex items-center gap-1 text-sm ml-3 font-medium" translate="no">
+            Go to page
+            <Input
+              key={pageNumber}
+              ref={inputRef}
+              type="number"
+              min={1}
+              max={totalPages}
+              defaultValue={pageNumber}
+              onKeyDown={handleKeyDown}
+              className="h-9 w-14 text-center px-1 py-0 font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              aria-label={`Go to page (1–${totalPages})`}
+            />
+            of {totalPages}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={doJump}
+              aria-label="Go to page"
+            >
+              <CornerDownLeft className="h-4 w-4" />
+            </Button>
+          </span>
         </PaginationItem>
       </PaginationContent>
     </Pagination>
